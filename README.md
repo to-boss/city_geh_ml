@@ -62,10 +62,32 @@ The XMI file is the CityGML 3.0 UML model exported from Enterprise Architect. It
 
 The generator produces Rust code for all 268 classes across 18 CityGML packages:
 
-- **34 abstract classes** &rarr; traits with supertrait hierarchy
-- **234 concrete classes** &rarr; structs implementing the appropriate traits
+- **34 abstract classes** &rarr; traits (with `Trait` suffix) + enum dispatch types with one variant per concrete descendant
+- **234 concrete classes** &rarr; structs implementing the appropriate traits, all deriving `Clone`
 - **13 enums** &rarr; Rust enums with `FromGml` deserialization
 - **142 data types** &rarr; codelist newtypes (`struct FooValue(pub String)`) and structured data types
+- **114 ADEOf\* extension types** &rarr; removed (0 implementations exist)
+
+### Enum Dispatch
+
+Abstract type hierarchies use enum dispatch instead of trait objects. Since the full CityGML type hierarchy is known at compile time, each abstract class generates an enum whose variants wrap the concrete descendants:
+
+```rust
+// Trait for accessor methods
+pub trait AbstractSpaceBoundaryTrait: AbstractCityObjectTrait {}
+
+// Enum with one variant per concrete subtype (boxed when >8 variants)
+#[derive(Debug, Clone)]
+pub enum AbstractSpaceBoundary {
+    CeilingSurface(Box<CeilingSurface>),
+    GroundSurface(Box<GroundSurface>),
+    RoofSurface(Box<RoofSurface>),
+    WallSurface(Box<WallSurface>),
+    // ...
+}
+```
+
+This enables `Clone`, `Default`, and pattern matching on all types &mdash; no `Box<dyn Trait>` anywhere.
 
 ### Packages
 
@@ -79,11 +101,11 @@ Appearance, Bridge, Building, CityFurniture, CityObjectGroup, Construction, Core
 pub struct BuildingFunctionValue(pub String);
 
 // Concrete class with inherited + own properties
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct Building {
     pub feature_id: ID,
     pub name: Vec<String>,
-    pub boundary: Vec<Box<dyn AbstractSpaceBoundary>>,
+    pub boundary: Vec<AbstractSpaceBoundary>,
     pub lod2_solid: Option<Solid>,
     pub function: Vec<BuildingFunctionValue>,
     pub roof_type: Option<RoofTypeValue>,
@@ -124,7 +146,7 @@ The reader uses a namespace-aware XML cursor (`GmlReader` / `SubtreeReader`) bui
 2. Each member is dispatched by `(namespace, localName)` to the appropriate `FromGml::from_gml()` impl
 3. Generated `FromGml` impls match child elements by namespace+name and delegate to field-level parsers
 4. Geometry elements are parsed by hand-written parsers in `gml_geometry.rs`
-5. Abstract types use generated dispatcher functions that match all known concrete subtypes
+5. Abstract types use generated dispatcher functions that return enum dispatch types matching all known concrete subtypes
 
 ## Building
 

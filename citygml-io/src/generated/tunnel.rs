@@ -1,13 +1,6 @@
 #![allow(unused_imports, unused_mut, unused_variables)]
 use super::*;
 
-pub trait ADEOfAbstractTunnel: std::fmt::Debug {}
-pub trait ADEOfHollowSpace: std::fmt::Debug {}
-pub trait ADEOfTunnel: std::fmt::Debug {}
-pub trait ADEOfTunnelConstructiveElement: std::fmt::Debug {}
-pub trait ADEOfTunnelFurniture: std::fmt::Debug {}
-pub trait ADEOfTunnelInstallation: std::fmt::Debug {}
-pub trait ADEOfTunnelPart: std::fmt::Debug {}
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct HollowSpaceClassValue(pub String);
 impl crate::from_gml::FromGml for HollowSpaceClassValue {
@@ -143,58 +136,48 @@ impl crate::from_gml::FromGml for TunnelUsageValue {
         Ok(TunnelUsageValue(reader.read_text()?))
     }
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct HollowSpace {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub creation_date: Option<String>,
     pub termination_date: Option<String>,
     pub valid_from: Option<String>,
     pub valid_to: Option<String>,
-    pub ade_of_abstract_feature_with_lifespan: Vec<
-        Box<dyn ADEOfAbstractFeatureWithLifespan>,
-    >,
     pub relative_to_terrain: Option<RelativeToTerrain>,
     pub relative_to_water: Option<RelativeToWater>,
-    pub ade_of_abstract_city_object: Vec<Box<dyn ADEOfAbstractCityObject>>,
-    pub appearance: Vec<Box<dyn AbstractAppearance>>,
-    pub generic_attribute: Vec<Box<dyn AbstractGenericAttribute>>,
-    pub generalizes_to: Vec<Box<dyn AbstractCityObject>>,
+    pub appearance: Vec<AbstractAppearance>,
+    pub generalizes_to: Vec<AbstractCityObject>,
     pub external_reference: Vec<ExternalReference>,
-    pub related_to: Vec<Box<dyn AbstractCityObject>>,
-    pub dynamizer: Vec<Box<dyn AbstractDynamizer>>,
+    pub related_to: Vec<AbstractCityObject>,
+    pub dynamizer: Vec<AbstractDynamizer>,
     pub space_type: Option<SpaceType>,
     pub volume: Vec<QualifiedVolume>,
     pub area: Vec<QualifiedArea>,
-    pub ade_of_abstract_space: Vec<Box<dyn ADEOfAbstractSpace>>,
     pub lod2_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod3_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod0_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod1_solid: Option<crate::geometry::Solid>,
     pub lod3_solid: Option<crate::geometry::Solid>,
-    pub boundary: Vec<Box<dyn AbstractSpaceBoundary>>,
+    pub boundary: Vec<AbstractSpaceBoundary>,
     pub lod0_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_solid: Option<crate::geometry::Solid>,
     pub lod0_point: Option<crate::geometry::DirectPosition>,
     pub lod3_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_multi_surface: Option<crate::geometry::MultiSurface>,
-    pub ade_of_abstract_physical_space: Vec<Box<dyn ADEOfAbstractPhysicalSpace>>,
     pub lod3_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
-    pub point_cloud: Option<Box<dyn AbstractPointCloud>>,
+    pub point_cloud: Option<AbstractPointCloud>,
     pub lod1_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
-    pub ade_of_abstract_unoccupied_space: Vec<Box<dyn ADEOfAbstractUnoccupiedSpace>>,
     pub class_: Option<HollowSpaceClassValue>,
     pub function: Vec<HollowSpaceFunctionValue>,
     pub usage: Vec<HollowSpaceUsageValue>,
-    pub ade_of_hollow_space: Vec<Box<dyn ADEOfHollowSpace>>,
     pub tunnel_installation: Vec<TunnelInstallation>,
     pub tunnel_furniture: Vec<TunnelFurniture>,
 }
-impl AbstractFeature for HollowSpace {
+impl AbstractFeatureTrait for HollowSpace {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -207,11 +190,8 @@ impl AbstractFeature for HollowSpace {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractFeatureWithLifespan for HollowSpace {
+impl AbstractFeatureWithLifespanTrait for HollowSpace {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
     }
@@ -224,42 +204,31 @@ impl AbstractFeatureWithLifespan for HollowSpace {
     fn valid_to(&self) -> Option<&String> {
         self.valid_to.as_ref()
     }
-    fn ade_of_abstract_feature_with_lifespan(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractFeatureWithLifespan>] {
-        &self.ade_of_abstract_feature_with_lifespan
-    }
 }
-impl AbstractCityObject for HollowSpace {
+impl AbstractCityObjectTrait for HollowSpace {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
     }
     fn relative_to_water(&self) -> Option<RelativeToWater> {
         self.relative_to_water
     }
-    fn ade_of_abstract_city_object(&self) -> &[Box<dyn ADEOfAbstractCityObject>] {
-        &self.ade_of_abstract_city_object
-    }
-    fn appearance(&self) -> &[Box<dyn AbstractAppearance>] {
+    fn appearance(&self) -> &[AbstractAppearance] {
         &self.appearance
     }
-    fn generic_attribute(&self) -> &[Box<dyn AbstractGenericAttribute>] {
-        &self.generic_attribute
-    }
-    fn generalizes_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn generalizes_to(&self) -> &[AbstractCityObject] {
         &self.generalizes_to
     }
     fn external_reference(&self) -> &[ExternalReference] {
         &self.external_reference
     }
-    fn related_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn related_to(&self) -> &[AbstractCityObject] {
         &self.related_to
     }
-    fn dynamizer(&self) -> &[Box<dyn AbstractDynamizer>] {
+    fn dynamizer(&self) -> &[AbstractDynamizer] {
         &self.dynamizer
     }
 }
-impl AbstractSpace for HollowSpace {
+impl AbstractSpaceTrait for HollowSpace {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
     }
@@ -268,9 +237,6 @@ impl AbstractSpace for HollowSpace {
     }
     fn area(&self) -> &[QualifiedArea] {
         &self.area
-    }
-    fn ade_of_abstract_space(&self) -> &[Box<dyn ADEOfAbstractSpace>] {
-        &self.ade_of_abstract_space
     }
     fn lod2_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod2_multi_curve.as_ref()
@@ -287,7 +253,7 @@ impl AbstractSpace for HollowSpace {
     fn lod3_solid(&self) -> Option<&crate::geometry::Solid> {
         self.lod3_solid.as_ref()
     }
-    fn boundary(&self) -> &[Box<dyn AbstractSpaceBoundary>] {
+    fn boundary(&self) -> &[AbstractSpaceBoundary] {
         &self.boundary
     }
     fn lod0_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
@@ -306,14 +272,11 @@ impl AbstractSpace for HollowSpace {
         self.lod2_multi_surface.as_ref()
     }
 }
-impl AbstractPhysicalSpace for HollowSpace {
-    fn ade_of_abstract_physical_space(&self) -> &[Box<dyn ADEOfAbstractPhysicalSpace>] {
-        &self.ade_of_abstract_physical_space
-    }
+impl AbstractPhysicalSpaceTrait for HollowSpace {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
     }
-    fn point_cloud(&self) -> Option<&Box<dyn AbstractPointCloud>> {
+    fn point_cloud(&self) -> Option<&AbstractPointCloud> {
         self.point_cloud.as_ref()
     }
     fn lod1_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
@@ -323,13 +286,7 @@ impl AbstractPhysicalSpace for HollowSpace {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
-impl AbstractUnoccupiedSpace for HollowSpace {
-    fn ade_of_abstract_unoccupied_space(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractUnoccupiedSpace>] {
-        &self.ade_of_abstract_unoccupied_space
-    }
-}
+impl AbstractUnoccupiedSpaceTrait for HollowSpace {}
 impl HollowSpace {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -340,17 +297,13 @@ impl HollowSpace {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut creation_date = None;
         let mut termination_date = None;
         let mut valid_from = None;
         let mut valid_to = None;
-        let mut ade_of_abstract_feature_with_lifespan = Vec::new();
         let mut relative_to_terrain = None;
         let mut relative_to_water = None;
-        let mut ade_of_abstract_city_object = Vec::new();
         let mut appearance = Vec::new();
-        let mut generic_attribute = Vec::new();
         let mut generalizes_to = Vec::new();
         let mut external_reference = Vec::new();
         let mut related_to = Vec::new();
@@ -358,7 +311,6 @@ impl HollowSpace {
         let mut space_type = None;
         let mut volume = Vec::new();
         let mut area = Vec::new();
-        let mut ade_of_abstract_space = Vec::new();
         let mut lod2_multi_curve = None;
         let mut lod3_multi_surface = None;
         let mut lod0_multi_surface = None;
@@ -370,16 +322,13 @@ impl HollowSpace {
         let mut lod0_point = None;
         let mut lod3_multi_curve = None;
         let mut lod2_multi_surface = None;
-        let mut ade_of_abstract_physical_space = Vec::new();
         let mut lod3_terrain_intersection_curve = None;
         let mut point_cloud = None;
         let mut lod1_terrain_intersection_curve = None;
         let mut lod2_terrain_intersection_curve = None;
-        let mut ade_of_abstract_unoccupied_space = Vec::new();
         let mut class_ = None;
         let mut function = Vec::new();
         let mut usage = Vec::new();
-        let mut ade_of_hollow_space = Vec::new();
         let mut tunnel_installation = Vec::new();
         let mut tunnel_furniture = Vec::new();
         let mut feature_id = ID(_gml_id);
@@ -398,9 +347,6 @@ impl HollowSpace {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "creationDate") => {
                     creation_date = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
@@ -415,9 +361,6 @@ impl HollowSpace {
                 (crate::namespace::NS_CORE, "validTo") => {
                     valid_to = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeatureWithLifespan") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "relativeToTerrain") => {
                     relative_to_terrain = Some(
                         RelativeToTerrain::from_gml_text(&sub.read_text()?)?,
@@ -428,30 +371,24 @@ impl HollowSpace {
                         RelativeToWater::from_gml_text(&sub.read_text()?)?,
                     );
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractCityObject") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "appearance") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         appearance
                             .push(
-                                super::dispatchers::parse_dyn_abstract_appearance(
+                                super::dispatchers::parse_abstract_appearance(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
                             );
                     }
                 }
-                (crate::namespace::NS_CORE, "genericAttribute") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "generalizesTo") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         generalizes_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -466,7 +403,7 @@ impl HollowSpace {
                     if let Some(child_info) = wrapper.next_element()? {
                         related_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -478,7 +415,7 @@ impl HollowSpace {
                     if let Some(child_info) = wrapper.next_element()? {
                         dynamizer
                             .push(
-                                super::dispatchers::parse_dyn_abstract_dynamizer(
+                                super::dispatchers::parse_abstract_dynamizer(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -493,9 +430,6 @@ impl HollowSpace {
                 }
                 (crate::namespace::NS_CORE, "area") => {
                     area.push(QualifiedArea::from_gml(&mut sub)?);
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractSpace") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_CORE, "lod2MultiCurve") => {
                     lod2_multi_curve = Some({
@@ -577,7 +511,7 @@ impl HollowSpace {
                     if let Some(child_info) = wrapper.next_element()? {
                         boundary
                             .push(
-                                super::dispatchers::parse_dyn_abstract_space_boundary(
+                                super::dispatchers::parse_abstract_space_boundary(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -659,9 +593,6 @@ impl HollowSpace {
                         }
                     });
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractPhysicalSpace") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "lod3TerrainIntersectionCurve") => {
                     lod3_terrain_intersection_curve = Some({
                         let mut geom_sub = sub.subtree();
@@ -681,7 +612,7 @@ impl HollowSpace {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         point_cloud = Some(
-                            super::dispatchers::parse_dyn_abstract_point_cloud(
+                            super::dispatchers::parse_abstract_point_cloud(
                                 &mut wrapper,
                                 &child_info,
                             )?,
@@ -718,9 +649,6 @@ impl HollowSpace {
                         }
                     });
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractUnoccupiedSpace") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_TUNNEL, "class") => {
                     class_ = Some(HollowSpaceClassValue(sub.read_text()?));
                 }
@@ -729,9 +657,6 @@ impl HollowSpace {
                 }
                 (crate::namespace::NS_TUNNEL, "usage") => {
                     usage.push(HollowSpaceUsageValue(sub.read_text()?));
-                }
-                (crate::namespace::NS_TUNNEL, "adeOfHollowSpace") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_TUNNEL, "tunnelInstallation") => {
                     let mut wrapper = sub.subtree();
@@ -767,17 +692,13 @@ impl HollowSpace {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             creation_date,
             termination_date,
             valid_from,
             valid_to,
-            ade_of_abstract_feature_with_lifespan,
             relative_to_terrain,
             relative_to_water,
-            ade_of_abstract_city_object,
             appearance,
-            generic_attribute,
             generalizes_to,
             external_reference,
             related_to,
@@ -785,7 +706,6 @@ impl HollowSpace {
             space_type,
             volume,
             area,
-            ade_of_abstract_space,
             lod2_multi_curve,
             lod3_multi_surface,
             lod0_multi_surface,
@@ -797,16 +717,13 @@ impl HollowSpace {
             lod0_point,
             lod3_multi_curve,
             lod2_multi_surface,
-            ade_of_abstract_physical_space,
             lod3_terrain_intersection_curve,
             point_cloud,
             lod1_terrain_intersection_curve,
             lod2_terrain_intersection_curve,
-            ade_of_abstract_unoccupied_space,
             class_,
             function,
             usage,
-            ade_of_hollow_space,
             tunnel_installation,
             tunnel_furniture,
         })
@@ -824,74 +741,396 @@ impl crate::from_gml::FromGml for HollowSpace {
         Self::from_gml_with_info(reader, &info)
     }
 }
-pub trait AbstractTunnel: AbstractConstruction {
+pub trait AbstractTunnelTrait: AbstractConstructionTrait {
     fn class_(&self) -> Option<&TunnelClassValue>;
     fn function(&self) -> &[TunnelFunctionValue];
     fn usage(&self) -> &[TunnelUsageValue];
-    fn ade_of_abstract_tunnel(&self) -> &[Box<dyn ADEOfAbstractTunnel>];
     fn tunnel_constructive_element(&self) -> &[TunnelConstructiveElement];
     fn tunnel_furniture(&self) -> &[TunnelFurniture];
     fn tunnel_installation(&self) -> &[TunnelInstallation];
     fn hollow_space(&self) -> &[HollowSpace];
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone)]
+pub enum AbstractTunnel {
+    Tunnel(Tunnel),
+    TunnelPart(TunnelPart),
+}
+impl Default for AbstractTunnel {
+    fn default() -> Self {
+        Self::Tunnel(Default::default())
+    }
+}
+impl AbstractFeatureTrait for AbstractTunnel {
+    fn feature_id(&self) -> &ID {
+        match self {
+            Self::Tunnel(v) => v.feature_id(),
+            Self::TunnelPart(v) => v.feature_id(),
+        }
+    }
+    fn identifier(&self) -> Option<&String> {
+        match self {
+            Self::Tunnel(v) => v.identifier(),
+            Self::TunnelPart(v) => v.identifier(),
+        }
+    }
+    fn name(&self) -> &[String] {
+        match self {
+            Self::Tunnel(v) => v.name(),
+            Self::TunnelPart(v) => v.name(),
+        }
+    }
+    fn description(&self) -> Option<&String> {
+        match self {
+            Self::Tunnel(v) => v.description(),
+            Self::TunnelPart(v) => v.description(),
+        }
+    }
+}
+impl AbstractFeatureWithLifespanTrait for AbstractTunnel {
+    fn creation_date(&self) -> Option<&String> {
+        match self {
+            Self::Tunnel(v) => v.creation_date(),
+            Self::TunnelPart(v) => v.creation_date(),
+        }
+    }
+    fn termination_date(&self) -> Option<&String> {
+        match self {
+            Self::Tunnel(v) => v.termination_date(),
+            Self::TunnelPart(v) => v.termination_date(),
+        }
+    }
+    fn valid_from(&self) -> Option<&String> {
+        match self {
+            Self::Tunnel(v) => v.valid_from(),
+            Self::TunnelPart(v) => v.valid_from(),
+        }
+    }
+    fn valid_to(&self) -> Option<&String> {
+        match self {
+            Self::Tunnel(v) => v.valid_to(),
+            Self::TunnelPart(v) => v.valid_to(),
+        }
+    }
+}
+impl AbstractCityObjectTrait for AbstractTunnel {
+    fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
+        match self {
+            Self::Tunnel(v) => v.relative_to_terrain(),
+            Self::TunnelPart(v) => v.relative_to_terrain(),
+        }
+    }
+    fn relative_to_water(&self) -> Option<RelativeToWater> {
+        match self {
+            Self::Tunnel(v) => v.relative_to_water(),
+            Self::TunnelPart(v) => v.relative_to_water(),
+        }
+    }
+    fn appearance(&self) -> &[AbstractAppearance] {
+        match self {
+            Self::Tunnel(v) => v.appearance(),
+            Self::TunnelPart(v) => v.appearance(),
+        }
+    }
+    fn generalizes_to(&self) -> &[AbstractCityObject] {
+        match self {
+            Self::Tunnel(v) => v.generalizes_to(),
+            Self::TunnelPart(v) => v.generalizes_to(),
+        }
+    }
+    fn external_reference(&self) -> &[ExternalReference] {
+        match self {
+            Self::Tunnel(v) => v.external_reference(),
+            Self::TunnelPart(v) => v.external_reference(),
+        }
+    }
+    fn related_to(&self) -> &[AbstractCityObject] {
+        match self {
+            Self::Tunnel(v) => v.related_to(),
+            Self::TunnelPart(v) => v.related_to(),
+        }
+    }
+    fn dynamizer(&self) -> &[AbstractDynamizer] {
+        match self {
+            Self::Tunnel(v) => v.dynamizer(),
+            Self::TunnelPart(v) => v.dynamizer(),
+        }
+    }
+}
+impl AbstractSpaceTrait for AbstractTunnel {
+    fn space_type(&self) -> Option<SpaceType> {
+        match self {
+            Self::Tunnel(v) => v.space_type(),
+            Self::TunnelPart(v) => v.space_type(),
+        }
+    }
+    fn volume(&self) -> &[QualifiedVolume] {
+        match self {
+            Self::Tunnel(v) => v.volume(),
+            Self::TunnelPart(v) => v.volume(),
+        }
+    }
+    fn area(&self) -> &[QualifiedArea] {
+        match self {
+            Self::Tunnel(v) => v.area(),
+            Self::TunnelPart(v) => v.area(),
+        }
+    }
+    fn lod2_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
+        match self {
+            Self::Tunnel(v) => v.lod2_multi_curve(),
+            Self::TunnelPart(v) => v.lod2_multi_curve(),
+        }
+    }
+    fn lod3_multi_surface(&self) -> Option<&crate::geometry::MultiSurface> {
+        match self {
+            Self::Tunnel(v) => v.lod3_multi_surface(),
+            Self::TunnelPart(v) => v.lod3_multi_surface(),
+        }
+    }
+    fn lod0_multi_surface(&self) -> Option<&crate::geometry::MultiSurface> {
+        match self {
+            Self::Tunnel(v) => v.lod0_multi_surface(),
+            Self::TunnelPart(v) => v.lod0_multi_surface(),
+        }
+    }
+    fn lod1_solid(&self) -> Option<&crate::geometry::Solid> {
+        match self {
+            Self::Tunnel(v) => v.lod1_solid(),
+            Self::TunnelPart(v) => v.lod1_solid(),
+        }
+    }
+    fn lod3_solid(&self) -> Option<&crate::geometry::Solid> {
+        match self {
+            Self::Tunnel(v) => v.lod3_solid(),
+            Self::TunnelPart(v) => v.lod3_solid(),
+        }
+    }
+    fn boundary(&self) -> &[AbstractSpaceBoundary] {
+        match self {
+            Self::Tunnel(v) => v.boundary(),
+            Self::TunnelPart(v) => v.boundary(),
+        }
+    }
+    fn lod0_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
+        match self {
+            Self::Tunnel(v) => v.lod0_multi_curve(),
+            Self::TunnelPart(v) => v.lod0_multi_curve(),
+        }
+    }
+    fn lod2_solid(&self) -> Option<&crate::geometry::Solid> {
+        match self {
+            Self::Tunnel(v) => v.lod2_solid(),
+            Self::TunnelPart(v) => v.lod2_solid(),
+        }
+    }
+    fn lod0_point(&self) -> Option<&crate::geometry::DirectPosition> {
+        match self {
+            Self::Tunnel(v) => v.lod0_point(),
+            Self::TunnelPart(v) => v.lod0_point(),
+        }
+    }
+    fn lod3_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
+        match self {
+            Self::Tunnel(v) => v.lod3_multi_curve(),
+            Self::TunnelPart(v) => v.lod3_multi_curve(),
+        }
+    }
+    fn lod2_multi_surface(&self) -> Option<&crate::geometry::MultiSurface> {
+        match self {
+            Self::Tunnel(v) => v.lod2_multi_surface(),
+            Self::TunnelPart(v) => v.lod2_multi_surface(),
+        }
+    }
+}
+impl AbstractPhysicalSpaceTrait for AbstractTunnel {
+    fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
+        match self {
+            Self::Tunnel(v) => v.lod3_terrain_intersection_curve(),
+            Self::TunnelPart(v) => v.lod3_terrain_intersection_curve(),
+        }
+    }
+    fn point_cloud(&self) -> Option<&AbstractPointCloud> {
+        match self {
+            Self::Tunnel(v) => v.point_cloud(),
+            Self::TunnelPart(v) => v.point_cloud(),
+        }
+    }
+    fn lod1_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
+        match self {
+            Self::Tunnel(v) => v.lod1_terrain_intersection_curve(),
+            Self::TunnelPart(v) => v.lod1_terrain_intersection_curve(),
+        }
+    }
+    fn lod2_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
+        match self {
+            Self::Tunnel(v) => v.lod2_terrain_intersection_curve(),
+            Self::TunnelPart(v) => v.lod2_terrain_intersection_curve(),
+        }
+    }
+}
+impl AbstractOccupiedSpaceTrait for AbstractTunnel {
+    fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
+        match self {
+            Self::Tunnel(v) => v.lod3_implicit_representation(),
+            Self::TunnelPart(v) => v.lod3_implicit_representation(),
+        }
+    }
+    fn lod2_implicit_representation(&self) -> Option<&ImplicitGeometry> {
+        match self {
+            Self::Tunnel(v) => v.lod2_implicit_representation(),
+            Self::TunnelPart(v) => v.lod2_implicit_representation(),
+        }
+    }
+    fn lod1_implicit_representation(&self) -> Option<&ImplicitGeometry> {
+        match self {
+            Self::Tunnel(v) => v.lod1_implicit_representation(),
+            Self::TunnelPart(v) => v.lod1_implicit_representation(),
+        }
+    }
+}
+impl AbstractConstructionTrait for AbstractTunnel {
+    fn condition_of_construction(&self) -> Option<ConditionOfConstructionValue> {
+        match self {
+            Self::Tunnel(v) => v.condition_of_construction(),
+            Self::TunnelPart(v) => v.condition_of_construction(),
+        }
+    }
+    fn date_of_construction(&self) -> Option<&String> {
+        match self {
+            Self::Tunnel(v) => v.date_of_construction(),
+            Self::TunnelPart(v) => v.date_of_construction(),
+        }
+    }
+    fn date_of_demolition(&self) -> Option<&String> {
+        match self {
+            Self::Tunnel(v) => v.date_of_demolition(),
+            Self::TunnelPart(v) => v.date_of_demolition(),
+        }
+    }
+    fn construction_event(&self) -> &[ConstructionEvent] {
+        match self {
+            Self::Tunnel(v) => v.construction_event(),
+            Self::TunnelPart(v) => v.construction_event(),
+        }
+    }
+    fn elevation(&self) -> &[Elevation] {
+        match self {
+            Self::Tunnel(v) => v.elevation(),
+            Self::TunnelPart(v) => v.elevation(),
+        }
+    }
+    fn height(&self) -> &[Height] {
+        match self {
+            Self::Tunnel(v) => v.height(),
+            Self::TunnelPart(v) => v.height(),
+        }
+    }
+    fn occupancy(&self) -> &[Occupancy] {
+        match self {
+            Self::Tunnel(v) => v.occupancy(),
+            Self::TunnelPart(v) => v.occupancy(),
+        }
+    }
+}
+impl AbstractTunnelTrait for AbstractTunnel {
+    fn class_(&self) -> Option<&TunnelClassValue> {
+        match self {
+            Self::Tunnel(v) => v.class_(),
+            Self::TunnelPart(v) => v.class_(),
+        }
+    }
+    fn function(&self) -> &[TunnelFunctionValue] {
+        match self {
+            Self::Tunnel(v) => v.function(),
+            Self::TunnelPart(v) => v.function(),
+        }
+    }
+    fn usage(&self) -> &[TunnelUsageValue] {
+        match self {
+            Self::Tunnel(v) => v.usage(),
+            Self::TunnelPart(v) => v.usage(),
+        }
+    }
+    fn tunnel_constructive_element(&self) -> &[TunnelConstructiveElement] {
+        match self {
+            Self::Tunnel(v) => v.tunnel_constructive_element(),
+            Self::TunnelPart(v) => v.tunnel_constructive_element(),
+        }
+    }
+    fn tunnel_furniture(&self) -> &[TunnelFurniture] {
+        match self {
+            Self::Tunnel(v) => v.tunnel_furniture(),
+            Self::TunnelPart(v) => v.tunnel_furniture(),
+        }
+    }
+    fn tunnel_installation(&self) -> &[TunnelInstallation] {
+        match self {
+            Self::Tunnel(v) => v.tunnel_installation(),
+            Self::TunnelPart(v) => v.tunnel_installation(),
+        }
+    }
+    fn hollow_space(&self) -> &[HollowSpace] {
+        match self {
+            Self::Tunnel(v) => v.hollow_space(),
+            Self::TunnelPart(v) => v.hollow_space(),
+        }
+    }
+}
+impl From<Tunnel> for AbstractTunnel {
+    fn from(v: Tunnel) -> Self {
+        Self::Tunnel(v)
+    }
+}
+impl From<TunnelPart> for AbstractTunnel {
+    fn from(v: TunnelPart) -> Self {
+        Self::TunnelPart(v)
+    }
+}
+#[derive(Debug, Clone, Default)]
 pub struct TunnelConstructiveElement {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub creation_date: Option<String>,
     pub termination_date: Option<String>,
     pub valid_from: Option<String>,
     pub valid_to: Option<String>,
-    pub ade_of_abstract_feature_with_lifespan: Vec<
-        Box<dyn ADEOfAbstractFeatureWithLifespan>,
-    >,
     pub relative_to_terrain: Option<RelativeToTerrain>,
     pub relative_to_water: Option<RelativeToWater>,
-    pub ade_of_abstract_city_object: Vec<Box<dyn ADEOfAbstractCityObject>>,
-    pub appearance: Vec<Box<dyn AbstractAppearance>>,
-    pub generic_attribute: Vec<Box<dyn AbstractGenericAttribute>>,
-    pub generalizes_to: Vec<Box<dyn AbstractCityObject>>,
+    pub appearance: Vec<AbstractAppearance>,
+    pub generalizes_to: Vec<AbstractCityObject>,
     pub external_reference: Vec<ExternalReference>,
-    pub related_to: Vec<Box<dyn AbstractCityObject>>,
-    pub dynamizer: Vec<Box<dyn AbstractDynamizer>>,
+    pub related_to: Vec<AbstractCityObject>,
+    pub dynamizer: Vec<AbstractDynamizer>,
     pub space_type: Option<SpaceType>,
     pub volume: Vec<QualifiedVolume>,
     pub area: Vec<QualifiedArea>,
-    pub ade_of_abstract_space: Vec<Box<dyn ADEOfAbstractSpace>>,
     pub lod2_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod3_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod0_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod1_solid: Option<crate::geometry::Solid>,
     pub lod3_solid: Option<crate::geometry::Solid>,
-    pub boundary: Vec<Box<dyn AbstractSpaceBoundary>>,
+    pub boundary: Vec<AbstractSpaceBoundary>,
     pub lod0_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_solid: Option<crate::geometry::Solid>,
     pub lod0_point: Option<crate::geometry::DirectPosition>,
     pub lod3_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_multi_surface: Option<crate::geometry::MultiSurface>,
-    pub ade_of_abstract_physical_space: Vec<Box<dyn ADEOfAbstractPhysicalSpace>>,
     pub lod3_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
-    pub point_cloud: Option<Box<dyn AbstractPointCloud>>,
+    pub point_cloud: Option<AbstractPointCloud>,
     pub lod1_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
-    pub ade_of_abstract_occupied_space: Vec<Box<dyn ADEOfAbstractOccupiedSpace>>,
     pub lod3_implicit_representation: Option<ImplicitGeometry>,
     pub lod2_implicit_representation: Option<ImplicitGeometry>,
     pub lod1_implicit_representation: Option<ImplicitGeometry>,
     pub is_structural_element: Option<bool>,
-    pub ade_of_abstract_constructive_element: Vec<
-        Box<dyn ADEOfAbstractConstructiveElement>,
-    >,
-    pub filling: Vec<Box<dyn AbstractFillingElement>>,
+    pub filling: Vec<AbstractFillingElement>,
     pub class_: Option<TunnelConstructiveElementClassValue>,
     pub function: Vec<TunnelConstructiveElementFunctionValue>,
     pub usage: Vec<TunnelConstructiveElementUsageValue>,
-    pub ade_of_tunnel_constructive_element: Vec<Box<dyn ADEOfTunnelConstructiveElement>>,
 }
-impl AbstractFeature for TunnelConstructiveElement {
+impl AbstractFeatureTrait for TunnelConstructiveElement {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -904,11 +1143,8 @@ impl AbstractFeature for TunnelConstructiveElement {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractFeatureWithLifespan for TunnelConstructiveElement {
+impl AbstractFeatureWithLifespanTrait for TunnelConstructiveElement {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
     }
@@ -921,42 +1157,31 @@ impl AbstractFeatureWithLifespan for TunnelConstructiveElement {
     fn valid_to(&self) -> Option<&String> {
         self.valid_to.as_ref()
     }
-    fn ade_of_abstract_feature_with_lifespan(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractFeatureWithLifespan>] {
-        &self.ade_of_abstract_feature_with_lifespan
-    }
 }
-impl AbstractCityObject for TunnelConstructiveElement {
+impl AbstractCityObjectTrait for TunnelConstructiveElement {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
     }
     fn relative_to_water(&self) -> Option<RelativeToWater> {
         self.relative_to_water
     }
-    fn ade_of_abstract_city_object(&self) -> &[Box<dyn ADEOfAbstractCityObject>] {
-        &self.ade_of_abstract_city_object
-    }
-    fn appearance(&self) -> &[Box<dyn AbstractAppearance>] {
+    fn appearance(&self) -> &[AbstractAppearance] {
         &self.appearance
     }
-    fn generic_attribute(&self) -> &[Box<dyn AbstractGenericAttribute>] {
-        &self.generic_attribute
-    }
-    fn generalizes_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn generalizes_to(&self) -> &[AbstractCityObject] {
         &self.generalizes_to
     }
     fn external_reference(&self) -> &[ExternalReference] {
         &self.external_reference
     }
-    fn related_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn related_to(&self) -> &[AbstractCityObject] {
         &self.related_to
     }
-    fn dynamizer(&self) -> &[Box<dyn AbstractDynamizer>] {
+    fn dynamizer(&self) -> &[AbstractDynamizer] {
         &self.dynamizer
     }
 }
-impl AbstractSpace for TunnelConstructiveElement {
+impl AbstractSpaceTrait for TunnelConstructiveElement {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
     }
@@ -965,9 +1190,6 @@ impl AbstractSpace for TunnelConstructiveElement {
     }
     fn area(&self) -> &[QualifiedArea] {
         &self.area
-    }
-    fn ade_of_abstract_space(&self) -> &[Box<dyn ADEOfAbstractSpace>] {
-        &self.ade_of_abstract_space
     }
     fn lod2_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod2_multi_curve.as_ref()
@@ -984,7 +1206,7 @@ impl AbstractSpace for TunnelConstructiveElement {
     fn lod3_solid(&self) -> Option<&crate::geometry::Solid> {
         self.lod3_solid.as_ref()
     }
-    fn boundary(&self) -> &[Box<dyn AbstractSpaceBoundary>] {
+    fn boundary(&self) -> &[AbstractSpaceBoundary] {
         &self.boundary
     }
     fn lod0_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
@@ -1003,14 +1225,11 @@ impl AbstractSpace for TunnelConstructiveElement {
         self.lod2_multi_surface.as_ref()
     }
 }
-impl AbstractPhysicalSpace for TunnelConstructiveElement {
-    fn ade_of_abstract_physical_space(&self) -> &[Box<dyn ADEOfAbstractPhysicalSpace>] {
-        &self.ade_of_abstract_physical_space
-    }
+impl AbstractPhysicalSpaceTrait for TunnelConstructiveElement {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
     }
-    fn point_cloud(&self) -> Option<&Box<dyn AbstractPointCloud>> {
+    fn point_cloud(&self) -> Option<&AbstractPointCloud> {
         self.point_cloud.as_ref()
     }
     fn lod1_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
@@ -1020,10 +1239,7 @@ impl AbstractPhysicalSpace for TunnelConstructiveElement {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
-impl AbstractOccupiedSpace for TunnelConstructiveElement {
-    fn ade_of_abstract_occupied_space(&self) -> &[Box<dyn ADEOfAbstractOccupiedSpace>] {
-        &self.ade_of_abstract_occupied_space
-    }
+impl AbstractOccupiedSpaceTrait for TunnelConstructiveElement {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
     }
@@ -1034,16 +1250,11 @@ impl AbstractOccupiedSpace for TunnelConstructiveElement {
         self.lod1_implicit_representation.as_ref()
     }
 }
-impl AbstractConstructiveElement for TunnelConstructiveElement {
+impl AbstractConstructiveElementTrait for TunnelConstructiveElement {
     fn is_structural_element(&self) -> Option<bool> {
         self.is_structural_element
     }
-    fn ade_of_abstract_constructive_element(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractConstructiveElement>] {
-        &self.ade_of_abstract_constructive_element
-    }
-    fn filling(&self) -> &[Box<dyn AbstractFillingElement>] {
+    fn filling(&self) -> &[AbstractFillingElement] {
         &self.filling
     }
 }
@@ -1057,17 +1268,13 @@ impl TunnelConstructiveElement {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut creation_date = None;
         let mut termination_date = None;
         let mut valid_from = None;
         let mut valid_to = None;
-        let mut ade_of_abstract_feature_with_lifespan = Vec::new();
         let mut relative_to_terrain = None;
         let mut relative_to_water = None;
-        let mut ade_of_abstract_city_object = Vec::new();
         let mut appearance = Vec::new();
-        let mut generic_attribute = Vec::new();
         let mut generalizes_to = Vec::new();
         let mut external_reference = Vec::new();
         let mut related_to = Vec::new();
@@ -1075,7 +1282,6 @@ impl TunnelConstructiveElement {
         let mut space_type = None;
         let mut volume = Vec::new();
         let mut area = Vec::new();
-        let mut ade_of_abstract_space = Vec::new();
         let mut lod2_multi_curve = None;
         let mut lod3_multi_surface = None;
         let mut lod0_multi_surface = None;
@@ -1087,22 +1293,18 @@ impl TunnelConstructiveElement {
         let mut lod0_point = None;
         let mut lod3_multi_curve = None;
         let mut lod2_multi_surface = None;
-        let mut ade_of_abstract_physical_space = Vec::new();
         let mut lod3_terrain_intersection_curve = None;
         let mut point_cloud = None;
         let mut lod1_terrain_intersection_curve = None;
         let mut lod2_terrain_intersection_curve = None;
-        let mut ade_of_abstract_occupied_space = Vec::new();
         let mut lod3_implicit_representation = None;
         let mut lod2_implicit_representation = None;
         let mut lod1_implicit_representation = None;
         let mut is_structural_element = None;
-        let mut ade_of_abstract_constructive_element = Vec::new();
         let mut filling = Vec::new();
         let mut class_ = None;
         let mut function = Vec::new();
         let mut usage = Vec::new();
-        let mut ade_of_tunnel_constructive_element = Vec::new();
         let mut feature_id = ID(_gml_id);
         let mut sub = reader.subtree();
         while let Some(info) = sub.next_element()? {
@@ -1119,9 +1321,6 @@ impl TunnelConstructiveElement {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "creationDate") => {
                     creation_date = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
@@ -1136,9 +1335,6 @@ impl TunnelConstructiveElement {
                 (crate::namespace::NS_CORE, "validTo") => {
                     valid_to = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeatureWithLifespan") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "relativeToTerrain") => {
                     relative_to_terrain = Some(
                         RelativeToTerrain::from_gml_text(&sub.read_text()?)?,
@@ -1149,30 +1345,24 @@ impl TunnelConstructiveElement {
                         RelativeToWater::from_gml_text(&sub.read_text()?)?,
                     );
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractCityObject") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "appearance") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         appearance
                             .push(
-                                super::dispatchers::parse_dyn_abstract_appearance(
+                                super::dispatchers::parse_abstract_appearance(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
                             );
                     }
                 }
-                (crate::namespace::NS_CORE, "genericAttribute") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "generalizesTo") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         generalizes_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -1187,7 +1377,7 @@ impl TunnelConstructiveElement {
                     if let Some(child_info) = wrapper.next_element()? {
                         related_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -1199,7 +1389,7 @@ impl TunnelConstructiveElement {
                     if let Some(child_info) = wrapper.next_element()? {
                         dynamizer
                             .push(
-                                super::dispatchers::parse_dyn_abstract_dynamizer(
+                                super::dispatchers::parse_abstract_dynamizer(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -1214,9 +1404,6 @@ impl TunnelConstructiveElement {
                 }
                 (crate::namespace::NS_CORE, "area") => {
                     area.push(QualifiedArea::from_gml(&mut sub)?);
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractSpace") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_CORE, "lod2MultiCurve") => {
                     lod2_multi_curve = Some({
@@ -1298,7 +1485,7 @@ impl TunnelConstructiveElement {
                     if let Some(child_info) = wrapper.next_element()? {
                         boundary
                             .push(
-                                super::dispatchers::parse_dyn_abstract_space_boundary(
+                                super::dispatchers::parse_abstract_space_boundary(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -1380,9 +1567,6 @@ impl TunnelConstructiveElement {
                         }
                     });
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractPhysicalSpace") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "lod3TerrainIntersectionCurve") => {
                     lod3_terrain_intersection_curve = Some({
                         let mut geom_sub = sub.subtree();
@@ -1402,7 +1586,7 @@ impl TunnelConstructiveElement {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         point_cloud = Some(
-                            super::dispatchers::parse_dyn_abstract_point_cloud(
+                            super::dispatchers::parse_abstract_point_cloud(
                                 &mut wrapper,
                                 &child_info,
                             )?,
@@ -1438,9 +1622,6 @@ impl TunnelConstructiveElement {
                             crate::geometry::MultiCurve::default()
                         }
                     });
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractOccupiedSpace") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_CORE, "lod3ImplicitRepresentation") => {
                     let mut wrapper = sub.subtree();
@@ -1492,18 +1673,12 @@ impl TunnelConstructiveElement {
                         crate::from_gml::FromGml::from_gml(&mut sub)?,
                     );
                 }
-                (
-                    crate::namespace::NS_CONSTRUCTION,
-                    "adeOfAbstractConstructiveElement",
-                ) => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CONSTRUCTION, "filling") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         filling
                             .push(
-                                super::dispatchers::parse_dyn_abstract_filling_element(
+                                super::dispatchers::parse_abstract_filling_element(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -1520,9 +1695,6 @@ impl TunnelConstructiveElement {
                 (crate::namespace::NS_TUNNEL, "usage") => {
                     usage.push(TunnelConstructiveElementUsageValue(sub.read_text()?));
                 }
-                (crate::namespace::NS_TUNNEL, "adeOfTunnelConstructiveElement") => {
-                    sub.skip_element()?;
-                }
                 _ => {
                     sub.skip_element()?;
                 }
@@ -1533,17 +1705,13 @@ impl TunnelConstructiveElement {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             creation_date,
             termination_date,
             valid_from,
             valid_to,
-            ade_of_abstract_feature_with_lifespan,
             relative_to_terrain,
             relative_to_water,
-            ade_of_abstract_city_object,
             appearance,
-            generic_attribute,
             generalizes_to,
             external_reference,
             related_to,
@@ -1551,7 +1719,6 @@ impl TunnelConstructiveElement {
             space_type,
             volume,
             area,
-            ade_of_abstract_space,
             lod2_multi_curve,
             lod3_multi_surface,
             lod0_multi_surface,
@@ -1563,22 +1730,18 @@ impl TunnelConstructiveElement {
             lod0_point,
             lod3_multi_curve,
             lod2_multi_surface,
-            ade_of_abstract_physical_space,
             lod3_terrain_intersection_curve,
             point_cloud,
             lod1_terrain_intersection_curve,
             lod2_terrain_intersection_curve,
-            ade_of_abstract_occupied_space,
             lod3_implicit_representation,
             lod2_implicit_representation,
             lod1_implicit_representation,
             is_structural_element,
-            ade_of_abstract_constructive_element,
             filling,
             class_,
             function,
             usage,
-            ade_of_tunnel_constructive_element,
         })
     }
 }
@@ -1594,60 +1757,49 @@ impl crate::from_gml::FromGml for TunnelConstructiveElement {
         Self::from_gml_with_info(reader, &info)
     }
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct TunnelFurniture {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub creation_date: Option<String>,
     pub termination_date: Option<String>,
     pub valid_from: Option<String>,
     pub valid_to: Option<String>,
-    pub ade_of_abstract_feature_with_lifespan: Vec<
-        Box<dyn ADEOfAbstractFeatureWithLifespan>,
-    >,
     pub relative_to_terrain: Option<RelativeToTerrain>,
     pub relative_to_water: Option<RelativeToWater>,
-    pub ade_of_abstract_city_object: Vec<Box<dyn ADEOfAbstractCityObject>>,
-    pub appearance: Vec<Box<dyn AbstractAppearance>>,
-    pub generic_attribute: Vec<Box<dyn AbstractGenericAttribute>>,
-    pub generalizes_to: Vec<Box<dyn AbstractCityObject>>,
+    pub appearance: Vec<AbstractAppearance>,
+    pub generalizes_to: Vec<AbstractCityObject>,
     pub external_reference: Vec<ExternalReference>,
-    pub related_to: Vec<Box<dyn AbstractCityObject>>,
-    pub dynamizer: Vec<Box<dyn AbstractDynamizer>>,
+    pub related_to: Vec<AbstractCityObject>,
+    pub dynamizer: Vec<AbstractDynamizer>,
     pub space_type: Option<SpaceType>,
     pub volume: Vec<QualifiedVolume>,
     pub area: Vec<QualifiedArea>,
-    pub ade_of_abstract_space: Vec<Box<dyn ADEOfAbstractSpace>>,
     pub lod2_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod3_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod0_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod1_solid: Option<crate::geometry::Solid>,
     pub lod3_solid: Option<crate::geometry::Solid>,
-    pub boundary: Vec<Box<dyn AbstractSpaceBoundary>>,
+    pub boundary: Vec<AbstractSpaceBoundary>,
     pub lod0_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_solid: Option<crate::geometry::Solid>,
     pub lod0_point: Option<crate::geometry::DirectPosition>,
     pub lod3_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_multi_surface: Option<crate::geometry::MultiSurface>,
-    pub ade_of_abstract_physical_space: Vec<Box<dyn ADEOfAbstractPhysicalSpace>>,
     pub lod3_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
-    pub point_cloud: Option<Box<dyn AbstractPointCloud>>,
+    pub point_cloud: Option<AbstractPointCloud>,
     pub lod1_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
-    pub ade_of_abstract_occupied_space: Vec<Box<dyn ADEOfAbstractOccupiedSpace>>,
     pub lod3_implicit_representation: Option<ImplicitGeometry>,
     pub lod2_implicit_representation: Option<ImplicitGeometry>,
     pub lod1_implicit_representation: Option<ImplicitGeometry>,
-    pub ade_of_abstract_furniture: Vec<Box<dyn ADEOfAbstractFurniture>>,
     pub class_: Option<TunnelFurnitureClassValue>,
     pub function: Vec<TunnelFurnitureFunctionValue>,
     pub usage: Vec<TunnelFurnitureUsageValue>,
-    pub ade_of_tunnel_furniture: Vec<Box<dyn ADEOfTunnelFurniture>>,
 }
-impl AbstractFeature for TunnelFurniture {
+impl AbstractFeatureTrait for TunnelFurniture {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -1660,11 +1812,8 @@ impl AbstractFeature for TunnelFurniture {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractFeatureWithLifespan for TunnelFurniture {
+impl AbstractFeatureWithLifespanTrait for TunnelFurniture {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
     }
@@ -1677,42 +1826,31 @@ impl AbstractFeatureWithLifespan for TunnelFurniture {
     fn valid_to(&self) -> Option<&String> {
         self.valid_to.as_ref()
     }
-    fn ade_of_abstract_feature_with_lifespan(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractFeatureWithLifespan>] {
-        &self.ade_of_abstract_feature_with_lifespan
-    }
 }
-impl AbstractCityObject for TunnelFurniture {
+impl AbstractCityObjectTrait for TunnelFurniture {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
     }
     fn relative_to_water(&self) -> Option<RelativeToWater> {
         self.relative_to_water
     }
-    fn ade_of_abstract_city_object(&self) -> &[Box<dyn ADEOfAbstractCityObject>] {
-        &self.ade_of_abstract_city_object
-    }
-    fn appearance(&self) -> &[Box<dyn AbstractAppearance>] {
+    fn appearance(&self) -> &[AbstractAppearance] {
         &self.appearance
     }
-    fn generic_attribute(&self) -> &[Box<dyn AbstractGenericAttribute>] {
-        &self.generic_attribute
-    }
-    fn generalizes_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn generalizes_to(&self) -> &[AbstractCityObject] {
         &self.generalizes_to
     }
     fn external_reference(&self) -> &[ExternalReference] {
         &self.external_reference
     }
-    fn related_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn related_to(&self) -> &[AbstractCityObject] {
         &self.related_to
     }
-    fn dynamizer(&self) -> &[Box<dyn AbstractDynamizer>] {
+    fn dynamizer(&self) -> &[AbstractDynamizer] {
         &self.dynamizer
     }
 }
-impl AbstractSpace for TunnelFurniture {
+impl AbstractSpaceTrait for TunnelFurniture {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
     }
@@ -1721,9 +1859,6 @@ impl AbstractSpace for TunnelFurniture {
     }
     fn area(&self) -> &[QualifiedArea] {
         &self.area
-    }
-    fn ade_of_abstract_space(&self) -> &[Box<dyn ADEOfAbstractSpace>] {
-        &self.ade_of_abstract_space
     }
     fn lod2_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod2_multi_curve.as_ref()
@@ -1740,7 +1875,7 @@ impl AbstractSpace for TunnelFurniture {
     fn lod3_solid(&self) -> Option<&crate::geometry::Solid> {
         self.lod3_solid.as_ref()
     }
-    fn boundary(&self) -> &[Box<dyn AbstractSpaceBoundary>] {
+    fn boundary(&self) -> &[AbstractSpaceBoundary] {
         &self.boundary
     }
     fn lod0_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
@@ -1759,14 +1894,11 @@ impl AbstractSpace for TunnelFurniture {
         self.lod2_multi_surface.as_ref()
     }
 }
-impl AbstractPhysicalSpace for TunnelFurniture {
-    fn ade_of_abstract_physical_space(&self) -> &[Box<dyn ADEOfAbstractPhysicalSpace>] {
-        &self.ade_of_abstract_physical_space
-    }
+impl AbstractPhysicalSpaceTrait for TunnelFurniture {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
     }
-    fn point_cloud(&self) -> Option<&Box<dyn AbstractPointCloud>> {
+    fn point_cloud(&self) -> Option<&AbstractPointCloud> {
         self.point_cloud.as_ref()
     }
     fn lod1_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
@@ -1776,10 +1908,7 @@ impl AbstractPhysicalSpace for TunnelFurniture {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
-impl AbstractOccupiedSpace for TunnelFurniture {
-    fn ade_of_abstract_occupied_space(&self) -> &[Box<dyn ADEOfAbstractOccupiedSpace>] {
-        &self.ade_of_abstract_occupied_space
-    }
+impl AbstractOccupiedSpaceTrait for TunnelFurniture {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
     }
@@ -1790,11 +1919,7 @@ impl AbstractOccupiedSpace for TunnelFurniture {
         self.lod1_implicit_representation.as_ref()
     }
 }
-impl AbstractFurniture for TunnelFurniture {
-    fn ade_of_abstract_furniture(&self) -> &[Box<dyn ADEOfAbstractFurniture>] {
-        &self.ade_of_abstract_furniture
-    }
-}
+impl AbstractFurnitureTrait for TunnelFurniture {}
 impl TunnelFurniture {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1805,17 +1930,13 @@ impl TunnelFurniture {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut creation_date = None;
         let mut termination_date = None;
         let mut valid_from = None;
         let mut valid_to = None;
-        let mut ade_of_abstract_feature_with_lifespan = Vec::new();
         let mut relative_to_terrain = None;
         let mut relative_to_water = None;
-        let mut ade_of_abstract_city_object = Vec::new();
         let mut appearance = Vec::new();
-        let mut generic_attribute = Vec::new();
         let mut generalizes_to = Vec::new();
         let mut external_reference = Vec::new();
         let mut related_to = Vec::new();
@@ -1823,7 +1944,6 @@ impl TunnelFurniture {
         let mut space_type = None;
         let mut volume = Vec::new();
         let mut area = Vec::new();
-        let mut ade_of_abstract_space = Vec::new();
         let mut lod2_multi_curve = None;
         let mut lod3_multi_surface = None;
         let mut lod0_multi_surface = None;
@@ -1835,20 +1955,16 @@ impl TunnelFurniture {
         let mut lod0_point = None;
         let mut lod3_multi_curve = None;
         let mut lod2_multi_surface = None;
-        let mut ade_of_abstract_physical_space = Vec::new();
         let mut lod3_terrain_intersection_curve = None;
         let mut point_cloud = None;
         let mut lod1_terrain_intersection_curve = None;
         let mut lod2_terrain_intersection_curve = None;
-        let mut ade_of_abstract_occupied_space = Vec::new();
         let mut lod3_implicit_representation = None;
         let mut lod2_implicit_representation = None;
         let mut lod1_implicit_representation = None;
-        let mut ade_of_abstract_furniture = Vec::new();
         let mut class_ = None;
         let mut function = Vec::new();
         let mut usage = Vec::new();
-        let mut ade_of_tunnel_furniture = Vec::new();
         let mut feature_id = ID(_gml_id);
         let mut sub = reader.subtree();
         while let Some(info) = sub.next_element()? {
@@ -1865,9 +1981,6 @@ impl TunnelFurniture {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "creationDate") => {
                     creation_date = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
@@ -1882,9 +1995,6 @@ impl TunnelFurniture {
                 (crate::namespace::NS_CORE, "validTo") => {
                     valid_to = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeatureWithLifespan") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "relativeToTerrain") => {
                     relative_to_terrain = Some(
                         RelativeToTerrain::from_gml_text(&sub.read_text()?)?,
@@ -1895,30 +2005,24 @@ impl TunnelFurniture {
                         RelativeToWater::from_gml_text(&sub.read_text()?)?,
                     );
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractCityObject") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "appearance") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         appearance
                             .push(
-                                super::dispatchers::parse_dyn_abstract_appearance(
+                                super::dispatchers::parse_abstract_appearance(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
                             );
                     }
                 }
-                (crate::namespace::NS_CORE, "genericAttribute") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "generalizesTo") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         generalizes_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -1933,7 +2037,7 @@ impl TunnelFurniture {
                     if let Some(child_info) = wrapper.next_element()? {
                         related_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -1945,7 +2049,7 @@ impl TunnelFurniture {
                     if let Some(child_info) = wrapper.next_element()? {
                         dynamizer
                             .push(
-                                super::dispatchers::parse_dyn_abstract_dynamizer(
+                                super::dispatchers::parse_abstract_dynamizer(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -1960,9 +2064,6 @@ impl TunnelFurniture {
                 }
                 (crate::namespace::NS_CORE, "area") => {
                     area.push(QualifiedArea::from_gml(&mut sub)?);
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractSpace") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_CORE, "lod2MultiCurve") => {
                     lod2_multi_curve = Some({
@@ -2044,7 +2145,7 @@ impl TunnelFurniture {
                     if let Some(child_info) = wrapper.next_element()? {
                         boundary
                             .push(
-                                super::dispatchers::parse_dyn_abstract_space_boundary(
+                                super::dispatchers::parse_abstract_space_boundary(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -2126,9 +2227,6 @@ impl TunnelFurniture {
                         }
                     });
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractPhysicalSpace") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "lod3TerrainIntersectionCurve") => {
                     lod3_terrain_intersection_curve = Some({
                         let mut geom_sub = sub.subtree();
@@ -2148,7 +2246,7 @@ impl TunnelFurniture {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         point_cloud = Some(
-                            super::dispatchers::parse_dyn_abstract_point_cloud(
+                            super::dispatchers::parse_abstract_point_cloud(
                                 &mut wrapper,
                                 &child_info,
                             )?,
@@ -2184,9 +2282,6 @@ impl TunnelFurniture {
                             crate::geometry::MultiCurve::default()
                         }
                     });
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractOccupiedSpace") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_CORE, "lod3ImplicitRepresentation") => {
                     let mut wrapper = sub.subtree();
@@ -2233,9 +2328,6 @@ impl TunnelFurniture {
                         );
                     }
                 }
-                (crate::namespace::NS_CONSTRUCTION, "adeOfAbstractFurniture") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_TUNNEL, "class") => {
                     class_ = Some(TunnelFurnitureClassValue(sub.read_text()?));
                 }
@@ -2244,9 +2336,6 @@ impl TunnelFurniture {
                 }
                 (crate::namespace::NS_TUNNEL, "usage") => {
                     usage.push(TunnelFurnitureUsageValue(sub.read_text()?));
-                }
-                (crate::namespace::NS_TUNNEL, "adeOfTunnelFurniture") => {
-                    sub.skip_element()?;
                 }
                 _ => {
                     sub.skip_element()?;
@@ -2258,17 +2347,13 @@ impl TunnelFurniture {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             creation_date,
             termination_date,
             valid_from,
             valid_to,
-            ade_of_abstract_feature_with_lifespan,
             relative_to_terrain,
             relative_to_water,
-            ade_of_abstract_city_object,
             appearance,
-            generic_attribute,
             generalizes_to,
             external_reference,
             related_to,
@@ -2276,7 +2361,6 @@ impl TunnelFurniture {
             space_type,
             volume,
             area,
-            ade_of_abstract_space,
             lod2_multi_curve,
             lod3_multi_surface,
             lod0_multi_surface,
@@ -2288,20 +2372,16 @@ impl TunnelFurniture {
             lod0_point,
             lod3_multi_curve,
             lod2_multi_surface,
-            ade_of_abstract_physical_space,
             lod3_terrain_intersection_curve,
             point_cloud,
             lod1_terrain_intersection_curve,
             lod2_terrain_intersection_curve,
-            ade_of_abstract_occupied_space,
             lod3_implicit_representation,
             lod2_implicit_representation,
             lod1_implicit_representation,
-            ade_of_abstract_furniture,
             class_,
             function,
             usage,
-            ade_of_tunnel_furniture,
         })
     }
 }
@@ -2317,61 +2397,50 @@ impl crate::from_gml::FromGml for TunnelFurniture {
         Self::from_gml_with_info(reader, &info)
     }
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct TunnelInstallation {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub creation_date: Option<String>,
     pub termination_date: Option<String>,
     pub valid_from: Option<String>,
     pub valid_to: Option<String>,
-    pub ade_of_abstract_feature_with_lifespan: Vec<
-        Box<dyn ADEOfAbstractFeatureWithLifespan>,
-    >,
     pub relative_to_terrain: Option<RelativeToTerrain>,
     pub relative_to_water: Option<RelativeToWater>,
-    pub ade_of_abstract_city_object: Vec<Box<dyn ADEOfAbstractCityObject>>,
-    pub appearance: Vec<Box<dyn AbstractAppearance>>,
-    pub generic_attribute: Vec<Box<dyn AbstractGenericAttribute>>,
-    pub generalizes_to: Vec<Box<dyn AbstractCityObject>>,
+    pub appearance: Vec<AbstractAppearance>,
+    pub generalizes_to: Vec<AbstractCityObject>,
     pub external_reference: Vec<ExternalReference>,
-    pub related_to: Vec<Box<dyn AbstractCityObject>>,
-    pub dynamizer: Vec<Box<dyn AbstractDynamizer>>,
+    pub related_to: Vec<AbstractCityObject>,
+    pub dynamizer: Vec<AbstractDynamizer>,
     pub space_type: Option<SpaceType>,
     pub volume: Vec<QualifiedVolume>,
     pub area: Vec<QualifiedArea>,
-    pub ade_of_abstract_space: Vec<Box<dyn ADEOfAbstractSpace>>,
     pub lod2_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod3_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod0_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod1_solid: Option<crate::geometry::Solid>,
     pub lod3_solid: Option<crate::geometry::Solid>,
-    pub boundary: Vec<Box<dyn AbstractSpaceBoundary>>,
+    pub boundary: Vec<AbstractSpaceBoundary>,
     pub lod0_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_solid: Option<crate::geometry::Solid>,
     pub lod0_point: Option<crate::geometry::DirectPosition>,
     pub lod3_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_multi_surface: Option<crate::geometry::MultiSurface>,
-    pub ade_of_abstract_physical_space: Vec<Box<dyn ADEOfAbstractPhysicalSpace>>,
     pub lod3_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
-    pub point_cloud: Option<Box<dyn AbstractPointCloud>>,
+    pub point_cloud: Option<AbstractPointCloud>,
     pub lod1_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
-    pub ade_of_abstract_occupied_space: Vec<Box<dyn ADEOfAbstractOccupiedSpace>>,
     pub lod3_implicit_representation: Option<ImplicitGeometry>,
     pub lod2_implicit_representation: Option<ImplicitGeometry>,
     pub lod1_implicit_representation: Option<ImplicitGeometry>,
     pub relation_to_construction: Option<RelationToConstruction>,
-    pub ade_of_abstract_installation: Vec<Box<dyn ADEOfAbstractInstallation>>,
     pub class_: Option<TunnelInstallationClassValue>,
     pub function: Vec<TunnelInstallationFunctionValue>,
     pub usage: Vec<TunnelInstallationUsageValue>,
-    pub ade_of_tunnel_installation: Vec<Box<dyn ADEOfTunnelInstallation>>,
 }
-impl AbstractFeature for TunnelInstallation {
+impl AbstractFeatureTrait for TunnelInstallation {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -2384,11 +2453,8 @@ impl AbstractFeature for TunnelInstallation {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractFeatureWithLifespan for TunnelInstallation {
+impl AbstractFeatureWithLifespanTrait for TunnelInstallation {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
     }
@@ -2401,42 +2467,31 @@ impl AbstractFeatureWithLifespan for TunnelInstallation {
     fn valid_to(&self) -> Option<&String> {
         self.valid_to.as_ref()
     }
-    fn ade_of_abstract_feature_with_lifespan(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractFeatureWithLifespan>] {
-        &self.ade_of_abstract_feature_with_lifespan
-    }
 }
-impl AbstractCityObject for TunnelInstallation {
+impl AbstractCityObjectTrait for TunnelInstallation {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
     }
     fn relative_to_water(&self) -> Option<RelativeToWater> {
         self.relative_to_water
     }
-    fn ade_of_abstract_city_object(&self) -> &[Box<dyn ADEOfAbstractCityObject>] {
-        &self.ade_of_abstract_city_object
-    }
-    fn appearance(&self) -> &[Box<dyn AbstractAppearance>] {
+    fn appearance(&self) -> &[AbstractAppearance] {
         &self.appearance
     }
-    fn generic_attribute(&self) -> &[Box<dyn AbstractGenericAttribute>] {
-        &self.generic_attribute
-    }
-    fn generalizes_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn generalizes_to(&self) -> &[AbstractCityObject] {
         &self.generalizes_to
     }
     fn external_reference(&self) -> &[ExternalReference] {
         &self.external_reference
     }
-    fn related_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn related_to(&self) -> &[AbstractCityObject] {
         &self.related_to
     }
-    fn dynamizer(&self) -> &[Box<dyn AbstractDynamizer>] {
+    fn dynamizer(&self) -> &[AbstractDynamizer] {
         &self.dynamizer
     }
 }
-impl AbstractSpace for TunnelInstallation {
+impl AbstractSpaceTrait for TunnelInstallation {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
     }
@@ -2445,9 +2500,6 @@ impl AbstractSpace for TunnelInstallation {
     }
     fn area(&self) -> &[QualifiedArea] {
         &self.area
-    }
-    fn ade_of_abstract_space(&self) -> &[Box<dyn ADEOfAbstractSpace>] {
-        &self.ade_of_abstract_space
     }
     fn lod2_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod2_multi_curve.as_ref()
@@ -2464,7 +2516,7 @@ impl AbstractSpace for TunnelInstallation {
     fn lod3_solid(&self) -> Option<&crate::geometry::Solid> {
         self.lod3_solid.as_ref()
     }
-    fn boundary(&self) -> &[Box<dyn AbstractSpaceBoundary>] {
+    fn boundary(&self) -> &[AbstractSpaceBoundary] {
         &self.boundary
     }
     fn lod0_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
@@ -2483,14 +2535,11 @@ impl AbstractSpace for TunnelInstallation {
         self.lod2_multi_surface.as_ref()
     }
 }
-impl AbstractPhysicalSpace for TunnelInstallation {
-    fn ade_of_abstract_physical_space(&self) -> &[Box<dyn ADEOfAbstractPhysicalSpace>] {
-        &self.ade_of_abstract_physical_space
-    }
+impl AbstractPhysicalSpaceTrait for TunnelInstallation {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
     }
-    fn point_cloud(&self) -> Option<&Box<dyn AbstractPointCloud>> {
+    fn point_cloud(&self) -> Option<&AbstractPointCloud> {
         self.point_cloud.as_ref()
     }
     fn lod1_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
@@ -2500,10 +2549,7 @@ impl AbstractPhysicalSpace for TunnelInstallation {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
-impl AbstractOccupiedSpace for TunnelInstallation {
-    fn ade_of_abstract_occupied_space(&self) -> &[Box<dyn ADEOfAbstractOccupiedSpace>] {
-        &self.ade_of_abstract_occupied_space
-    }
+impl AbstractOccupiedSpaceTrait for TunnelInstallation {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
     }
@@ -2514,12 +2560,9 @@ impl AbstractOccupiedSpace for TunnelInstallation {
         self.lod1_implicit_representation.as_ref()
     }
 }
-impl AbstractInstallation for TunnelInstallation {
+impl AbstractInstallationTrait for TunnelInstallation {
     fn relation_to_construction(&self) -> Option<RelationToConstruction> {
         self.relation_to_construction
-    }
-    fn ade_of_abstract_installation(&self) -> &[Box<dyn ADEOfAbstractInstallation>] {
-        &self.ade_of_abstract_installation
     }
 }
 impl TunnelInstallation {
@@ -2532,17 +2575,13 @@ impl TunnelInstallation {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut creation_date = None;
         let mut termination_date = None;
         let mut valid_from = None;
         let mut valid_to = None;
-        let mut ade_of_abstract_feature_with_lifespan = Vec::new();
         let mut relative_to_terrain = None;
         let mut relative_to_water = None;
-        let mut ade_of_abstract_city_object = Vec::new();
         let mut appearance = Vec::new();
-        let mut generic_attribute = Vec::new();
         let mut generalizes_to = Vec::new();
         let mut external_reference = Vec::new();
         let mut related_to = Vec::new();
@@ -2550,7 +2589,6 @@ impl TunnelInstallation {
         let mut space_type = None;
         let mut volume = Vec::new();
         let mut area = Vec::new();
-        let mut ade_of_abstract_space = Vec::new();
         let mut lod2_multi_curve = None;
         let mut lod3_multi_surface = None;
         let mut lod0_multi_surface = None;
@@ -2562,21 +2600,17 @@ impl TunnelInstallation {
         let mut lod0_point = None;
         let mut lod3_multi_curve = None;
         let mut lod2_multi_surface = None;
-        let mut ade_of_abstract_physical_space = Vec::new();
         let mut lod3_terrain_intersection_curve = None;
         let mut point_cloud = None;
         let mut lod1_terrain_intersection_curve = None;
         let mut lod2_terrain_intersection_curve = None;
-        let mut ade_of_abstract_occupied_space = Vec::new();
         let mut lod3_implicit_representation = None;
         let mut lod2_implicit_representation = None;
         let mut lod1_implicit_representation = None;
         let mut relation_to_construction = None;
-        let mut ade_of_abstract_installation = Vec::new();
         let mut class_ = None;
         let mut function = Vec::new();
         let mut usage = Vec::new();
-        let mut ade_of_tunnel_installation = Vec::new();
         let mut feature_id = ID(_gml_id);
         let mut sub = reader.subtree();
         while let Some(info) = sub.next_element()? {
@@ -2593,9 +2627,6 @@ impl TunnelInstallation {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "creationDate") => {
                     creation_date = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
@@ -2610,9 +2641,6 @@ impl TunnelInstallation {
                 (crate::namespace::NS_CORE, "validTo") => {
                     valid_to = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeatureWithLifespan") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "relativeToTerrain") => {
                     relative_to_terrain = Some(
                         RelativeToTerrain::from_gml_text(&sub.read_text()?)?,
@@ -2623,30 +2651,24 @@ impl TunnelInstallation {
                         RelativeToWater::from_gml_text(&sub.read_text()?)?,
                     );
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractCityObject") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "appearance") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         appearance
                             .push(
-                                super::dispatchers::parse_dyn_abstract_appearance(
+                                super::dispatchers::parse_abstract_appearance(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
                             );
                     }
                 }
-                (crate::namespace::NS_CORE, "genericAttribute") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "generalizesTo") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         generalizes_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -2661,7 +2683,7 @@ impl TunnelInstallation {
                     if let Some(child_info) = wrapper.next_element()? {
                         related_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -2673,7 +2695,7 @@ impl TunnelInstallation {
                     if let Some(child_info) = wrapper.next_element()? {
                         dynamizer
                             .push(
-                                super::dispatchers::parse_dyn_abstract_dynamizer(
+                                super::dispatchers::parse_abstract_dynamizer(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -2688,9 +2710,6 @@ impl TunnelInstallation {
                 }
                 (crate::namespace::NS_CORE, "area") => {
                     area.push(QualifiedArea::from_gml(&mut sub)?);
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractSpace") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_CORE, "lod2MultiCurve") => {
                     lod2_multi_curve = Some({
@@ -2772,7 +2791,7 @@ impl TunnelInstallation {
                     if let Some(child_info) = wrapper.next_element()? {
                         boundary
                             .push(
-                                super::dispatchers::parse_dyn_abstract_space_boundary(
+                                super::dispatchers::parse_abstract_space_boundary(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -2854,9 +2873,6 @@ impl TunnelInstallation {
                         }
                     });
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractPhysicalSpace") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "lod3TerrainIntersectionCurve") => {
                     lod3_terrain_intersection_curve = Some({
                         let mut geom_sub = sub.subtree();
@@ -2876,7 +2892,7 @@ impl TunnelInstallation {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         point_cloud = Some(
-                            super::dispatchers::parse_dyn_abstract_point_cloud(
+                            super::dispatchers::parse_abstract_point_cloud(
                                 &mut wrapper,
                                 &child_info,
                             )?,
@@ -2912,9 +2928,6 @@ impl TunnelInstallation {
                             crate::geometry::MultiCurve::default()
                         }
                     });
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractOccupiedSpace") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_CORE, "lod3ImplicitRepresentation") => {
                     let mut wrapper = sub.subtree();
@@ -2966,9 +2979,6 @@ impl TunnelInstallation {
                         RelationToConstruction::from_gml_text(&sub.read_text()?)?,
                     );
                 }
-                (crate::namespace::NS_CONSTRUCTION, "adeOfAbstractInstallation") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_TUNNEL, "class") => {
                     class_ = Some(TunnelInstallationClassValue(sub.read_text()?));
                 }
@@ -2977,9 +2987,6 @@ impl TunnelInstallation {
                 }
                 (crate::namespace::NS_TUNNEL, "usage") => {
                     usage.push(TunnelInstallationUsageValue(sub.read_text()?));
-                }
-                (crate::namespace::NS_TUNNEL, "adeOfTunnelInstallation") => {
-                    sub.skip_element()?;
                 }
                 _ => {
                     sub.skip_element()?;
@@ -2991,17 +2998,13 @@ impl TunnelInstallation {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             creation_date,
             termination_date,
             valid_from,
             valid_to,
-            ade_of_abstract_feature_with_lifespan,
             relative_to_terrain,
             relative_to_water,
-            ade_of_abstract_city_object,
             appearance,
-            generic_attribute,
             generalizes_to,
             external_reference,
             related_to,
@@ -3009,7 +3012,6 @@ impl TunnelInstallation {
             space_type,
             volume,
             area,
-            ade_of_abstract_space,
             lod2_multi_curve,
             lod3_multi_surface,
             lod0_multi_surface,
@@ -3021,21 +3023,17 @@ impl TunnelInstallation {
             lod0_point,
             lod3_multi_curve,
             lod2_multi_surface,
-            ade_of_abstract_physical_space,
             lod3_terrain_intersection_curve,
             point_cloud,
             lod1_terrain_intersection_curve,
             lod2_terrain_intersection_curve,
-            ade_of_abstract_occupied_space,
             lod3_implicit_representation,
             lod2_implicit_representation,
             lod1_implicit_representation,
             relation_to_construction,
-            ade_of_abstract_installation,
             class_,
             function,
             usage,
-            ade_of_tunnel_installation,
         })
     }
 }
@@ -3051,50 +3049,41 @@ impl crate::from_gml::FromGml for TunnelInstallation {
         Self::from_gml_with_info(reader, &info)
     }
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct Tunnel {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub creation_date: Option<String>,
     pub termination_date: Option<String>,
     pub valid_from: Option<String>,
     pub valid_to: Option<String>,
-    pub ade_of_abstract_feature_with_lifespan: Vec<
-        Box<dyn ADEOfAbstractFeatureWithLifespan>,
-    >,
     pub relative_to_terrain: Option<RelativeToTerrain>,
     pub relative_to_water: Option<RelativeToWater>,
-    pub ade_of_abstract_city_object: Vec<Box<dyn ADEOfAbstractCityObject>>,
-    pub appearance: Vec<Box<dyn AbstractAppearance>>,
-    pub generic_attribute: Vec<Box<dyn AbstractGenericAttribute>>,
-    pub generalizes_to: Vec<Box<dyn AbstractCityObject>>,
+    pub appearance: Vec<AbstractAppearance>,
+    pub generalizes_to: Vec<AbstractCityObject>,
     pub external_reference: Vec<ExternalReference>,
-    pub related_to: Vec<Box<dyn AbstractCityObject>>,
-    pub dynamizer: Vec<Box<dyn AbstractDynamizer>>,
+    pub related_to: Vec<AbstractCityObject>,
+    pub dynamizer: Vec<AbstractDynamizer>,
     pub space_type: Option<SpaceType>,
     pub volume: Vec<QualifiedVolume>,
     pub area: Vec<QualifiedArea>,
-    pub ade_of_abstract_space: Vec<Box<dyn ADEOfAbstractSpace>>,
     pub lod2_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod3_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod0_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod1_solid: Option<crate::geometry::Solid>,
     pub lod3_solid: Option<crate::geometry::Solid>,
-    pub boundary: Vec<Box<dyn AbstractSpaceBoundary>>,
+    pub boundary: Vec<AbstractSpaceBoundary>,
     pub lod0_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_solid: Option<crate::geometry::Solid>,
     pub lod0_point: Option<crate::geometry::DirectPosition>,
     pub lod3_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_multi_surface: Option<crate::geometry::MultiSurface>,
-    pub ade_of_abstract_physical_space: Vec<Box<dyn ADEOfAbstractPhysicalSpace>>,
     pub lod3_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
-    pub point_cloud: Option<Box<dyn AbstractPointCloud>>,
+    pub point_cloud: Option<AbstractPointCloud>,
     pub lod1_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
-    pub ade_of_abstract_occupied_space: Vec<Box<dyn ADEOfAbstractOccupiedSpace>>,
     pub lod3_implicit_representation: Option<ImplicitGeometry>,
     pub lod2_implicit_representation: Option<ImplicitGeometry>,
     pub lod1_implicit_representation: Option<ImplicitGeometry>,
@@ -3105,19 +3094,16 @@ pub struct Tunnel {
     pub elevation: Vec<Elevation>,
     pub height: Vec<Height>,
     pub occupancy: Vec<Occupancy>,
-    pub ade_of_abstract_construction: Vec<Box<dyn ADEOfAbstractConstruction>>,
     pub class_: Option<TunnelClassValue>,
     pub function: Vec<TunnelFunctionValue>,
     pub usage: Vec<TunnelUsageValue>,
-    pub ade_of_abstract_tunnel: Vec<Box<dyn ADEOfAbstractTunnel>>,
     pub tunnel_constructive_element: Vec<TunnelConstructiveElement>,
     pub tunnel_furniture: Vec<TunnelFurniture>,
     pub tunnel_installation: Vec<TunnelInstallation>,
     pub hollow_space: Vec<HollowSpace>,
-    pub ade_of_tunnel: Vec<Box<dyn ADEOfTunnel>>,
     pub tunnel_part: Vec<TunnelPart>,
 }
-impl AbstractFeature for Tunnel {
+impl AbstractFeatureTrait for Tunnel {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -3130,11 +3116,8 @@ impl AbstractFeature for Tunnel {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractFeatureWithLifespan for Tunnel {
+impl AbstractFeatureWithLifespanTrait for Tunnel {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
     }
@@ -3147,42 +3130,31 @@ impl AbstractFeatureWithLifespan for Tunnel {
     fn valid_to(&self) -> Option<&String> {
         self.valid_to.as_ref()
     }
-    fn ade_of_abstract_feature_with_lifespan(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractFeatureWithLifespan>] {
-        &self.ade_of_abstract_feature_with_lifespan
-    }
 }
-impl AbstractCityObject for Tunnel {
+impl AbstractCityObjectTrait for Tunnel {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
     }
     fn relative_to_water(&self) -> Option<RelativeToWater> {
         self.relative_to_water
     }
-    fn ade_of_abstract_city_object(&self) -> &[Box<dyn ADEOfAbstractCityObject>] {
-        &self.ade_of_abstract_city_object
-    }
-    fn appearance(&self) -> &[Box<dyn AbstractAppearance>] {
+    fn appearance(&self) -> &[AbstractAppearance] {
         &self.appearance
     }
-    fn generic_attribute(&self) -> &[Box<dyn AbstractGenericAttribute>] {
-        &self.generic_attribute
-    }
-    fn generalizes_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn generalizes_to(&self) -> &[AbstractCityObject] {
         &self.generalizes_to
     }
     fn external_reference(&self) -> &[ExternalReference] {
         &self.external_reference
     }
-    fn related_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn related_to(&self) -> &[AbstractCityObject] {
         &self.related_to
     }
-    fn dynamizer(&self) -> &[Box<dyn AbstractDynamizer>] {
+    fn dynamizer(&self) -> &[AbstractDynamizer] {
         &self.dynamizer
     }
 }
-impl AbstractSpace for Tunnel {
+impl AbstractSpaceTrait for Tunnel {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
     }
@@ -3191,9 +3163,6 @@ impl AbstractSpace for Tunnel {
     }
     fn area(&self) -> &[QualifiedArea] {
         &self.area
-    }
-    fn ade_of_abstract_space(&self) -> &[Box<dyn ADEOfAbstractSpace>] {
-        &self.ade_of_abstract_space
     }
     fn lod2_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod2_multi_curve.as_ref()
@@ -3210,7 +3179,7 @@ impl AbstractSpace for Tunnel {
     fn lod3_solid(&self) -> Option<&crate::geometry::Solid> {
         self.lod3_solid.as_ref()
     }
-    fn boundary(&self) -> &[Box<dyn AbstractSpaceBoundary>] {
+    fn boundary(&self) -> &[AbstractSpaceBoundary] {
         &self.boundary
     }
     fn lod0_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
@@ -3229,14 +3198,11 @@ impl AbstractSpace for Tunnel {
         self.lod2_multi_surface.as_ref()
     }
 }
-impl AbstractPhysicalSpace for Tunnel {
-    fn ade_of_abstract_physical_space(&self) -> &[Box<dyn ADEOfAbstractPhysicalSpace>] {
-        &self.ade_of_abstract_physical_space
-    }
+impl AbstractPhysicalSpaceTrait for Tunnel {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
     }
-    fn point_cloud(&self) -> Option<&Box<dyn AbstractPointCloud>> {
+    fn point_cloud(&self) -> Option<&AbstractPointCloud> {
         self.point_cloud.as_ref()
     }
     fn lod1_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
@@ -3246,10 +3212,7 @@ impl AbstractPhysicalSpace for Tunnel {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
-impl AbstractOccupiedSpace for Tunnel {
-    fn ade_of_abstract_occupied_space(&self) -> &[Box<dyn ADEOfAbstractOccupiedSpace>] {
-        &self.ade_of_abstract_occupied_space
-    }
+impl AbstractOccupiedSpaceTrait for Tunnel {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
     }
@@ -3260,7 +3223,7 @@ impl AbstractOccupiedSpace for Tunnel {
         self.lod1_implicit_representation.as_ref()
     }
 }
-impl AbstractConstruction for Tunnel {
+impl AbstractConstructionTrait for Tunnel {
     fn condition_of_construction(&self) -> Option<ConditionOfConstructionValue> {
         self.condition_of_construction
     }
@@ -3282,11 +3245,8 @@ impl AbstractConstruction for Tunnel {
     fn occupancy(&self) -> &[Occupancy] {
         &self.occupancy
     }
-    fn ade_of_abstract_construction(&self) -> &[Box<dyn ADEOfAbstractConstruction>] {
-        &self.ade_of_abstract_construction
-    }
 }
-impl AbstractTunnel for Tunnel {
+impl AbstractTunnelTrait for Tunnel {
     fn class_(&self) -> Option<&TunnelClassValue> {
         self.class_.as_ref()
     }
@@ -3295,9 +3255,6 @@ impl AbstractTunnel for Tunnel {
     }
     fn usage(&self) -> &[TunnelUsageValue] {
         &self.usage
-    }
-    fn ade_of_abstract_tunnel(&self) -> &[Box<dyn ADEOfAbstractTunnel>] {
-        &self.ade_of_abstract_tunnel
     }
     fn tunnel_constructive_element(&self) -> &[TunnelConstructiveElement] {
         &self.tunnel_constructive_element
@@ -3322,17 +3279,13 @@ impl Tunnel {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut creation_date = None;
         let mut termination_date = None;
         let mut valid_from = None;
         let mut valid_to = None;
-        let mut ade_of_abstract_feature_with_lifespan = Vec::new();
         let mut relative_to_terrain = None;
         let mut relative_to_water = None;
-        let mut ade_of_abstract_city_object = Vec::new();
         let mut appearance = Vec::new();
-        let mut generic_attribute = Vec::new();
         let mut generalizes_to = Vec::new();
         let mut external_reference = Vec::new();
         let mut related_to = Vec::new();
@@ -3340,7 +3293,6 @@ impl Tunnel {
         let mut space_type = None;
         let mut volume = Vec::new();
         let mut area = Vec::new();
-        let mut ade_of_abstract_space = Vec::new();
         let mut lod2_multi_curve = None;
         let mut lod3_multi_surface = None;
         let mut lod0_multi_surface = None;
@@ -3352,12 +3304,10 @@ impl Tunnel {
         let mut lod0_point = None;
         let mut lod3_multi_curve = None;
         let mut lod2_multi_surface = None;
-        let mut ade_of_abstract_physical_space = Vec::new();
         let mut lod3_terrain_intersection_curve = None;
         let mut point_cloud = None;
         let mut lod1_terrain_intersection_curve = None;
         let mut lod2_terrain_intersection_curve = None;
-        let mut ade_of_abstract_occupied_space = Vec::new();
         let mut lod3_implicit_representation = None;
         let mut lod2_implicit_representation = None;
         let mut lod1_implicit_representation = None;
@@ -3368,16 +3318,13 @@ impl Tunnel {
         let mut elevation = Vec::new();
         let mut height = Vec::new();
         let mut occupancy = Vec::new();
-        let mut ade_of_abstract_construction = Vec::new();
         let mut class_ = None;
         let mut function = Vec::new();
         let mut usage = Vec::new();
-        let mut ade_of_abstract_tunnel = Vec::new();
         let mut tunnel_constructive_element = Vec::new();
         let mut tunnel_furniture = Vec::new();
         let mut tunnel_installation = Vec::new();
         let mut hollow_space = Vec::new();
-        let mut ade_of_tunnel = Vec::new();
         let mut tunnel_part = Vec::new();
         let mut feature_id = ID(_gml_id);
         let mut sub = reader.subtree();
@@ -3395,9 +3342,6 @@ impl Tunnel {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "creationDate") => {
                     creation_date = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
@@ -3412,9 +3356,6 @@ impl Tunnel {
                 (crate::namespace::NS_CORE, "validTo") => {
                     valid_to = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeatureWithLifespan") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "relativeToTerrain") => {
                     relative_to_terrain = Some(
                         RelativeToTerrain::from_gml_text(&sub.read_text()?)?,
@@ -3425,30 +3366,24 @@ impl Tunnel {
                         RelativeToWater::from_gml_text(&sub.read_text()?)?,
                     );
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractCityObject") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "appearance") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         appearance
                             .push(
-                                super::dispatchers::parse_dyn_abstract_appearance(
+                                super::dispatchers::parse_abstract_appearance(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
                             );
                     }
                 }
-                (crate::namespace::NS_CORE, "genericAttribute") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "generalizesTo") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         generalizes_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -3463,7 +3398,7 @@ impl Tunnel {
                     if let Some(child_info) = wrapper.next_element()? {
                         related_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -3475,7 +3410,7 @@ impl Tunnel {
                     if let Some(child_info) = wrapper.next_element()? {
                         dynamizer
                             .push(
-                                super::dispatchers::parse_dyn_abstract_dynamizer(
+                                super::dispatchers::parse_abstract_dynamizer(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -3490,9 +3425,6 @@ impl Tunnel {
                 }
                 (crate::namespace::NS_CORE, "area") => {
                     area.push(QualifiedArea::from_gml(&mut sub)?);
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractSpace") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_CORE, "lod2MultiCurve") => {
                     lod2_multi_curve = Some({
@@ -3574,7 +3506,7 @@ impl Tunnel {
                     if let Some(child_info) = wrapper.next_element()? {
                         boundary
                             .push(
-                                super::dispatchers::parse_dyn_abstract_space_boundary(
+                                super::dispatchers::parse_abstract_space_boundary(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -3656,9 +3588,6 @@ impl Tunnel {
                         }
                     });
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractPhysicalSpace") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "lod3TerrainIntersectionCurve") => {
                     lod3_terrain_intersection_curve = Some({
                         let mut geom_sub = sub.subtree();
@@ -3678,7 +3607,7 @@ impl Tunnel {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         point_cloud = Some(
-                            super::dispatchers::parse_dyn_abstract_point_cloud(
+                            super::dispatchers::parse_abstract_point_cloud(
                                 &mut wrapper,
                                 &child_info,
                             )?,
@@ -3714,9 +3643,6 @@ impl Tunnel {
                             crate::geometry::MultiCurve::default()
                         }
                     });
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractOccupiedSpace") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_CORE, "lod3ImplicitRepresentation") => {
                     let mut wrapper = sub.subtree();
@@ -3790,9 +3716,6 @@ impl Tunnel {
                 (crate::namespace::NS_CONSTRUCTION, "occupancy") => {
                     occupancy.push(Occupancy::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CONSTRUCTION, "adeOfAbstractConstruction") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_TUNNEL, "class") => {
                     class_ = Some(TunnelClassValue(sub.read_text()?));
                 }
@@ -3801,9 +3724,6 @@ impl Tunnel {
                 }
                 (crate::namespace::NS_TUNNEL, "usage") => {
                     usage.push(TunnelUsageValue(sub.read_text()?));
-                }
-                (crate::namespace::NS_TUNNEL, "adeOfAbstractTunnel") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_TUNNEL, "tunnelConstructiveElement") => {
                     let mut wrapper = sub.subtree();
@@ -3850,9 +3770,6 @@ impl Tunnel {
                             );
                     }
                 }
-                (crate::namespace::NS_TUNNEL, "adeOfTunnel") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_TUNNEL, "tunnelPart") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
@@ -3872,17 +3789,13 @@ impl Tunnel {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             creation_date,
             termination_date,
             valid_from,
             valid_to,
-            ade_of_abstract_feature_with_lifespan,
             relative_to_terrain,
             relative_to_water,
-            ade_of_abstract_city_object,
             appearance,
-            generic_attribute,
             generalizes_to,
             external_reference,
             related_to,
@@ -3890,7 +3803,6 @@ impl Tunnel {
             space_type,
             volume,
             area,
-            ade_of_abstract_space,
             lod2_multi_curve,
             lod3_multi_surface,
             lod0_multi_surface,
@@ -3902,12 +3814,10 @@ impl Tunnel {
             lod0_point,
             lod3_multi_curve,
             lod2_multi_surface,
-            ade_of_abstract_physical_space,
             lod3_terrain_intersection_curve,
             point_cloud,
             lod1_terrain_intersection_curve,
             lod2_terrain_intersection_curve,
-            ade_of_abstract_occupied_space,
             lod3_implicit_representation,
             lod2_implicit_representation,
             lod1_implicit_representation,
@@ -3918,16 +3828,13 @@ impl Tunnel {
             elevation,
             height,
             occupancy,
-            ade_of_abstract_construction,
             class_,
             function,
             usage,
-            ade_of_abstract_tunnel,
             tunnel_constructive_element,
             tunnel_furniture,
             tunnel_installation,
             hollow_space,
-            ade_of_tunnel,
             tunnel_part,
         })
     }
@@ -3944,50 +3851,41 @@ impl crate::from_gml::FromGml for Tunnel {
         Self::from_gml_with_info(reader, &info)
     }
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct TunnelPart {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub creation_date: Option<String>,
     pub termination_date: Option<String>,
     pub valid_from: Option<String>,
     pub valid_to: Option<String>,
-    pub ade_of_abstract_feature_with_lifespan: Vec<
-        Box<dyn ADEOfAbstractFeatureWithLifespan>,
-    >,
     pub relative_to_terrain: Option<RelativeToTerrain>,
     pub relative_to_water: Option<RelativeToWater>,
-    pub ade_of_abstract_city_object: Vec<Box<dyn ADEOfAbstractCityObject>>,
-    pub appearance: Vec<Box<dyn AbstractAppearance>>,
-    pub generic_attribute: Vec<Box<dyn AbstractGenericAttribute>>,
-    pub generalizes_to: Vec<Box<dyn AbstractCityObject>>,
+    pub appearance: Vec<AbstractAppearance>,
+    pub generalizes_to: Vec<AbstractCityObject>,
     pub external_reference: Vec<ExternalReference>,
-    pub related_to: Vec<Box<dyn AbstractCityObject>>,
-    pub dynamizer: Vec<Box<dyn AbstractDynamizer>>,
+    pub related_to: Vec<AbstractCityObject>,
+    pub dynamizer: Vec<AbstractDynamizer>,
     pub space_type: Option<SpaceType>,
     pub volume: Vec<QualifiedVolume>,
     pub area: Vec<QualifiedArea>,
-    pub ade_of_abstract_space: Vec<Box<dyn ADEOfAbstractSpace>>,
     pub lod2_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod3_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod0_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod1_solid: Option<crate::geometry::Solid>,
     pub lod3_solid: Option<crate::geometry::Solid>,
-    pub boundary: Vec<Box<dyn AbstractSpaceBoundary>>,
+    pub boundary: Vec<AbstractSpaceBoundary>,
     pub lod0_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_solid: Option<crate::geometry::Solid>,
     pub lod0_point: Option<crate::geometry::DirectPosition>,
     pub lod3_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_multi_surface: Option<crate::geometry::MultiSurface>,
-    pub ade_of_abstract_physical_space: Vec<Box<dyn ADEOfAbstractPhysicalSpace>>,
     pub lod3_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
-    pub point_cloud: Option<Box<dyn AbstractPointCloud>>,
+    pub point_cloud: Option<AbstractPointCloud>,
     pub lod1_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
-    pub ade_of_abstract_occupied_space: Vec<Box<dyn ADEOfAbstractOccupiedSpace>>,
     pub lod3_implicit_representation: Option<ImplicitGeometry>,
     pub lod2_implicit_representation: Option<ImplicitGeometry>,
     pub lod1_implicit_representation: Option<ImplicitGeometry>,
@@ -3998,18 +3896,15 @@ pub struct TunnelPart {
     pub elevation: Vec<Elevation>,
     pub height: Vec<Height>,
     pub occupancy: Vec<Occupancy>,
-    pub ade_of_abstract_construction: Vec<Box<dyn ADEOfAbstractConstruction>>,
     pub class_: Option<TunnelClassValue>,
     pub function: Vec<TunnelFunctionValue>,
     pub usage: Vec<TunnelUsageValue>,
-    pub ade_of_abstract_tunnel: Vec<Box<dyn ADEOfAbstractTunnel>>,
     pub tunnel_constructive_element: Vec<TunnelConstructiveElement>,
     pub tunnel_furniture: Vec<TunnelFurniture>,
     pub tunnel_installation: Vec<TunnelInstallation>,
     pub hollow_space: Vec<HollowSpace>,
-    pub ade_of_tunnel_part: Vec<Box<dyn ADEOfTunnelPart>>,
 }
-impl AbstractFeature for TunnelPart {
+impl AbstractFeatureTrait for TunnelPart {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -4022,11 +3917,8 @@ impl AbstractFeature for TunnelPart {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractFeatureWithLifespan for TunnelPart {
+impl AbstractFeatureWithLifespanTrait for TunnelPart {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
     }
@@ -4039,42 +3931,31 @@ impl AbstractFeatureWithLifespan for TunnelPart {
     fn valid_to(&self) -> Option<&String> {
         self.valid_to.as_ref()
     }
-    fn ade_of_abstract_feature_with_lifespan(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractFeatureWithLifespan>] {
-        &self.ade_of_abstract_feature_with_lifespan
-    }
 }
-impl AbstractCityObject for TunnelPart {
+impl AbstractCityObjectTrait for TunnelPart {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
     }
     fn relative_to_water(&self) -> Option<RelativeToWater> {
         self.relative_to_water
     }
-    fn ade_of_abstract_city_object(&self) -> &[Box<dyn ADEOfAbstractCityObject>] {
-        &self.ade_of_abstract_city_object
-    }
-    fn appearance(&self) -> &[Box<dyn AbstractAppearance>] {
+    fn appearance(&self) -> &[AbstractAppearance] {
         &self.appearance
     }
-    fn generic_attribute(&self) -> &[Box<dyn AbstractGenericAttribute>] {
-        &self.generic_attribute
-    }
-    fn generalizes_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn generalizes_to(&self) -> &[AbstractCityObject] {
         &self.generalizes_to
     }
     fn external_reference(&self) -> &[ExternalReference] {
         &self.external_reference
     }
-    fn related_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn related_to(&self) -> &[AbstractCityObject] {
         &self.related_to
     }
-    fn dynamizer(&self) -> &[Box<dyn AbstractDynamizer>] {
+    fn dynamizer(&self) -> &[AbstractDynamizer] {
         &self.dynamizer
     }
 }
-impl AbstractSpace for TunnelPart {
+impl AbstractSpaceTrait for TunnelPart {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
     }
@@ -4083,9 +3964,6 @@ impl AbstractSpace for TunnelPart {
     }
     fn area(&self) -> &[QualifiedArea] {
         &self.area
-    }
-    fn ade_of_abstract_space(&self) -> &[Box<dyn ADEOfAbstractSpace>] {
-        &self.ade_of_abstract_space
     }
     fn lod2_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod2_multi_curve.as_ref()
@@ -4102,7 +3980,7 @@ impl AbstractSpace for TunnelPart {
     fn lod3_solid(&self) -> Option<&crate::geometry::Solid> {
         self.lod3_solid.as_ref()
     }
-    fn boundary(&self) -> &[Box<dyn AbstractSpaceBoundary>] {
+    fn boundary(&self) -> &[AbstractSpaceBoundary] {
         &self.boundary
     }
     fn lod0_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
@@ -4121,14 +3999,11 @@ impl AbstractSpace for TunnelPart {
         self.lod2_multi_surface.as_ref()
     }
 }
-impl AbstractPhysicalSpace for TunnelPart {
-    fn ade_of_abstract_physical_space(&self) -> &[Box<dyn ADEOfAbstractPhysicalSpace>] {
-        &self.ade_of_abstract_physical_space
-    }
+impl AbstractPhysicalSpaceTrait for TunnelPart {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
     }
-    fn point_cloud(&self) -> Option<&Box<dyn AbstractPointCloud>> {
+    fn point_cloud(&self) -> Option<&AbstractPointCloud> {
         self.point_cloud.as_ref()
     }
     fn lod1_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
@@ -4138,10 +4013,7 @@ impl AbstractPhysicalSpace for TunnelPart {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
-impl AbstractOccupiedSpace for TunnelPart {
-    fn ade_of_abstract_occupied_space(&self) -> &[Box<dyn ADEOfAbstractOccupiedSpace>] {
-        &self.ade_of_abstract_occupied_space
-    }
+impl AbstractOccupiedSpaceTrait for TunnelPart {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
     }
@@ -4152,7 +4024,7 @@ impl AbstractOccupiedSpace for TunnelPart {
         self.lod1_implicit_representation.as_ref()
     }
 }
-impl AbstractConstruction for TunnelPart {
+impl AbstractConstructionTrait for TunnelPart {
     fn condition_of_construction(&self) -> Option<ConditionOfConstructionValue> {
         self.condition_of_construction
     }
@@ -4174,11 +4046,8 @@ impl AbstractConstruction for TunnelPart {
     fn occupancy(&self) -> &[Occupancy] {
         &self.occupancy
     }
-    fn ade_of_abstract_construction(&self) -> &[Box<dyn ADEOfAbstractConstruction>] {
-        &self.ade_of_abstract_construction
-    }
 }
-impl AbstractTunnel for TunnelPart {
+impl AbstractTunnelTrait for TunnelPart {
     fn class_(&self) -> Option<&TunnelClassValue> {
         self.class_.as_ref()
     }
@@ -4187,9 +4056,6 @@ impl AbstractTunnel for TunnelPart {
     }
     fn usage(&self) -> &[TunnelUsageValue] {
         &self.usage
-    }
-    fn ade_of_abstract_tunnel(&self) -> &[Box<dyn ADEOfAbstractTunnel>] {
-        &self.ade_of_abstract_tunnel
     }
     fn tunnel_constructive_element(&self) -> &[TunnelConstructiveElement] {
         &self.tunnel_constructive_element
@@ -4214,17 +4080,13 @@ impl TunnelPart {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut creation_date = None;
         let mut termination_date = None;
         let mut valid_from = None;
         let mut valid_to = None;
-        let mut ade_of_abstract_feature_with_lifespan = Vec::new();
         let mut relative_to_terrain = None;
         let mut relative_to_water = None;
-        let mut ade_of_abstract_city_object = Vec::new();
         let mut appearance = Vec::new();
-        let mut generic_attribute = Vec::new();
         let mut generalizes_to = Vec::new();
         let mut external_reference = Vec::new();
         let mut related_to = Vec::new();
@@ -4232,7 +4094,6 @@ impl TunnelPart {
         let mut space_type = None;
         let mut volume = Vec::new();
         let mut area = Vec::new();
-        let mut ade_of_abstract_space = Vec::new();
         let mut lod2_multi_curve = None;
         let mut lod3_multi_surface = None;
         let mut lod0_multi_surface = None;
@@ -4244,12 +4105,10 @@ impl TunnelPart {
         let mut lod0_point = None;
         let mut lod3_multi_curve = None;
         let mut lod2_multi_surface = None;
-        let mut ade_of_abstract_physical_space = Vec::new();
         let mut lod3_terrain_intersection_curve = None;
         let mut point_cloud = None;
         let mut lod1_terrain_intersection_curve = None;
         let mut lod2_terrain_intersection_curve = None;
-        let mut ade_of_abstract_occupied_space = Vec::new();
         let mut lod3_implicit_representation = None;
         let mut lod2_implicit_representation = None;
         let mut lod1_implicit_representation = None;
@@ -4260,16 +4119,13 @@ impl TunnelPart {
         let mut elevation = Vec::new();
         let mut height = Vec::new();
         let mut occupancy = Vec::new();
-        let mut ade_of_abstract_construction = Vec::new();
         let mut class_ = None;
         let mut function = Vec::new();
         let mut usage = Vec::new();
-        let mut ade_of_abstract_tunnel = Vec::new();
         let mut tunnel_constructive_element = Vec::new();
         let mut tunnel_furniture = Vec::new();
         let mut tunnel_installation = Vec::new();
         let mut hollow_space = Vec::new();
-        let mut ade_of_tunnel_part = Vec::new();
         let mut feature_id = ID(_gml_id);
         let mut sub = reader.subtree();
         while let Some(info) = sub.next_element()? {
@@ -4286,9 +4142,6 @@ impl TunnelPart {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "creationDate") => {
                     creation_date = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
@@ -4303,9 +4156,6 @@ impl TunnelPart {
                 (crate::namespace::NS_CORE, "validTo") => {
                     valid_to = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeatureWithLifespan") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "relativeToTerrain") => {
                     relative_to_terrain = Some(
                         RelativeToTerrain::from_gml_text(&sub.read_text()?)?,
@@ -4316,30 +4166,24 @@ impl TunnelPart {
                         RelativeToWater::from_gml_text(&sub.read_text()?)?,
                     );
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractCityObject") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "appearance") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         appearance
                             .push(
-                                super::dispatchers::parse_dyn_abstract_appearance(
+                                super::dispatchers::parse_abstract_appearance(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
                             );
                     }
                 }
-                (crate::namespace::NS_CORE, "genericAttribute") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "generalizesTo") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         generalizes_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -4354,7 +4198,7 @@ impl TunnelPart {
                     if let Some(child_info) = wrapper.next_element()? {
                         related_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -4366,7 +4210,7 @@ impl TunnelPart {
                     if let Some(child_info) = wrapper.next_element()? {
                         dynamizer
                             .push(
-                                super::dispatchers::parse_dyn_abstract_dynamizer(
+                                super::dispatchers::parse_abstract_dynamizer(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -4381,9 +4225,6 @@ impl TunnelPart {
                 }
                 (crate::namespace::NS_CORE, "area") => {
                     area.push(QualifiedArea::from_gml(&mut sub)?);
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractSpace") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_CORE, "lod2MultiCurve") => {
                     lod2_multi_curve = Some({
@@ -4465,7 +4306,7 @@ impl TunnelPart {
                     if let Some(child_info) = wrapper.next_element()? {
                         boundary
                             .push(
-                                super::dispatchers::parse_dyn_abstract_space_boundary(
+                                super::dispatchers::parse_abstract_space_boundary(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -4547,9 +4388,6 @@ impl TunnelPart {
                         }
                     });
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractPhysicalSpace") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "lod3TerrainIntersectionCurve") => {
                     lod3_terrain_intersection_curve = Some({
                         let mut geom_sub = sub.subtree();
@@ -4569,7 +4407,7 @@ impl TunnelPart {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         point_cloud = Some(
-                            super::dispatchers::parse_dyn_abstract_point_cloud(
+                            super::dispatchers::parse_abstract_point_cloud(
                                 &mut wrapper,
                                 &child_info,
                             )?,
@@ -4605,9 +4443,6 @@ impl TunnelPart {
                             crate::geometry::MultiCurve::default()
                         }
                     });
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractOccupiedSpace") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_CORE, "lod3ImplicitRepresentation") => {
                     let mut wrapper = sub.subtree();
@@ -4681,9 +4516,6 @@ impl TunnelPart {
                 (crate::namespace::NS_CONSTRUCTION, "occupancy") => {
                     occupancy.push(Occupancy::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CONSTRUCTION, "adeOfAbstractConstruction") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_TUNNEL, "class") => {
                     class_ = Some(TunnelClassValue(sub.read_text()?));
                 }
@@ -4692,9 +4524,6 @@ impl TunnelPart {
                 }
                 (crate::namespace::NS_TUNNEL, "usage") => {
                     usage.push(TunnelUsageValue(sub.read_text()?));
-                }
-                (crate::namespace::NS_TUNNEL, "adeOfAbstractTunnel") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_TUNNEL, "tunnelConstructiveElement") => {
                     let mut wrapper = sub.subtree();
@@ -4741,9 +4570,6 @@ impl TunnelPart {
                             );
                     }
                 }
-                (crate::namespace::NS_TUNNEL, "adeOfTunnelPart") => {
-                    sub.skip_element()?;
-                }
                 _ => {
                     sub.skip_element()?;
                 }
@@ -4754,17 +4580,13 @@ impl TunnelPart {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             creation_date,
             termination_date,
             valid_from,
             valid_to,
-            ade_of_abstract_feature_with_lifespan,
             relative_to_terrain,
             relative_to_water,
-            ade_of_abstract_city_object,
             appearance,
-            generic_attribute,
             generalizes_to,
             external_reference,
             related_to,
@@ -4772,7 +4594,6 @@ impl TunnelPart {
             space_type,
             volume,
             area,
-            ade_of_abstract_space,
             lod2_multi_curve,
             lod3_multi_surface,
             lod0_multi_surface,
@@ -4784,12 +4605,10 @@ impl TunnelPart {
             lod0_point,
             lod3_multi_curve,
             lod2_multi_surface,
-            ade_of_abstract_physical_space,
             lod3_terrain_intersection_curve,
             point_cloud,
             lod1_terrain_intersection_curve,
             lod2_terrain_intersection_curve,
-            ade_of_abstract_occupied_space,
             lod3_implicit_representation,
             lod2_implicit_representation,
             lod1_implicit_representation,
@@ -4800,16 +4619,13 @@ impl TunnelPart {
             elevation,
             height,
             occupancy,
-            ade_of_abstract_construction,
             class_,
             function,
             usage,
-            ade_of_abstract_tunnel,
             tunnel_constructive_element,
             tunnel_furniture,
             tunnel_installation,
             hollow_space,
-            ade_of_tunnel_part,
         })
     }
 }

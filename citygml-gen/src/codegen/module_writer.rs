@@ -6,6 +6,7 @@ use proc_macro2::TokenStream;
 use crate::codegen::datatype_gen::generate_datatype;
 use crate::codegen::enum_gen::generate_enum;
 use crate::codegen::from_gml_gen;
+use crate::codegen::enum_gen_dispatch::generate_enum_dispatch;
 use crate::codegen::struct_gen::{generate_codelist, generate_struct};
 use crate::codegen::trait_gen::generate_trait;
 use crate::error::GenError;
@@ -76,21 +77,33 @@ pub fn generate_all(
     // Generate classes in topological order
     for class_id in &model.sorted_class_ids {
         if let Some(cls) = model.classes.get(class_id.as_str()) {
-            let ts = if cls.is_abstract {
-                generate_trait(cls, model)
+            if cls.is_abstract {
+                let ts = generate_trait(cls, model);
+                if let Some(pt) = pkg_tokens.get_mut(&cls.package_id) {
+                    pt.tokens.push(ts);
+                }
+                // Generate enum dispatch if there are concrete descendants
+                let descendants = model.concrete_descendants(&cls.xmi_id);
+                if !descendants.is_empty() {
+                    let enum_ts = generate_enum_dispatch(cls, &descendants, model);
+                    if let Some(pt) = pkg_tokens.get_mut(&cls.package_id) {
+                        pt.tokens.push(enum_ts);
+                    }
+                }
             } else if cls.own_properties.is_empty()
                 && cls.parent_ids.is_empty()
-                && !cls.is_abstract
             {
                 // CodeList class (no attrs, no parents, concrete)
-                generate_codelist(cls)
+                let ts = generate_codelist(cls);
+                if let Some(pt) = pkg_tokens.get_mut(&cls.package_id) {
+                    pt.tokens.push(ts);
+                }
             } else {
-                generate_struct(cls, model)
+                let ts = generate_struct(cls, model);
+                if let Some(pt) = pkg_tokens.get_mut(&cls.package_id) {
+                    pt.tokens.push(ts);
+                }
             };
-
-            if let Some(pt) = pkg_tokens.get_mut(&cls.package_id) {
-                pt.tokens.push(ts);
-            }
 
             // Also generate FromGml for non-abstract classes
             if with_reader && !cls.is_abstract {

@@ -1,22 +1,18 @@
 #![allow(unused_imports, unused_mut, unused_variables)]
 use super::*;
 
-pub trait ADEOfPointCloud: std::fmt::Debug {}
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct PointCloud {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
-    pub ade_of_abstract_point_cloud: Vec<Box<dyn ADEOfAbstractPointCloud>>,
     pub mime_type: Option<MimeTypeValue>,
     pub point_file: Option<String>,
     pub point_file_srs_name: Option<String>,
-    pub ade_of_point_cloud: Vec<Box<dyn ADEOfPointCloud>>,
     pub points: Option<Vec<crate::geometry::DirectPosition>>,
 }
-impl AbstractFeature for PointCloud {
+impl AbstractFeatureTrait for PointCloud {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -29,15 +25,8 @@ impl AbstractFeature for PointCloud {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractPointCloud for PointCloud {
-    fn ade_of_abstract_point_cloud(&self) -> &[Box<dyn ADEOfAbstractPointCloud>] {
-        &self.ade_of_abstract_point_cloud
-    }
-}
+impl AbstractPointCloudTrait for PointCloud {}
 impl PointCloud {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -48,12 +37,9 @@ impl PointCloud {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
-        let mut ade_of_abstract_point_cloud = Vec::new();
         let mut mime_type = None;
         let mut point_file = None;
         let mut point_file_srs_name = None;
-        let mut ade_of_point_cloud = Vec::new();
         let mut points = None;
         let mut feature_id = ID(_gml_id);
         let mut sub = reader.subtree();
@@ -71,12 +57,6 @@ impl PointCloud {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractPointCloud") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_POINT_CLOUD, "mimeType") => {
                     mime_type = Some(MimeTypeValue(sub.read_text()?));
                 }
@@ -87,9 +67,6 @@ impl PointCloud {
                     point_file_srs_name = Some(
                         crate::from_gml::FromGml::from_gml(&mut sub)?,
                     );
-                }
-                (crate::namespace::NS_POINT_CLOUD, "adeOfPointCloud") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_POINT_CLOUD, "points") => {
                     points = Some({
@@ -116,12 +93,9 @@ impl PointCloud {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
-            ade_of_abstract_point_cloud,
             mime_type,
             point_file,
             point_file_srs_name,
-            ade_of_point_cloud,
             points,
         })
     }

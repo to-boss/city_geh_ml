@@ -1,16 +1,6 @@
 #![allow(unused_imports, unused_mut, unused_variables)]
 use super::*;
 
-pub trait ADEOfAbstractBuilding: std::fmt::Debug {}
-pub trait ADEOfAbstractBuildingSubdivision: std::fmt::Debug {}
-pub trait ADEOfBuilding: std::fmt::Debug {}
-pub trait ADEOfBuildingConstructiveElement: std::fmt::Debug {}
-pub trait ADEOfBuildingFurniture: std::fmt::Debug {}
-pub trait ADEOfBuildingInstallation: std::fmt::Debug {}
-pub trait ADEOfBuildingPart: std::fmt::Debug {}
-pub trait ADEOfBuildingRoom: std::fmt::Debug {}
-pub trait ADEOfBuildingUnit: std::fmt::Debug {}
-pub trait ADEOfStorey: std::fmt::Debug {}
 #[derive(Debug, Clone, Default)]
 pub struct RoomHeight {
     pub high_reference: RoomElevationReferenceValue,
@@ -235,76 +225,320 @@ impl crate::from_gml::FromGml for RoomElevationReferenceValue {
         Ok(RoomElevationReferenceValue(reader.read_text()?))
     }
 }
-pub trait AbstractBuildingSubdivision: AbstractLogicalSpace {
+pub trait AbstractBuildingSubdivisionTrait: AbstractLogicalSpaceTrait {
     fn class_(&self) -> Option<&BuildingSubdivisionClassValue>;
     fn function(&self) -> &[BuildingSubdivisionFunctionValue];
     fn usage(&self) -> &[BuildingSubdivisionUsageValue];
     fn elevation(&self) -> &[Elevation];
     fn sort_key(&self) -> Option<f64>;
-    fn ade_of_abstract_building_subdivision(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractBuildingSubdivision>];
     fn building_furniture(&self) -> &[BuildingFurniture];
     fn building_constructive_element(&self) -> &[BuildingConstructiveElement];
     fn building_installation(&self) -> &[BuildingInstallation];
     fn building_room(&self) -> &[BuildingRoom];
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone)]
+pub enum AbstractBuildingSubdivision {
+    BuildingUnit(BuildingUnit),
+    Storey(Storey),
+}
+impl Default for AbstractBuildingSubdivision {
+    fn default() -> Self {
+        Self::BuildingUnit(Default::default())
+    }
+}
+impl AbstractFeatureTrait for AbstractBuildingSubdivision {
+    fn feature_id(&self) -> &ID {
+        match self {
+            Self::BuildingUnit(v) => v.feature_id(),
+            Self::Storey(v) => v.feature_id(),
+        }
+    }
+    fn identifier(&self) -> Option<&String> {
+        match self {
+            Self::BuildingUnit(v) => v.identifier(),
+            Self::Storey(v) => v.identifier(),
+        }
+    }
+    fn name(&self) -> &[String] {
+        match self {
+            Self::BuildingUnit(v) => v.name(),
+            Self::Storey(v) => v.name(),
+        }
+    }
+    fn description(&self) -> Option<&String> {
+        match self {
+            Self::BuildingUnit(v) => v.description(),
+            Self::Storey(v) => v.description(),
+        }
+    }
+}
+impl AbstractFeatureWithLifespanTrait for AbstractBuildingSubdivision {
+    fn creation_date(&self) -> Option<&String> {
+        match self {
+            Self::BuildingUnit(v) => v.creation_date(),
+            Self::Storey(v) => v.creation_date(),
+        }
+    }
+    fn termination_date(&self) -> Option<&String> {
+        match self {
+            Self::BuildingUnit(v) => v.termination_date(),
+            Self::Storey(v) => v.termination_date(),
+        }
+    }
+    fn valid_from(&self) -> Option<&String> {
+        match self {
+            Self::BuildingUnit(v) => v.valid_from(),
+            Self::Storey(v) => v.valid_from(),
+        }
+    }
+    fn valid_to(&self) -> Option<&String> {
+        match self {
+            Self::BuildingUnit(v) => v.valid_to(),
+            Self::Storey(v) => v.valid_to(),
+        }
+    }
+}
+impl AbstractCityObjectTrait for AbstractBuildingSubdivision {
+    fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
+        match self {
+            Self::BuildingUnit(v) => v.relative_to_terrain(),
+            Self::Storey(v) => v.relative_to_terrain(),
+        }
+    }
+    fn relative_to_water(&self) -> Option<RelativeToWater> {
+        match self {
+            Self::BuildingUnit(v) => v.relative_to_water(),
+            Self::Storey(v) => v.relative_to_water(),
+        }
+    }
+    fn appearance(&self) -> &[AbstractAppearance] {
+        match self {
+            Self::BuildingUnit(v) => v.appearance(),
+            Self::Storey(v) => v.appearance(),
+        }
+    }
+    fn generalizes_to(&self) -> &[AbstractCityObject] {
+        match self {
+            Self::BuildingUnit(v) => v.generalizes_to(),
+            Self::Storey(v) => v.generalizes_to(),
+        }
+    }
+    fn external_reference(&self) -> &[ExternalReference] {
+        match self {
+            Self::BuildingUnit(v) => v.external_reference(),
+            Self::Storey(v) => v.external_reference(),
+        }
+    }
+    fn related_to(&self) -> &[AbstractCityObject] {
+        match self {
+            Self::BuildingUnit(v) => v.related_to(),
+            Self::Storey(v) => v.related_to(),
+        }
+    }
+    fn dynamizer(&self) -> &[AbstractDynamizer] {
+        match self {
+            Self::BuildingUnit(v) => v.dynamizer(),
+            Self::Storey(v) => v.dynamizer(),
+        }
+    }
+}
+impl AbstractSpaceTrait for AbstractBuildingSubdivision {
+    fn space_type(&self) -> Option<SpaceType> {
+        match self {
+            Self::BuildingUnit(v) => v.space_type(),
+            Self::Storey(v) => v.space_type(),
+        }
+    }
+    fn volume(&self) -> &[QualifiedVolume] {
+        match self {
+            Self::BuildingUnit(v) => v.volume(),
+            Self::Storey(v) => v.volume(),
+        }
+    }
+    fn area(&self) -> &[QualifiedArea] {
+        match self {
+            Self::BuildingUnit(v) => v.area(),
+            Self::Storey(v) => v.area(),
+        }
+    }
+    fn lod2_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
+        match self {
+            Self::BuildingUnit(v) => v.lod2_multi_curve(),
+            Self::Storey(v) => v.lod2_multi_curve(),
+        }
+    }
+    fn lod3_multi_surface(&self) -> Option<&crate::geometry::MultiSurface> {
+        match self {
+            Self::BuildingUnit(v) => v.lod3_multi_surface(),
+            Self::Storey(v) => v.lod3_multi_surface(),
+        }
+    }
+    fn lod0_multi_surface(&self) -> Option<&crate::geometry::MultiSurface> {
+        match self {
+            Self::BuildingUnit(v) => v.lod0_multi_surface(),
+            Self::Storey(v) => v.lod0_multi_surface(),
+        }
+    }
+    fn lod1_solid(&self) -> Option<&crate::geometry::Solid> {
+        match self {
+            Self::BuildingUnit(v) => v.lod1_solid(),
+            Self::Storey(v) => v.lod1_solid(),
+        }
+    }
+    fn lod3_solid(&self) -> Option<&crate::geometry::Solid> {
+        match self {
+            Self::BuildingUnit(v) => v.lod3_solid(),
+            Self::Storey(v) => v.lod3_solid(),
+        }
+    }
+    fn boundary(&self) -> &[AbstractSpaceBoundary] {
+        match self {
+            Self::BuildingUnit(v) => v.boundary(),
+            Self::Storey(v) => v.boundary(),
+        }
+    }
+    fn lod0_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
+        match self {
+            Self::BuildingUnit(v) => v.lod0_multi_curve(),
+            Self::Storey(v) => v.lod0_multi_curve(),
+        }
+    }
+    fn lod2_solid(&self) -> Option<&crate::geometry::Solid> {
+        match self {
+            Self::BuildingUnit(v) => v.lod2_solid(),
+            Self::Storey(v) => v.lod2_solid(),
+        }
+    }
+    fn lod0_point(&self) -> Option<&crate::geometry::DirectPosition> {
+        match self {
+            Self::BuildingUnit(v) => v.lod0_point(),
+            Self::Storey(v) => v.lod0_point(),
+        }
+    }
+    fn lod3_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
+        match self {
+            Self::BuildingUnit(v) => v.lod3_multi_curve(),
+            Self::Storey(v) => v.lod3_multi_curve(),
+        }
+    }
+    fn lod2_multi_surface(&self) -> Option<&crate::geometry::MultiSurface> {
+        match self {
+            Self::BuildingUnit(v) => v.lod2_multi_surface(),
+            Self::Storey(v) => v.lod2_multi_surface(),
+        }
+    }
+}
+impl AbstractLogicalSpaceTrait for AbstractBuildingSubdivision {}
+impl AbstractBuildingSubdivisionTrait for AbstractBuildingSubdivision {
+    fn class_(&self) -> Option<&BuildingSubdivisionClassValue> {
+        match self {
+            Self::BuildingUnit(v) => v.class_(),
+            Self::Storey(v) => v.class_(),
+        }
+    }
+    fn function(&self) -> &[BuildingSubdivisionFunctionValue] {
+        match self {
+            Self::BuildingUnit(v) => v.function(),
+            Self::Storey(v) => v.function(),
+        }
+    }
+    fn usage(&self) -> &[BuildingSubdivisionUsageValue] {
+        match self {
+            Self::BuildingUnit(v) => v.usage(),
+            Self::Storey(v) => v.usage(),
+        }
+    }
+    fn elevation(&self) -> &[Elevation] {
+        match self {
+            Self::BuildingUnit(v) => v.elevation(),
+            Self::Storey(v) => v.elevation(),
+        }
+    }
+    fn sort_key(&self) -> Option<f64> {
+        match self {
+            Self::BuildingUnit(v) => v.sort_key(),
+            Self::Storey(v) => v.sort_key(),
+        }
+    }
+    fn building_furniture(&self) -> &[BuildingFurniture] {
+        match self {
+            Self::BuildingUnit(v) => v.building_furniture(),
+            Self::Storey(v) => v.building_furniture(),
+        }
+    }
+    fn building_constructive_element(&self) -> &[BuildingConstructiveElement] {
+        match self {
+            Self::BuildingUnit(v) => v.building_constructive_element(),
+            Self::Storey(v) => v.building_constructive_element(),
+        }
+    }
+    fn building_installation(&self) -> &[BuildingInstallation] {
+        match self {
+            Self::BuildingUnit(v) => v.building_installation(),
+            Self::Storey(v) => v.building_installation(),
+        }
+    }
+    fn building_room(&self) -> &[BuildingRoom] {
+        match self {
+            Self::BuildingUnit(v) => v.building_room(),
+            Self::Storey(v) => v.building_room(),
+        }
+    }
+}
+impl From<BuildingUnit> for AbstractBuildingSubdivision {
+    fn from(v: BuildingUnit) -> Self {
+        Self::BuildingUnit(v)
+    }
+}
+impl From<Storey> for AbstractBuildingSubdivision {
+    fn from(v: Storey) -> Self {
+        Self::Storey(v)
+    }
+}
+#[derive(Debug, Clone, Default)]
 pub struct BuildingUnit {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub creation_date: Option<String>,
     pub termination_date: Option<String>,
     pub valid_from: Option<String>,
     pub valid_to: Option<String>,
-    pub ade_of_abstract_feature_with_lifespan: Vec<
-        Box<dyn ADEOfAbstractFeatureWithLifespan>,
-    >,
     pub relative_to_terrain: Option<RelativeToTerrain>,
     pub relative_to_water: Option<RelativeToWater>,
-    pub ade_of_abstract_city_object: Vec<Box<dyn ADEOfAbstractCityObject>>,
-    pub appearance: Vec<Box<dyn AbstractAppearance>>,
-    pub generic_attribute: Vec<Box<dyn AbstractGenericAttribute>>,
-    pub generalizes_to: Vec<Box<dyn AbstractCityObject>>,
+    pub appearance: Vec<AbstractAppearance>,
+    pub generalizes_to: Vec<AbstractCityObject>,
     pub external_reference: Vec<ExternalReference>,
-    pub related_to: Vec<Box<dyn AbstractCityObject>>,
-    pub dynamizer: Vec<Box<dyn AbstractDynamizer>>,
+    pub related_to: Vec<AbstractCityObject>,
+    pub dynamizer: Vec<AbstractDynamizer>,
     pub space_type: Option<SpaceType>,
     pub volume: Vec<QualifiedVolume>,
     pub area: Vec<QualifiedArea>,
-    pub ade_of_abstract_space: Vec<Box<dyn ADEOfAbstractSpace>>,
     pub lod2_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod3_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod0_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod1_solid: Option<crate::geometry::Solid>,
     pub lod3_solid: Option<crate::geometry::Solid>,
-    pub boundary: Vec<Box<dyn AbstractSpaceBoundary>>,
+    pub boundary: Vec<AbstractSpaceBoundary>,
     pub lod0_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_solid: Option<crate::geometry::Solid>,
     pub lod0_point: Option<crate::geometry::DirectPosition>,
     pub lod3_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_multi_surface: Option<crate::geometry::MultiSurface>,
-    pub ade_of_abstract_logical_space: Vec<Box<dyn ADEOfAbstractLogicalSpace>>,
     pub class_: Option<BuildingSubdivisionClassValue>,
     pub function: Vec<BuildingSubdivisionFunctionValue>,
     pub usage: Vec<BuildingSubdivisionUsageValue>,
     pub elevation: Vec<Elevation>,
     pub sort_key: Option<f64>,
-    pub ade_of_abstract_building_subdivision: Vec<
-        Box<dyn ADEOfAbstractBuildingSubdivision>,
-    >,
     pub building_furniture: Vec<BuildingFurniture>,
     pub building_constructive_element: Vec<BuildingConstructiveElement>,
     pub building_installation: Vec<BuildingInstallation>,
     pub building_room: Vec<BuildingRoom>,
-    pub ade_of_building_unit: Vec<Box<dyn ADEOfBuildingUnit>>,
     pub address: Vec<Address>,
     pub storey: Vec<Storey>,
 }
-impl AbstractFeature for BuildingUnit {
+impl AbstractFeatureTrait for BuildingUnit {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -317,11 +551,8 @@ impl AbstractFeature for BuildingUnit {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractFeatureWithLifespan for BuildingUnit {
+impl AbstractFeatureWithLifespanTrait for BuildingUnit {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
     }
@@ -334,42 +565,31 @@ impl AbstractFeatureWithLifespan for BuildingUnit {
     fn valid_to(&self) -> Option<&String> {
         self.valid_to.as_ref()
     }
-    fn ade_of_abstract_feature_with_lifespan(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractFeatureWithLifespan>] {
-        &self.ade_of_abstract_feature_with_lifespan
-    }
 }
-impl AbstractCityObject for BuildingUnit {
+impl AbstractCityObjectTrait for BuildingUnit {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
     }
     fn relative_to_water(&self) -> Option<RelativeToWater> {
         self.relative_to_water
     }
-    fn ade_of_abstract_city_object(&self) -> &[Box<dyn ADEOfAbstractCityObject>] {
-        &self.ade_of_abstract_city_object
-    }
-    fn appearance(&self) -> &[Box<dyn AbstractAppearance>] {
+    fn appearance(&self) -> &[AbstractAppearance] {
         &self.appearance
     }
-    fn generic_attribute(&self) -> &[Box<dyn AbstractGenericAttribute>] {
-        &self.generic_attribute
-    }
-    fn generalizes_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn generalizes_to(&self) -> &[AbstractCityObject] {
         &self.generalizes_to
     }
     fn external_reference(&self) -> &[ExternalReference] {
         &self.external_reference
     }
-    fn related_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn related_to(&self) -> &[AbstractCityObject] {
         &self.related_to
     }
-    fn dynamizer(&self) -> &[Box<dyn AbstractDynamizer>] {
+    fn dynamizer(&self) -> &[AbstractDynamizer] {
         &self.dynamizer
     }
 }
-impl AbstractSpace for BuildingUnit {
+impl AbstractSpaceTrait for BuildingUnit {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
     }
@@ -378,9 +598,6 @@ impl AbstractSpace for BuildingUnit {
     }
     fn area(&self) -> &[QualifiedArea] {
         &self.area
-    }
-    fn ade_of_abstract_space(&self) -> &[Box<dyn ADEOfAbstractSpace>] {
-        &self.ade_of_abstract_space
     }
     fn lod2_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod2_multi_curve.as_ref()
@@ -397,7 +614,7 @@ impl AbstractSpace for BuildingUnit {
     fn lod3_solid(&self) -> Option<&crate::geometry::Solid> {
         self.lod3_solid.as_ref()
     }
-    fn boundary(&self) -> &[Box<dyn AbstractSpaceBoundary>] {
+    fn boundary(&self) -> &[AbstractSpaceBoundary] {
         &self.boundary
     }
     fn lod0_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
@@ -416,12 +633,8 @@ impl AbstractSpace for BuildingUnit {
         self.lod2_multi_surface.as_ref()
     }
 }
-impl AbstractLogicalSpace for BuildingUnit {
-    fn ade_of_abstract_logical_space(&self) -> &[Box<dyn ADEOfAbstractLogicalSpace>] {
-        &self.ade_of_abstract_logical_space
-    }
-}
-impl AbstractBuildingSubdivision for BuildingUnit {
+impl AbstractLogicalSpaceTrait for BuildingUnit {}
+impl AbstractBuildingSubdivisionTrait for BuildingUnit {
     fn class_(&self) -> Option<&BuildingSubdivisionClassValue> {
         self.class_.as_ref()
     }
@@ -436,11 +649,6 @@ impl AbstractBuildingSubdivision for BuildingUnit {
     }
     fn sort_key(&self) -> Option<f64> {
         self.sort_key
-    }
-    fn ade_of_abstract_building_subdivision(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractBuildingSubdivision>] {
-        &self.ade_of_abstract_building_subdivision
     }
     fn building_furniture(&self) -> &[BuildingFurniture] {
         &self.building_furniture
@@ -465,17 +673,13 @@ impl BuildingUnit {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut creation_date = None;
         let mut termination_date = None;
         let mut valid_from = None;
         let mut valid_to = None;
-        let mut ade_of_abstract_feature_with_lifespan = Vec::new();
         let mut relative_to_terrain = None;
         let mut relative_to_water = None;
-        let mut ade_of_abstract_city_object = Vec::new();
         let mut appearance = Vec::new();
-        let mut generic_attribute = Vec::new();
         let mut generalizes_to = Vec::new();
         let mut external_reference = Vec::new();
         let mut related_to = Vec::new();
@@ -483,7 +687,6 @@ impl BuildingUnit {
         let mut space_type = None;
         let mut volume = Vec::new();
         let mut area = Vec::new();
-        let mut ade_of_abstract_space = Vec::new();
         let mut lod2_multi_curve = None;
         let mut lod3_multi_surface = None;
         let mut lod0_multi_surface = None;
@@ -495,18 +698,15 @@ impl BuildingUnit {
         let mut lod0_point = None;
         let mut lod3_multi_curve = None;
         let mut lod2_multi_surface = None;
-        let mut ade_of_abstract_logical_space = Vec::new();
         let mut class_ = None;
         let mut function = Vec::new();
         let mut usage = Vec::new();
         let mut elevation = Vec::new();
         let mut sort_key = None;
-        let mut ade_of_abstract_building_subdivision = Vec::new();
         let mut building_furniture = Vec::new();
         let mut building_constructive_element = Vec::new();
         let mut building_installation = Vec::new();
         let mut building_room = Vec::new();
-        let mut ade_of_building_unit = Vec::new();
         let mut address = Vec::new();
         let mut storey = Vec::new();
         let mut feature_id = ID(_gml_id);
@@ -525,9 +725,6 @@ impl BuildingUnit {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "creationDate") => {
                     creation_date = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
@@ -542,9 +739,6 @@ impl BuildingUnit {
                 (crate::namespace::NS_CORE, "validTo") => {
                     valid_to = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeatureWithLifespan") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "relativeToTerrain") => {
                     relative_to_terrain = Some(
                         RelativeToTerrain::from_gml_text(&sub.read_text()?)?,
@@ -555,30 +749,24 @@ impl BuildingUnit {
                         RelativeToWater::from_gml_text(&sub.read_text()?)?,
                     );
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractCityObject") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "appearance") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         appearance
                             .push(
-                                super::dispatchers::parse_dyn_abstract_appearance(
+                                super::dispatchers::parse_abstract_appearance(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
                             );
                     }
                 }
-                (crate::namespace::NS_CORE, "genericAttribute") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "generalizesTo") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         generalizes_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -593,7 +781,7 @@ impl BuildingUnit {
                     if let Some(child_info) = wrapper.next_element()? {
                         related_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -605,7 +793,7 @@ impl BuildingUnit {
                     if let Some(child_info) = wrapper.next_element()? {
                         dynamizer
                             .push(
-                                super::dispatchers::parse_dyn_abstract_dynamizer(
+                                super::dispatchers::parse_abstract_dynamizer(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -620,9 +808,6 @@ impl BuildingUnit {
                 }
                 (crate::namespace::NS_CORE, "area") => {
                     area.push(QualifiedArea::from_gml(&mut sub)?);
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractSpace") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_CORE, "lod2MultiCurve") => {
                     lod2_multi_curve = Some({
@@ -704,7 +889,7 @@ impl BuildingUnit {
                     if let Some(child_info) = wrapper.next_element()? {
                         boundary
                             .push(
-                                super::dispatchers::parse_dyn_abstract_space_boundary(
+                                super::dispatchers::parse_abstract_space_boundary(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -786,9 +971,6 @@ impl BuildingUnit {
                         }
                     });
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractLogicalSpace") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_BUILDING, "class") => {
                     class_ = Some(BuildingSubdivisionClassValue(sub.read_text()?));
                 }
@@ -803,9 +985,6 @@ impl BuildingUnit {
                 }
                 (crate::namespace::NS_BUILDING, "sortKey") => {
                     sort_key = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
-                }
-                (crate::namespace::NS_BUILDING, "adeOfAbstractBuildingSubdivision") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_BUILDING, "buildingFurniture") => {
                     let mut wrapper = sub.subtree();
@@ -851,9 +1030,6 @@ impl BuildingUnit {
                                 BuildingRoom::from_gml_with_info(&mut wrapper, &child_info)?,
                             );
                     }
-                }
-                (crate::namespace::NS_BUILDING, "adeOfBuildingUnit") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_BUILDING, "address") => {
                     let mut wrapper = sub.subtree();
@@ -883,17 +1059,13 @@ impl BuildingUnit {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             creation_date,
             termination_date,
             valid_from,
             valid_to,
-            ade_of_abstract_feature_with_lifespan,
             relative_to_terrain,
             relative_to_water,
-            ade_of_abstract_city_object,
             appearance,
-            generic_attribute,
             generalizes_to,
             external_reference,
             related_to,
@@ -901,7 +1073,6 @@ impl BuildingUnit {
             space_type,
             volume,
             area,
-            ade_of_abstract_space,
             lod2_multi_curve,
             lod3_multi_surface,
             lod0_multi_surface,
@@ -913,18 +1084,15 @@ impl BuildingUnit {
             lod0_point,
             lod3_multi_curve,
             lod2_multi_surface,
-            ade_of_abstract_logical_space,
             class_,
             function,
             usage,
             elevation,
             sort_key,
-            ade_of_abstract_building_subdivision,
             building_furniture,
             building_constructive_element,
             building_installation,
             building_room,
-            ade_of_building_unit,
             address,
             storey,
         })
@@ -942,61 +1110,49 @@ impl crate::from_gml::FromGml for BuildingUnit {
         Self::from_gml_with_info(reader, &info)
     }
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct Storey {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub creation_date: Option<String>,
     pub termination_date: Option<String>,
     pub valid_from: Option<String>,
     pub valid_to: Option<String>,
-    pub ade_of_abstract_feature_with_lifespan: Vec<
-        Box<dyn ADEOfAbstractFeatureWithLifespan>,
-    >,
     pub relative_to_terrain: Option<RelativeToTerrain>,
     pub relative_to_water: Option<RelativeToWater>,
-    pub ade_of_abstract_city_object: Vec<Box<dyn ADEOfAbstractCityObject>>,
-    pub appearance: Vec<Box<dyn AbstractAppearance>>,
-    pub generic_attribute: Vec<Box<dyn AbstractGenericAttribute>>,
-    pub generalizes_to: Vec<Box<dyn AbstractCityObject>>,
+    pub appearance: Vec<AbstractAppearance>,
+    pub generalizes_to: Vec<AbstractCityObject>,
     pub external_reference: Vec<ExternalReference>,
-    pub related_to: Vec<Box<dyn AbstractCityObject>>,
-    pub dynamizer: Vec<Box<dyn AbstractDynamizer>>,
+    pub related_to: Vec<AbstractCityObject>,
+    pub dynamizer: Vec<AbstractDynamizer>,
     pub space_type: Option<SpaceType>,
     pub volume: Vec<QualifiedVolume>,
     pub area: Vec<QualifiedArea>,
-    pub ade_of_abstract_space: Vec<Box<dyn ADEOfAbstractSpace>>,
     pub lod2_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod3_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod0_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod1_solid: Option<crate::geometry::Solid>,
     pub lod3_solid: Option<crate::geometry::Solid>,
-    pub boundary: Vec<Box<dyn AbstractSpaceBoundary>>,
+    pub boundary: Vec<AbstractSpaceBoundary>,
     pub lod0_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_solid: Option<crate::geometry::Solid>,
     pub lod0_point: Option<crate::geometry::DirectPosition>,
     pub lod3_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_multi_surface: Option<crate::geometry::MultiSurface>,
-    pub ade_of_abstract_logical_space: Vec<Box<dyn ADEOfAbstractLogicalSpace>>,
     pub class_: Option<BuildingSubdivisionClassValue>,
     pub function: Vec<BuildingSubdivisionFunctionValue>,
     pub usage: Vec<BuildingSubdivisionUsageValue>,
     pub elevation: Vec<Elevation>,
     pub sort_key: Option<f64>,
-    pub ade_of_abstract_building_subdivision: Vec<
-        Box<dyn ADEOfAbstractBuildingSubdivision>,
-    >,
     pub building_furniture: Vec<BuildingFurniture>,
     pub building_constructive_element: Vec<BuildingConstructiveElement>,
     pub building_installation: Vec<BuildingInstallation>,
     pub building_room: Vec<BuildingRoom>,
-    pub ade_of_storey: Vec<Box<dyn ADEOfStorey>>,
     pub building_unit: Vec<BuildingUnit>,
 }
-impl AbstractFeature for Storey {
+impl AbstractFeatureTrait for Storey {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -1009,11 +1165,8 @@ impl AbstractFeature for Storey {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractFeatureWithLifespan for Storey {
+impl AbstractFeatureWithLifespanTrait for Storey {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
     }
@@ -1026,42 +1179,31 @@ impl AbstractFeatureWithLifespan for Storey {
     fn valid_to(&self) -> Option<&String> {
         self.valid_to.as_ref()
     }
-    fn ade_of_abstract_feature_with_lifespan(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractFeatureWithLifespan>] {
-        &self.ade_of_abstract_feature_with_lifespan
-    }
 }
-impl AbstractCityObject for Storey {
+impl AbstractCityObjectTrait for Storey {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
     }
     fn relative_to_water(&self) -> Option<RelativeToWater> {
         self.relative_to_water
     }
-    fn ade_of_abstract_city_object(&self) -> &[Box<dyn ADEOfAbstractCityObject>] {
-        &self.ade_of_abstract_city_object
-    }
-    fn appearance(&self) -> &[Box<dyn AbstractAppearance>] {
+    fn appearance(&self) -> &[AbstractAppearance] {
         &self.appearance
     }
-    fn generic_attribute(&self) -> &[Box<dyn AbstractGenericAttribute>] {
-        &self.generic_attribute
-    }
-    fn generalizes_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn generalizes_to(&self) -> &[AbstractCityObject] {
         &self.generalizes_to
     }
     fn external_reference(&self) -> &[ExternalReference] {
         &self.external_reference
     }
-    fn related_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn related_to(&self) -> &[AbstractCityObject] {
         &self.related_to
     }
-    fn dynamizer(&self) -> &[Box<dyn AbstractDynamizer>] {
+    fn dynamizer(&self) -> &[AbstractDynamizer] {
         &self.dynamizer
     }
 }
-impl AbstractSpace for Storey {
+impl AbstractSpaceTrait for Storey {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
     }
@@ -1070,9 +1212,6 @@ impl AbstractSpace for Storey {
     }
     fn area(&self) -> &[QualifiedArea] {
         &self.area
-    }
-    fn ade_of_abstract_space(&self) -> &[Box<dyn ADEOfAbstractSpace>] {
-        &self.ade_of_abstract_space
     }
     fn lod2_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod2_multi_curve.as_ref()
@@ -1089,7 +1228,7 @@ impl AbstractSpace for Storey {
     fn lod3_solid(&self) -> Option<&crate::geometry::Solid> {
         self.lod3_solid.as_ref()
     }
-    fn boundary(&self) -> &[Box<dyn AbstractSpaceBoundary>] {
+    fn boundary(&self) -> &[AbstractSpaceBoundary] {
         &self.boundary
     }
     fn lod0_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
@@ -1108,12 +1247,8 @@ impl AbstractSpace for Storey {
         self.lod2_multi_surface.as_ref()
     }
 }
-impl AbstractLogicalSpace for Storey {
-    fn ade_of_abstract_logical_space(&self) -> &[Box<dyn ADEOfAbstractLogicalSpace>] {
-        &self.ade_of_abstract_logical_space
-    }
-}
-impl AbstractBuildingSubdivision for Storey {
+impl AbstractLogicalSpaceTrait for Storey {}
+impl AbstractBuildingSubdivisionTrait for Storey {
     fn class_(&self) -> Option<&BuildingSubdivisionClassValue> {
         self.class_.as_ref()
     }
@@ -1128,11 +1263,6 @@ impl AbstractBuildingSubdivision for Storey {
     }
     fn sort_key(&self) -> Option<f64> {
         self.sort_key
-    }
-    fn ade_of_abstract_building_subdivision(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractBuildingSubdivision>] {
-        &self.ade_of_abstract_building_subdivision
     }
     fn building_furniture(&self) -> &[BuildingFurniture] {
         &self.building_furniture
@@ -1157,17 +1287,13 @@ impl Storey {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut creation_date = None;
         let mut termination_date = None;
         let mut valid_from = None;
         let mut valid_to = None;
-        let mut ade_of_abstract_feature_with_lifespan = Vec::new();
         let mut relative_to_terrain = None;
         let mut relative_to_water = None;
-        let mut ade_of_abstract_city_object = Vec::new();
         let mut appearance = Vec::new();
-        let mut generic_attribute = Vec::new();
         let mut generalizes_to = Vec::new();
         let mut external_reference = Vec::new();
         let mut related_to = Vec::new();
@@ -1175,7 +1301,6 @@ impl Storey {
         let mut space_type = None;
         let mut volume = Vec::new();
         let mut area = Vec::new();
-        let mut ade_of_abstract_space = Vec::new();
         let mut lod2_multi_curve = None;
         let mut lod3_multi_surface = None;
         let mut lod0_multi_surface = None;
@@ -1187,18 +1312,15 @@ impl Storey {
         let mut lod0_point = None;
         let mut lod3_multi_curve = None;
         let mut lod2_multi_surface = None;
-        let mut ade_of_abstract_logical_space = Vec::new();
         let mut class_ = None;
         let mut function = Vec::new();
         let mut usage = Vec::new();
         let mut elevation = Vec::new();
         let mut sort_key = None;
-        let mut ade_of_abstract_building_subdivision = Vec::new();
         let mut building_furniture = Vec::new();
         let mut building_constructive_element = Vec::new();
         let mut building_installation = Vec::new();
         let mut building_room = Vec::new();
-        let mut ade_of_storey = Vec::new();
         let mut building_unit = Vec::new();
         let mut feature_id = ID(_gml_id);
         let mut sub = reader.subtree();
@@ -1216,9 +1338,6 @@ impl Storey {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "creationDate") => {
                     creation_date = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
@@ -1233,9 +1352,6 @@ impl Storey {
                 (crate::namespace::NS_CORE, "validTo") => {
                     valid_to = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeatureWithLifespan") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "relativeToTerrain") => {
                     relative_to_terrain = Some(
                         RelativeToTerrain::from_gml_text(&sub.read_text()?)?,
@@ -1246,30 +1362,24 @@ impl Storey {
                         RelativeToWater::from_gml_text(&sub.read_text()?)?,
                     );
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractCityObject") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "appearance") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         appearance
                             .push(
-                                super::dispatchers::parse_dyn_abstract_appearance(
+                                super::dispatchers::parse_abstract_appearance(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
                             );
                     }
                 }
-                (crate::namespace::NS_CORE, "genericAttribute") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "generalizesTo") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         generalizes_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -1284,7 +1394,7 @@ impl Storey {
                     if let Some(child_info) = wrapper.next_element()? {
                         related_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -1296,7 +1406,7 @@ impl Storey {
                     if let Some(child_info) = wrapper.next_element()? {
                         dynamizer
                             .push(
-                                super::dispatchers::parse_dyn_abstract_dynamizer(
+                                super::dispatchers::parse_abstract_dynamizer(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -1311,9 +1421,6 @@ impl Storey {
                 }
                 (crate::namespace::NS_CORE, "area") => {
                     area.push(QualifiedArea::from_gml(&mut sub)?);
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractSpace") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_CORE, "lod2MultiCurve") => {
                     lod2_multi_curve = Some({
@@ -1395,7 +1502,7 @@ impl Storey {
                     if let Some(child_info) = wrapper.next_element()? {
                         boundary
                             .push(
-                                super::dispatchers::parse_dyn_abstract_space_boundary(
+                                super::dispatchers::parse_abstract_space_boundary(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -1477,9 +1584,6 @@ impl Storey {
                         }
                     });
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractLogicalSpace") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_BUILDING, "class") => {
                     class_ = Some(BuildingSubdivisionClassValue(sub.read_text()?));
                 }
@@ -1494,9 +1598,6 @@ impl Storey {
                 }
                 (crate::namespace::NS_BUILDING, "sortKey") => {
                     sort_key = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
-                }
-                (crate::namespace::NS_BUILDING, "adeOfAbstractBuildingSubdivision") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_BUILDING, "buildingFurniture") => {
                     let mut wrapper = sub.subtree();
@@ -1543,9 +1644,6 @@ impl Storey {
                             );
                     }
                 }
-                (crate::namespace::NS_BUILDING, "adeOfStorey") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_BUILDING, "buildingUnit") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
@@ -1565,17 +1663,13 @@ impl Storey {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             creation_date,
             termination_date,
             valid_from,
             valid_to,
-            ade_of_abstract_feature_with_lifespan,
             relative_to_terrain,
             relative_to_water,
-            ade_of_abstract_city_object,
             appearance,
-            generic_attribute,
             generalizes_to,
             external_reference,
             related_to,
@@ -1583,7 +1677,6 @@ impl Storey {
             space_type,
             volume,
             area,
-            ade_of_abstract_space,
             lod2_multi_curve,
             lod3_multi_surface,
             lod0_multi_surface,
@@ -1595,18 +1688,15 @@ impl Storey {
             lod0_point,
             lod3_multi_curve,
             lod2_multi_surface,
-            ade_of_abstract_logical_space,
             class_,
             function,
             usage,
             elevation,
             sort_key,
-            ade_of_abstract_building_subdivision,
             building_furniture,
             building_constructive_element,
             building_installation,
             building_room,
-            ade_of_storey,
             building_unit,
         })
     }
@@ -1623,59 +1713,49 @@ impl crate::from_gml::FromGml for Storey {
         Self::from_gml_with_info(reader, &info)
     }
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct BuildingRoom {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub creation_date: Option<String>,
     pub termination_date: Option<String>,
     pub valid_from: Option<String>,
     pub valid_to: Option<String>,
-    pub ade_of_abstract_feature_with_lifespan: Vec<
-        Box<dyn ADEOfAbstractFeatureWithLifespan>,
-    >,
     pub relative_to_terrain: Option<RelativeToTerrain>,
     pub relative_to_water: Option<RelativeToWater>,
-    pub ade_of_abstract_city_object: Vec<Box<dyn ADEOfAbstractCityObject>>,
-    pub appearance: Vec<Box<dyn AbstractAppearance>>,
-    pub generic_attribute: Vec<Box<dyn AbstractGenericAttribute>>,
-    pub generalizes_to: Vec<Box<dyn AbstractCityObject>>,
+    pub appearance: Vec<AbstractAppearance>,
+    pub generalizes_to: Vec<AbstractCityObject>,
     pub external_reference: Vec<ExternalReference>,
-    pub related_to: Vec<Box<dyn AbstractCityObject>>,
-    pub dynamizer: Vec<Box<dyn AbstractDynamizer>>,
+    pub related_to: Vec<AbstractCityObject>,
+    pub dynamizer: Vec<AbstractDynamizer>,
     pub space_type: Option<SpaceType>,
     pub volume: Vec<QualifiedVolume>,
     pub area: Vec<QualifiedArea>,
-    pub ade_of_abstract_space: Vec<Box<dyn ADEOfAbstractSpace>>,
     pub lod2_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod3_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod0_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod1_solid: Option<crate::geometry::Solid>,
     pub lod3_solid: Option<crate::geometry::Solid>,
-    pub boundary: Vec<Box<dyn AbstractSpaceBoundary>>,
+    pub boundary: Vec<AbstractSpaceBoundary>,
     pub lod0_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_solid: Option<crate::geometry::Solid>,
     pub lod0_point: Option<crate::geometry::DirectPosition>,
     pub lod3_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_multi_surface: Option<crate::geometry::MultiSurface>,
-    pub ade_of_abstract_physical_space: Vec<Box<dyn ADEOfAbstractPhysicalSpace>>,
     pub lod3_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
-    pub point_cloud: Option<Box<dyn AbstractPointCloud>>,
+    pub point_cloud: Option<AbstractPointCloud>,
     pub lod1_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
-    pub ade_of_abstract_unoccupied_space: Vec<Box<dyn ADEOfAbstractUnoccupiedSpace>>,
     pub class_: Option<BuildingRoomClassValue>,
     pub function: Vec<BuildingRoomFunctionValue>,
     pub usage: Vec<BuildingRoomUsageValue>,
     pub room_height: Vec<RoomHeight>,
-    pub ade_of_building_room: Vec<Box<dyn ADEOfBuildingRoom>>,
     pub building_furniture: Vec<BuildingFurniture>,
     pub building_installation: Vec<BuildingInstallation>,
 }
-impl AbstractFeature for BuildingRoom {
+impl AbstractFeatureTrait for BuildingRoom {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -1688,11 +1768,8 @@ impl AbstractFeature for BuildingRoom {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractFeatureWithLifespan for BuildingRoom {
+impl AbstractFeatureWithLifespanTrait for BuildingRoom {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
     }
@@ -1705,42 +1782,31 @@ impl AbstractFeatureWithLifespan for BuildingRoom {
     fn valid_to(&self) -> Option<&String> {
         self.valid_to.as_ref()
     }
-    fn ade_of_abstract_feature_with_lifespan(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractFeatureWithLifespan>] {
-        &self.ade_of_abstract_feature_with_lifespan
-    }
 }
-impl AbstractCityObject for BuildingRoom {
+impl AbstractCityObjectTrait for BuildingRoom {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
     }
     fn relative_to_water(&self) -> Option<RelativeToWater> {
         self.relative_to_water
     }
-    fn ade_of_abstract_city_object(&self) -> &[Box<dyn ADEOfAbstractCityObject>] {
-        &self.ade_of_abstract_city_object
-    }
-    fn appearance(&self) -> &[Box<dyn AbstractAppearance>] {
+    fn appearance(&self) -> &[AbstractAppearance] {
         &self.appearance
     }
-    fn generic_attribute(&self) -> &[Box<dyn AbstractGenericAttribute>] {
-        &self.generic_attribute
-    }
-    fn generalizes_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn generalizes_to(&self) -> &[AbstractCityObject] {
         &self.generalizes_to
     }
     fn external_reference(&self) -> &[ExternalReference] {
         &self.external_reference
     }
-    fn related_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn related_to(&self) -> &[AbstractCityObject] {
         &self.related_to
     }
-    fn dynamizer(&self) -> &[Box<dyn AbstractDynamizer>] {
+    fn dynamizer(&self) -> &[AbstractDynamizer] {
         &self.dynamizer
     }
 }
-impl AbstractSpace for BuildingRoom {
+impl AbstractSpaceTrait for BuildingRoom {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
     }
@@ -1749,9 +1815,6 @@ impl AbstractSpace for BuildingRoom {
     }
     fn area(&self) -> &[QualifiedArea] {
         &self.area
-    }
-    fn ade_of_abstract_space(&self) -> &[Box<dyn ADEOfAbstractSpace>] {
-        &self.ade_of_abstract_space
     }
     fn lod2_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod2_multi_curve.as_ref()
@@ -1768,7 +1831,7 @@ impl AbstractSpace for BuildingRoom {
     fn lod3_solid(&self) -> Option<&crate::geometry::Solid> {
         self.lod3_solid.as_ref()
     }
-    fn boundary(&self) -> &[Box<dyn AbstractSpaceBoundary>] {
+    fn boundary(&self) -> &[AbstractSpaceBoundary] {
         &self.boundary
     }
     fn lod0_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
@@ -1787,14 +1850,11 @@ impl AbstractSpace for BuildingRoom {
         self.lod2_multi_surface.as_ref()
     }
 }
-impl AbstractPhysicalSpace for BuildingRoom {
-    fn ade_of_abstract_physical_space(&self) -> &[Box<dyn ADEOfAbstractPhysicalSpace>] {
-        &self.ade_of_abstract_physical_space
-    }
+impl AbstractPhysicalSpaceTrait for BuildingRoom {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
     }
-    fn point_cloud(&self) -> Option<&Box<dyn AbstractPointCloud>> {
+    fn point_cloud(&self) -> Option<&AbstractPointCloud> {
         self.point_cloud.as_ref()
     }
     fn lod1_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
@@ -1804,13 +1864,7 @@ impl AbstractPhysicalSpace for BuildingRoom {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
-impl AbstractUnoccupiedSpace for BuildingRoom {
-    fn ade_of_abstract_unoccupied_space(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractUnoccupiedSpace>] {
-        &self.ade_of_abstract_unoccupied_space
-    }
-}
+impl AbstractUnoccupiedSpaceTrait for BuildingRoom {}
 impl BuildingRoom {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1821,17 +1875,13 @@ impl BuildingRoom {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut creation_date = None;
         let mut termination_date = None;
         let mut valid_from = None;
         let mut valid_to = None;
-        let mut ade_of_abstract_feature_with_lifespan = Vec::new();
         let mut relative_to_terrain = None;
         let mut relative_to_water = None;
-        let mut ade_of_abstract_city_object = Vec::new();
         let mut appearance = Vec::new();
-        let mut generic_attribute = Vec::new();
         let mut generalizes_to = Vec::new();
         let mut external_reference = Vec::new();
         let mut related_to = Vec::new();
@@ -1839,7 +1889,6 @@ impl BuildingRoom {
         let mut space_type = None;
         let mut volume = Vec::new();
         let mut area = Vec::new();
-        let mut ade_of_abstract_space = Vec::new();
         let mut lod2_multi_curve = None;
         let mut lod3_multi_surface = None;
         let mut lod0_multi_surface = None;
@@ -1851,17 +1900,14 @@ impl BuildingRoom {
         let mut lod0_point = None;
         let mut lod3_multi_curve = None;
         let mut lod2_multi_surface = None;
-        let mut ade_of_abstract_physical_space = Vec::new();
         let mut lod3_terrain_intersection_curve = None;
         let mut point_cloud = None;
         let mut lod1_terrain_intersection_curve = None;
         let mut lod2_terrain_intersection_curve = None;
-        let mut ade_of_abstract_unoccupied_space = Vec::new();
         let mut class_ = None;
         let mut function = Vec::new();
         let mut usage = Vec::new();
         let mut room_height = Vec::new();
-        let mut ade_of_building_room = Vec::new();
         let mut building_furniture = Vec::new();
         let mut building_installation = Vec::new();
         let mut feature_id = ID(_gml_id);
@@ -1880,9 +1926,6 @@ impl BuildingRoom {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "creationDate") => {
                     creation_date = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
@@ -1897,9 +1940,6 @@ impl BuildingRoom {
                 (crate::namespace::NS_CORE, "validTo") => {
                     valid_to = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeatureWithLifespan") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "relativeToTerrain") => {
                     relative_to_terrain = Some(
                         RelativeToTerrain::from_gml_text(&sub.read_text()?)?,
@@ -1910,30 +1950,24 @@ impl BuildingRoom {
                         RelativeToWater::from_gml_text(&sub.read_text()?)?,
                     );
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractCityObject") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "appearance") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         appearance
                             .push(
-                                super::dispatchers::parse_dyn_abstract_appearance(
+                                super::dispatchers::parse_abstract_appearance(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
                             );
                     }
                 }
-                (crate::namespace::NS_CORE, "genericAttribute") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "generalizesTo") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         generalizes_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -1948,7 +1982,7 @@ impl BuildingRoom {
                     if let Some(child_info) = wrapper.next_element()? {
                         related_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -1960,7 +1994,7 @@ impl BuildingRoom {
                     if let Some(child_info) = wrapper.next_element()? {
                         dynamizer
                             .push(
-                                super::dispatchers::parse_dyn_abstract_dynamizer(
+                                super::dispatchers::parse_abstract_dynamizer(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -1975,9 +2009,6 @@ impl BuildingRoom {
                 }
                 (crate::namespace::NS_CORE, "area") => {
                     area.push(QualifiedArea::from_gml(&mut sub)?);
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractSpace") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_CORE, "lod2MultiCurve") => {
                     lod2_multi_curve = Some({
@@ -2059,7 +2090,7 @@ impl BuildingRoom {
                     if let Some(child_info) = wrapper.next_element()? {
                         boundary
                             .push(
-                                super::dispatchers::parse_dyn_abstract_space_boundary(
+                                super::dispatchers::parse_abstract_space_boundary(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -2141,9 +2172,6 @@ impl BuildingRoom {
                         }
                     });
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractPhysicalSpace") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "lod3TerrainIntersectionCurve") => {
                     lod3_terrain_intersection_curve = Some({
                         let mut geom_sub = sub.subtree();
@@ -2163,7 +2191,7 @@ impl BuildingRoom {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         point_cloud = Some(
-                            super::dispatchers::parse_dyn_abstract_point_cloud(
+                            super::dispatchers::parse_abstract_point_cloud(
                                 &mut wrapper,
                                 &child_info,
                             )?,
@@ -2200,9 +2228,6 @@ impl BuildingRoom {
                         }
                     });
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractUnoccupiedSpace") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_BUILDING, "class") => {
                     class_ = Some(BuildingRoomClassValue(sub.read_text()?));
                 }
@@ -2214,9 +2239,6 @@ impl BuildingRoom {
                 }
                 (crate::namespace::NS_BUILDING, "roomHeight") => {
                     room_height.push(RoomHeight::from_gml(&mut sub)?);
-                }
-                (crate::namespace::NS_BUILDING, "adeOfBuildingRoom") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_BUILDING, "buildingFurniture") => {
                     let mut wrapper = sub.subtree();
@@ -2252,17 +2274,13 @@ impl BuildingRoom {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             creation_date,
             termination_date,
             valid_from,
             valid_to,
-            ade_of_abstract_feature_with_lifespan,
             relative_to_terrain,
             relative_to_water,
-            ade_of_abstract_city_object,
             appearance,
-            generic_attribute,
             generalizes_to,
             external_reference,
             related_to,
@@ -2270,7 +2288,6 @@ impl BuildingRoom {
             space_type,
             volume,
             area,
-            ade_of_abstract_space,
             lod2_multi_curve,
             lod3_multi_surface,
             lod0_multi_surface,
@@ -2282,17 +2299,14 @@ impl BuildingRoom {
             lod0_point,
             lod3_multi_curve,
             lod2_multi_surface,
-            ade_of_abstract_physical_space,
             lod3_terrain_intersection_curve,
             point_cloud,
             lod1_terrain_intersection_curve,
             lod2_terrain_intersection_curve,
-            ade_of_abstract_unoccupied_space,
             class_,
             function,
             usage,
             room_height,
-            ade_of_building_room,
             building_furniture,
             building_installation,
         })
@@ -2310,7 +2324,7 @@ impl crate::from_gml::FromGml for BuildingRoom {
         Self::from_gml_with_info(reader, &info)
     }
 }
-pub trait AbstractBuilding: AbstractConstruction {
+pub trait AbstractBuildingTrait: AbstractConstructionTrait {
     fn class_(&self) -> Option<&BuildingClassValue>;
     fn function(&self) -> &[BuildingFunctionValue];
     fn usage(&self) -> &[BuildingUsageValue];
@@ -2319,74 +2333,436 @@ pub trait AbstractBuilding: AbstractConstruction {
     fn storeys_below_ground(&self) -> Option<i64>;
     fn storey_heights_above_ground(&self) -> Option<&Vec<f64>>;
     fn storey_heights_below_ground(&self) -> Option<&Vec<f64>>;
-    fn ade_of_abstract_building(&self) -> &[Box<dyn ADEOfAbstractBuilding>];
     fn building_installation(&self) -> &[BuildingInstallation];
     fn building_furniture(&self) -> &[BuildingFurniture];
     fn building_constructive_element(&self) -> &[BuildingConstructiveElement];
     fn address(&self) -> &[Address];
     fn building_room(&self) -> &[BuildingRoom];
-    fn building_subdivision(&self) -> &[Box<dyn AbstractBuildingSubdivision>];
+    fn building_subdivision(&self) -> &[AbstractBuildingSubdivision];
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone)]
+pub enum AbstractBuilding {
+    Building(Building),
+    BuildingPart(BuildingPart),
+}
+impl Default for AbstractBuilding {
+    fn default() -> Self {
+        Self::Building(Default::default())
+    }
+}
+impl AbstractFeatureTrait for AbstractBuilding {
+    fn feature_id(&self) -> &ID {
+        match self {
+            Self::Building(v) => v.feature_id(),
+            Self::BuildingPart(v) => v.feature_id(),
+        }
+    }
+    fn identifier(&self) -> Option<&String> {
+        match self {
+            Self::Building(v) => v.identifier(),
+            Self::BuildingPart(v) => v.identifier(),
+        }
+    }
+    fn name(&self) -> &[String] {
+        match self {
+            Self::Building(v) => v.name(),
+            Self::BuildingPart(v) => v.name(),
+        }
+    }
+    fn description(&self) -> Option<&String> {
+        match self {
+            Self::Building(v) => v.description(),
+            Self::BuildingPart(v) => v.description(),
+        }
+    }
+}
+impl AbstractFeatureWithLifespanTrait for AbstractBuilding {
+    fn creation_date(&self) -> Option<&String> {
+        match self {
+            Self::Building(v) => v.creation_date(),
+            Self::BuildingPart(v) => v.creation_date(),
+        }
+    }
+    fn termination_date(&self) -> Option<&String> {
+        match self {
+            Self::Building(v) => v.termination_date(),
+            Self::BuildingPart(v) => v.termination_date(),
+        }
+    }
+    fn valid_from(&self) -> Option<&String> {
+        match self {
+            Self::Building(v) => v.valid_from(),
+            Self::BuildingPart(v) => v.valid_from(),
+        }
+    }
+    fn valid_to(&self) -> Option<&String> {
+        match self {
+            Self::Building(v) => v.valid_to(),
+            Self::BuildingPart(v) => v.valid_to(),
+        }
+    }
+}
+impl AbstractCityObjectTrait for AbstractBuilding {
+    fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
+        match self {
+            Self::Building(v) => v.relative_to_terrain(),
+            Self::BuildingPart(v) => v.relative_to_terrain(),
+        }
+    }
+    fn relative_to_water(&self) -> Option<RelativeToWater> {
+        match self {
+            Self::Building(v) => v.relative_to_water(),
+            Self::BuildingPart(v) => v.relative_to_water(),
+        }
+    }
+    fn appearance(&self) -> &[AbstractAppearance] {
+        match self {
+            Self::Building(v) => v.appearance(),
+            Self::BuildingPart(v) => v.appearance(),
+        }
+    }
+    fn generalizes_to(&self) -> &[AbstractCityObject] {
+        match self {
+            Self::Building(v) => v.generalizes_to(),
+            Self::BuildingPart(v) => v.generalizes_to(),
+        }
+    }
+    fn external_reference(&self) -> &[ExternalReference] {
+        match self {
+            Self::Building(v) => v.external_reference(),
+            Self::BuildingPart(v) => v.external_reference(),
+        }
+    }
+    fn related_to(&self) -> &[AbstractCityObject] {
+        match self {
+            Self::Building(v) => v.related_to(),
+            Self::BuildingPart(v) => v.related_to(),
+        }
+    }
+    fn dynamizer(&self) -> &[AbstractDynamizer] {
+        match self {
+            Self::Building(v) => v.dynamizer(),
+            Self::BuildingPart(v) => v.dynamizer(),
+        }
+    }
+}
+impl AbstractSpaceTrait for AbstractBuilding {
+    fn space_type(&self) -> Option<SpaceType> {
+        match self {
+            Self::Building(v) => v.space_type(),
+            Self::BuildingPart(v) => v.space_type(),
+        }
+    }
+    fn volume(&self) -> &[QualifiedVolume] {
+        match self {
+            Self::Building(v) => v.volume(),
+            Self::BuildingPart(v) => v.volume(),
+        }
+    }
+    fn area(&self) -> &[QualifiedArea] {
+        match self {
+            Self::Building(v) => v.area(),
+            Self::BuildingPart(v) => v.area(),
+        }
+    }
+    fn lod2_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
+        match self {
+            Self::Building(v) => v.lod2_multi_curve(),
+            Self::BuildingPart(v) => v.lod2_multi_curve(),
+        }
+    }
+    fn lod3_multi_surface(&self) -> Option<&crate::geometry::MultiSurface> {
+        match self {
+            Self::Building(v) => v.lod3_multi_surface(),
+            Self::BuildingPart(v) => v.lod3_multi_surface(),
+        }
+    }
+    fn lod0_multi_surface(&self) -> Option<&crate::geometry::MultiSurface> {
+        match self {
+            Self::Building(v) => v.lod0_multi_surface(),
+            Self::BuildingPart(v) => v.lod0_multi_surface(),
+        }
+    }
+    fn lod1_solid(&self) -> Option<&crate::geometry::Solid> {
+        match self {
+            Self::Building(v) => v.lod1_solid(),
+            Self::BuildingPart(v) => v.lod1_solid(),
+        }
+    }
+    fn lod3_solid(&self) -> Option<&crate::geometry::Solid> {
+        match self {
+            Self::Building(v) => v.lod3_solid(),
+            Self::BuildingPart(v) => v.lod3_solid(),
+        }
+    }
+    fn boundary(&self) -> &[AbstractSpaceBoundary] {
+        match self {
+            Self::Building(v) => v.boundary(),
+            Self::BuildingPart(v) => v.boundary(),
+        }
+    }
+    fn lod0_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
+        match self {
+            Self::Building(v) => v.lod0_multi_curve(),
+            Self::BuildingPart(v) => v.lod0_multi_curve(),
+        }
+    }
+    fn lod2_solid(&self) -> Option<&crate::geometry::Solid> {
+        match self {
+            Self::Building(v) => v.lod2_solid(),
+            Self::BuildingPart(v) => v.lod2_solid(),
+        }
+    }
+    fn lod0_point(&self) -> Option<&crate::geometry::DirectPosition> {
+        match self {
+            Self::Building(v) => v.lod0_point(),
+            Self::BuildingPart(v) => v.lod0_point(),
+        }
+    }
+    fn lod3_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
+        match self {
+            Self::Building(v) => v.lod3_multi_curve(),
+            Self::BuildingPart(v) => v.lod3_multi_curve(),
+        }
+    }
+    fn lod2_multi_surface(&self) -> Option<&crate::geometry::MultiSurface> {
+        match self {
+            Self::Building(v) => v.lod2_multi_surface(),
+            Self::BuildingPart(v) => v.lod2_multi_surface(),
+        }
+    }
+}
+impl AbstractPhysicalSpaceTrait for AbstractBuilding {
+    fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
+        match self {
+            Self::Building(v) => v.lod3_terrain_intersection_curve(),
+            Self::BuildingPart(v) => v.lod3_terrain_intersection_curve(),
+        }
+    }
+    fn point_cloud(&self) -> Option<&AbstractPointCloud> {
+        match self {
+            Self::Building(v) => v.point_cloud(),
+            Self::BuildingPart(v) => v.point_cloud(),
+        }
+    }
+    fn lod1_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
+        match self {
+            Self::Building(v) => v.lod1_terrain_intersection_curve(),
+            Self::BuildingPart(v) => v.lod1_terrain_intersection_curve(),
+        }
+    }
+    fn lod2_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
+        match self {
+            Self::Building(v) => v.lod2_terrain_intersection_curve(),
+            Self::BuildingPart(v) => v.lod2_terrain_intersection_curve(),
+        }
+    }
+}
+impl AbstractOccupiedSpaceTrait for AbstractBuilding {
+    fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
+        match self {
+            Self::Building(v) => v.lod3_implicit_representation(),
+            Self::BuildingPart(v) => v.lod3_implicit_representation(),
+        }
+    }
+    fn lod2_implicit_representation(&self) -> Option<&ImplicitGeometry> {
+        match self {
+            Self::Building(v) => v.lod2_implicit_representation(),
+            Self::BuildingPart(v) => v.lod2_implicit_representation(),
+        }
+    }
+    fn lod1_implicit_representation(&self) -> Option<&ImplicitGeometry> {
+        match self {
+            Self::Building(v) => v.lod1_implicit_representation(),
+            Self::BuildingPart(v) => v.lod1_implicit_representation(),
+        }
+    }
+}
+impl AbstractConstructionTrait for AbstractBuilding {
+    fn condition_of_construction(&self) -> Option<ConditionOfConstructionValue> {
+        match self {
+            Self::Building(v) => v.condition_of_construction(),
+            Self::BuildingPart(v) => v.condition_of_construction(),
+        }
+    }
+    fn date_of_construction(&self) -> Option<&String> {
+        match self {
+            Self::Building(v) => v.date_of_construction(),
+            Self::BuildingPart(v) => v.date_of_construction(),
+        }
+    }
+    fn date_of_demolition(&self) -> Option<&String> {
+        match self {
+            Self::Building(v) => v.date_of_demolition(),
+            Self::BuildingPart(v) => v.date_of_demolition(),
+        }
+    }
+    fn construction_event(&self) -> &[ConstructionEvent] {
+        match self {
+            Self::Building(v) => v.construction_event(),
+            Self::BuildingPart(v) => v.construction_event(),
+        }
+    }
+    fn elevation(&self) -> &[Elevation] {
+        match self {
+            Self::Building(v) => v.elevation(),
+            Self::BuildingPart(v) => v.elevation(),
+        }
+    }
+    fn height(&self) -> &[Height] {
+        match self {
+            Self::Building(v) => v.height(),
+            Self::BuildingPart(v) => v.height(),
+        }
+    }
+    fn occupancy(&self) -> &[Occupancy] {
+        match self {
+            Self::Building(v) => v.occupancy(),
+            Self::BuildingPart(v) => v.occupancy(),
+        }
+    }
+}
+impl AbstractBuildingTrait for AbstractBuilding {
+    fn class_(&self) -> Option<&BuildingClassValue> {
+        match self {
+            Self::Building(v) => v.class_(),
+            Self::BuildingPart(v) => v.class_(),
+        }
+    }
+    fn function(&self) -> &[BuildingFunctionValue] {
+        match self {
+            Self::Building(v) => v.function(),
+            Self::BuildingPart(v) => v.function(),
+        }
+    }
+    fn usage(&self) -> &[BuildingUsageValue] {
+        match self {
+            Self::Building(v) => v.usage(),
+            Self::BuildingPart(v) => v.usage(),
+        }
+    }
+    fn roof_type(&self) -> Option<&RoofTypeValue> {
+        match self {
+            Self::Building(v) => v.roof_type(),
+            Self::BuildingPart(v) => v.roof_type(),
+        }
+    }
+    fn storeys_above_ground(&self) -> Option<i64> {
+        match self {
+            Self::Building(v) => v.storeys_above_ground(),
+            Self::BuildingPart(v) => v.storeys_above_ground(),
+        }
+    }
+    fn storeys_below_ground(&self) -> Option<i64> {
+        match self {
+            Self::Building(v) => v.storeys_below_ground(),
+            Self::BuildingPart(v) => v.storeys_below_ground(),
+        }
+    }
+    fn storey_heights_above_ground(&self) -> Option<&Vec<f64>> {
+        match self {
+            Self::Building(v) => v.storey_heights_above_ground(),
+            Self::BuildingPart(v) => v.storey_heights_above_ground(),
+        }
+    }
+    fn storey_heights_below_ground(&self) -> Option<&Vec<f64>> {
+        match self {
+            Self::Building(v) => v.storey_heights_below_ground(),
+            Self::BuildingPart(v) => v.storey_heights_below_ground(),
+        }
+    }
+    fn building_installation(&self) -> &[BuildingInstallation] {
+        match self {
+            Self::Building(v) => v.building_installation(),
+            Self::BuildingPart(v) => v.building_installation(),
+        }
+    }
+    fn building_furniture(&self) -> &[BuildingFurniture] {
+        match self {
+            Self::Building(v) => v.building_furniture(),
+            Self::BuildingPart(v) => v.building_furniture(),
+        }
+    }
+    fn building_constructive_element(&self) -> &[BuildingConstructiveElement] {
+        match self {
+            Self::Building(v) => v.building_constructive_element(),
+            Self::BuildingPart(v) => v.building_constructive_element(),
+        }
+    }
+    fn address(&self) -> &[Address] {
+        match self {
+            Self::Building(v) => v.address(),
+            Self::BuildingPart(v) => v.address(),
+        }
+    }
+    fn building_room(&self) -> &[BuildingRoom] {
+        match self {
+            Self::Building(v) => v.building_room(),
+            Self::BuildingPart(v) => v.building_room(),
+        }
+    }
+    fn building_subdivision(&self) -> &[AbstractBuildingSubdivision] {
+        match self {
+            Self::Building(v) => v.building_subdivision(),
+            Self::BuildingPart(v) => v.building_subdivision(),
+        }
+    }
+}
+impl From<Building> for AbstractBuilding {
+    fn from(v: Building) -> Self {
+        Self::Building(v)
+    }
+}
+impl From<BuildingPart> for AbstractBuilding {
+    fn from(v: BuildingPart) -> Self {
+        Self::BuildingPart(v)
+    }
+}
+#[derive(Debug, Clone, Default)]
 pub struct BuildingConstructiveElement {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub creation_date: Option<String>,
     pub termination_date: Option<String>,
     pub valid_from: Option<String>,
     pub valid_to: Option<String>,
-    pub ade_of_abstract_feature_with_lifespan: Vec<
-        Box<dyn ADEOfAbstractFeatureWithLifespan>,
-    >,
     pub relative_to_terrain: Option<RelativeToTerrain>,
     pub relative_to_water: Option<RelativeToWater>,
-    pub ade_of_abstract_city_object: Vec<Box<dyn ADEOfAbstractCityObject>>,
-    pub appearance: Vec<Box<dyn AbstractAppearance>>,
-    pub generic_attribute: Vec<Box<dyn AbstractGenericAttribute>>,
-    pub generalizes_to: Vec<Box<dyn AbstractCityObject>>,
+    pub appearance: Vec<AbstractAppearance>,
+    pub generalizes_to: Vec<AbstractCityObject>,
     pub external_reference: Vec<ExternalReference>,
-    pub related_to: Vec<Box<dyn AbstractCityObject>>,
-    pub dynamizer: Vec<Box<dyn AbstractDynamizer>>,
+    pub related_to: Vec<AbstractCityObject>,
+    pub dynamizer: Vec<AbstractDynamizer>,
     pub space_type: Option<SpaceType>,
     pub volume: Vec<QualifiedVolume>,
     pub area: Vec<QualifiedArea>,
-    pub ade_of_abstract_space: Vec<Box<dyn ADEOfAbstractSpace>>,
     pub lod2_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod3_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod0_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod1_solid: Option<crate::geometry::Solid>,
     pub lod3_solid: Option<crate::geometry::Solid>,
-    pub boundary: Vec<Box<dyn AbstractSpaceBoundary>>,
+    pub boundary: Vec<AbstractSpaceBoundary>,
     pub lod0_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_solid: Option<crate::geometry::Solid>,
     pub lod0_point: Option<crate::geometry::DirectPosition>,
     pub lod3_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_multi_surface: Option<crate::geometry::MultiSurface>,
-    pub ade_of_abstract_physical_space: Vec<Box<dyn ADEOfAbstractPhysicalSpace>>,
     pub lod3_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
-    pub point_cloud: Option<Box<dyn AbstractPointCloud>>,
+    pub point_cloud: Option<AbstractPointCloud>,
     pub lod1_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
-    pub ade_of_abstract_occupied_space: Vec<Box<dyn ADEOfAbstractOccupiedSpace>>,
     pub lod3_implicit_representation: Option<ImplicitGeometry>,
     pub lod2_implicit_representation: Option<ImplicitGeometry>,
     pub lod1_implicit_representation: Option<ImplicitGeometry>,
     pub is_structural_element: Option<bool>,
-    pub ade_of_abstract_constructive_element: Vec<
-        Box<dyn ADEOfAbstractConstructiveElement>,
-    >,
-    pub filling: Vec<Box<dyn AbstractFillingElement>>,
+    pub filling: Vec<AbstractFillingElement>,
     pub class_: Option<BuildingConstructiveElementClassValue>,
     pub function: Vec<BuildingConstructiveElementFunctionValue>,
     pub usage: Vec<BuildingConstructiveElementUsageValue>,
-    pub ade_of_building_constructive_element: Vec<
-        Box<dyn ADEOfBuildingConstructiveElement>,
-    >,
 }
-impl AbstractFeature for BuildingConstructiveElement {
+impl AbstractFeatureTrait for BuildingConstructiveElement {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -2399,11 +2775,8 @@ impl AbstractFeature for BuildingConstructiveElement {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractFeatureWithLifespan for BuildingConstructiveElement {
+impl AbstractFeatureWithLifespanTrait for BuildingConstructiveElement {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
     }
@@ -2416,42 +2789,31 @@ impl AbstractFeatureWithLifespan for BuildingConstructiveElement {
     fn valid_to(&self) -> Option<&String> {
         self.valid_to.as_ref()
     }
-    fn ade_of_abstract_feature_with_lifespan(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractFeatureWithLifespan>] {
-        &self.ade_of_abstract_feature_with_lifespan
-    }
 }
-impl AbstractCityObject for BuildingConstructiveElement {
+impl AbstractCityObjectTrait for BuildingConstructiveElement {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
     }
     fn relative_to_water(&self) -> Option<RelativeToWater> {
         self.relative_to_water
     }
-    fn ade_of_abstract_city_object(&self) -> &[Box<dyn ADEOfAbstractCityObject>] {
-        &self.ade_of_abstract_city_object
-    }
-    fn appearance(&self) -> &[Box<dyn AbstractAppearance>] {
+    fn appearance(&self) -> &[AbstractAppearance] {
         &self.appearance
     }
-    fn generic_attribute(&self) -> &[Box<dyn AbstractGenericAttribute>] {
-        &self.generic_attribute
-    }
-    fn generalizes_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn generalizes_to(&self) -> &[AbstractCityObject] {
         &self.generalizes_to
     }
     fn external_reference(&self) -> &[ExternalReference] {
         &self.external_reference
     }
-    fn related_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn related_to(&self) -> &[AbstractCityObject] {
         &self.related_to
     }
-    fn dynamizer(&self) -> &[Box<dyn AbstractDynamizer>] {
+    fn dynamizer(&self) -> &[AbstractDynamizer] {
         &self.dynamizer
     }
 }
-impl AbstractSpace for BuildingConstructiveElement {
+impl AbstractSpaceTrait for BuildingConstructiveElement {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
     }
@@ -2460,9 +2822,6 @@ impl AbstractSpace for BuildingConstructiveElement {
     }
     fn area(&self) -> &[QualifiedArea] {
         &self.area
-    }
-    fn ade_of_abstract_space(&self) -> &[Box<dyn ADEOfAbstractSpace>] {
-        &self.ade_of_abstract_space
     }
     fn lod2_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod2_multi_curve.as_ref()
@@ -2479,7 +2838,7 @@ impl AbstractSpace for BuildingConstructiveElement {
     fn lod3_solid(&self) -> Option<&crate::geometry::Solid> {
         self.lod3_solid.as_ref()
     }
-    fn boundary(&self) -> &[Box<dyn AbstractSpaceBoundary>] {
+    fn boundary(&self) -> &[AbstractSpaceBoundary] {
         &self.boundary
     }
     fn lod0_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
@@ -2498,14 +2857,11 @@ impl AbstractSpace for BuildingConstructiveElement {
         self.lod2_multi_surface.as_ref()
     }
 }
-impl AbstractPhysicalSpace for BuildingConstructiveElement {
-    fn ade_of_abstract_physical_space(&self) -> &[Box<dyn ADEOfAbstractPhysicalSpace>] {
-        &self.ade_of_abstract_physical_space
-    }
+impl AbstractPhysicalSpaceTrait for BuildingConstructiveElement {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
     }
-    fn point_cloud(&self) -> Option<&Box<dyn AbstractPointCloud>> {
+    fn point_cloud(&self) -> Option<&AbstractPointCloud> {
         self.point_cloud.as_ref()
     }
     fn lod1_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
@@ -2515,10 +2871,7 @@ impl AbstractPhysicalSpace for BuildingConstructiveElement {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
-impl AbstractOccupiedSpace for BuildingConstructiveElement {
-    fn ade_of_abstract_occupied_space(&self) -> &[Box<dyn ADEOfAbstractOccupiedSpace>] {
-        &self.ade_of_abstract_occupied_space
-    }
+impl AbstractOccupiedSpaceTrait for BuildingConstructiveElement {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
     }
@@ -2529,16 +2882,11 @@ impl AbstractOccupiedSpace for BuildingConstructiveElement {
         self.lod1_implicit_representation.as_ref()
     }
 }
-impl AbstractConstructiveElement for BuildingConstructiveElement {
+impl AbstractConstructiveElementTrait for BuildingConstructiveElement {
     fn is_structural_element(&self) -> Option<bool> {
         self.is_structural_element
     }
-    fn ade_of_abstract_constructive_element(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractConstructiveElement>] {
-        &self.ade_of_abstract_constructive_element
-    }
-    fn filling(&self) -> &[Box<dyn AbstractFillingElement>] {
+    fn filling(&self) -> &[AbstractFillingElement] {
         &self.filling
     }
 }
@@ -2552,17 +2900,13 @@ impl BuildingConstructiveElement {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut creation_date = None;
         let mut termination_date = None;
         let mut valid_from = None;
         let mut valid_to = None;
-        let mut ade_of_abstract_feature_with_lifespan = Vec::new();
         let mut relative_to_terrain = None;
         let mut relative_to_water = None;
-        let mut ade_of_abstract_city_object = Vec::new();
         let mut appearance = Vec::new();
-        let mut generic_attribute = Vec::new();
         let mut generalizes_to = Vec::new();
         let mut external_reference = Vec::new();
         let mut related_to = Vec::new();
@@ -2570,7 +2914,6 @@ impl BuildingConstructiveElement {
         let mut space_type = None;
         let mut volume = Vec::new();
         let mut area = Vec::new();
-        let mut ade_of_abstract_space = Vec::new();
         let mut lod2_multi_curve = None;
         let mut lod3_multi_surface = None;
         let mut lod0_multi_surface = None;
@@ -2582,22 +2925,18 @@ impl BuildingConstructiveElement {
         let mut lod0_point = None;
         let mut lod3_multi_curve = None;
         let mut lod2_multi_surface = None;
-        let mut ade_of_abstract_physical_space = Vec::new();
         let mut lod3_terrain_intersection_curve = None;
         let mut point_cloud = None;
         let mut lod1_terrain_intersection_curve = None;
         let mut lod2_terrain_intersection_curve = None;
-        let mut ade_of_abstract_occupied_space = Vec::new();
         let mut lod3_implicit_representation = None;
         let mut lod2_implicit_representation = None;
         let mut lod1_implicit_representation = None;
         let mut is_structural_element = None;
-        let mut ade_of_abstract_constructive_element = Vec::new();
         let mut filling = Vec::new();
         let mut class_ = None;
         let mut function = Vec::new();
         let mut usage = Vec::new();
-        let mut ade_of_building_constructive_element = Vec::new();
         let mut feature_id = ID(_gml_id);
         let mut sub = reader.subtree();
         while let Some(info) = sub.next_element()? {
@@ -2614,9 +2953,6 @@ impl BuildingConstructiveElement {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "creationDate") => {
                     creation_date = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
@@ -2631,9 +2967,6 @@ impl BuildingConstructiveElement {
                 (crate::namespace::NS_CORE, "validTo") => {
                     valid_to = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeatureWithLifespan") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "relativeToTerrain") => {
                     relative_to_terrain = Some(
                         RelativeToTerrain::from_gml_text(&sub.read_text()?)?,
@@ -2644,30 +2977,24 @@ impl BuildingConstructiveElement {
                         RelativeToWater::from_gml_text(&sub.read_text()?)?,
                     );
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractCityObject") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "appearance") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         appearance
                             .push(
-                                super::dispatchers::parse_dyn_abstract_appearance(
+                                super::dispatchers::parse_abstract_appearance(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
                             );
                     }
                 }
-                (crate::namespace::NS_CORE, "genericAttribute") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "generalizesTo") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         generalizes_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -2682,7 +3009,7 @@ impl BuildingConstructiveElement {
                     if let Some(child_info) = wrapper.next_element()? {
                         related_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -2694,7 +3021,7 @@ impl BuildingConstructiveElement {
                     if let Some(child_info) = wrapper.next_element()? {
                         dynamizer
                             .push(
-                                super::dispatchers::parse_dyn_abstract_dynamizer(
+                                super::dispatchers::parse_abstract_dynamizer(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -2709,9 +3036,6 @@ impl BuildingConstructiveElement {
                 }
                 (crate::namespace::NS_CORE, "area") => {
                     area.push(QualifiedArea::from_gml(&mut sub)?);
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractSpace") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_CORE, "lod2MultiCurve") => {
                     lod2_multi_curve = Some({
@@ -2793,7 +3117,7 @@ impl BuildingConstructiveElement {
                     if let Some(child_info) = wrapper.next_element()? {
                         boundary
                             .push(
-                                super::dispatchers::parse_dyn_abstract_space_boundary(
+                                super::dispatchers::parse_abstract_space_boundary(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -2875,9 +3199,6 @@ impl BuildingConstructiveElement {
                         }
                     });
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractPhysicalSpace") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "lod3TerrainIntersectionCurve") => {
                     lod3_terrain_intersection_curve = Some({
                         let mut geom_sub = sub.subtree();
@@ -2897,7 +3218,7 @@ impl BuildingConstructiveElement {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         point_cloud = Some(
-                            super::dispatchers::parse_dyn_abstract_point_cloud(
+                            super::dispatchers::parse_abstract_point_cloud(
                                 &mut wrapper,
                                 &child_info,
                             )?,
@@ -2933,9 +3254,6 @@ impl BuildingConstructiveElement {
                             crate::geometry::MultiCurve::default()
                         }
                     });
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractOccupiedSpace") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_CORE, "lod3ImplicitRepresentation") => {
                     let mut wrapper = sub.subtree();
@@ -2987,18 +3305,12 @@ impl BuildingConstructiveElement {
                         crate::from_gml::FromGml::from_gml(&mut sub)?,
                     );
                 }
-                (
-                    crate::namespace::NS_CONSTRUCTION,
-                    "adeOfAbstractConstructiveElement",
-                ) => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CONSTRUCTION, "filling") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         filling
                             .push(
-                                super::dispatchers::parse_dyn_abstract_filling_element(
+                                super::dispatchers::parse_abstract_filling_element(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -3019,9 +3331,6 @@ impl BuildingConstructiveElement {
                 (crate::namespace::NS_BUILDING, "usage") => {
                     usage.push(BuildingConstructiveElementUsageValue(sub.read_text()?));
                 }
-                (crate::namespace::NS_BUILDING, "adeOfBuildingConstructiveElement") => {
-                    sub.skip_element()?;
-                }
                 _ => {
                     sub.skip_element()?;
                 }
@@ -3032,17 +3341,13 @@ impl BuildingConstructiveElement {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             creation_date,
             termination_date,
             valid_from,
             valid_to,
-            ade_of_abstract_feature_with_lifespan,
             relative_to_terrain,
             relative_to_water,
-            ade_of_abstract_city_object,
             appearance,
-            generic_attribute,
             generalizes_to,
             external_reference,
             related_to,
@@ -3050,7 +3355,6 @@ impl BuildingConstructiveElement {
             space_type,
             volume,
             area,
-            ade_of_abstract_space,
             lod2_multi_curve,
             lod3_multi_surface,
             lod0_multi_surface,
@@ -3062,22 +3366,18 @@ impl BuildingConstructiveElement {
             lod0_point,
             lod3_multi_curve,
             lod2_multi_surface,
-            ade_of_abstract_physical_space,
             lod3_terrain_intersection_curve,
             point_cloud,
             lod1_terrain_intersection_curve,
             lod2_terrain_intersection_curve,
-            ade_of_abstract_occupied_space,
             lod3_implicit_representation,
             lod2_implicit_representation,
             lod1_implicit_representation,
             is_structural_element,
-            ade_of_abstract_constructive_element,
             filling,
             class_,
             function,
             usage,
-            ade_of_building_constructive_element,
         })
     }
 }
@@ -3093,60 +3393,49 @@ impl crate::from_gml::FromGml for BuildingConstructiveElement {
         Self::from_gml_with_info(reader, &info)
     }
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct BuildingFurniture {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub creation_date: Option<String>,
     pub termination_date: Option<String>,
     pub valid_from: Option<String>,
     pub valid_to: Option<String>,
-    pub ade_of_abstract_feature_with_lifespan: Vec<
-        Box<dyn ADEOfAbstractFeatureWithLifespan>,
-    >,
     pub relative_to_terrain: Option<RelativeToTerrain>,
     pub relative_to_water: Option<RelativeToWater>,
-    pub ade_of_abstract_city_object: Vec<Box<dyn ADEOfAbstractCityObject>>,
-    pub appearance: Vec<Box<dyn AbstractAppearance>>,
-    pub generic_attribute: Vec<Box<dyn AbstractGenericAttribute>>,
-    pub generalizes_to: Vec<Box<dyn AbstractCityObject>>,
+    pub appearance: Vec<AbstractAppearance>,
+    pub generalizes_to: Vec<AbstractCityObject>,
     pub external_reference: Vec<ExternalReference>,
-    pub related_to: Vec<Box<dyn AbstractCityObject>>,
-    pub dynamizer: Vec<Box<dyn AbstractDynamizer>>,
+    pub related_to: Vec<AbstractCityObject>,
+    pub dynamizer: Vec<AbstractDynamizer>,
     pub space_type: Option<SpaceType>,
     pub volume: Vec<QualifiedVolume>,
     pub area: Vec<QualifiedArea>,
-    pub ade_of_abstract_space: Vec<Box<dyn ADEOfAbstractSpace>>,
     pub lod2_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod3_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod0_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod1_solid: Option<crate::geometry::Solid>,
     pub lod3_solid: Option<crate::geometry::Solid>,
-    pub boundary: Vec<Box<dyn AbstractSpaceBoundary>>,
+    pub boundary: Vec<AbstractSpaceBoundary>,
     pub lod0_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_solid: Option<crate::geometry::Solid>,
     pub lod0_point: Option<crate::geometry::DirectPosition>,
     pub lod3_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_multi_surface: Option<crate::geometry::MultiSurface>,
-    pub ade_of_abstract_physical_space: Vec<Box<dyn ADEOfAbstractPhysicalSpace>>,
     pub lod3_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
-    pub point_cloud: Option<Box<dyn AbstractPointCloud>>,
+    pub point_cloud: Option<AbstractPointCloud>,
     pub lod1_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
-    pub ade_of_abstract_occupied_space: Vec<Box<dyn ADEOfAbstractOccupiedSpace>>,
     pub lod3_implicit_representation: Option<ImplicitGeometry>,
     pub lod2_implicit_representation: Option<ImplicitGeometry>,
     pub lod1_implicit_representation: Option<ImplicitGeometry>,
-    pub ade_of_abstract_furniture: Vec<Box<dyn ADEOfAbstractFurniture>>,
     pub class_: Option<BuildingFurnitureClassValue>,
     pub function: Vec<BuildingFurnitureFunctionValue>,
     pub usage: Vec<BuildingFurnitureUsageValue>,
-    pub ade_of_building_furniture: Vec<Box<dyn ADEOfBuildingFurniture>>,
 }
-impl AbstractFeature for BuildingFurniture {
+impl AbstractFeatureTrait for BuildingFurniture {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -3159,11 +3448,8 @@ impl AbstractFeature for BuildingFurniture {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractFeatureWithLifespan for BuildingFurniture {
+impl AbstractFeatureWithLifespanTrait for BuildingFurniture {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
     }
@@ -3176,42 +3462,31 @@ impl AbstractFeatureWithLifespan for BuildingFurniture {
     fn valid_to(&self) -> Option<&String> {
         self.valid_to.as_ref()
     }
-    fn ade_of_abstract_feature_with_lifespan(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractFeatureWithLifespan>] {
-        &self.ade_of_abstract_feature_with_lifespan
-    }
 }
-impl AbstractCityObject for BuildingFurniture {
+impl AbstractCityObjectTrait for BuildingFurniture {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
     }
     fn relative_to_water(&self) -> Option<RelativeToWater> {
         self.relative_to_water
     }
-    fn ade_of_abstract_city_object(&self) -> &[Box<dyn ADEOfAbstractCityObject>] {
-        &self.ade_of_abstract_city_object
-    }
-    fn appearance(&self) -> &[Box<dyn AbstractAppearance>] {
+    fn appearance(&self) -> &[AbstractAppearance] {
         &self.appearance
     }
-    fn generic_attribute(&self) -> &[Box<dyn AbstractGenericAttribute>] {
-        &self.generic_attribute
-    }
-    fn generalizes_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn generalizes_to(&self) -> &[AbstractCityObject] {
         &self.generalizes_to
     }
     fn external_reference(&self) -> &[ExternalReference] {
         &self.external_reference
     }
-    fn related_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn related_to(&self) -> &[AbstractCityObject] {
         &self.related_to
     }
-    fn dynamizer(&self) -> &[Box<dyn AbstractDynamizer>] {
+    fn dynamizer(&self) -> &[AbstractDynamizer] {
         &self.dynamizer
     }
 }
-impl AbstractSpace for BuildingFurniture {
+impl AbstractSpaceTrait for BuildingFurniture {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
     }
@@ -3220,9 +3495,6 @@ impl AbstractSpace for BuildingFurniture {
     }
     fn area(&self) -> &[QualifiedArea] {
         &self.area
-    }
-    fn ade_of_abstract_space(&self) -> &[Box<dyn ADEOfAbstractSpace>] {
-        &self.ade_of_abstract_space
     }
     fn lod2_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod2_multi_curve.as_ref()
@@ -3239,7 +3511,7 @@ impl AbstractSpace for BuildingFurniture {
     fn lod3_solid(&self) -> Option<&crate::geometry::Solid> {
         self.lod3_solid.as_ref()
     }
-    fn boundary(&self) -> &[Box<dyn AbstractSpaceBoundary>] {
+    fn boundary(&self) -> &[AbstractSpaceBoundary] {
         &self.boundary
     }
     fn lod0_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
@@ -3258,14 +3530,11 @@ impl AbstractSpace for BuildingFurniture {
         self.lod2_multi_surface.as_ref()
     }
 }
-impl AbstractPhysicalSpace for BuildingFurniture {
-    fn ade_of_abstract_physical_space(&self) -> &[Box<dyn ADEOfAbstractPhysicalSpace>] {
-        &self.ade_of_abstract_physical_space
-    }
+impl AbstractPhysicalSpaceTrait for BuildingFurniture {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
     }
-    fn point_cloud(&self) -> Option<&Box<dyn AbstractPointCloud>> {
+    fn point_cloud(&self) -> Option<&AbstractPointCloud> {
         self.point_cloud.as_ref()
     }
     fn lod1_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
@@ -3275,10 +3544,7 @@ impl AbstractPhysicalSpace for BuildingFurniture {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
-impl AbstractOccupiedSpace for BuildingFurniture {
-    fn ade_of_abstract_occupied_space(&self) -> &[Box<dyn ADEOfAbstractOccupiedSpace>] {
-        &self.ade_of_abstract_occupied_space
-    }
+impl AbstractOccupiedSpaceTrait for BuildingFurniture {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
     }
@@ -3289,11 +3555,7 @@ impl AbstractOccupiedSpace for BuildingFurniture {
         self.lod1_implicit_representation.as_ref()
     }
 }
-impl AbstractFurniture for BuildingFurniture {
-    fn ade_of_abstract_furniture(&self) -> &[Box<dyn ADEOfAbstractFurniture>] {
-        &self.ade_of_abstract_furniture
-    }
-}
+impl AbstractFurnitureTrait for BuildingFurniture {}
 impl BuildingFurniture {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -3304,17 +3566,13 @@ impl BuildingFurniture {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut creation_date = None;
         let mut termination_date = None;
         let mut valid_from = None;
         let mut valid_to = None;
-        let mut ade_of_abstract_feature_with_lifespan = Vec::new();
         let mut relative_to_terrain = None;
         let mut relative_to_water = None;
-        let mut ade_of_abstract_city_object = Vec::new();
         let mut appearance = Vec::new();
-        let mut generic_attribute = Vec::new();
         let mut generalizes_to = Vec::new();
         let mut external_reference = Vec::new();
         let mut related_to = Vec::new();
@@ -3322,7 +3580,6 @@ impl BuildingFurniture {
         let mut space_type = None;
         let mut volume = Vec::new();
         let mut area = Vec::new();
-        let mut ade_of_abstract_space = Vec::new();
         let mut lod2_multi_curve = None;
         let mut lod3_multi_surface = None;
         let mut lod0_multi_surface = None;
@@ -3334,20 +3591,16 @@ impl BuildingFurniture {
         let mut lod0_point = None;
         let mut lod3_multi_curve = None;
         let mut lod2_multi_surface = None;
-        let mut ade_of_abstract_physical_space = Vec::new();
         let mut lod3_terrain_intersection_curve = None;
         let mut point_cloud = None;
         let mut lod1_terrain_intersection_curve = None;
         let mut lod2_terrain_intersection_curve = None;
-        let mut ade_of_abstract_occupied_space = Vec::new();
         let mut lod3_implicit_representation = None;
         let mut lod2_implicit_representation = None;
         let mut lod1_implicit_representation = None;
-        let mut ade_of_abstract_furniture = Vec::new();
         let mut class_ = None;
         let mut function = Vec::new();
         let mut usage = Vec::new();
-        let mut ade_of_building_furniture = Vec::new();
         let mut feature_id = ID(_gml_id);
         let mut sub = reader.subtree();
         while let Some(info) = sub.next_element()? {
@@ -3364,9 +3617,6 @@ impl BuildingFurniture {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "creationDate") => {
                     creation_date = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
@@ -3381,9 +3631,6 @@ impl BuildingFurniture {
                 (crate::namespace::NS_CORE, "validTo") => {
                     valid_to = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeatureWithLifespan") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "relativeToTerrain") => {
                     relative_to_terrain = Some(
                         RelativeToTerrain::from_gml_text(&sub.read_text()?)?,
@@ -3394,30 +3641,24 @@ impl BuildingFurniture {
                         RelativeToWater::from_gml_text(&sub.read_text()?)?,
                     );
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractCityObject") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "appearance") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         appearance
                             .push(
-                                super::dispatchers::parse_dyn_abstract_appearance(
+                                super::dispatchers::parse_abstract_appearance(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
                             );
                     }
                 }
-                (crate::namespace::NS_CORE, "genericAttribute") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "generalizesTo") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         generalizes_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -3432,7 +3673,7 @@ impl BuildingFurniture {
                     if let Some(child_info) = wrapper.next_element()? {
                         related_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -3444,7 +3685,7 @@ impl BuildingFurniture {
                     if let Some(child_info) = wrapper.next_element()? {
                         dynamizer
                             .push(
-                                super::dispatchers::parse_dyn_abstract_dynamizer(
+                                super::dispatchers::parse_abstract_dynamizer(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -3459,9 +3700,6 @@ impl BuildingFurniture {
                 }
                 (crate::namespace::NS_CORE, "area") => {
                     area.push(QualifiedArea::from_gml(&mut sub)?);
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractSpace") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_CORE, "lod2MultiCurve") => {
                     lod2_multi_curve = Some({
@@ -3543,7 +3781,7 @@ impl BuildingFurniture {
                     if let Some(child_info) = wrapper.next_element()? {
                         boundary
                             .push(
-                                super::dispatchers::parse_dyn_abstract_space_boundary(
+                                super::dispatchers::parse_abstract_space_boundary(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -3625,9 +3863,6 @@ impl BuildingFurniture {
                         }
                     });
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractPhysicalSpace") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "lod3TerrainIntersectionCurve") => {
                     lod3_terrain_intersection_curve = Some({
                         let mut geom_sub = sub.subtree();
@@ -3647,7 +3882,7 @@ impl BuildingFurniture {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         point_cloud = Some(
-                            super::dispatchers::parse_dyn_abstract_point_cloud(
+                            super::dispatchers::parse_abstract_point_cloud(
                                 &mut wrapper,
                                 &child_info,
                             )?,
@@ -3683,9 +3918,6 @@ impl BuildingFurniture {
                             crate::geometry::MultiCurve::default()
                         }
                     });
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractOccupiedSpace") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_CORE, "lod3ImplicitRepresentation") => {
                     let mut wrapper = sub.subtree();
@@ -3732,9 +3964,6 @@ impl BuildingFurniture {
                         );
                     }
                 }
-                (crate::namespace::NS_CONSTRUCTION, "adeOfAbstractFurniture") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_BUILDING, "class") => {
                     class_ = Some(BuildingFurnitureClassValue(sub.read_text()?));
                 }
@@ -3743,9 +3972,6 @@ impl BuildingFurniture {
                 }
                 (crate::namespace::NS_BUILDING, "usage") => {
                     usage.push(BuildingFurnitureUsageValue(sub.read_text()?));
-                }
-                (crate::namespace::NS_BUILDING, "adeOfBuildingFurniture") => {
-                    sub.skip_element()?;
                 }
                 _ => {
                     sub.skip_element()?;
@@ -3757,17 +3983,13 @@ impl BuildingFurniture {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             creation_date,
             termination_date,
             valid_from,
             valid_to,
-            ade_of_abstract_feature_with_lifespan,
             relative_to_terrain,
             relative_to_water,
-            ade_of_abstract_city_object,
             appearance,
-            generic_attribute,
             generalizes_to,
             external_reference,
             related_to,
@@ -3775,7 +3997,6 @@ impl BuildingFurniture {
             space_type,
             volume,
             area,
-            ade_of_abstract_space,
             lod2_multi_curve,
             lod3_multi_surface,
             lod0_multi_surface,
@@ -3787,20 +4008,16 @@ impl BuildingFurniture {
             lod0_point,
             lod3_multi_curve,
             lod2_multi_surface,
-            ade_of_abstract_physical_space,
             lod3_terrain_intersection_curve,
             point_cloud,
             lod1_terrain_intersection_curve,
             lod2_terrain_intersection_curve,
-            ade_of_abstract_occupied_space,
             lod3_implicit_representation,
             lod2_implicit_representation,
             lod1_implicit_representation,
-            ade_of_abstract_furniture,
             class_,
             function,
             usage,
-            ade_of_building_furniture,
         })
     }
 }
@@ -3816,61 +4033,50 @@ impl crate::from_gml::FromGml for BuildingFurniture {
         Self::from_gml_with_info(reader, &info)
     }
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct BuildingInstallation {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub creation_date: Option<String>,
     pub termination_date: Option<String>,
     pub valid_from: Option<String>,
     pub valid_to: Option<String>,
-    pub ade_of_abstract_feature_with_lifespan: Vec<
-        Box<dyn ADEOfAbstractFeatureWithLifespan>,
-    >,
     pub relative_to_terrain: Option<RelativeToTerrain>,
     pub relative_to_water: Option<RelativeToWater>,
-    pub ade_of_abstract_city_object: Vec<Box<dyn ADEOfAbstractCityObject>>,
-    pub appearance: Vec<Box<dyn AbstractAppearance>>,
-    pub generic_attribute: Vec<Box<dyn AbstractGenericAttribute>>,
-    pub generalizes_to: Vec<Box<dyn AbstractCityObject>>,
+    pub appearance: Vec<AbstractAppearance>,
+    pub generalizes_to: Vec<AbstractCityObject>,
     pub external_reference: Vec<ExternalReference>,
-    pub related_to: Vec<Box<dyn AbstractCityObject>>,
-    pub dynamizer: Vec<Box<dyn AbstractDynamizer>>,
+    pub related_to: Vec<AbstractCityObject>,
+    pub dynamizer: Vec<AbstractDynamizer>,
     pub space_type: Option<SpaceType>,
     pub volume: Vec<QualifiedVolume>,
     pub area: Vec<QualifiedArea>,
-    pub ade_of_abstract_space: Vec<Box<dyn ADEOfAbstractSpace>>,
     pub lod2_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod3_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod0_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod1_solid: Option<crate::geometry::Solid>,
     pub lod3_solid: Option<crate::geometry::Solid>,
-    pub boundary: Vec<Box<dyn AbstractSpaceBoundary>>,
+    pub boundary: Vec<AbstractSpaceBoundary>,
     pub lod0_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_solid: Option<crate::geometry::Solid>,
     pub lod0_point: Option<crate::geometry::DirectPosition>,
     pub lod3_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_multi_surface: Option<crate::geometry::MultiSurface>,
-    pub ade_of_abstract_physical_space: Vec<Box<dyn ADEOfAbstractPhysicalSpace>>,
     pub lod3_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
-    pub point_cloud: Option<Box<dyn AbstractPointCloud>>,
+    pub point_cloud: Option<AbstractPointCloud>,
     pub lod1_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
-    pub ade_of_abstract_occupied_space: Vec<Box<dyn ADEOfAbstractOccupiedSpace>>,
     pub lod3_implicit_representation: Option<ImplicitGeometry>,
     pub lod2_implicit_representation: Option<ImplicitGeometry>,
     pub lod1_implicit_representation: Option<ImplicitGeometry>,
     pub relation_to_construction: Option<RelationToConstruction>,
-    pub ade_of_abstract_installation: Vec<Box<dyn ADEOfAbstractInstallation>>,
     pub class_: Option<BuildingInstallationClassValue>,
     pub function: Vec<BuildingInstallationFunctionValue>,
     pub usage: Vec<BuildingInstallationUsageValue>,
-    pub ade_of_building_installation: Vec<Box<dyn ADEOfBuildingInstallation>>,
 }
-impl AbstractFeature for BuildingInstallation {
+impl AbstractFeatureTrait for BuildingInstallation {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -3883,11 +4089,8 @@ impl AbstractFeature for BuildingInstallation {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractFeatureWithLifespan for BuildingInstallation {
+impl AbstractFeatureWithLifespanTrait for BuildingInstallation {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
     }
@@ -3900,42 +4103,31 @@ impl AbstractFeatureWithLifespan for BuildingInstallation {
     fn valid_to(&self) -> Option<&String> {
         self.valid_to.as_ref()
     }
-    fn ade_of_abstract_feature_with_lifespan(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractFeatureWithLifespan>] {
-        &self.ade_of_abstract_feature_with_lifespan
-    }
 }
-impl AbstractCityObject for BuildingInstallation {
+impl AbstractCityObjectTrait for BuildingInstallation {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
     }
     fn relative_to_water(&self) -> Option<RelativeToWater> {
         self.relative_to_water
     }
-    fn ade_of_abstract_city_object(&self) -> &[Box<dyn ADEOfAbstractCityObject>] {
-        &self.ade_of_abstract_city_object
-    }
-    fn appearance(&self) -> &[Box<dyn AbstractAppearance>] {
+    fn appearance(&self) -> &[AbstractAppearance] {
         &self.appearance
     }
-    fn generic_attribute(&self) -> &[Box<dyn AbstractGenericAttribute>] {
-        &self.generic_attribute
-    }
-    fn generalizes_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn generalizes_to(&self) -> &[AbstractCityObject] {
         &self.generalizes_to
     }
     fn external_reference(&self) -> &[ExternalReference] {
         &self.external_reference
     }
-    fn related_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn related_to(&self) -> &[AbstractCityObject] {
         &self.related_to
     }
-    fn dynamizer(&self) -> &[Box<dyn AbstractDynamizer>] {
+    fn dynamizer(&self) -> &[AbstractDynamizer] {
         &self.dynamizer
     }
 }
-impl AbstractSpace for BuildingInstallation {
+impl AbstractSpaceTrait for BuildingInstallation {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
     }
@@ -3944,9 +4136,6 @@ impl AbstractSpace for BuildingInstallation {
     }
     fn area(&self) -> &[QualifiedArea] {
         &self.area
-    }
-    fn ade_of_abstract_space(&self) -> &[Box<dyn ADEOfAbstractSpace>] {
-        &self.ade_of_abstract_space
     }
     fn lod2_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod2_multi_curve.as_ref()
@@ -3963,7 +4152,7 @@ impl AbstractSpace for BuildingInstallation {
     fn lod3_solid(&self) -> Option<&crate::geometry::Solid> {
         self.lod3_solid.as_ref()
     }
-    fn boundary(&self) -> &[Box<dyn AbstractSpaceBoundary>] {
+    fn boundary(&self) -> &[AbstractSpaceBoundary] {
         &self.boundary
     }
     fn lod0_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
@@ -3982,14 +4171,11 @@ impl AbstractSpace for BuildingInstallation {
         self.lod2_multi_surface.as_ref()
     }
 }
-impl AbstractPhysicalSpace for BuildingInstallation {
-    fn ade_of_abstract_physical_space(&self) -> &[Box<dyn ADEOfAbstractPhysicalSpace>] {
-        &self.ade_of_abstract_physical_space
-    }
+impl AbstractPhysicalSpaceTrait for BuildingInstallation {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
     }
-    fn point_cloud(&self) -> Option<&Box<dyn AbstractPointCloud>> {
+    fn point_cloud(&self) -> Option<&AbstractPointCloud> {
         self.point_cloud.as_ref()
     }
     fn lod1_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
@@ -3999,10 +4185,7 @@ impl AbstractPhysicalSpace for BuildingInstallation {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
-impl AbstractOccupiedSpace for BuildingInstallation {
-    fn ade_of_abstract_occupied_space(&self) -> &[Box<dyn ADEOfAbstractOccupiedSpace>] {
-        &self.ade_of_abstract_occupied_space
-    }
+impl AbstractOccupiedSpaceTrait for BuildingInstallation {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
     }
@@ -4013,12 +4196,9 @@ impl AbstractOccupiedSpace for BuildingInstallation {
         self.lod1_implicit_representation.as_ref()
     }
 }
-impl AbstractInstallation for BuildingInstallation {
+impl AbstractInstallationTrait for BuildingInstallation {
     fn relation_to_construction(&self) -> Option<RelationToConstruction> {
         self.relation_to_construction
-    }
-    fn ade_of_abstract_installation(&self) -> &[Box<dyn ADEOfAbstractInstallation>] {
-        &self.ade_of_abstract_installation
     }
 }
 impl BuildingInstallation {
@@ -4031,17 +4211,13 @@ impl BuildingInstallation {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut creation_date = None;
         let mut termination_date = None;
         let mut valid_from = None;
         let mut valid_to = None;
-        let mut ade_of_abstract_feature_with_lifespan = Vec::new();
         let mut relative_to_terrain = None;
         let mut relative_to_water = None;
-        let mut ade_of_abstract_city_object = Vec::new();
         let mut appearance = Vec::new();
-        let mut generic_attribute = Vec::new();
         let mut generalizes_to = Vec::new();
         let mut external_reference = Vec::new();
         let mut related_to = Vec::new();
@@ -4049,7 +4225,6 @@ impl BuildingInstallation {
         let mut space_type = None;
         let mut volume = Vec::new();
         let mut area = Vec::new();
-        let mut ade_of_abstract_space = Vec::new();
         let mut lod2_multi_curve = None;
         let mut lod3_multi_surface = None;
         let mut lod0_multi_surface = None;
@@ -4061,21 +4236,17 @@ impl BuildingInstallation {
         let mut lod0_point = None;
         let mut lod3_multi_curve = None;
         let mut lod2_multi_surface = None;
-        let mut ade_of_abstract_physical_space = Vec::new();
         let mut lod3_terrain_intersection_curve = None;
         let mut point_cloud = None;
         let mut lod1_terrain_intersection_curve = None;
         let mut lod2_terrain_intersection_curve = None;
-        let mut ade_of_abstract_occupied_space = Vec::new();
         let mut lod3_implicit_representation = None;
         let mut lod2_implicit_representation = None;
         let mut lod1_implicit_representation = None;
         let mut relation_to_construction = None;
-        let mut ade_of_abstract_installation = Vec::new();
         let mut class_ = None;
         let mut function = Vec::new();
         let mut usage = Vec::new();
-        let mut ade_of_building_installation = Vec::new();
         let mut feature_id = ID(_gml_id);
         let mut sub = reader.subtree();
         while let Some(info) = sub.next_element()? {
@@ -4092,9 +4263,6 @@ impl BuildingInstallation {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "creationDate") => {
                     creation_date = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
@@ -4109,9 +4277,6 @@ impl BuildingInstallation {
                 (crate::namespace::NS_CORE, "validTo") => {
                     valid_to = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeatureWithLifespan") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "relativeToTerrain") => {
                     relative_to_terrain = Some(
                         RelativeToTerrain::from_gml_text(&sub.read_text()?)?,
@@ -4122,30 +4287,24 @@ impl BuildingInstallation {
                         RelativeToWater::from_gml_text(&sub.read_text()?)?,
                     );
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractCityObject") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "appearance") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         appearance
                             .push(
-                                super::dispatchers::parse_dyn_abstract_appearance(
+                                super::dispatchers::parse_abstract_appearance(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
                             );
                     }
                 }
-                (crate::namespace::NS_CORE, "genericAttribute") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "generalizesTo") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         generalizes_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -4160,7 +4319,7 @@ impl BuildingInstallation {
                     if let Some(child_info) = wrapper.next_element()? {
                         related_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -4172,7 +4331,7 @@ impl BuildingInstallation {
                     if let Some(child_info) = wrapper.next_element()? {
                         dynamizer
                             .push(
-                                super::dispatchers::parse_dyn_abstract_dynamizer(
+                                super::dispatchers::parse_abstract_dynamizer(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -4187,9 +4346,6 @@ impl BuildingInstallation {
                 }
                 (crate::namespace::NS_CORE, "area") => {
                     area.push(QualifiedArea::from_gml(&mut sub)?);
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractSpace") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_CORE, "lod2MultiCurve") => {
                     lod2_multi_curve = Some({
@@ -4271,7 +4427,7 @@ impl BuildingInstallation {
                     if let Some(child_info) = wrapper.next_element()? {
                         boundary
                             .push(
-                                super::dispatchers::parse_dyn_abstract_space_boundary(
+                                super::dispatchers::parse_abstract_space_boundary(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -4353,9 +4509,6 @@ impl BuildingInstallation {
                         }
                     });
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractPhysicalSpace") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "lod3TerrainIntersectionCurve") => {
                     lod3_terrain_intersection_curve = Some({
                         let mut geom_sub = sub.subtree();
@@ -4375,7 +4528,7 @@ impl BuildingInstallation {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         point_cloud = Some(
-                            super::dispatchers::parse_dyn_abstract_point_cloud(
+                            super::dispatchers::parse_abstract_point_cloud(
                                 &mut wrapper,
                                 &child_info,
                             )?,
@@ -4411,9 +4564,6 @@ impl BuildingInstallation {
                             crate::geometry::MultiCurve::default()
                         }
                     });
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractOccupiedSpace") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_CORE, "lod3ImplicitRepresentation") => {
                     let mut wrapper = sub.subtree();
@@ -4465,9 +4615,6 @@ impl BuildingInstallation {
                         RelationToConstruction::from_gml_text(&sub.read_text()?)?,
                     );
                 }
-                (crate::namespace::NS_CONSTRUCTION, "adeOfAbstractInstallation") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_BUILDING, "class") => {
                     class_ = Some(BuildingInstallationClassValue(sub.read_text()?));
                 }
@@ -4476,9 +4623,6 @@ impl BuildingInstallation {
                 }
                 (crate::namespace::NS_BUILDING, "usage") => {
                     usage.push(BuildingInstallationUsageValue(sub.read_text()?));
-                }
-                (crate::namespace::NS_BUILDING, "adeOfBuildingInstallation") => {
-                    sub.skip_element()?;
                 }
                 _ => {
                     sub.skip_element()?;
@@ -4490,17 +4634,13 @@ impl BuildingInstallation {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             creation_date,
             termination_date,
             valid_from,
             valid_to,
-            ade_of_abstract_feature_with_lifespan,
             relative_to_terrain,
             relative_to_water,
-            ade_of_abstract_city_object,
             appearance,
-            generic_attribute,
             generalizes_to,
             external_reference,
             related_to,
@@ -4508,7 +4648,6 @@ impl BuildingInstallation {
             space_type,
             volume,
             area,
-            ade_of_abstract_space,
             lod2_multi_curve,
             lod3_multi_surface,
             lod0_multi_surface,
@@ -4520,21 +4659,17 @@ impl BuildingInstallation {
             lod0_point,
             lod3_multi_curve,
             lod2_multi_surface,
-            ade_of_abstract_physical_space,
             lod3_terrain_intersection_curve,
             point_cloud,
             lod1_terrain_intersection_curve,
             lod2_terrain_intersection_curve,
-            ade_of_abstract_occupied_space,
             lod3_implicit_representation,
             lod2_implicit_representation,
             lod1_implicit_representation,
             relation_to_construction,
-            ade_of_abstract_installation,
             class_,
             function,
             usage,
-            ade_of_building_installation,
         })
     }
 }
@@ -4550,50 +4685,41 @@ impl crate::from_gml::FromGml for BuildingInstallation {
         Self::from_gml_with_info(reader, &info)
     }
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct Building {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub creation_date: Option<String>,
     pub termination_date: Option<String>,
     pub valid_from: Option<String>,
     pub valid_to: Option<String>,
-    pub ade_of_abstract_feature_with_lifespan: Vec<
-        Box<dyn ADEOfAbstractFeatureWithLifespan>,
-    >,
     pub relative_to_terrain: Option<RelativeToTerrain>,
     pub relative_to_water: Option<RelativeToWater>,
-    pub ade_of_abstract_city_object: Vec<Box<dyn ADEOfAbstractCityObject>>,
-    pub appearance: Vec<Box<dyn AbstractAppearance>>,
-    pub generic_attribute: Vec<Box<dyn AbstractGenericAttribute>>,
-    pub generalizes_to: Vec<Box<dyn AbstractCityObject>>,
+    pub appearance: Vec<AbstractAppearance>,
+    pub generalizes_to: Vec<AbstractCityObject>,
     pub external_reference: Vec<ExternalReference>,
-    pub related_to: Vec<Box<dyn AbstractCityObject>>,
-    pub dynamizer: Vec<Box<dyn AbstractDynamizer>>,
+    pub related_to: Vec<AbstractCityObject>,
+    pub dynamizer: Vec<AbstractDynamizer>,
     pub space_type: Option<SpaceType>,
     pub volume: Vec<QualifiedVolume>,
     pub area: Vec<QualifiedArea>,
-    pub ade_of_abstract_space: Vec<Box<dyn ADEOfAbstractSpace>>,
     pub lod2_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod3_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod0_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod1_solid: Option<crate::geometry::Solid>,
     pub lod3_solid: Option<crate::geometry::Solid>,
-    pub boundary: Vec<Box<dyn AbstractSpaceBoundary>>,
+    pub boundary: Vec<AbstractSpaceBoundary>,
     pub lod0_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_solid: Option<crate::geometry::Solid>,
     pub lod0_point: Option<crate::geometry::DirectPosition>,
     pub lod3_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_multi_surface: Option<crate::geometry::MultiSurface>,
-    pub ade_of_abstract_physical_space: Vec<Box<dyn ADEOfAbstractPhysicalSpace>>,
     pub lod3_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
-    pub point_cloud: Option<Box<dyn AbstractPointCloud>>,
+    pub point_cloud: Option<AbstractPointCloud>,
     pub lod1_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
-    pub ade_of_abstract_occupied_space: Vec<Box<dyn ADEOfAbstractOccupiedSpace>>,
     pub lod3_implicit_representation: Option<ImplicitGeometry>,
     pub lod2_implicit_representation: Option<ImplicitGeometry>,
     pub lod1_implicit_representation: Option<ImplicitGeometry>,
@@ -4604,7 +4730,6 @@ pub struct Building {
     pub elevation: Vec<Elevation>,
     pub height: Vec<Height>,
     pub occupancy: Vec<Occupancy>,
-    pub ade_of_abstract_construction: Vec<Box<dyn ADEOfAbstractConstruction>>,
     pub class_: Option<BuildingClassValue>,
     pub function: Vec<BuildingFunctionValue>,
     pub usage: Vec<BuildingUsageValue>,
@@ -4613,17 +4738,15 @@ pub struct Building {
     pub storeys_below_ground: Option<i64>,
     pub storey_heights_above_ground: Option<Vec<f64>>,
     pub storey_heights_below_ground: Option<Vec<f64>>,
-    pub ade_of_abstract_building: Vec<Box<dyn ADEOfAbstractBuilding>>,
     pub building_installation: Vec<BuildingInstallation>,
     pub building_furniture: Vec<BuildingFurniture>,
     pub building_constructive_element: Vec<BuildingConstructiveElement>,
     pub address: Vec<Address>,
     pub building_room: Vec<BuildingRoom>,
-    pub building_subdivision: Vec<Box<dyn AbstractBuildingSubdivision>>,
-    pub ade_of_building: Vec<Box<dyn ADEOfBuilding>>,
+    pub building_subdivision: Vec<AbstractBuildingSubdivision>,
     pub building_part: Vec<BuildingPart>,
 }
-impl AbstractFeature for Building {
+impl AbstractFeatureTrait for Building {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -4636,11 +4759,8 @@ impl AbstractFeature for Building {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractFeatureWithLifespan for Building {
+impl AbstractFeatureWithLifespanTrait for Building {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
     }
@@ -4653,42 +4773,31 @@ impl AbstractFeatureWithLifespan for Building {
     fn valid_to(&self) -> Option<&String> {
         self.valid_to.as_ref()
     }
-    fn ade_of_abstract_feature_with_lifespan(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractFeatureWithLifespan>] {
-        &self.ade_of_abstract_feature_with_lifespan
-    }
 }
-impl AbstractCityObject for Building {
+impl AbstractCityObjectTrait for Building {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
     }
     fn relative_to_water(&self) -> Option<RelativeToWater> {
         self.relative_to_water
     }
-    fn ade_of_abstract_city_object(&self) -> &[Box<dyn ADEOfAbstractCityObject>] {
-        &self.ade_of_abstract_city_object
-    }
-    fn appearance(&self) -> &[Box<dyn AbstractAppearance>] {
+    fn appearance(&self) -> &[AbstractAppearance] {
         &self.appearance
     }
-    fn generic_attribute(&self) -> &[Box<dyn AbstractGenericAttribute>] {
-        &self.generic_attribute
-    }
-    fn generalizes_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn generalizes_to(&self) -> &[AbstractCityObject] {
         &self.generalizes_to
     }
     fn external_reference(&self) -> &[ExternalReference] {
         &self.external_reference
     }
-    fn related_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn related_to(&self) -> &[AbstractCityObject] {
         &self.related_to
     }
-    fn dynamizer(&self) -> &[Box<dyn AbstractDynamizer>] {
+    fn dynamizer(&self) -> &[AbstractDynamizer] {
         &self.dynamizer
     }
 }
-impl AbstractSpace for Building {
+impl AbstractSpaceTrait for Building {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
     }
@@ -4697,9 +4806,6 @@ impl AbstractSpace for Building {
     }
     fn area(&self) -> &[QualifiedArea] {
         &self.area
-    }
-    fn ade_of_abstract_space(&self) -> &[Box<dyn ADEOfAbstractSpace>] {
-        &self.ade_of_abstract_space
     }
     fn lod2_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod2_multi_curve.as_ref()
@@ -4716,7 +4822,7 @@ impl AbstractSpace for Building {
     fn lod3_solid(&self) -> Option<&crate::geometry::Solid> {
         self.lod3_solid.as_ref()
     }
-    fn boundary(&self) -> &[Box<dyn AbstractSpaceBoundary>] {
+    fn boundary(&self) -> &[AbstractSpaceBoundary] {
         &self.boundary
     }
     fn lod0_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
@@ -4735,14 +4841,11 @@ impl AbstractSpace for Building {
         self.lod2_multi_surface.as_ref()
     }
 }
-impl AbstractPhysicalSpace for Building {
-    fn ade_of_abstract_physical_space(&self) -> &[Box<dyn ADEOfAbstractPhysicalSpace>] {
-        &self.ade_of_abstract_physical_space
-    }
+impl AbstractPhysicalSpaceTrait for Building {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
     }
-    fn point_cloud(&self) -> Option<&Box<dyn AbstractPointCloud>> {
+    fn point_cloud(&self) -> Option<&AbstractPointCloud> {
         self.point_cloud.as_ref()
     }
     fn lod1_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
@@ -4752,10 +4855,7 @@ impl AbstractPhysicalSpace for Building {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
-impl AbstractOccupiedSpace for Building {
-    fn ade_of_abstract_occupied_space(&self) -> &[Box<dyn ADEOfAbstractOccupiedSpace>] {
-        &self.ade_of_abstract_occupied_space
-    }
+impl AbstractOccupiedSpaceTrait for Building {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
     }
@@ -4766,7 +4866,7 @@ impl AbstractOccupiedSpace for Building {
         self.lod1_implicit_representation.as_ref()
     }
 }
-impl AbstractConstruction for Building {
+impl AbstractConstructionTrait for Building {
     fn condition_of_construction(&self) -> Option<ConditionOfConstructionValue> {
         self.condition_of_construction
     }
@@ -4788,11 +4888,8 @@ impl AbstractConstruction for Building {
     fn occupancy(&self) -> &[Occupancy] {
         &self.occupancy
     }
-    fn ade_of_abstract_construction(&self) -> &[Box<dyn ADEOfAbstractConstruction>] {
-        &self.ade_of_abstract_construction
-    }
 }
-impl AbstractBuilding for Building {
+impl AbstractBuildingTrait for Building {
     fn class_(&self) -> Option<&BuildingClassValue> {
         self.class_.as_ref()
     }
@@ -4817,9 +4914,6 @@ impl AbstractBuilding for Building {
     fn storey_heights_below_ground(&self) -> Option<&Vec<f64>> {
         self.storey_heights_below_ground.as_ref()
     }
-    fn ade_of_abstract_building(&self) -> &[Box<dyn ADEOfAbstractBuilding>] {
-        &self.ade_of_abstract_building
-    }
     fn building_installation(&self) -> &[BuildingInstallation] {
         &self.building_installation
     }
@@ -4835,7 +4929,7 @@ impl AbstractBuilding for Building {
     fn building_room(&self) -> &[BuildingRoom] {
         &self.building_room
     }
-    fn building_subdivision(&self) -> &[Box<dyn AbstractBuildingSubdivision>] {
+    fn building_subdivision(&self) -> &[AbstractBuildingSubdivision] {
         &self.building_subdivision
     }
 }
@@ -4849,17 +4943,13 @@ impl Building {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut creation_date = None;
         let mut termination_date = None;
         let mut valid_from = None;
         let mut valid_to = None;
-        let mut ade_of_abstract_feature_with_lifespan = Vec::new();
         let mut relative_to_terrain = None;
         let mut relative_to_water = None;
-        let mut ade_of_abstract_city_object = Vec::new();
         let mut appearance = Vec::new();
-        let mut generic_attribute = Vec::new();
         let mut generalizes_to = Vec::new();
         let mut external_reference = Vec::new();
         let mut related_to = Vec::new();
@@ -4867,7 +4957,6 @@ impl Building {
         let mut space_type = None;
         let mut volume = Vec::new();
         let mut area = Vec::new();
-        let mut ade_of_abstract_space = Vec::new();
         let mut lod2_multi_curve = None;
         let mut lod3_multi_surface = None;
         let mut lod0_multi_surface = None;
@@ -4879,12 +4968,10 @@ impl Building {
         let mut lod0_point = None;
         let mut lod3_multi_curve = None;
         let mut lod2_multi_surface = None;
-        let mut ade_of_abstract_physical_space = Vec::new();
         let mut lod3_terrain_intersection_curve = None;
         let mut point_cloud = None;
         let mut lod1_terrain_intersection_curve = None;
         let mut lod2_terrain_intersection_curve = None;
-        let mut ade_of_abstract_occupied_space = Vec::new();
         let mut lod3_implicit_representation = None;
         let mut lod2_implicit_representation = None;
         let mut lod1_implicit_representation = None;
@@ -4895,7 +4982,6 @@ impl Building {
         let mut elevation = Vec::new();
         let mut height = Vec::new();
         let mut occupancy = Vec::new();
-        let mut ade_of_abstract_construction = Vec::new();
         let mut class_ = None;
         let mut function = Vec::new();
         let mut usage = Vec::new();
@@ -4904,14 +4990,12 @@ impl Building {
         let mut storeys_below_ground = None;
         let mut storey_heights_above_ground = None;
         let mut storey_heights_below_ground = None;
-        let mut ade_of_abstract_building = Vec::new();
         let mut building_installation = Vec::new();
         let mut building_furniture = Vec::new();
         let mut building_constructive_element = Vec::new();
         let mut address = Vec::new();
         let mut building_room = Vec::new();
         let mut building_subdivision = Vec::new();
-        let mut ade_of_building = Vec::new();
         let mut building_part = Vec::new();
         let mut feature_id = ID(_gml_id);
         let mut sub = reader.subtree();
@@ -4929,9 +5013,6 @@ impl Building {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "creationDate") => {
                     creation_date = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
@@ -4946,9 +5027,6 @@ impl Building {
                 (crate::namespace::NS_CORE, "validTo") => {
                     valid_to = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeatureWithLifespan") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "relativeToTerrain") => {
                     relative_to_terrain = Some(
                         RelativeToTerrain::from_gml_text(&sub.read_text()?)?,
@@ -4959,30 +5037,24 @@ impl Building {
                         RelativeToWater::from_gml_text(&sub.read_text()?)?,
                     );
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractCityObject") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "appearance") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         appearance
                             .push(
-                                super::dispatchers::parse_dyn_abstract_appearance(
+                                super::dispatchers::parse_abstract_appearance(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
                             );
                     }
                 }
-                (crate::namespace::NS_CORE, "genericAttribute") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "generalizesTo") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         generalizes_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -4997,7 +5069,7 @@ impl Building {
                     if let Some(child_info) = wrapper.next_element()? {
                         related_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -5009,7 +5081,7 @@ impl Building {
                     if let Some(child_info) = wrapper.next_element()? {
                         dynamizer
                             .push(
-                                super::dispatchers::parse_dyn_abstract_dynamizer(
+                                super::dispatchers::parse_abstract_dynamizer(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -5024,9 +5096,6 @@ impl Building {
                 }
                 (crate::namespace::NS_CORE, "area") => {
                     area.push(QualifiedArea::from_gml(&mut sub)?);
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractSpace") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_CORE, "lod2MultiCurve") => {
                     lod2_multi_curve = Some({
@@ -5108,7 +5177,7 @@ impl Building {
                     if let Some(child_info) = wrapper.next_element()? {
                         boundary
                             .push(
-                                super::dispatchers::parse_dyn_abstract_space_boundary(
+                                super::dispatchers::parse_abstract_space_boundary(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -5190,9 +5259,6 @@ impl Building {
                         }
                     });
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractPhysicalSpace") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "lod3TerrainIntersectionCurve") => {
                     lod3_terrain_intersection_curve = Some({
                         let mut geom_sub = sub.subtree();
@@ -5212,7 +5278,7 @@ impl Building {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         point_cloud = Some(
-                            super::dispatchers::parse_dyn_abstract_point_cloud(
+                            super::dispatchers::parse_abstract_point_cloud(
                                 &mut wrapper,
                                 &child_info,
                             )?,
@@ -5248,9 +5314,6 @@ impl Building {
                             crate::geometry::MultiCurve::default()
                         }
                     });
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractOccupiedSpace") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_CORE, "lod3ImplicitRepresentation") => {
                     let mut wrapper = sub.subtree();
@@ -5324,9 +5387,6 @@ impl Building {
                 (crate::namespace::NS_CONSTRUCTION, "occupancy") => {
                     occupancy.push(Occupancy::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CONSTRUCTION, "adeOfAbstractConstruction") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_BUILDING, "class") => {
                     class_ = Some(BuildingClassValue(sub.read_text()?));
                 }
@@ -5364,9 +5424,6 @@ impl Building {
                         .filter_map(|s| s.parse::<f64>().ok())
                         .collect();
                     storey_heights_below_ground = Some(vals);
-                }
-                (crate::namespace::NS_BUILDING, "adeOfAbstractBuilding") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_BUILDING, "buildingInstallation") => {
                     let mut wrapper = sub.subtree();
@@ -5427,15 +5484,12 @@ impl Building {
                     if let Some(child_info) = wrapper.next_element()? {
                         building_subdivision
                             .push(
-                                super::dispatchers::parse_dyn_abstract_building_subdivision(
+                                super::dispatchers::parse_abstract_building_subdivision(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
                             );
                     }
-                }
-                (crate::namespace::NS_BUILDING, "adeOfBuilding") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_BUILDING, "buildingPart") => {
                     let mut wrapper = sub.subtree();
@@ -5456,17 +5510,13 @@ impl Building {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             creation_date,
             termination_date,
             valid_from,
             valid_to,
-            ade_of_abstract_feature_with_lifespan,
             relative_to_terrain,
             relative_to_water,
-            ade_of_abstract_city_object,
             appearance,
-            generic_attribute,
             generalizes_to,
             external_reference,
             related_to,
@@ -5474,7 +5524,6 @@ impl Building {
             space_type,
             volume,
             area,
-            ade_of_abstract_space,
             lod2_multi_curve,
             lod3_multi_surface,
             lod0_multi_surface,
@@ -5486,12 +5535,10 @@ impl Building {
             lod0_point,
             lod3_multi_curve,
             lod2_multi_surface,
-            ade_of_abstract_physical_space,
             lod3_terrain_intersection_curve,
             point_cloud,
             lod1_terrain_intersection_curve,
             lod2_terrain_intersection_curve,
-            ade_of_abstract_occupied_space,
             lod3_implicit_representation,
             lod2_implicit_representation,
             lod1_implicit_representation,
@@ -5502,7 +5549,6 @@ impl Building {
             elevation,
             height,
             occupancy,
-            ade_of_abstract_construction,
             class_,
             function,
             usage,
@@ -5511,14 +5557,12 @@ impl Building {
             storeys_below_ground,
             storey_heights_above_ground,
             storey_heights_below_ground,
-            ade_of_abstract_building,
             building_installation,
             building_furniture,
             building_constructive_element,
             address,
             building_room,
             building_subdivision,
-            ade_of_building,
             building_part,
         })
     }
@@ -5535,50 +5579,41 @@ impl crate::from_gml::FromGml for Building {
         Self::from_gml_with_info(reader, &info)
     }
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct BuildingPart {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub creation_date: Option<String>,
     pub termination_date: Option<String>,
     pub valid_from: Option<String>,
     pub valid_to: Option<String>,
-    pub ade_of_abstract_feature_with_lifespan: Vec<
-        Box<dyn ADEOfAbstractFeatureWithLifespan>,
-    >,
     pub relative_to_terrain: Option<RelativeToTerrain>,
     pub relative_to_water: Option<RelativeToWater>,
-    pub ade_of_abstract_city_object: Vec<Box<dyn ADEOfAbstractCityObject>>,
-    pub appearance: Vec<Box<dyn AbstractAppearance>>,
-    pub generic_attribute: Vec<Box<dyn AbstractGenericAttribute>>,
-    pub generalizes_to: Vec<Box<dyn AbstractCityObject>>,
+    pub appearance: Vec<AbstractAppearance>,
+    pub generalizes_to: Vec<AbstractCityObject>,
     pub external_reference: Vec<ExternalReference>,
-    pub related_to: Vec<Box<dyn AbstractCityObject>>,
-    pub dynamizer: Vec<Box<dyn AbstractDynamizer>>,
+    pub related_to: Vec<AbstractCityObject>,
+    pub dynamizer: Vec<AbstractDynamizer>,
     pub space_type: Option<SpaceType>,
     pub volume: Vec<QualifiedVolume>,
     pub area: Vec<QualifiedArea>,
-    pub ade_of_abstract_space: Vec<Box<dyn ADEOfAbstractSpace>>,
     pub lod2_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod3_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod0_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod1_solid: Option<crate::geometry::Solid>,
     pub lod3_solid: Option<crate::geometry::Solid>,
-    pub boundary: Vec<Box<dyn AbstractSpaceBoundary>>,
+    pub boundary: Vec<AbstractSpaceBoundary>,
     pub lod0_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_solid: Option<crate::geometry::Solid>,
     pub lod0_point: Option<crate::geometry::DirectPosition>,
     pub lod3_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_multi_surface: Option<crate::geometry::MultiSurface>,
-    pub ade_of_abstract_physical_space: Vec<Box<dyn ADEOfAbstractPhysicalSpace>>,
     pub lod3_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
-    pub point_cloud: Option<Box<dyn AbstractPointCloud>>,
+    pub point_cloud: Option<AbstractPointCloud>,
     pub lod1_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
-    pub ade_of_abstract_occupied_space: Vec<Box<dyn ADEOfAbstractOccupiedSpace>>,
     pub lod3_implicit_representation: Option<ImplicitGeometry>,
     pub lod2_implicit_representation: Option<ImplicitGeometry>,
     pub lod1_implicit_representation: Option<ImplicitGeometry>,
@@ -5589,7 +5624,6 @@ pub struct BuildingPart {
     pub elevation: Vec<Elevation>,
     pub height: Vec<Height>,
     pub occupancy: Vec<Occupancy>,
-    pub ade_of_abstract_construction: Vec<Box<dyn ADEOfAbstractConstruction>>,
     pub class_: Option<BuildingClassValue>,
     pub function: Vec<BuildingFunctionValue>,
     pub usage: Vec<BuildingUsageValue>,
@@ -5598,16 +5632,14 @@ pub struct BuildingPart {
     pub storeys_below_ground: Option<i64>,
     pub storey_heights_above_ground: Option<Vec<f64>>,
     pub storey_heights_below_ground: Option<Vec<f64>>,
-    pub ade_of_abstract_building: Vec<Box<dyn ADEOfAbstractBuilding>>,
     pub building_installation: Vec<BuildingInstallation>,
     pub building_furniture: Vec<BuildingFurniture>,
     pub building_constructive_element: Vec<BuildingConstructiveElement>,
     pub address: Vec<Address>,
     pub building_room: Vec<BuildingRoom>,
-    pub building_subdivision: Vec<Box<dyn AbstractBuildingSubdivision>>,
-    pub ade_of_building_part: Vec<Box<dyn ADEOfBuildingPart>>,
+    pub building_subdivision: Vec<AbstractBuildingSubdivision>,
 }
-impl AbstractFeature for BuildingPart {
+impl AbstractFeatureTrait for BuildingPart {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -5620,11 +5652,8 @@ impl AbstractFeature for BuildingPart {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractFeatureWithLifespan for BuildingPart {
+impl AbstractFeatureWithLifespanTrait for BuildingPart {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
     }
@@ -5637,42 +5666,31 @@ impl AbstractFeatureWithLifespan for BuildingPart {
     fn valid_to(&self) -> Option<&String> {
         self.valid_to.as_ref()
     }
-    fn ade_of_abstract_feature_with_lifespan(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractFeatureWithLifespan>] {
-        &self.ade_of_abstract_feature_with_lifespan
-    }
 }
-impl AbstractCityObject for BuildingPart {
+impl AbstractCityObjectTrait for BuildingPart {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
     }
     fn relative_to_water(&self) -> Option<RelativeToWater> {
         self.relative_to_water
     }
-    fn ade_of_abstract_city_object(&self) -> &[Box<dyn ADEOfAbstractCityObject>] {
-        &self.ade_of_abstract_city_object
-    }
-    fn appearance(&self) -> &[Box<dyn AbstractAppearance>] {
+    fn appearance(&self) -> &[AbstractAppearance] {
         &self.appearance
     }
-    fn generic_attribute(&self) -> &[Box<dyn AbstractGenericAttribute>] {
-        &self.generic_attribute
-    }
-    fn generalizes_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn generalizes_to(&self) -> &[AbstractCityObject] {
         &self.generalizes_to
     }
     fn external_reference(&self) -> &[ExternalReference] {
         &self.external_reference
     }
-    fn related_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn related_to(&self) -> &[AbstractCityObject] {
         &self.related_to
     }
-    fn dynamizer(&self) -> &[Box<dyn AbstractDynamizer>] {
+    fn dynamizer(&self) -> &[AbstractDynamizer] {
         &self.dynamizer
     }
 }
-impl AbstractSpace for BuildingPart {
+impl AbstractSpaceTrait for BuildingPart {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
     }
@@ -5681,9 +5699,6 @@ impl AbstractSpace for BuildingPart {
     }
     fn area(&self) -> &[QualifiedArea] {
         &self.area
-    }
-    fn ade_of_abstract_space(&self) -> &[Box<dyn ADEOfAbstractSpace>] {
-        &self.ade_of_abstract_space
     }
     fn lod2_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod2_multi_curve.as_ref()
@@ -5700,7 +5715,7 @@ impl AbstractSpace for BuildingPart {
     fn lod3_solid(&self) -> Option<&crate::geometry::Solid> {
         self.lod3_solid.as_ref()
     }
-    fn boundary(&self) -> &[Box<dyn AbstractSpaceBoundary>] {
+    fn boundary(&self) -> &[AbstractSpaceBoundary] {
         &self.boundary
     }
     fn lod0_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
@@ -5719,14 +5734,11 @@ impl AbstractSpace for BuildingPart {
         self.lod2_multi_surface.as_ref()
     }
 }
-impl AbstractPhysicalSpace for BuildingPart {
-    fn ade_of_abstract_physical_space(&self) -> &[Box<dyn ADEOfAbstractPhysicalSpace>] {
-        &self.ade_of_abstract_physical_space
-    }
+impl AbstractPhysicalSpaceTrait for BuildingPart {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
     }
-    fn point_cloud(&self) -> Option<&Box<dyn AbstractPointCloud>> {
+    fn point_cloud(&self) -> Option<&AbstractPointCloud> {
         self.point_cloud.as_ref()
     }
     fn lod1_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
@@ -5736,10 +5748,7 @@ impl AbstractPhysicalSpace for BuildingPart {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
-impl AbstractOccupiedSpace for BuildingPart {
-    fn ade_of_abstract_occupied_space(&self) -> &[Box<dyn ADEOfAbstractOccupiedSpace>] {
-        &self.ade_of_abstract_occupied_space
-    }
+impl AbstractOccupiedSpaceTrait for BuildingPart {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
     }
@@ -5750,7 +5759,7 @@ impl AbstractOccupiedSpace for BuildingPart {
         self.lod1_implicit_representation.as_ref()
     }
 }
-impl AbstractConstruction for BuildingPart {
+impl AbstractConstructionTrait for BuildingPart {
     fn condition_of_construction(&self) -> Option<ConditionOfConstructionValue> {
         self.condition_of_construction
     }
@@ -5772,11 +5781,8 @@ impl AbstractConstruction for BuildingPart {
     fn occupancy(&self) -> &[Occupancy] {
         &self.occupancy
     }
-    fn ade_of_abstract_construction(&self) -> &[Box<dyn ADEOfAbstractConstruction>] {
-        &self.ade_of_abstract_construction
-    }
 }
-impl AbstractBuilding for BuildingPart {
+impl AbstractBuildingTrait for BuildingPart {
     fn class_(&self) -> Option<&BuildingClassValue> {
         self.class_.as_ref()
     }
@@ -5801,9 +5807,6 @@ impl AbstractBuilding for BuildingPart {
     fn storey_heights_below_ground(&self) -> Option<&Vec<f64>> {
         self.storey_heights_below_ground.as_ref()
     }
-    fn ade_of_abstract_building(&self) -> &[Box<dyn ADEOfAbstractBuilding>] {
-        &self.ade_of_abstract_building
-    }
     fn building_installation(&self) -> &[BuildingInstallation] {
         &self.building_installation
     }
@@ -5819,7 +5822,7 @@ impl AbstractBuilding for BuildingPart {
     fn building_room(&self) -> &[BuildingRoom] {
         &self.building_room
     }
-    fn building_subdivision(&self) -> &[Box<dyn AbstractBuildingSubdivision>] {
+    fn building_subdivision(&self) -> &[AbstractBuildingSubdivision] {
         &self.building_subdivision
     }
 }
@@ -5833,17 +5836,13 @@ impl BuildingPart {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut creation_date = None;
         let mut termination_date = None;
         let mut valid_from = None;
         let mut valid_to = None;
-        let mut ade_of_abstract_feature_with_lifespan = Vec::new();
         let mut relative_to_terrain = None;
         let mut relative_to_water = None;
-        let mut ade_of_abstract_city_object = Vec::new();
         let mut appearance = Vec::new();
-        let mut generic_attribute = Vec::new();
         let mut generalizes_to = Vec::new();
         let mut external_reference = Vec::new();
         let mut related_to = Vec::new();
@@ -5851,7 +5850,6 @@ impl BuildingPart {
         let mut space_type = None;
         let mut volume = Vec::new();
         let mut area = Vec::new();
-        let mut ade_of_abstract_space = Vec::new();
         let mut lod2_multi_curve = None;
         let mut lod3_multi_surface = None;
         let mut lod0_multi_surface = None;
@@ -5863,12 +5861,10 @@ impl BuildingPart {
         let mut lod0_point = None;
         let mut lod3_multi_curve = None;
         let mut lod2_multi_surface = None;
-        let mut ade_of_abstract_physical_space = Vec::new();
         let mut lod3_terrain_intersection_curve = None;
         let mut point_cloud = None;
         let mut lod1_terrain_intersection_curve = None;
         let mut lod2_terrain_intersection_curve = None;
-        let mut ade_of_abstract_occupied_space = Vec::new();
         let mut lod3_implicit_representation = None;
         let mut lod2_implicit_representation = None;
         let mut lod1_implicit_representation = None;
@@ -5879,7 +5875,6 @@ impl BuildingPart {
         let mut elevation = Vec::new();
         let mut height = Vec::new();
         let mut occupancy = Vec::new();
-        let mut ade_of_abstract_construction = Vec::new();
         let mut class_ = None;
         let mut function = Vec::new();
         let mut usage = Vec::new();
@@ -5888,14 +5883,12 @@ impl BuildingPart {
         let mut storeys_below_ground = None;
         let mut storey_heights_above_ground = None;
         let mut storey_heights_below_ground = None;
-        let mut ade_of_abstract_building = Vec::new();
         let mut building_installation = Vec::new();
         let mut building_furniture = Vec::new();
         let mut building_constructive_element = Vec::new();
         let mut address = Vec::new();
         let mut building_room = Vec::new();
         let mut building_subdivision = Vec::new();
-        let mut ade_of_building_part = Vec::new();
         let mut feature_id = ID(_gml_id);
         let mut sub = reader.subtree();
         while let Some(info) = sub.next_element()? {
@@ -5912,9 +5905,6 @@ impl BuildingPart {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "creationDate") => {
                     creation_date = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
@@ -5929,9 +5919,6 @@ impl BuildingPart {
                 (crate::namespace::NS_CORE, "validTo") => {
                     valid_to = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeatureWithLifespan") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "relativeToTerrain") => {
                     relative_to_terrain = Some(
                         RelativeToTerrain::from_gml_text(&sub.read_text()?)?,
@@ -5942,30 +5929,24 @@ impl BuildingPart {
                         RelativeToWater::from_gml_text(&sub.read_text()?)?,
                     );
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractCityObject") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "appearance") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         appearance
                             .push(
-                                super::dispatchers::parse_dyn_abstract_appearance(
+                                super::dispatchers::parse_abstract_appearance(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
                             );
                     }
                 }
-                (crate::namespace::NS_CORE, "genericAttribute") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "generalizesTo") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         generalizes_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -5980,7 +5961,7 @@ impl BuildingPart {
                     if let Some(child_info) = wrapper.next_element()? {
                         related_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -5992,7 +5973,7 @@ impl BuildingPart {
                     if let Some(child_info) = wrapper.next_element()? {
                         dynamizer
                             .push(
-                                super::dispatchers::parse_dyn_abstract_dynamizer(
+                                super::dispatchers::parse_abstract_dynamizer(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -6007,9 +5988,6 @@ impl BuildingPart {
                 }
                 (crate::namespace::NS_CORE, "area") => {
                     area.push(QualifiedArea::from_gml(&mut sub)?);
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractSpace") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_CORE, "lod2MultiCurve") => {
                     lod2_multi_curve = Some({
@@ -6091,7 +6069,7 @@ impl BuildingPart {
                     if let Some(child_info) = wrapper.next_element()? {
                         boundary
                             .push(
-                                super::dispatchers::parse_dyn_abstract_space_boundary(
+                                super::dispatchers::parse_abstract_space_boundary(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -6173,9 +6151,6 @@ impl BuildingPart {
                         }
                     });
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractPhysicalSpace") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "lod3TerrainIntersectionCurve") => {
                     lod3_terrain_intersection_curve = Some({
                         let mut geom_sub = sub.subtree();
@@ -6195,7 +6170,7 @@ impl BuildingPart {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         point_cloud = Some(
-                            super::dispatchers::parse_dyn_abstract_point_cloud(
+                            super::dispatchers::parse_abstract_point_cloud(
                                 &mut wrapper,
                                 &child_info,
                             )?,
@@ -6231,9 +6206,6 @@ impl BuildingPart {
                             crate::geometry::MultiCurve::default()
                         }
                     });
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractOccupiedSpace") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_CORE, "lod3ImplicitRepresentation") => {
                     let mut wrapper = sub.subtree();
@@ -6307,9 +6279,6 @@ impl BuildingPart {
                 (crate::namespace::NS_CONSTRUCTION, "occupancy") => {
                     occupancy.push(Occupancy::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CONSTRUCTION, "adeOfAbstractConstruction") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_BUILDING, "class") => {
                     class_ = Some(BuildingClassValue(sub.read_text()?));
                 }
@@ -6347,9 +6316,6 @@ impl BuildingPart {
                         .filter_map(|s| s.parse::<f64>().ok())
                         .collect();
                     storey_heights_below_ground = Some(vals);
-                }
-                (crate::namespace::NS_BUILDING, "adeOfAbstractBuilding") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_BUILDING, "buildingInstallation") => {
                     let mut wrapper = sub.subtree();
@@ -6410,15 +6376,12 @@ impl BuildingPart {
                     if let Some(child_info) = wrapper.next_element()? {
                         building_subdivision
                             .push(
-                                super::dispatchers::parse_dyn_abstract_building_subdivision(
+                                super::dispatchers::parse_abstract_building_subdivision(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
                             );
                     }
-                }
-                (crate::namespace::NS_BUILDING, "adeOfBuildingPart") => {
-                    sub.skip_element()?;
                 }
                 _ => {
                     sub.skip_element()?;
@@ -6430,17 +6393,13 @@ impl BuildingPart {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             creation_date,
             termination_date,
             valid_from,
             valid_to,
-            ade_of_abstract_feature_with_lifespan,
             relative_to_terrain,
             relative_to_water,
-            ade_of_abstract_city_object,
             appearance,
-            generic_attribute,
             generalizes_to,
             external_reference,
             related_to,
@@ -6448,7 +6407,6 @@ impl BuildingPart {
             space_type,
             volume,
             area,
-            ade_of_abstract_space,
             lod2_multi_curve,
             lod3_multi_surface,
             lod0_multi_surface,
@@ -6460,12 +6418,10 @@ impl BuildingPart {
             lod0_point,
             lod3_multi_curve,
             lod2_multi_surface,
-            ade_of_abstract_physical_space,
             lod3_terrain_intersection_curve,
             point_cloud,
             lod1_terrain_intersection_curve,
             lod2_terrain_intersection_curve,
-            ade_of_abstract_occupied_space,
             lod3_implicit_representation,
             lod2_implicit_representation,
             lod1_implicit_representation,
@@ -6476,7 +6432,6 @@ impl BuildingPart {
             elevation,
             height,
             occupancy,
-            ade_of_abstract_construction,
             class_,
             function,
             usage,
@@ -6485,14 +6440,12 @@ impl BuildingPart {
             storeys_below_ground,
             storey_heights_above_ground,
             storey_heights_below_ground,
-            ade_of_abstract_building,
             building_installation,
             building_furniture,
             building_constructive_element,
             address,
             building_room,
             building_subdivision,
-            ade_of_building_part,
         })
     }
 }

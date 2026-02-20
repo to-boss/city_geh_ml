@@ -45,7 +45,8 @@ pub fn external_type_tokens(ext: ExternalType) -> TokenStream {
             quote! { Vec<crate::geometry::DirectPosition> }
         }
         ExternalType::GmObject | ExternalType::AnyFeature => {
-            quote! { Box<dyn std::any::Any> }
+            // Placeholder — these generic types can't be parsed from GML
+            quote! { () }
         }
         ExternalType::ScCrs | ExternalType::EngineeringCrs | ExternalType::UnitOfMeasure => {
             quote! { String }

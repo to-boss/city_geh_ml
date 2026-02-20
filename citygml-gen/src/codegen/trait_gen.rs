@@ -3,14 +3,15 @@ use std::collections::HashSet;
 use proc_macro2::TokenStream;
 use quote::quote;
 
-use crate::codegen::mapper::{prop_method_ident, prop_to_return_type, type_ident};
+use crate::codegen::mapper::{prop_method_ident, prop_to_return_type, trait_ident};
 use crate::ir::model::UmlModel;
 use crate::ir::types::UmlClass;
 use crate::util::naming::{escape_keyword, to_snake_case};
 
 /// Generate a Rust trait from an abstract UML class.
+/// The trait name has a "Trait" suffix to avoid collision with the enum dispatch type.
 pub fn generate_trait(cls: &UmlClass, model: &UmlModel) -> TokenStream {
-    let trait_name = type_ident(&cls.name);
+    let trait_name = trait_ident(&cls.name);
 
     // Build supertrait list from parent_ids
     let supertraits: Vec<TokenStream> = cls
@@ -19,7 +20,7 @@ pub fn generate_trait(cls: &UmlClass, model: &UmlModel) -> TokenStream {
         .filter_map(|pid| model.classes.get(pid.as_str()))
         .filter(|parent| parent.is_abstract)
         .map(|parent| {
-            let parent_name = type_ident(&parent.name);
+            let parent_name = trait_ident(&parent.name);
             quote! { #parent_name }
         })
         .collect();
@@ -36,10 +37,12 @@ pub fn generate_trait(cls: &UmlClass, model: &UmlModel) -> TokenStream {
         }
     }
 
-    // Own property methods — skip those already declared in an ancestor trait
+    // Own property methods — skip those already declared in an ancestor trait,
+    // and skip ADEOf* / dead abstract type properties.
     let methods: Vec<TokenStream> = cls
         .own_properties
         .iter()
+        .filter(|prop| !model.should_skip_prop(prop))
         .filter(|prop| {
             let method_key = escape_keyword(&to_snake_case(&prop.name));
             !ancestor_methods.contains(&method_key)

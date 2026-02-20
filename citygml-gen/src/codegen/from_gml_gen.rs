@@ -2,7 +2,7 @@ use proc_macro2::{Ident, Span, TokenStream};
 use quote::quote;
 
 use crate::codegen::external_types::is_geometry_type;
-use crate::codegen::mapper::{is_trait_object_prop, prop_field_ident, type_ident};
+use crate::codegen::mapper::{is_abstract_prop, prop_field_ident, type_ident};
 use crate::ir::model::UmlModel;
 use crate::ir::types::*;
 use crate::util::naming::{escape_keyword, to_snake_case};
@@ -125,7 +125,7 @@ fn gen_field_parse(
         if let UmlTypeRef::Known(id) = &prop.type_ref {
             if let Some(cls) = model.classes.get(id.as_str()) {
                 let dispatcher_fn = Ident::new(
-                    &format!("parse_dyn_{}", to_snake_case(&cls.name)),
+                    &format!("parse_{}", to_snake_case(&cls.name)),
                     Span::call_site(),
                 );
                 match prop.multiplicity {
@@ -512,7 +512,7 @@ fn dedup_props<'a>(props: &[&'a UmlProperty]) -> Vec<&'a UmlProperty> {
 /// Generate a field initializer expression for FromGml.
 fn gen_field_init(prop: &UmlProperty, model: &UmlModel) -> TokenStream {
     let field_name = prop_field_ident(&prop.name);
-    let is_abstract = is_trait_object_prop(prop, model);
+    let is_abstract = is_abstract_prop(prop, model);
 
     // Required abstract types are promoted to Optional in the struct
     if is_abstract && prop.multiplicity == Multiplicity::Required {
@@ -561,9 +561,12 @@ pub fn generate_from_gml_class(cls: &UmlClass, model: &UmlModel) -> TokenStream 
     let struct_name = type_ident(&cls.name);
     let props_with_ns = collect_properties_with_ns(cls, model);
 
-    // Dedup all properties (first/ancestor occurrence wins)
+    // Dedup all properties (first/ancestor occurrence wins), filter out skipped
     let all_props_raw = model.all_properties(&cls.xmi_id);
-    let all_props = dedup_props(&all_props_raw);
+    let all_props: Vec<&UmlProperty> = dedup_props(&all_props_raw)
+        .into_iter()
+        .filter(|prop| !model.should_skip_prop(prop))
+        .collect();
 
     // Check if the struct has a featureID property (from AbstractFeature)
     let has_feature_id = all_props.iter().any(|p| p.name == "featureID");
@@ -580,6 +583,10 @@ pub fn generate_from_gml_class(cls: &UmlClass, model: &UmlModel) -> TokenStream 
     let mut seen_arms: indexmap::IndexMap<String, TokenStream> = indexmap::IndexMap::new();
     for pwn in &props_with_ns {
         let prop = pwn.prop;
+        // Skip ADEOf* and dead abstract type properties
+        if model.should_skip_prop(prop) {
+            continue;
+        }
         let field_key = escape_keyword(&to_snake_case(&prop.name));
         if !seen_fields.insert(field_key.clone()) {
             continue; // Skip duplicate property (already handled by ancestor)
@@ -587,7 +594,7 @@ pub fn generate_from_gml_class(cls: &UmlClass, model: &UmlModel) -> TokenStream 
         let ns_path: TokenStream = pwn.ns_const.parse().unwrap();
         let xml_name = &prop.name;
         let field_ident = prop_field_ident(&prop.name);
-        let is_abstract = is_trait_object_prop(prop, model);
+        let is_abstract = is_abstract_prop(prop, model);
         // For Required abstract types (promoted to Optional), parse as Optional
         let parse_expr = if is_abstract && prop.multiplicity == Multiplicity::Required {
             let mut opt_prop = prop.clone();
@@ -729,30 +736,40 @@ pub fn generate_from_gml_datatype(dt: &UmlDataType, model: &UmlModel) -> TokenSt
         return generate_from_gml_codelist(&dt.name);
     }
 
+    // Skip ADEOf* data types
+    if dt.name.starts_with("ADEOf") {
+        return TokenStream::new();
+    }
+
     let own_ns = model
         .package_name(&dt.package_id)
         .and_then(ns_const_for_package)
         .unwrap_or("crate::namespace::NS_CORE");
 
-    // Field initialization
-    let field_inits: Vec<TokenStream> = dt
+    // Filter out skipped properties
+    let props: Vec<&UmlProperty> = dt
         .properties
+        .iter()
+        .filter(|prop| !model.should_skip_prop(prop))
+        .collect();
+
+    // Field initialization
+    let field_inits: Vec<TokenStream> = props
         .iter()
         .map(|prop| gen_field_init(prop, model))
         .collect();
 
-    let match_arms: Vec<TokenStream> = dt
-        .properties
+    let match_arms: Vec<TokenStream> = props
         .iter()
         .map(|prop| {
             let actual_ns = ns_for_property(prop, own_ns);
             let ns_path: TokenStream = actual_ns.parse().unwrap();
             let xml_name = &prop.name;
             let field_ident = prop_field_ident(&prop.name);
-            let is_abstract = is_trait_object_prop(prop, model);
+            let is_abstract = is_abstract_prop(prop, model);
             // For Required abstract types (promoted to Optional), parse as Optional
             let parse_expr = if is_abstract && prop.multiplicity == Multiplicity::Required {
-                let mut opt_prop = prop.clone();
+                let mut opt_prop = (*prop).clone();
                 opt_prop.multiplicity = Multiplicity::Optional;
                 gen_field_parse(&field_ident, &opt_prop, model)
             } else {
@@ -766,8 +783,7 @@ pub fn generate_from_gml_datatype(dt: &UmlDataType, model: &UmlModel) -> TokenSt
         })
         .collect();
 
-    let field_names: Vec<Ident> = dt
-        .properties
+    let field_names: Vec<Ident> = props
         .iter()
         .map(|prop| prop_field_ident(&prop.name))
         .collect();
@@ -798,51 +814,60 @@ pub fn generate_from_gml_datatype(dt: &UmlDataType, model: &UmlModel) -> TokenSt
     }
 }
 
-/// Generate dispatcher functions for all abstract classes.
+/// Generate dispatcher functions for all abstract classes with concrete descendants.
+/// Returns enum dispatch types instead of `Box<dyn Trait>`.
 pub fn generate_dispatchers(model: &UmlModel) -> TokenStream {
     let mut dispatchers = Vec::new();
 
-    // For each abstract class, find all concrete classes that inherit from it
     for (abs_id, abs_cls) in &model.classes {
         if !abs_cls.is_abstract {
             continue;
         }
 
-        let trait_name = type_ident(&abs_cls.name);
+        let descendants = model.concrete_descendants(abs_id);
+        if descendants.is_empty() {
+            continue;
+        }
+
+        let enum_name = type_ident(&abs_cls.name);
         let fn_name = Ident::new(
-            &format!("parse_dyn_{}", to_snake_case(&abs_cls.name)),
+            &format!("parse_{}", to_snake_case(&abs_cls.name)),
             Span::call_site(),
         );
+        let use_box = descendants.len() > 8;
 
-        // Collect all concrete implementors
+        // Collect match arms for each concrete descendant
         let mut match_arms = Vec::new();
-        for (cls_id, cls) in &model.classes {
-            if cls.is_abstract {
-                continue;
-            }
-            // Check if this concrete class has abs_cls in its ancestor chain
-            let ancestors = model.ancestor_chain(cls_id);
-            let has_ancestor = ancestors.iter().any(|a| a.xmi_id == *abs_id);
-            if !has_ancestor {
-                continue;
-            }
-
+        for cls in &descendants {
             let cls_name = type_ident(&cls.name);
+            let variant_name = type_ident(&cls.name);
             let ns = model
                 .package_name(&cls.package_id)
                 .and_then(ns_const_for_package);
             if let Some(ns_const) = ns {
                 let ns_path: TokenStream = ns_const.parse().unwrap();
                 let xml_name = &cls.name;
+                let construct = if use_box {
+                    quote! {
+                        Ok(super::#enum_name::#variant_name(
+                            Box::new(super::#cls_name::from_gml_with_info(reader, info)?)
+                        ))
+                    }
+                } else {
+                    quote! {
+                        Ok(super::#enum_name::#variant_name(
+                            super::#cls_name::from_gml_with_info(reader, info)?
+                        ))
+                    }
+                };
                 match_arms.push(quote! {
                     (#ns_path, #xml_name) => {
-                        Ok(Box::new(super::#cls_name::from_gml_with_info(reader, info)?))
+                        #construct
                     }
                 });
             }
         }
 
-        // Only generate if there are concrete implementors
         if match_arms.is_empty() {
             continue;
         }
@@ -851,7 +876,7 @@ pub fn generate_dispatchers(model: &UmlModel) -> TokenStream {
             pub fn #fn_name(
                 reader: &mut crate::gml_reader::SubtreeReader<'_>,
                 info: &crate::gml_reader::ElementInfo,
-            ) -> Result<Box<dyn super::#trait_name>, crate::error::ReaderError> {
+            ) -> Result<super::#enum_name, crate::error::ReaderError> {
                 match (info.namespace.as_str(), info.local_name.as_str()) {
                     #(#match_arms)*
                     _ => Err(crate::error::ReaderError::UnsupportedFeature {

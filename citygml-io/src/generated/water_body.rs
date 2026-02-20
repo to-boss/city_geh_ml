@@ -1,10 +1,6 @@
 #![allow(unused_imports, unused_mut, unused_variables)]
 use super::*;
 
-pub trait ADEOfAbstractWaterBoundarySurface: std::fmt::Debug {}
-pub trait ADEOfWaterBody: std::fmt::Debug {}
-pub trait ADEOfWaterGroundSurface: std::fmt::Debug {}
-pub trait ADEOfWaterSurface: std::fmt::Debug {}
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct WaterBodyClassValue(pub String);
 impl crate::from_gml::FromGml for WaterBodyClassValue {
@@ -41,64 +37,212 @@ impl crate::from_gml::FromGml for WaterLevelValue {
         Ok(WaterLevelValue(reader.read_text()?))
     }
 }
-pub trait AbstractWaterBoundarySurface: AbstractThematicSurface {
-    fn ade_of_abstract_water_boundary_surface(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractWaterBoundarySurface>];
+pub trait AbstractWaterBoundarySurfaceTrait: AbstractThematicSurfaceTrait {}
+#[derive(Debug, Clone)]
+pub enum AbstractWaterBoundarySurface {
+    WaterGroundSurface(WaterGroundSurface),
+    WaterSurface(WaterSurface),
 }
-#[derive(Debug, Default)]
+impl Default for AbstractWaterBoundarySurface {
+    fn default() -> Self {
+        Self::WaterGroundSurface(Default::default())
+    }
+}
+impl AbstractFeatureTrait for AbstractWaterBoundarySurface {
+    fn feature_id(&self) -> &ID {
+        match self {
+            Self::WaterGroundSurface(v) => v.feature_id(),
+            Self::WaterSurface(v) => v.feature_id(),
+        }
+    }
+    fn identifier(&self) -> Option<&String> {
+        match self {
+            Self::WaterGroundSurface(v) => v.identifier(),
+            Self::WaterSurface(v) => v.identifier(),
+        }
+    }
+    fn name(&self) -> &[String] {
+        match self {
+            Self::WaterGroundSurface(v) => v.name(),
+            Self::WaterSurface(v) => v.name(),
+        }
+    }
+    fn description(&self) -> Option<&String> {
+        match self {
+            Self::WaterGroundSurface(v) => v.description(),
+            Self::WaterSurface(v) => v.description(),
+        }
+    }
+}
+impl AbstractFeatureWithLifespanTrait for AbstractWaterBoundarySurface {
+    fn creation_date(&self) -> Option<&String> {
+        match self {
+            Self::WaterGroundSurface(v) => v.creation_date(),
+            Self::WaterSurface(v) => v.creation_date(),
+        }
+    }
+    fn termination_date(&self) -> Option<&String> {
+        match self {
+            Self::WaterGroundSurface(v) => v.termination_date(),
+            Self::WaterSurface(v) => v.termination_date(),
+        }
+    }
+    fn valid_from(&self) -> Option<&String> {
+        match self {
+            Self::WaterGroundSurface(v) => v.valid_from(),
+            Self::WaterSurface(v) => v.valid_from(),
+        }
+    }
+    fn valid_to(&self) -> Option<&String> {
+        match self {
+            Self::WaterGroundSurface(v) => v.valid_to(),
+            Self::WaterSurface(v) => v.valid_to(),
+        }
+    }
+}
+impl AbstractCityObjectTrait for AbstractWaterBoundarySurface {
+    fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
+        match self {
+            Self::WaterGroundSurface(v) => v.relative_to_terrain(),
+            Self::WaterSurface(v) => v.relative_to_terrain(),
+        }
+    }
+    fn relative_to_water(&self) -> Option<RelativeToWater> {
+        match self {
+            Self::WaterGroundSurface(v) => v.relative_to_water(),
+            Self::WaterSurface(v) => v.relative_to_water(),
+        }
+    }
+    fn appearance(&self) -> &[AbstractAppearance] {
+        match self {
+            Self::WaterGroundSurface(v) => v.appearance(),
+            Self::WaterSurface(v) => v.appearance(),
+        }
+    }
+    fn generalizes_to(&self) -> &[AbstractCityObject] {
+        match self {
+            Self::WaterGroundSurface(v) => v.generalizes_to(),
+            Self::WaterSurface(v) => v.generalizes_to(),
+        }
+    }
+    fn external_reference(&self) -> &[ExternalReference] {
+        match self {
+            Self::WaterGroundSurface(v) => v.external_reference(),
+            Self::WaterSurface(v) => v.external_reference(),
+        }
+    }
+    fn related_to(&self) -> &[AbstractCityObject] {
+        match self {
+            Self::WaterGroundSurface(v) => v.related_to(),
+            Self::WaterSurface(v) => v.related_to(),
+        }
+    }
+    fn dynamizer(&self) -> &[AbstractDynamizer] {
+        match self {
+            Self::WaterGroundSurface(v) => v.dynamizer(),
+            Self::WaterSurface(v) => v.dynamizer(),
+        }
+    }
+}
+impl AbstractSpaceBoundaryTrait for AbstractWaterBoundarySurface {}
+impl AbstractThematicSurfaceTrait for AbstractWaterBoundarySurface {
+    fn area(&self) -> &[QualifiedArea] {
+        match self {
+            Self::WaterGroundSurface(v) => v.area(),
+            Self::WaterSurface(v) => v.area(),
+        }
+    }
+    fn lod3_multi_surface(&self) -> Option<&crate::geometry::MultiSurface> {
+        match self {
+            Self::WaterGroundSurface(v) => v.lod3_multi_surface(),
+            Self::WaterSurface(v) => v.lod3_multi_surface(),
+        }
+    }
+    fn lod2_multi_surface(&self) -> Option<&crate::geometry::MultiSurface> {
+        match self {
+            Self::WaterGroundSurface(v) => v.lod2_multi_surface(),
+            Self::WaterSurface(v) => v.lod2_multi_surface(),
+        }
+    }
+    fn point_cloud(&self) -> Option<&AbstractPointCloud> {
+        match self {
+            Self::WaterGroundSurface(v) => v.point_cloud(),
+            Self::WaterSurface(v) => v.point_cloud(),
+        }
+    }
+    fn lod0_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
+        match self {
+            Self::WaterGroundSurface(v) => v.lod0_multi_curve(),
+            Self::WaterSurface(v) => v.lod0_multi_curve(),
+        }
+    }
+    fn lod0_multi_surface(&self) -> Option<&crate::geometry::MultiSurface> {
+        match self {
+            Self::WaterGroundSurface(v) => v.lod0_multi_surface(),
+            Self::WaterSurface(v) => v.lod0_multi_surface(),
+        }
+    }
+    fn lod1_multi_surface(&self) -> Option<&crate::geometry::MultiSurface> {
+        match self {
+            Self::WaterGroundSurface(v) => v.lod1_multi_surface(),
+            Self::WaterSurface(v) => v.lod1_multi_surface(),
+        }
+    }
+}
+impl AbstractWaterBoundarySurfaceTrait for AbstractWaterBoundarySurface {}
+impl From<WaterGroundSurface> for AbstractWaterBoundarySurface {
+    fn from(v: WaterGroundSurface) -> Self {
+        Self::WaterGroundSurface(v)
+    }
+}
+impl From<WaterSurface> for AbstractWaterBoundarySurface {
+    fn from(v: WaterSurface) -> Self {
+        Self::WaterSurface(v)
+    }
+}
+#[derive(Debug, Clone, Default)]
 pub struct WaterBody {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub creation_date: Option<String>,
     pub termination_date: Option<String>,
     pub valid_from: Option<String>,
     pub valid_to: Option<String>,
-    pub ade_of_abstract_feature_with_lifespan: Vec<
-        Box<dyn ADEOfAbstractFeatureWithLifespan>,
-    >,
     pub relative_to_terrain: Option<RelativeToTerrain>,
     pub relative_to_water: Option<RelativeToWater>,
-    pub ade_of_abstract_city_object: Vec<Box<dyn ADEOfAbstractCityObject>>,
-    pub appearance: Vec<Box<dyn AbstractAppearance>>,
-    pub generic_attribute: Vec<Box<dyn AbstractGenericAttribute>>,
-    pub generalizes_to: Vec<Box<dyn AbstractCityObject>>,
+    pub appearance: Vec<AbstractAppearance>,
+    pub generalizes_to: Vec<AbstractCityObject>,
     pub external_reference: Vec<ExternalReference>,
-    pub related_to: Vec<Box<dyn AbstractCityObject>>,
-    pub dynamizer: Vec<Box<dyn AbstractDynamizer>>,
+    pub related_to: Vec<AbstractCityObject>,
+    pub dynamizer: Vec<AbstractDynamizer>,
     pub space_type: Option<SpaceType>,
     pub volume: Vec<QualifiedVolume>,
     pub area: Vec<QualifiedArea>,
-    pub ade_of_abstract_space: Vec<Box<dyn ADEOfAbstractSpace>>,
     pub lod2_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod3_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod0_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod1_solid: Option<crate::geometry::Solid>,
     pub lod3_solid: Option<crate::geometry::Solid>,
-    pub boundary: Vec<Box<dyn AbstractSpaceBoundary>>,
+    pub boundary: Vec<AbstractSpaceBoundary>,
     pub lod0_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_solid: Option<crate::geometry::Solid>,
     pub lod0_point: Option<crate::geometry::DirectPosition>,
     pub lod3_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_multi_surface: Option<crate::geometry::MultiSurface>,
-    pub ade_of_abstract_physical_space: Vec<Box<dyn ADEOfAbstractPhysicalSpace>>,
     pub lod3_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
-    pub point_cloud: Option<Box<dyn AbstractPointCloud>>,
+    pub point_cloud: Option<AbstractPointCloud>,
     pub lod1_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
-    pub ade_of_abstract_occupied_space: Vec<Box<dyn ADEOfAbstractOccupiedSpace>>,
     pub lod3_implicit_representation: Option<ImplicitGeometry>,
     pub lod2_implicit_representation: Option<ImplicitGeometry>,
     pub lod1_implicit_representation: Option<ImplicitGeometry>,
     pub class_: Option<WaterBodyClassValue>,
     pub function: Vec<WaterBodyFunctionValue>,
     pub usage: Vec<WaterBodyUsageValue>,
-    pub ade_of_water_body: Vec<Box<dyn ADEOfWaterBody>>,
 }
-impl AbstractFeature for WaterBody {
+impl AbstractFeatureTrait for WaterBody {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -111,11 +255,8 @@ impl AbstractFeature for WaterBody {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractFeatureWithLifespan for WaterBody {
+impl AbstractFeatureWithLifespanTrait for WaterBody {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
     }
@@ -128,42 +269,31 @@ impl AbstractFeatureWithLifespan for WaterBody {
     fn valid_to(&self) -> Option<&String> {
         self.valid_to.as_ref()
     }
-    fn ade_of_abstract_feature_with_lifespan(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractFeatureWithLifespan>] {
-        &self.ade_of_abstract_feature_with_lifespan
-    }
 }
-impl AbstractCityObject for WaterBody {
+impl AbstractCityObjectTrait for WaterBody {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
     }
     fn relative_to_water(&self) -> Option<RelativeToWater> {
         self.relative_to_water
     }
-    fn ade_of_abstract_city_object(&self) -> &[Box<dyn ADEOfAbstractCityObject>] {
-        &self.ade_of_abstract_city_object
-    }
-    fn appearance(&self) -> &[Box<dyn AbstractAppearance>] {
+    fn appearance(&self) -> &[AbstractAppearance] {
         &self.appearance
     }
-    fn generic_attribute(&self) -> &[Box<dyn AbstractGenericAttribute>] {
-        &self.generic_attribute
-    }
-    fn generalizes_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn generalizes_to(&self) -> &[AbstractCityObject] {
         &self.generalizes_to
     }
     fn external_reference(&self) -> &[ExternalReference] {
         &self.external_reference
     }
-    fn related_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn related_to(&self) -> &[AbstractCityObject] {
         &self.related_to
     }
-    fn dynamizer(&self) -> &[Box<dyn AbstractDynamizer>] {
+    fn dynamizer(&self) -> &[AbstractDynamizer] {
         &self.dynamizer
     }
 }
-impl AbstractSpace for WaterBody {
+impl AbstractSpaceTrait for WaterBody {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
     }
@@ -172,9 +302,6 @@ impl AbstractSpace for WaterBody {
     }
     fn area(&self) -> &[QualifiedArea] {
         &self.area
-    }
-    fn ade_of_abstract_space(&self) -> &[Box<dyn ADEOfAbstractSpace>] {
-        &self.ade_of_abstract_space
     }
     fn lod2_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod2_multi_curve.as_ref()
@@ -191,7 +318,7 @@ impl AbstractSpace for WaterBody {
     fn lod3_solid(&self) -> Option<&crate::geometry::Solid> {
         self.lod3_solid.as_ref()
     }
-    fn boundary(&self) -> &[Box<dyn AbstractSpaceBoundary>] {
+    fn boundary(&self) -> &[AbstractSpaceBoundary] {
         &self.boundary
     }
     fn lod0_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
@@ -210,14 +337,11 @@ impl AbstractSpace for WaterBody {
         self.lod2_multi_surface.as_ref()
     }
 }
-impl AbstractPhysicalSpace for WaterBody {
-    fn ade_of_abstract_physical_space(&self) -> &[Box<dyn ADEOfAbstractPhysicalSpace>] {
-        &self.ade_of_abstract_physical_space
-    }
+impl AbstractPhysicalSpaceTrait for WaterBody {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
     }
-    fn point_cloud(&self) -> Option<&Box<dyn AbstractPointCloud>> {
+    fn point_cloud(&self) -> Option<&AbstractPointCloud> {
         self.point_cloud.as_ref()
     }
     fn lod1_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
@@ -227,10 +351,7 @@ impl AbstractPhysicalSpace for WaterBody {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
-impl AbstractOccupiedSpace for WaterBody {
-    fn ade_of_abstract_occupied_space(&self) -> &[Box<dyn ADEOfAbstractOccupiedSpace>] {
-        &self.ade_of_abstract_occupied_space
-    }
+impl AbstractOccupiedSpaceTrait for WaterBody {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
     }
@@ -251,17 +372,13 @@ impl WaterBody {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut creation_date = None;
         let mut termination_date = None;
         let mut valid_from = None;
         let mut valid_to = None;
-        let mut ade_of_abstract_feature_with_lifespan = Vec::new();
         let mut relative_to_terrain = None;
         let mut relative_to_water = None;
-        let mut ade_of_abstract_city_object = Vec::new();
         let mut appearance = Vec::new();
-        let mut generic_attribute = Vec::new();
         let mut generalizes_to = Vec::new();
         let mut external_reference = Vec::new();
         let mut related_to = Vec::new();
@@ -269,7 +386,6 @@ impl WaterBody {
         let mut space_type = None;
         let mut volume = Vec::new();
         let mut area = Vec::new();
-        let mut ade_of_abstract_space = Vec::new();
         let mut lod2_multi_curve = None;
         let mut lod3_multi_surface = None;
         let mut lod0_multi_surface = None;
@@ -281,19 +397,16 @@ impl WaterBody {
         let mut lod0_point = None;
         let mut lod3_multi_curve = None;
         let mut lod2_multi_surface = None;
-        let mut ade_of_abstract_physical_space = Vec::new();
         let mut lod3_terrain_intersection_curve = None;
         let mut point_cloud = None;
         let mut lod1_terrain_intersection_curve = None;
         let mut lod2_terrain_intersection_curve = None;
-        let mut ade_of_abstract_occupied_space = Vec::new();
         let mut lod3_implicit_representation = None;
         let mut lod2_implicit_representation = None;
         let mut lod1_implicit_representation = None;
         let mut class_ = None;
         let mut function = Vec::new();
         let mut usage = Vec::new();
-        let mut ade_of_water_body = Vec::new();
         let mut feature_id = ID(_gml_id);
         let mut sub = reader.subtree();
         while let Some(info) = sub.next_element()? {
@@ -310,9 +423,6 @@ impl WaterBody {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "creationDate") => {
                     creation_date = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
@@ -327,9 +437,6 @@ impl WaterBody {
                 (crate::namespace::NS_CORE, "validTo") => {
                     valid_to = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeatureWithLifespan") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "relativeToTerrain") => {
                     relative_to_terrain = Some(
                         RelativeToTerrain::from_gml_text(&sub.read_text()?)?,
@@ -340,30 +447,24 @@ impl WaterBody {
                         RelativeToWater::from_gml_text(&sub.read_text()?)?,
                     );
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractCityObject") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "appearance") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         appearance
                             .push(
-                                super::dispatchers::parse_dyn_abstract_appearance(
+                                super::dispatchers::parse_abstract_appearance(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
                             );
                     }
                 }
-                (crate::namespace::NS_CORE, "genericAttribute") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "generalizesTo") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         generalizes_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -378,7 +479,7 @@ impl WaterBody {
                     if let Some(child_info) = wrapper.next_element()? {
                         related_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -390,7 +491,7 @@ impl WaterBody {
                     if let Some(child_info) = wrapper.next_element()? {
                         dynamizer
                             .push(
-                                super::dispatchers::parse_dyn_abstract_dynamizer(
+                                super::dispatchers::parse_abstract_dynamizer(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -405,9 +506,6 @@ impl WaterBody {
                 }
                 (crate::namespace::NS_CORE, "area") => {
                     area.push(QualifiedArea::from_gml(&mut sub)?);
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractSpace") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_CORE, "lod2MultiCurve") => {
                     lod2_multi_curve = Some({
@@ -489,7 +587,7 @@ impl WaterBody {
                     if let Some(child_info) = wrapper.next_element()? {
                         boundary
                             .push(
-                                super::dispatchers::parse_dyn_abstract_space_boundary(
+                                super::dispatchers::parse_abstract_space_boundary(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -571,9 +669,6 @@ impl WaterBody {
                         }
                     });
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractPhysicalSpace") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "lod3TerrainIntersectionCurve") => {
                     lod3_terrain_intersection_curve = Some({
                         let mut geom_sub = sub.subtree();
@@ -593,7 +688,7 @@ impl WaterBody {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         point_cloud = Some(
-                            super::dispatchers::parse_dyn_abstract_point_cloud(
+                            super::dispatchers::parse_abstract_point_cloud(
                                 &mut wrapper,
                                 &child_info,
                             )?,
@@ -629,9 +724,6 @@ impl WaterBody {
                             crate::geometry::MultiCurve::default()
                         }
                     });
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractOccupiedSpace") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_CORE, "lod3ImplicitRepresentation") => {
                     let mut wrapper = sub.subtree();
@@ -687,9 +779,6 @@ impl WaterBody {
                 (crate::namespace::NS_WATER_BODY, "usage") => {
                     usage.push(WaterBodyUsageValue(sub.read_text()?));
                 }
-                (crate::namespace::NS_WATER_BODY, "adeOfWaterBody") => {
-                    sub.skip_element()?;
-                }
                 _ => {
                     sub.skip_element()?;
                 }
@@ -700,17 +789,13 @@ impl WaterBody {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             creation_date,
             termination_date,
             valid_from,
             valid_to,
-            ade_of_abstract_feature_with_lifespan,
             relative_to_terrain,
             relative_to_water,
-            ade_of_abstract_city_object,
             appearance,
-            generic_attribute,
             generalizes_to,
             external_reference,
             related_to,
@@ -718,7 +803,6 @@ impl WaterBody {
             space_type,
             volume,
             area,
-            ade_of_abstract_space,
             lod2_multi_curve,
             lod3_multi_surface,
             lod0_multi_surface,
@@ -730,19 +814,16 @@ impl WaterBody {
             lod0_point,
             lod3_multi_curve,
             lod2_multi_surface,
-            ade_of_abstract_physical_space,
             lod3_terrain_intersection_curve,
             point_cloud,
             lod1_terrain_intersection_curve,
             lod2_terrain_intersection_curve,
-            ade_of_abstract_occupied_space,
             lod3_implicit_representation,
             lod2_implicit_representation,
             lod1_implicit_representation,
             class_,
             function,
             usage,
-            ade_of_water_body,
         })
     }
 }
@@ -758,44 +839,32 @@ impl crate::from_gml::FromGml for WaterBody {
         Self::from_gml_with_info(reader, &info)
     }
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct WaterGroundSurface {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub creation_date: Option<String>,
     pub termination_date: Option<String>,
     pub valid_from: Option<String>,
     pub valid_to: Option<String>,
-    pub ade_of_abstract_feature_with_lifespan: Vec<
-        Box<dyn ADEOfAbstractFeatureWithLifespan>,
-    >,
     pub relative_to_terrain: Option<RelativeToTerrain>,
     pub relative_to_water: Option<RelativeToWater>,
-    pub ade_of_abstract_city_object: Vec<Box<dyn ADEOfAbstractCityObject>>,
-    pub appearance: Vec<Box<dyn AbstractAppearance>>,
-    pub generic_attribute: Vec<Box<dyn AbstractGenericAttribute>>,
-    pub generalizes_to: Vec<Box<dyn AbstractCityObject>>,
+    pub appearance: Vec<AbstractAppearance>,
+    pub generalizes_to: Vec<AbstractCityObject>,
     pub external_reference: Vec<ExternalReference>,
-    pub related_to: Vec<Box<dyn AbstractCityObject>>,
-    pub dynamizer: Vec<Box<dyn AbstractDynamizer>>,
-    pub ade_of_abstract_space_boundary: Vec<Box<dyn ADEOfAbstractSpaceBoundary>>,
+    pub related_to: Vec<AbstractCityObject>,
+    pub dynamizer: Vec<AbstractDynamizer>,
     pub area: Vec<QualifiedArea>,
-    pub ade_of_abstract_thematic_surface: Vec<Box<dyn ADEOfAbstractThematicSurface>>,
     pub lod3_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod2_multi_surface: Option<crate::geometry::MultiSurface>,
-    pub point_cloud: Option<Box<dyn AbstractPointCloud>>,
+    pub point_cloud: Option<AbstractPointCloud>,
     pub lod0_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod0_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod1_multi_surface: Option<crate::geometry::MultiSurface>,
-    pub ade_of_abstract_water_boundary_surface: Vec<
-        Box<dyn ADEOfAbstractWaterBoundarySurface>,
-    >,
-    pub ade_of_water_ground_surface: Vec<Box<dyn ADEOfWaterGroundSurface>>,
 }
-impl AbstractFeature for WaterGroundSurface {
+impl AbstractFeatureTrait for WaterGroundSurface {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -808,11 +877,8 @@ impl AbstractFeature for WaterGroundSurface {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractFeatureWithLifespan for WaterGroundSurface {
+impl AbstractFeatureWithLifespanTrait for WaterGroundSurface {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
     }
@@ -825,54 +891,34 @@ impl AbstractFeatureWithLifespan for WaterGroundSurface {
     fn valid_to(&self) -> Option<&String> {
         self.valid_to.as_ref()
     }
-    fn ade_of_abstract_feature_with_lifespan(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractFeatureWithLifespan>] {
-        &self.ade_of_abstract_feature_with_lifespan
-    }
 }
-impl AbstractCityObject for WaterGroundSurface {
+impl AbstractCityObjectTrait for WaterGroundSurface {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
     }
     fn relative_to_water(&self) -> Option<RelativeToWater> {
         self.relative_to_water
     }
-    fn ade_of_abstract_city_object(&self) -> &[Box<dyn ADEOfAbstractCityObject>] {
-        &self.ade_of_abstract_city_object
-    }
-    fn appearance(&self) -> &[Box<dyn AbstractAppearance>] {
+    fn appearance(&self) -> &[AbstractAppearance] {
         &self.appearance
     }
-    fn generic_attribute(&self) -> &[Box<dyn AbstractGenericAttribute>] {
-        &self.generic_attribute
-    }
-    fn generalizes_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn generalizes_to(&self) -> &[AbstractCityObject] {
         &self.generalizes_to
     }
     fn external_reference(&self) -> &[ExternalReference] {
         &self.external_reference
     }
-    fn related_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn related_to(&self) -> &[AbstractCityObject] {
         &self.related_to
     }
-    fn dynamizer(&self) -> &[Box<dyn AbstractDynamizer>] {
+    fn dynamizer(&self) -> &[AbstractDynamizer] {
         &self.dynamizer
     }
 }
-impl AbstractSpaceBoundary for WaterGroundSurface {
-    fn ade_of_abstract_space_boundary(&self) -> &[Box<dyn ADEOfAbstractSpaceBoundary>] {
-        &self.ade_of_abstract_space_boundary
-    }
-}
-impl AbstractThematicSurface for WaterGroundSurface {
+impl AbstractSpaceBoundaryTrait for WaterGroundSurface {}
+impl AbstractThematicSurfaceTrait for WaterGroundSurface {
     fn area(&self) -> &[QualifiedArea] {
         &self.area
-    }
-    fn ade_of_abstract_thematic_surface(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractThematicSurface>] {
-        &self.ade_of_abstract_thematic_surface
     }
     fn lod3_multi_surface(&self) -> Option<&crate::geometry::MultiSurface> {
         self.lod3_multi_surface.as_ref()
@@ -880,7 +926,7 @@ impl AbstractThematicSurface for WaterGroundSurface {
     fn lod2_multi_surface(&self) -> Option<&crate::geometry::MultiSurface> {
         self.lod2_multi_surface.as_ref()
     }
-    fn point_cloud(&self) -> Option<&Box<dyn AbstractPointCloud>> {
+    fn point_cloud(&self) -> Option<&AbstractPointCloud> {
         self.point_cloud.as_ref()
     }
     fn lod0_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
@@ -893,13 +939,7 @@ impl AbstractThematicSurface for WaterGroundSurface {
         self.lod1_multi_surface.as_ref()
     }
 }
-impl AbstractWaterBoundarySurface for WaterGroundSurface {
-    fn ade_of_abstract_water_boundary_surface(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractWaterBoundarySurface>] {
-        &self.ade_of_abstract_water_boundary_surface
-    }
-}
+impl AbstractWaterBoundarySurfaceTrait for WaterGroundSurface {}
 impl WaterGroundSurface {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -910,32 +950,24 @@ impl WaterGroundSurface {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut creation_date = None;
         let mut termination_date = None;
         let mut valid_from = None;
         let mut valid_to = None;
-        let mut ade_of_abstract_feature_with_lifespan = Vec::new();
         let mut relative_to_terrain = None;
         let mut relative_to_water = None;
-        let mut ade_of_abstract_city_object = Vec::new();
         let mut appearance = Vec::new();
-        let mut generic_attribute = Vec::new();
         let mut generalizes_to = Vec::new();
         let mut external_reference = Vec::new();
         let mut related_to = Vec::new();
         let mut dynamizer = Vec::new();
-        let mut ade_of_abstract_space_boundary = Vec::new();
         let mut area = Vec::new();
-        let mut ade_of_abstract_thematic_surface = Vec::new();
         let mut lod3_multi_surface = None;
         let mut lod2_multi_surface = None;
         let mut point_cloud = None;
         let mut lod0_multi_curve = None;
         let mut lod0_multi_surface = None;
         let mut lod1_multi_surface = None;
-        let mut ade_of_abstract_water_boundary_surface = Vec::new();
-        let mut ade_of_water_ground_surface = Vec::new();
         let mut feature_id = ID(_gml_id);
         let mut sub = reader.subtree();
         while let Some(info) = sub.next_element()? {
@@ -952,9 +984,6 @@ impl WaterGroundSurface {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "creationDate") => {
                     creation_date = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
@@ -969,9 +998,6 @@ impl WaterGroundSurface {
                 (crate::namespace::NS_CORE, "validTo") => {
                     valid_to = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeatureWithLifespan") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "relativeToTerrain") => {
                     relative_to_terrain = Some(
                         RelativeToTerrain::from_gml_text(&sub.read_text()?)?,
@@ -982,30 +1008,24 @@ impl WaterGroundSurface {
                         RelativeToWater::from_gml_text(&sub.read_text()?)?,
                     );
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractCityObject") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "appearance") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         appearance
                             .push(
-                                super::dispatchers::parse_dyn_abstract_appearance(
+                                super::dispatchers::parse_abstract_appearance(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
                             );
                     }
                 }
-                (crate::namespace::NS_CORE, "genericAttribute") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "generalizesTo") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         generalizes_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -1020,7 +1040,7 @@ impl WaterGroundSurface {
                     if let Some(child_info) = wrapper.next_element()? {
                         related_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -1032,21 +1052,15 @@ impl WaterGroundSurface {
                     if let Some(child_info) = wrapper.next_element()? {
                         dynamizer
                             .push(
-                                super::dispatchers::parse_dyn_abstract_dynamizer(
+                                super::dispatchers::parse_abstract_dynamizer(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
                             );
                     }
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractSpaceBoundary") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "area") => {
                     area.push(QualifiedArea::from_gml(&mut sub)?);
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractThematicSurface") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_CORE, "lod3MultiSurface") => {
                     lod3_multi_surface = Some({
@@ -1082,7 +1096,7 @@ impl WaterGroundSurface {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         point_cloud = Some(
-                            super::dispatchers::parse_dyn_abstract_point_cloud(
+                            super::dispatchers::parse_abstract_point_cloud(
                                 &mut wrapper,
                                 &child_info,
                             )?,
@@ -1134,15 +1148,6 @@ impl WaterGroundSurface {
                         }
                     });
                 }
-                (
-                    crate::namespace::NS_WATER_BODY,
-                    "adeOfAbstractWaterBoundarySurface",
-                ) => {
-                    sub.skip_element()?;
-                }
-                (crate::namespace::NS_WATER_BODY, "adeOfWaterGroundSurface") => {
-                    sub.skip_element()?;
-                }
                 _ => {
                     sub.skip_element()?;
                 }
@@ -1153,32 +1158,24 @@ impl WaterGroundSurface {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             creation_date,
             termination_date,
             valid_from,
             valid_to,
-            ade_of_abstract_feature_with_lifespan,
             relative_to_terrain,
             relative_to_water,
-            ade_of_abstract_city_object,
             appearance,
-            generic_attribute,
             generalizes_to,
             external_reference,
             related_to,
             dynamizer,
-            ade_of_abstract_space_boundary,
             area,
-            ade_of_abstract_thematic_surface,
             lod3_multi_surface,
             lod2_multi_surface,
             point_cloud,
             lod0_multi_curve,
             lod0_multi_surface,
             lod1_multi_surface,
-            ade_of_abstract_water_boundary_surface,
-            ade_of_water_ground_surface,
         })
     }
 }
@@ -1194,45 +1191,33 @@ impl crate::from_gml::FromGml for WaterGroundSurface {
         Self::from_gml_with_info(reader, &info)
     }
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct WaterSurface {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub creation_date: Option<String>,
     pub termination_date: Option<String>,
     pub valid_from: Option<String>,
     pub valid_to: Option<String>,
-    pub ade_of_abstract_feature_with_lifespan: Vec<
-        Box<dyn ADEOfAbstractFeatureWithLifespan>,
-    >,
     pub relative_to_terrain: Option<RelativeToTerrain>,
     pub relative_to_water: Option<RelativeToWater>,
-    pub ade_of_abstract_city_object: Vec<Box<dyn ADEOfAbstractCityObject>>,
-    pub appearance: Vec<Box<dyn AbstractAppearance>>,
-    pub generic_attribute: Vec<Box<dyn AbstractGenericAttribute>>,
-    pub generalizes_to: Vec<Box<dyn AbstractCityObject>>,
+    pub appearance: Vec<AbstractAppearance>,
+    pub generalizes_to: Vec<AbstractCityObject>,
     pub external_reference: Vec<ExternalReference>,
-    pub related_to: Vec<Box<dyn AbstractCityObject>>,
-    pub dynamizer: Vec<Box<dyn AbstractDynamizer>>,
-    pub ade_of_abstract_space_boundary: Vec<Box<dyn ADEOfAbstractSpaceBoundary>>,
+    pub related_to: Vec<AbstractCityObject>,
+    pub dynamizer: Vec<AbstractDynamizer>,
     pub area: Vec<QualifiedArea>,
-    pub ade_of_abstract_thematic_surface: Vec<Box<dyn ADEOfAbstractThematicSurface>>,
     pub lod3_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod2_multi_surface: Option<crate::geometry::MultiSurface>,
-    pub point_cloud: Option<Box<dyn AbstractPointCloud>>,
+    pub point_cloud: Option<AbstractPointCloud>,
     pub lod0_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod0_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod1_multi_surface: Option<crate::geometry::MultiSurface>,
-    pub ade_of_abstract_water_boundary_surface: Vec<
-        Box<dyn ADEOfAbstractWaterBoundarySurface>,
-    >,
     pub water_level: Option<WaterLevelValue>,
-    pub ade_of_water_surface: Vec<Box<dyn ADEOfWaterSurface>>,
 }
-impl AbstractFeature for WaterSurface {
+impl AbstractFeatureTrait for WaterSurface {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -1245,11 +1230,8 @@ impl AbstractFeature for WaterSurface {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractFeatureWithLifespan for WaterSurface {
+impl AbstractFeatureWithLifespanTrait for WaterSurface {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
     }
@@ -1262,54 +1244,34 @@ impl AbstractFeatureWithLifespan for WaterSurface {
     fn valid_to(&self) -> Option<&String> {
         self.valid_to.as_ref()
     }
-    fn ade_of_abstract_feature_with_lifespan(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractFeatureWithLifespan>] {
-        &self.ade_of_abstract_feature_with_lifespan
-    }
 }
-impl AbstractCityObject for WaterSurface {
+impl AbstractCityObjectTrait for WaterSurface {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
     }
     fn relative_to_water(&self) -> Option<RelativeToWater> {
         self.relative_to_water
     }
-    fn ade_of_abstract_city_object(&self) -> &[Box<dyn ADEOfAbstractCityObject>] {
-        &self.ade_of_abstract_city_object
-    }
-    fn appearance(&self) -> &[Box<dyn AbstractAppearance>] {
+    fn appearance(&self) -> &[AbstractAppearance] {
         &self.appearance
     }
-    fn generic_attribute(&self) -> &[Box<dyn AbstractGenericAttribute>] {
-        &self.generic_attribute
-    }
-    fn generalizes_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn generalizes_to(&self) -> &[AbstractCityObject] {
         &self.generalizes_to
     }
     fn external_reference(&self) -> &[ExternalReference] {
         &self.external_reference
     }
-    fn related_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn related_to(&self) -> &[AbstractCityObject] {
         &self.related_to
     }
-    fn dynamizer(&self) -> &[Box<dyn AbstractDynamizer>] {
+    fn dynamizer(&self) -> &[AbstractDynamizer] {
         &self.dynamizer
     }
 }
-impl AbstractSpaceBoundary for WaterSurface {
-    fn ade_of_abstract_space_boundary(&self) -> &[Box<dyn ADEOfAbstractSpaceBoundary>] {
-        &self.ade_of_abstract_space_boundary
-    }
-}
-impl AbstractThematicSurface for WaterSurface {
+impl AbstractSpaceBoundaryTrait for WaterSurface {}
+impl AbstractThematicSurfaceTrait for WaterSurface {
     fn area(&self) -> &[QualifiedArea] {
         &self.area
-    }
-    fn ade_of_abstract_thematic_surface(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractThematicSurface>] {
-        &self.ade_of_abstract_thematic_surface
     }
     fn lod3_multi_surface(&self) -> Option<&crate::geometry::MultiSurface> {
         self.lod3_multi_surface.as_ref()
@@ -1317,7 +1279,7 @@ impl AbstractThematicSurface for WaterSurface {
     fn lod2_multi_surface(&self) -> Option<&crate::geometry::MultiSurface> {
         self.lod2_multi_surface.as_ref()
     }
-    fn point_cloud(&self) -> Option<&Box<dyn AbstractPointCloud>> {
+    fn point_cloud(&self) -> Option<&AbstractPointCloud> {
         self.point_cloud.as_ref()
     }
     fn lod0_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
@@ -1330,13 +1292,7 @@ impl AbstractThematicSurface for WaterSurface {
         self.lod1_multi_surface.as_ref()
     }
 }
-impl AbstractWaterBoundarySurface for WaterSurface {
-    fn ade_of_abstract_water_boundary_surface(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractWaterBoundarySurface>] {
-        &self.ade_of_abstract_water_boundary_surface
-    }
-}
+impl AbstractWaterBoundarySurfaceTrait for WaterSurface {}
 impl WaterSurface {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1347,33 +1303,25 @@ impl WaterSurface {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut creation_date = None;
         let mut termination_date = None;
         let mut valid_from = None;
         let mut valid_to = None;
-        let mut ade_of_abstract_feature_with_lifespan = Vec::new();
         let mut relative_to_terrain = None;
         let mut relative_to_water = None;
-        let mut ade_of_abstract_city_object = Vec::new();
         let mut appearance = Vec::new();
-        let mut generic_attribute = Vec::new();
         let mut generalizes_to = Vec::new();
         let mut external_reference = Vec::new();
         let mut related_to = Vec::new();
         let mut dynamizer = Vec::new();
-        let mut ade_of_abstract_space_boundary = Vec::new();
         let mut area = Vec::new();
-        let mut ade_of_abstract_thematic_surface = Vec::new();
         let mut lod3_multi_surface = None;
         let mut lod2_multi_surface = None;
         let mut point_cloud = None;
         let mut lod0_multi_curve = None;
         let mut lod0_multi_surface = None;
         let mut lod1_multi_surface = None;
-        let mut ade_of_abstract_water_boundary_surface = Vec::new();
         let mut water_level = None;
-        let mut ade_of_water_surface = Vec::new();
         let mut feature_id = ID(_gml_id);
         let mut sub = reader.subtree();
         while let Some(info) = sub.next_element()? {
@@ -1390,9 +1338,6 @@ impl WaterSurface {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "creationDate") => {
                     creation_date = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
@@ -1407,9 +1352,6 @@ impl WaterSurface {
                 (crate::namespace::NS_CORE, "validTo") => {
                     valid_to = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeatureWithLifespan") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "relativeToTerrain") => {
                     relative_to_terrain = Some(
                         RelativeToTerrain::from_gml_text(&sub.read_text()?)?,
@@ -1420,30 +1362,24 @@ impl WaterSurface {
                         RelativeToWater::from_gml_text(&sub.read_text()?)?,
                     );
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractCityObject") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "appearance") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         appearance
                             .push(
-                                super::dispatchers::parse_dyn_abstract_appearance(
+                                super::dispatchers::parse_abstract_appearance(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
                             );
                     }
                 }
-                (crate::namespace::NS_CORE, "genericAttribute") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "generalizesTo") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         generalizes_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -1458,7 +1394,7 @@ impl WaterSurface {
                     if let Some(child_info) = wrapper.next_element()? {
                         related_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -1470,21 +1406,15 @@ impl WaterSurface {
                     if let Some(child_info) = wrapper.next_element()? {
                         dynamizer
                             .push(
-                                super::dispatchers::parse_dyn_abstract_dynamizer(
+                                super::dispatchers::parse_abstract_dynamizer(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
                             );
                     }
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractSpaceBoundary") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "area") => {
                     area.push(QualifiedArea::from_gml(&mut sub)?);
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractThematicSurface") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_CORE, "lod3MultiSurface") => {
                     lod3_multi_surface = Some({
@@ -1520,7 +1450,7 @@ impl WaterSurface {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         point_cloud = Some(
-                            super::dispatchers::parse_dyn_abstract_point_cloud(
+                            super::dispatchers::parse_abstract_point_cloud(
                                 &mut wrapper,
                                 &child_info,
                             )?,
@@ -1572,17 +1502,8 @@ impl WaterSurface {
                         }
                     });
                 }
-                (
-                    crate::namespace::NS_WATER_BODY,
-                    "adeOfAbstractWaterBoundarySurface",
-                ) => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_WATER_BODY, "waterLevel") => {
                     water_level = Some(WaterLevelValue(sub.read_text()?));
-                }
-                (crate::namespace::NS_WATER_BODY, "adeOfWaterSurface") => {
-                    sub.skip_element()?;
                 }
                 _ => {
                     sub.skip_element()?;
@@ -1594,33 +1515,25 @@ impl WaterSurface {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             creation_date,
             termination_date,
             valid_from,
             valid_to,
-            ade_of_abstract_feature_with_lifespan,
             relative_to_terrain,
             relative_to_water,
-            ade_of_abstract_city_object,
             appearance,
-            generic_attribute,
             generalizes_to,
             external_reference,
             related_to,
             dynamizer,
-            ade_of_abstract_space_boundary,
             area,
-            ade_of_abstract_thematic_surface,
             lod3_multi_surface,
             lod2_multi_surface,
             point_cloud,
             lod0_multi_curve,
             lod0_multi_surface,
             lod1_multi_surface,
-            ade_of_abstract_water_boundary_surface,
             water_level,
-            ade_of_water_surface,
         })
     }
 }

@@ -1,31 +1,59 @@
 #![allow(unused_imports, unused_mut, unused_variables)]
 use super::*;
 
-pub fn parse_dyn_abstract_construction(
+pub fn parse_abstract_construction(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractConstruction>, crate::error::ReaderError> {
+) -> Result<super::AbstractConstruction, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_CONSTRUCTION, "OtherConstruction") => {
-            Ok(Box::new(super::OtherConstruction::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractConstruction::OtherConstruction(
+                    super::OtherConstruction::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_BRIDGE, "Bridge") => {
-            Ok(Box::new(super::Bridge::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractConstruction::Bridge(
+                    super::Bridge::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_BRIDGE, "BridgePart") => {
-            Ok(Box::new(super::BridgePart::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractConstruction::BridgePart(
+                    super::BridgePart::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "Building") => {
-            Ok(Box::new(super::Building::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractConstruction::Building(
+                    super::Building::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "BuildingPart") => {
-            Ok(Box::new(super::BuildingPart::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractConstruction::BuildingPart(
+                    super::BuildingPart::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "Tunnel") => {
-            Ok(Box::new(super::Tunnel::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractConstruction::Tunnel(
+                    super::Tunnel::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "TunnelPart") => {
-            Ok(Box::new(super::TunnelPart::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractConstruction::TunnelPart(
+                    super::TunnelPart::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         _ => {
             Err(crate::error::ReaderError::UnsupportedFeature {
@@ -35,34 +63,66 @@ pub fn parse_dyn_abstract_construction(
         }
     }
 }
-pub fn parse_dyn_abstract_construction_surface(
+pub fn parse_abstract_construction_surface(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractConstructionSurface>, crate::error::ReaderError> {
+) -> Result<super::AbstractConstructionSurface, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_CONSTRUCTION, "CeilingSurface") => {
-            Ok(Box::new(super::CeilingSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractConstructionSurface::CeilingSurface(
+                    super::CeilingSurface::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "FloorSurface") => {
-            Ok(Box::new(super::FloorSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractConstructionSurface::FloorSurface(
+                    super::FloorSurface::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "GroundSurface") => {
-            Ok(Box::new(super::GroundSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractConstructionSurface::GroundSurface(
+                    super::GroundSurface::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "InteriorWallSurface") => {
-            Ok(Box::new(super::InteriorWallSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractConstructionSurface::InteriorWallSurface(
+                    super::InteriorWallSurface::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "OuterCeilingSurface") => {
-            Ok(Box::new(super::OuterCeilingSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractConstructionSurface::OuterCeilingSurface(
+                    super::OuterCeilingSurface::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "OuterFloorSurface") => {
-            Ok(Box::new(super::OuterFloorSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractConstructionSurface::OuterFloorSurface(
+                    super::OuterFloorSurface::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "RoofSurface") => {
-            Ok(Box::new(super::RoofSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractConstructionSurface::RoofSurface(
+                    super::RoofSurface::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "WallSurface") => {
-            Ok(Box::new(super::WallSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractConstructionSurface::WallSurface(
+                    super::WallSurface::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         _ => {
             Err(crate::error::ReaderError::UnsupportedFeature {
@@ -72,28 +132,28 @@ pub fn parse_dyn_abstract_construction_surface(
         }
     }
 }
-pub fn parse_dyn_abstract_constructive_element(
+pub fn parse_abstract_constructive_element(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractConstructiveElement>, crate::error::ReaderError> {
+) -> Result<super::AbstractConstructiveElement, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_BRIDGE, "BridgeConstructiveElement") => {
             Ok(
-                Box::new(
+                super::AbstractConstructiveElement::BridgeConstructiveElement(
                     super::BridgeConstructiveElement::from_gml_with_info(reader, info)?,
                 ),
             )
         }
         (crate::namespace::NS_BUILDING, "BuildingConstructiveElement") => {
             Ok(
-                Box::new(
+                super::AbstractConstructiveElement::BuildingConstructiveElement(
                     super::BuildingConstructiveElement::from_gml_with_info(reader, info)?,
                 ),
             )
         }
         (crate::namespace::NS_TUNNEL, "TunnelConstructiveElement") => {
             Ok(
-                Box::new(
+                super::AbstractConstructiveElement::TunnelConstructiveElement(
                     super::TunnelConstructiveElement::from_gml_with_info(reader, info)?,
                 ),
             )
@@ -106,16 +166,24 @@ pub fn parse_dyn_abstract_constructive_element(
         }
     }
 }
-pub fn parse_dyn_abstract_filling_element(
+pub fn parse_abstract_filling_element(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractFillingElement>, crate::error::ReaderError> {
+) -> Result<super::AbstractFillingElement, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_CONSTRUCTION, "Door") => {
-            Ok(Box::new(super::Door::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFillingElement::Door(
+                    super::Door::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "Window") => {
-            Ok(Box::new(super::Window::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFillingElement::Window(
+                    super::Window::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         _ => {
             Err(crate::error::ReaderError::UnsupportedFeature {
@@ -125,16 +193,24 @@ pub fn parse_dyn_abstract_filling_element(
         }
     }
 }
-pub fn parse_dyn_abstract_filling_surface(
+pub fn parse_abstract_filling_surface(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractFillingSurface>, crate::error::ReaderError> {
+) -> Result<super::AbstractFillingSurface, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_CONSTRUCTION, "DoorSurface") => {
-            Ok(Box::new(super::DoorSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFillingSurface::DoorSurface(
+                    super::DoorSurface::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "WindowSurface") => {
-            Ok(Box::new(super::WindowSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFillingSurface::WindowSurface(
+                    super::WindowSurface::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         _ => {
             Err(crate::error::ReaderError::UnsupportedFeature {
@@ -144,19 +220,31 @@ pub fn parse_dyn_abstract_filling_surface(
         }
     }
 }
-pub fn parse_dyn_abstract_furniture(
+pub fn parse_abstract_furniture(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractFurniture>, crate::error::ReaderError> {
+) -> Result<super::AbstractFurniture, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_BRIDGE, "BridgeFurniture") => {
-            Ok(Box::new(super::BridgeFurniture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFurniture::BridgeFurniture(
+                    super::BridgeFurniture::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "BuildingFurniture") => {
-            Ok(Box::new(super::BuildingFurniture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFurniture::BuildingFurniture(
+                    super::BuildingFurniture::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "TunnelFurniture") => {
-            Ok(Box::new(super::TunnelFurniture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFurniture::TunnelFurniture(
+                    super::TunnelFurniture::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         _ => {
             Err(crate::error::ReaderError::UnsupportedFeature {
@@ -166,19 +254,31 @@ pub fn parse_dyn_abstract_furniture(
         }
     }
 }
-pub fn parse_dyn_abstract_installation(
+pub fn parse_abstract_installation(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractInstallation>, crate::error::ReaderError> {
+) -> Result<super::AbstractInstallation, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_BRIDGE, "BridgeInstallation") => {
-            Ok(Box::new(super::BridgeInstallation::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractInstallation::BridgeInstallation(
+                    super::BridgeInstallation::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "BuildingInstallation") => {
-            Ok(Box::new(super::BuildingInstallation::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractInstallation::BuildingInstallation(
+                    super::BuildingInstallation::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "TunnelInstallation") => {
-            Ok(Box::new(super::TunnelInstallation::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractInstallation::TunnelInstallation(
+                    super::TunnelInstallation::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         _ => {
             Err(crate::error::ReaderError::UnsupportedFeature {
@@ -188,24 +288,28 @@ pub fn parse_dyn_abstract_installation(
         }
     }
 }
-pub fn parse_dyn_abstract_atomic_timeseries(
+pub fn parse_abstract_atomic_timeseries(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractAtomicTimeseries>, crate::error::ReaderError> {
+) -> Result<super::AbstractAtomicTimeseries, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_DYNAMIZER, "GenericTimeseries") => {
-            Ok(Box::new(super::GenericTimeseries::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractAtomicTimeseries::GenericTimeseries(
+                    super::GenericTimeseries::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_DYNAMIZER, "StandardFileTimeseries") => {
             Ok(
-                Box::new(
+                super::AbstractAtomicTimeseries::StandardFileTimeseries(
                     super::StandardFileTimeseries::from_gml_with_info(reader, info)?,
                 ),
             )
         }
         (crate::namespace::NS_DYNAMIZER, "TabulatedFileTimeseries") => {
             Ok(
-                Box::new(
+                super::AbstractAtomicTimeseries::TabulatedFileTimeseries(
                     super::TabulatedFileTimeseries::from_gml_with_info(reader, info)?,
                 ),
             )
@@ -218,27 +322,35 @@ pub fn parse_dyn_abstract_atomic_timeseries(
         }
     }
 }
-pub fn parse_dyn_abstract_timeseries(
+pub fn parse_abstract_timeseries(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractTimeseries>, crate::error::ReaderError> {
+) -> Result<super::AbstractTimeseries, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_DYNAMIZER, "CompositeTimeseries") => {
-            Ok(Box::new(super::CompositeTimeseries::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractTimeseries::CompositeTimeseries(
+                    super::CompositeTimeseries::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_DYNAMIZER, "GenericTimeseries") => {
-            Ok(Box::new(super::GenericTimeseries::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractTimeseries::GenericTimeseries(
+                    super::GenericTimeseries::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_DYNAMIZER, "StandardFileTimeseries") => {
             Ok(
-                Box::new(
+                super::AbstractTimeseries::StandardFileTimeseries(
                     super::StandardFileTimeseries::from_gml_with_info(reader, info)?,
                 ),
             )
         }
         (crate::namespace::NS_DYNAMIZER, "TabulatedFileTimeseries") => {
             Ok(
-                Box::new(
+                super::AbstractTimeseries::TabulatedFileTimeseries(
                     super::TabulatedFileTimeseries::from_gml_with_info(reader, info)?,
                 ),
             )
@@ -251,19 +363,31 @@ pub fn parse_dyn_abstract_timeseries(
         }
     }
 }
-pub fn parse_dyn_abstract_surface_data(
+pub fn parse_abstract_surface_data(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractSurfaceData>, crate::error::ReaderError> {
+) -> Result<super::AbstractSurfaceData, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_APPEARANCE, "GeoreferencedTexture") => {
-            Ok(Box::new(super::GeoreferencedTexture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSurfaceData::GeoreferencedTexture(
+                    super::GeoreferencedTexture::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_APPEARANCE, "ParameterizedTexture") => {
-            Ok(Box::new(super::ParameterizedTexture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSurfaceData::ParameterizedTexture(
+                    super::ParameterizedTexture::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_APPEARANCE, "X3DMaterial") => {
-            Ok(Box::new(super::X3DMaterial::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSurfaceData::X3DMaterial(
+                    super::X3DMaterial::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         _ => {
             Err(crate::error::ReaderError::UnsupportedFeature {
@@ -273,16 +397,24 @@ pub fn parse_dyn_abstract_surface_data(
         }
     }
 }
-pub fn parse_dyn_abstract_texture(
+pub fn parse_abstract_texture(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractTexture>, crate::error::ReaderError> {
+) -> Result<super::AbstractTexture, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_APPEARANCE, "GeoreferencedTexture") => {
-            Ok(Box::new(super::GeoreferencedTexture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractTexture::GeoreferencedTexture(
+                    super::GeoreferencedTexture::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_APPEARANCE, "ParameterizedTexture") => {
-            Ok(Box::new(super::ParameterizedTexture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractTexture::ParameterizedTexture(
+                    super::ParameterizedTexture::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         _ => {
             Err(crate::error::ReaderError::UnsupportedFeature {
@@ -292,16 +424,24 @@ pub fn parse_dyn_abstract_texture(
         }
     }
 }
-pub fn parse_dyn_abstract_bridge(
+pub fn parse_abstract_bridge(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractBridge>, crate::error::ReaderError> {
+) -> Result<super::AbstractBridge, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_BRIDGE, "Bridge") => {
-            Ok(Box::new(super::Bridge::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractBridge::Bridge(
+                    super::Bridge::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_BRIDGE, "BridgePart") => {
-            Ok(Box::new(super::BridgePart::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractBridge::BridgePart(
+                    super::BridgePart::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         _ => {
             Err(crate::error::ReaderError::UnsupportedFeature {
@@ -311,16 +451,24 @@ pub fn parse_dyn_abstract_bridge(
         }
     }
 }
-pub fn parse_dyn_abstract_building(
+pub fn parse_abstract_building(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractBuilding>, crate::error::ReaderError> {
+) -> Result<super::AbstractBuilding, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_BUILDING, "Building") => {
-            Ok(Box::new(super::Building::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractBuilding::Building(
+                    super::Building::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "BuildingPart") => {
-            Ok(Box::new(super::BuildingPart::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractBuilding::BuildingPart(
+                    super::BuildingPart::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         _ => {
             Err(crate::error::ReaderError::UnsupportedFeature {
@@ -330,16 +478,24 @@ pub fn parse_dyn_abstract_building(
         }
     }
 }
-pub fn parse_dyn_abstract_building_subdivision(
+pub fn parse_abstract_building_subdivision(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractBuildingSubdivision>, crate::error::ReaderError> {
+) -> Result<super::AbstractBuildingSubdivision, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_BUILDING, "BuildingUnit") => {
-            Ok(Box::new(super::BuildingUnit::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractBuildingSubdivision::BuildingUnit(
+                    super::BuildingUnit::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "Storey") => {
-            Ok(Box::new(super::Storey::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractBuildingSubdivision::Storey(
+                    super::Storey::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         _ => {
             Err(crate::error::ReaderError::UnsupportedFeature {
@@ -349,13 +505,17 @@ pub fn parse_dyn_abstract_building_subdivision(
         }
     }
 }
-pub fn parse_dyn_abstract_appearance(
+pub fn parse_abstract_appearance(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractAppearance>, crate::error::ReaderError> {
+) -> Result<super::AbstractAppearance, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_APPEARANCE, "Appearance") => {
-            Ok(Box::new(super::Appearance::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractAppearance::Appearance(
+                    super::Appearance::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         _ => {
             Err(crate::error::ReaderError::UnsupportedFeature {
@@ -365,232 +525,516 @@ pub fn parse_dyn_abstract_appearance(
         }
     }
 }
-pub fn parse_dyn_abstract_city_object(
+pub fn parse_abstract_city_object(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractCityObject>, crate::error::ReaderError> {
+) -> Result<super::AbstractCityObject, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_CONSTRUCTION, "CeilingSurface") => {
-            Ok(Box::new(super::CeilingSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::CeilingSurface(
+                    Box::new(super::CeilingSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "Door") => {
-            Ok(Box::new(super::Door::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::Door(
+                    Box::new(super::Door::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "DoorSurface") => {
-            Ok(Box::new(super::DoorSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::DoorSurface(
+                    Box::new(super::DoorSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "FloorSurface") => {
-            Ok(Box::new(super::FloorSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::FloorSurface(
+                    Box::new(super::FloorSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "GroundSurface") => {
-            Ok(Box::new(super::GroundSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::GroundSurface(
+                    Box::new(super::GroundSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "InteriorWallSurface") => {
-            Ok(Box::new(super::InteriorWallSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::InteriorWallSurface(
+                    Box::new(
+                        super::InteriorWallSurface::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "OtherConstruction") => {
-            Ok(Box::new(super::OtherConstruction::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::OtherConstruction(
+                    Box::new(super::OtherConstruction::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "OuterCeilingSurface") => {
-            Ok(Box::new(super::OuterCeilingSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::OuterCeilingSurface(
+                    Box::new(
+                        super::OuterCeilingSurface::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "OuterFloorSurface") => {
-            Ok(Box::new(super::OuterFloorSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::OuterFloorSurface(
+                    Box::new(super::OuterFloorSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "RoofSurface") => {
-            Ok(Box::new(super::RoofSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::RoofSurface(
+                    Box::new(super::RoofSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "WallSurface") => {
-            Ok(Box::new(super::WallSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::WallSurface(
+                    Box::new(super::WallSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "Window") => {
-            Ok(Box::new(super::Window::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::Window(
+                    Box::new(super::Window::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "WindowSurface") => {
-            Ok(Box::new(super::WindowSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::WindowSurface(
+                    Box::new(super::WindowSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BRIDGE, "Bridge") => {
-            Ok(Box::new(super::Bridge::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::Bridge(
+                    Box::new(super::Bridge::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BRIDGE, "BridgeConstructiveElement") => {
             Ok(
-                Box::new(
-                    super::BridgeConstructiveElement::from_gml_with_info(reader, info)?,
+                super::AbstractCityObject::BridgeConstructiveElement(
+                    Box::new(
+                        super::BridgeConstructiveElement::from_gml_with_info(
+                            reader,
+                            info,
+                        )?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_BRIDGE, "BridgeFurniture") => {
-            Ok(Box::new(super::BridgeFurniture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::BridgeFurniture(
+                    Box::new(super::BridgeFurniture::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BRIDGE, "BridgeInstallation") => {
-            Ok(Box::new(super::BridgeInstallation::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::BridgeInstallation(
+                    Box::new(
+                        super::BridgeInstallation::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_BRIDGE, "BridgePart") => {
-            Ok(Box::new(super::BridgePart::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::BridgePart(
+                    Box::new(super::BridgePart::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BRIDGE, "BridgeRoom") => {
-            Ok(Box::new(super::BridgeRoom::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::BridgeRoom(
+                    Box::new(super::BridgeRoom::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "Building") => {
-            Ok(Box::new(super::Building::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::Building(
+                    Box::new(super::Building::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "BuildingConstructiveElement") => {
             Ok(
-                Box::new(
-                    super::BuildingConstructiveElement::from_gml_with_info(reader, info)?,
+                super::AbstractCityObject::BuildingConstructiveElement(
+                    Box::new(
+                        super::BuildingConstructiveElement::from_gml_with_info(
+                            reader,
+                            info,
+                        )?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_BUILDING, "BuildingFurniture") => {
-            Ok(Box::new(super::BuildingFurniture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::BuildingFurniture(
+                    Box::new(super::BuildingFurniture::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "BuildingInstallation") => {
-            Ok(Box::new(super::BuildingInstallation::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::BuildingInstallation(
+                    Box::new(
+                        super::BuildingInstallation::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "BuildingPart") => {
-            Ok(Box::new(super::BuildingPart::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::BuildingPart(
+                    Box::new(super::BuildingPart::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "BuildingRoom") => {
-            Ok(Box::new(super::BuildingRoom::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::BuildingRoom(
+                    Box::new(super::BuildingRoom::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "BuildingUnit") => {
-            Ok(Box::new(super::BuildingUnit::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::BuildingUnit(
+                    Box::new(super::BuildingUnit::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "Storey") => {
-            Ok(Box::new(super::Storey::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::Storey(
+                    Box::new(super::Storey::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CITY_FURNITURE, "CityFurniture") => {
-            Ok(Box::new(super::CityFurniture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::CityFurniture(
+                    Box::new(super::CityFurniture::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CITY_OBJECT_GROUP, "CityObjectGroup") => {
-            Ok(Box::new(super::CityObjectGroup::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::CityObjectGroup(
+                    Box::new(super::CityObjectGroup::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CORE, "ClosureSurface") => {
-            Ok(Box::new(super::ClosureSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::ClosureSurface(
+                    Box::new(super::ClosureSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_GENERICS, "GenericLogicalSpace") => {
-            Ok(Box::new(super::GenericLogicalSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::GenericLogicalSpace(
+                    Box::new(
+                        super::GenericLogicalSpace::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_GENERICS, "GenericOccupiedSpace") => {
-            Ok(Box::new(super::GenericOccupiedSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::GenericOccupiedSpace(
+                    Box::new(
+                        super::GenericOccupiedSpace::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_GENERICS, "GenericThematicSurface") => {
             Ok(
-                Box::new(
-                    super::GenericThematicSurface::from_gml_with_info(reader, info)?,
+                super::AbstractCityObject::GenericThematicSurface(
+                    Box::new(
+                        super::GenericThematicSurface::from_gml_with_info(reader, info)?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_GENERICS, "GenericUnoccupiedSpace") => {
             Ok(
-                Box::new(
-                    super::GenericUnoccupiedSpace::from_gml_with_info(reader, info)?,
+                super::AbstractCityObject::GenericUnoccupiedSpace(
+                    Box::new(
+                        super::GenericUnoccupiedSpace::from_gml_with_info(reader, info)?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_LAND_USE, "LandUse") => {
-            Ok(Box::new(super::LandUse::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::LandUse(
+                    Box::new(super::LandUse::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_RELIEF, "BreaklineRelief") => {
-            Ok(Box::new(super::BreaklineRelief::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::BreaklineRelief(
+                    Box::new(super::BreaklineRelief::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_RELIEF, "MassPointRelief") => {
-            Ok(Box::new(super::MassPointRelief::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::MassPointRelief(
+                    Box::new(super::MassPointRelief::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_RELIEF, "RasterRelief") => {
-            Ok(Box::new(super::RasterRelief::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::RasterRelief(
+                    Box::new(super::RasterRelief::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_RELIEF, "ReliefFeature") => {
-            Ok(Box::new(super::ReliefFeature::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::ReliefFeature(
+                    Box::new(super::ReliefFeature::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_RELIEF, "TINRelief") => {
-            Ok(Box::new(super::TINRelief::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::TINRelief(
+                    Box::new(super::TINRelief::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "AuxiliaryTrafficArea") => {
-            Ok(Box::new(super::AuxiliaryTrafficArea::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::AuxiliaryTrafficArea(
+                    Box::new(
+                        super::AuxiliaryTrafficArea::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "AuxiliaryTrafficSpace") => {
-            Ok(Box::new(super::AuxiliaryTrafficSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::AuxiliaryTrafficSpace(
+                    Box::new(
+                        super::AuxiliaryTrafficSpace::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "ClearanceSpace") => {
-            Ok(Box::new(super::ClearanceSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::ClearanceSpace(
+                    Box::new(super::ClearanceSpace::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Hole") => {
-            Ok(Box::new(super::Hole::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::Hole(
+                    Box::new(super::Hole::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "HoleSurface") => {
-            Ok(Box::new(super::HoleSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::HoleSurface(
+                    Box::new(super::HoleSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Intersection") => {
-            Ok(Box::new(super::Intersection::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::Intersection(
+                    Box::new(super::Intersection::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Marking") => {
-            Ok(Box::new(super::Marking::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::Marking(
+                    Box::new(super::Marking::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Railway") => {
-            Ok(Box::new(super::Railway::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::Railway(
+                    Box::new(super::Railway::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Road") => {
-            Ok(Box::new(super::Road::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::Road(
+                    Box::new(super::Road::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Section") => {
-            Ok(Box::new(super::Section::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::Section(
+                    Box::new(super::Section::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Square") => {
-            Ok(Box::new(super::Square::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::Square(
+                    Box::new(super::Square::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Track") => {
-            Ok(Box::new(super::Track::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::Track(
+                    Box::new(super::Track::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "TrafficArea") => {
-            Ok(Box::new(super::TrafficArea::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::TrafficArea(
+                    Box::new(super::TrafficArea::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "TrafficSpace") => {
-            Ok(Box::new(super::TrafficSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::TrafficSpace(
+                    Box::new(super::TrafficSpace::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Waterway") => {
-            Ok(Box::new(super::Waterway::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::Waterway(
+                    Box::new(super::Waterway::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "HollowSpace") => {
-            Ok(Box::new(super::HollowSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::HollowSpace(
+                    Box::new(super::HollowSpace::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "Tunnel") => {
-            Ok(Box::new(super::Tunnel::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::Tunnel(
+                    Box::new(super::Tunnel::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "TunnelConstructiveElement") => {
             Ok(
-                Box::new(
-                    super::TunnelConstructiveElement::from_gml_with_info(reader, info)?,
+                super::AbstractCityObject::TunnelConstructiveElement(
+                    Box::new(
+                        super::TunnelConstructiveElement::from_gml_with_info(
+                            reader,
+                            info,
+                        )?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_TUNNEL, "TunnelFurniture") => {
-            Ok(Box::new(super::TunnelFurniture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::TunnelFurniture(
+                    Box::new(super::TunnelFurniture::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "TunnelInstallation") => {
-            Ok(Box::new(super::TunnelInstallation::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::TunnelInstallation(
+                    Box::new(
+                        super::TunnelInstallation::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "TunnelPart") => {
-            Ok(Box::new(super::TunnelPart::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::TunnelPart(
+                    Box::new(super::TunnelPart::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_VEGETATION, "PlantCover") => {
-            Ok(Box::new(super::PlantCover::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::PlantCover(
+                    Box::new(super::PlantCover::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_VEGETATION, "SolitaryVegetationObject") => {
             Ok(
-                Box::new(
-                    super::SolitaryVegetationObject::from_gml_with_info(reader, info)?,
+                super::AbstractCityObject::SolitaryVegetationObject(
+                    Box::new(
+                        super::SolitaryVegetationObject::from_gml_with_info(
+                            reader,
+                            info,
+                        )?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_WATER_BODY, "WaterBody") => {
-            Ok(Box::new(super::WaterBody::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::WaterBody(
+                    Box::new(super::WaterBody::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_WATER_BODY, "WaterGroundSurface") => {
-            Ok(Box::new(super::WaterGroundSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::WaterGroundSurface(
+                    Box::new(
+                        super::WaterGroundSurface::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_WATER_BODY, "WaterSurface") => {
-            Ok(Box::new(super::WaterSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractCityObject::WaterSurface(
+                    Box::new(super::WaterSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         _ => {
             Err(crate::error::ReaderError::UnsupportedFeature {
@@ -600,13 +1044,17 @@ pub fn parse_dyn_abstract_city_object(
         }
     }
 }
-pub fn parse_dyn_abstract_dynamizer(
+pub fn parse_abstract_dynamizer(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractDynamizer>, crate::error::ReaderError> {
+) -> Result<super::AbstractDynamizer, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_DYNAMIZER, "Dynamizer") => {
-            Ok(Box::new(super::Dynamizer::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractDynamizer::Dynamizer(
+                    super::Dynamizer::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         _ => {
             Err(crate::error::ReaderError::UnsupportedFeature {
@@ -616,282 +1064,624 @@ pub fn parse_dyn_abstract_dynamizer(
         }
     }
 }
-pub fn parse_dyn_abstract_feature(
+pub fn parse_abstract_feature(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractFeature>, crate::error::ReaderError> {
+) -> Result<super::AbstractFeature, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_CONSTRUCTION, "CeilingSurface") => {
-            Ok(Box::new(super::CeilingSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::CeilingSurface(
+                    Box::new(super::CeilingSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "Door") => {
-            Ok(Box::new(super::Door::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::Door(
+                    Box::new(super::Door::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "DoorSurface") => {
-            Ok(Box::new(super::DoorSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::DoorSurface(
+                    Box::new(super::DoorSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "FloorSurface") => {
-            Ok(Box::new(super::FloorSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::FloorSurface(
+                    Box::new(super::FloorSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "GroundSurface") => {
-            Ok(Box::new(super::GroundSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::GroundSurface(
+                    Box::new(super::GroundSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "InteriorWallSurface") => {
-            Ok(Box::new(super::InteriorWallSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::InteriorWallSurface(
+                    Box::new(
+                        super::InteriorWallSurface::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "OtherConstruction") => {
-            Ok(Box::new(super::OtherConstruction::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::OtherConstruction(
+                    Box::new(super::OtherConstruction::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "OuterCeilingSurface") => {
-            Ok(Box::new(super::OuterCeilingSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::OuterCeilingSurface(
+                    Box::new(
+                        super::OuterCeilingSurface::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "OuterFloorSurface") => {
-            Ok(Box::new(super::OuterFloorSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::OuterFloorSurface(
+                    Box::new(super::OuterFloorSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "RoofSurface") => {
-            Ok(Box::new(super::RoofSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::RoofSurface(
+                    Box::new(super::RoofSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "WallSurface") => {
-            Ok(Box::new(super::WallSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::WallSurface(
+                    Box::new(super::WallSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "Window") => {
-            Ok(Box::new(super::Window::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::Window(
+                    Box::new(super::Window::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "WindowSurface") => {
-            Ok(Box::new(super::WindowSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::WindowSurface(
+                    Box::new(super::WindowSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_DYNAMIZER, "CompositeTimeseries") => {
-            Ok(Box::new(super::CompositeTimeseries::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::CompositeTimeseries(
+                    Box::new(
+                        super::CompositeTimeseries::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_DYNAMIZER, "Dynamizer") => {
-            Ok(Box::new(super::Dynamizer::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::Dynamizer(
+                    Box::new(super::Dynamizer::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_DYNAMIZER, "GenericTimeseries") => {
-            Ok(Box::new(super::GenericTimeseries::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::GenericTimeseries(
+                    Box::new(super::GenericTimeseries::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_DYNAMIZER, "StandardFileTimeseries") => {
             Ok(
-                Box::new(
-                    super::StandardFileTimeseries::from_gml_with_info(reader, info)?,
+                super::AbstractFeature::StandardFileTimeseries(
+                    Box::new(
+                        super::StandardFileTimeseries::from_gml_with_info(reader, info)?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_DYNAMIZER, "TabulatedFileTimeseries") => {
             Ok(
-                Box::new(
-                    super::TabulatedFileTimeseries::from_gml_with_info(reader, info)?,
+                super::AbstractFeature::TabulatedFileTimeseries(
+                    Box::new(
+                        super::TabulatedFileTimeseries::from_gml_with_info(reader, info)?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_POINT_CLOUD, "PointCloud") => {
-            Ok(Box::new(super::PointCloud::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::PointCloud(
+                    Box::new(super::PointCloud::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_VERSIONING, "Version") => {
-            Ok(Box::new(super::Version::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::Version(
+                    Box::new(super::Version::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_VERSIONING, "VersionTransition") => {
-            Ok(Box::new(super::VersionTransition::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::VersionTransition(
+                    Box::new(super::VersionTransition::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_APPEARANCE, "Appearance") => {
-            Ok(Box::new(super::Appearance::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::Appearance(
+                    Box::new(super::Appearance::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_APPEARANCE, "GeoreferencedTexture") => {
-            Ok(Box::new(super::GeoreferencedTexture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::GeoreferencedTexture(
+                    Box::new(
+                        super::GeoreferencedTexture::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_APPEARANCE, "ParameterizedTexture") => {
-            Ok(Box::new(super::ParameterizedTexture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::ParameterizedTexture(
+                    Box::new(
+                        super::ParameterizedTexture::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_APPEARANCE, "X3DMaterial") => {
-            Ok(Box::new(super::X3DMaterial::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::X3DMaterial(
+                    Box::new(super::X3DMaterial::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BRIDGE, "Bridge") => {
-            Ok(Box::new(super::Bridge::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::Bridge(
+                    Box::new(super::Bridge::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BRIDGE, "BridgeConstructiveElement") => {
             Ok(
-                Box::new(
-                    super::BridgeConstructiveElement::from_gml_with_info(reader, info)?,
+                super::AbstractFeature::BridgeConstructiveElement(
+                    Box::new(
+                        super::BridgeConstructiveElement::from_gml_with_info(
+                            reader,
+                            info,
+                        )?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_BRIDGE, "BridgeFurniture") => {
-            Ok(Box::new(super::BridgeFurniture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::BridgeFurniture(
+                    Box::new(super::BridgeFurniture::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BRIDGE, "BridgeInstallation") => {
-            Ok(Box::new(super::BridgeInstallation::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::BridgeInstallation(
+                    Box::new(
+                        super::BridgeInstallation::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_BRIDGE, "BridgePart") => {
-            Ok(Box::new(super::BridgePart::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::BridgePart(
+                    Box::new(super::BridgePart::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BRIDGE, "BridgeRoom") => {
-            Ok(Box::new(super::BridgeRoom::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::BridgeRoom(
+                    Box::new(super::BridgeRoom::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "Building") => {
-            Ok(Box::new(super::Building::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::Building(
+                    Box::new(super::Building::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "BuildingConstructiveElement") => {
             Ok(
-                Box::new(
-                    super::BuildingConstructiveElement::from_gml_with_info(reader, info)?,
+                super::AbstractFeature::BuildingConstructiveElement(
+                    Box::new(
+                        super::BuildingConstructiveElement::from_gml_with_info(
+                            reader,
+                            info,
+                        )?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_BUILDING, "BuildingFurniture") => {
-            Ok(Box::new(super::BuildingFurniture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::BuildingFurniture(
+                    Box::new(super::BuildingFurniture::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "BuildingInstallation") => {
-            Ok(Box::new(super::BuildingInstallation::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::BuildingInstallation(
+                    Box::new(
+                        super::BuildingInstallation::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "BuildingPart") => {
-            Ok(Box::new(super::BuildingPart::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::BuildingPart(
+                    Box::new(super::BuildingPart::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "BuildingRoom") => {
-            Ok(Box::new(super::BuildingRoom::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::BuildingRoom(
+                    Box::new(super::BuildingRoom::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "BuildingUnit") => {
-            Ok(Box::new(super::BuildingUnit::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::BuildingUnit(
+                    Box::new(super::BuildingUnit::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "Storey") => {
-            Ok(Box::new(super::Storey::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::Storey(
+                    Box::new(super::Storey::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CITY_FURNITURE, "CityFurniture") => {
-            Ok(Box::new(super::CityFurniture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::CityFurniture(
+                    Box::new(super::CityFurniture::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CITY_OBJECT_GROUP, "CityObjectGroup") => {
-            Ok(Box::new(super::CityObjectGroup::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::CityObjectGroup(
+                    Box::new(super::CityObjectGroup::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CORE, "Address") => {
-            Ok(Box::new(super::Address::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::Address(
+                    Box::new(super::Address::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CORE, "CityModel") => {
-            Ok(Box::new(super::CityModel::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::CityModel(
+                    Box::new(super::CityModel::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CORE, "ClosureSurface") => {
-            Ok(Box::new(super::ClosureSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::ClosureSurface(
+                    Box::new(super::ClosureSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_GENERICS, "GenericLogicalSpace") => {
-            Ok(Box::new(super::GenericLogicalSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::GenericLogicalSpace(
+                    Box::new(
+                        super::GenericLogicalSpace::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_GENERICS, "GenericOccupiedSpace") => {
-            Ok(Box::new(super::GenericOccupiedSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::GenericOccupiedSpace(
+                    Box::new(
+                        super::GenericOccupiedSpace::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_GENERICS, "GenericThematicSurface") => {
             Ok(
-                Box::new(
-                    super::GenericThematicSurface::from_gml_with_info(reader, info)?,
+                super::AbstractFeature::GenericThematicSurface(
+                    Box::new(
+                        super::GenericThematicSurface::from_gml_with_info(reader, info)?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_GENERICS, "GenericUnoccupiedSpace") => {
             Ok(
-                Box::new(
-                    super::GenericUnoccupiedSpace::from_gml_with_info(reader, info)?,
+                super::AbstractFeature::GenericUnoccupiedSpace(
+                    Box::new(
+                        super::GenericUnoccupiedSpace::from_gml_with_info(reader, info)?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_LAND_USE, "LandUse") => {
-            Ok(Box::new(super::LandUse::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::LandUse(
+                    Box::new(super::LandUse::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_RELIEF, "BreaklineRelief") => {
-            Ok(Box::new(super::BreaklineRelief::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::BreaklineRelief(
+                    Box::new(super::BreaklineRelief::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_RELIEF, "MassPointRelief") => {
-            Ok(Box::new(super::MassPointRelief::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::MassPointRelief(
+                    Box::new(super::MassPointRelief::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_RELIEF, "RasterRelief") => {
-            Ok(Box::new(super::RasterRelief::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::RasterRelief(
+                    Box::new(super::RasterRelief::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_RELIEF, "ReliefFeature") => {
-            Ok(Box::new(super::ReliefFeature::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::ReliefFeature(
+                    Box::new(super::ReliefFeature::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_RELIEF, "TINRelief") => {
-            Ok(Box::new(super::TINRelief::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::TINRelief(
+                    Box::new(super::TINRelief::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "AuxiliaryTrafficArea") => {
-            Ok(Box::new(super::AuxiliaryTrafficArea::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::AuxiliaryTrafficArea(
+                    Box::new(
+                        super::AuxiliaryTrafficArea::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "AuxiliaryTrafficSpace") => {
-            Ok(Box::new(super::AuxiliaryTrafficSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::AuxiliaryTrafficSpace(
+                    Box::new(
+                        super::AuxiliaryTrafficSpace::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "ClearanceSpace") => {
-            Ok(Box::new(super::ClearanceSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::ClearanceSpace(
+                    Box::new(super::ClearanceSpace::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Hole") => {
-            Ok(Box::new(super::Hole::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::Hole(
+                    Box::new(super::Hole::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "HoleSurface") => {
-            Ok(Box::new(super::HoleSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::HoleSurface(
+                    Box::new(super::HoleSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Intersection") => {
-            Ok(Box::new(super::Intersection::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::Intersection(
+                    Box::new(super::Intersection::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Marking") => {
-            Ok(Box::new(super::Marking::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::Marking(
+                    Box::new(super::Marking::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Railway") => {
-            Ok(Box::new(super::Railway::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::Railway(
+                    Box::new(super::Railway::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Road") => {
-            Ok(Box::new(super::Road::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::Road(
+                    Box::new(super::Road::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Section") => {
-            Ok(Box::new(super::Section::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::Section(
+                    Box::new(super::Section::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Square") => {
-            Ok(Box::new(super::Square::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::Square(
+                    Box::new(super::Square::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Track") => {
-            Ok(Box::new(super::Track::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::Track(
+                    Box::new(super::Track::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "TrafficArea") => {
-            Ok(Box::new(super::TrafficArea::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::TrafficArea(
+                    Box::new(super::TrafficArea::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "TrafficSpace") => {
-            Ok(Box::new(super::TrafficSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::TrafficSpace(
+                    Box::new(super::TrafficSpace::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Waterway") => {
-            Ok(Box::new(super::Waterway::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::Waterway(
+                    Box::new(super::Waterway::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "HollowSpace") => {
-            Ok(Box::new(super::HollowSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::HollowSpace(
+                    Box::new(super::HollowSpace::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "Tunnel") => {
-            Ok(Box::new(super::Tunnel::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::Tunnel(
+                    Box::new(super::Tunnel::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "TunnelConstructiveElement") => {
             Ok(
-                Box::new(
-                    super::TunnelConstructiveElement::from_gml_with_info(reader, info)?,
+                super::AbstractFeature::TunnelConstructiveElement(
+                    Box::new(
+                        super::TunnelConstructiveElement::from_gml_with_info(
+                            reader,
+                            info,
+                        )?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_TUNNEL, "TunnelFurniture") => {
-            Ok(Box::new(super::TunnelFurniture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::TunnelFurniture(
+                    Box::new(super::TunnelFurniture::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "TunnelInstallation") => {
-            Ok(Box::new(super::TunnelInstallation::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::TunnelInstallation(
+                    Box::new(
+                        super::TunnelInstallation::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "TunnelPart") => {
-            Ok(Box::new(super::TunnelPart::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::TunnelPart(
+                    Box::new(super::TunnelPart::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_VEGETATION, "PlantCover") => {
-            Ok(Box::new(super::PlantCover::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::PlantCover(
+                    Box::new(super::PlantCover::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_VEGETATION, "SolitaryVegetationObject") => {
             Ok(
-                Box::new(
-                    super::SolitaryVegetationObject::from_gml_with_info(reader, info)?,
+                super::AbstractFeature::SolitaryVegetationObject(
+                    Box::new(
+                        super::SolitaryVegetationObject::from_gml_with_info(
+                            reader,
+                            info,
+                        )?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_WATER_BODY, "WaterBody") => {
-            Ok(Box::new(super::WaterBody::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::WaterBody(
+                    Box::new(super::WaterBody::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_WATER_BODY, "WaterGroundSurface") => {
-            Ok(Box::new(super::WaterGroundSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::WaterGroundSurface(
+                    Box::new(
+                        super::WaterGroundSurface::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_WATER_BODY, "WaterSurface") => {
-            Ok(Box::new(super::WaterSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeature::WaterSurface(
+                    Box::new(super::WaterSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         _ => {
             Err(crate::error::ReaderError::UnsupportedFeature {
@@ -901,247 +1691,551 @@ pub fn parse_dyn_abstract_feature(
         }
     }
 }
-pub fn parse_dyn_abstract_feature_with_lifespan(
+pub fn parse_abstract_feature_with_lifespan(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractFeatureWithLifespan>, crate::error::ReaderError> {
+) -> Result<super::AbstractFeatureWithLifespan, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_CONSTRUCTION, "CeilingSurface") => {
-            Ok(Box::new(super::CeilingSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::CeilingSurface(
+                    Box::new(super::CeilingSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "Door") => {
-            Ok(Box::new(super::Door::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::Door(
+                    Box::new(super::Door::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "DoorSurface") => {
-            Ok(Box::new(super::DoorSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::DoorSurface(
+                    Box::new(super::DoorSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "FloorSurface") => {
-            Ok(Box::new(super::FloorSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::FloorSurface(
+                    Box::new(super::FloorSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "GroundSurface") => {
-            Ok(Box::new(super::GroundSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::GroundSurface(
+                    Box::new(super::GroundSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "InteriorWallSurface") => {
-            Ok(Box::new(super::InteriorWallSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::InteriorWallSurface(
+                    Box::new(
+                        super::InteriorWallSurface::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "OtherConstruction") => {
-            Ok(Box::new(super::OtherConstruction::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::OtherConstruction(
+                    Box::new(super::OtherConstruction::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "OuterCeilingSurface") => {
-            Ok(Box::new(super::OuterCeilingSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::OuterCeilingSurface(
+                    Box::new(
+                        super::OuterCeilingSurface::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "OuterFloorSurface") => {
-            Ok(Box::new(super::OuterFloorSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::OuterFloorSurface(
+                    Box::new(super::OuterFloorSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "RoofSurface") => {
-            Ok(Box::new(super::RoofSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::RoofSurface(
+                    Box::new(super::RoofSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "WallSurface") => {
-            Ok(Box::new(super::WallSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::WallSurface(
+                    Box::new(super::WallSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "Window") => {
-            Ok(Box::new(super::Window::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::Window(
+                    Box::new(super::Window::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "WindowSurface") => {
-            Ok(Box::new(super::WindowSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::WindowSurface(
+                    Box::new(super::WindowSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_DYNAMIZER, "Dynamizer") => {
-            Ok(Box::new(super::Dynamizer::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::Dynamizer(
+                    Box::new(super::Dynamizer::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_VERSIONING, "Version") => {
-            Ok(Box::new(super::Version::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::Version(
+                    Box::new(super::Version::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_VERSIONING, "VersionTransition") => {
-            Ok(Box::new(super::VersionTransition::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::VersionTransition(
+                    Box::new(super::VersionTransition::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_APPEARANCE, "Appearance") => {
-            Ok(Box::new(super::Appearance::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::Appearance(
+                    Box::new(super::Appearance::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BRIDGE, "Bridge") => {
-            Ok(Box::new(super::Bridge::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::Bridge(
+                    Box::new(super::Bridge::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BRIDGE, "BridgeConstructiveElement") => {
             Ok(
-                Box::new(
-                    super::BridgeConstructiveElement::from_gml_with_info(reader, info)?,
+                super::AbstractFeatureWithLifespan::BridgeConstructiveElement(
+                    Box::new(
+                        super::BridgeConstructiveElement::from_gml_with_info(
+                            reader,
+                            info,
+                        )?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_BRIDGE, "BridgeFurniture") => {
-            Ok(Box::new(super::BridgeFurniture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::BridgeFurniture(
+                    Box::new(super::BridgeFurniture::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BRIDGE, "BridgeInstallation") => {
-            Ok(Box::new(super::BridgeInstallation::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::BridgeInstallation(
+                    Box::new(
+                        super::BridgeInstallation::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_BRIDGE, "BridgePart") => {
-            Ok(Box::new(super::BridgePart::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::BridgePart(
+                    Box::new(super::BridgePart::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BRIDGE, "BridgeRoom") => {
-            Ok(Box::new(super::BridgeRoom::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::BridgeRoom(
+                    Box::new(super::BridgeRoom::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "Building") => {
-            Ok(Box::new(super::Building::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::Building(
+                    Box::new(super::Building::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "BuildingConstructiveElement") => {
             Ok(
-                Box::new(
-                    super::BuildingConstructiveElement::from_gml_with_info(reader, info)?,
+                super::AbstractFeatureWithLifespan::BuildingConstructiveElement(
+                    Box::new(
+                        super::BuildingConstructiveElement::from_gml_with_info(
+                            reader,
+                            info,
+                        )?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_BUILDING, "BuildingFurniture") => {
-            Ok(Box::new(super::BuildingFurniture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::BuildingFurniture(
+                    Box::new(super::BuildingFurniture::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "BuildingInstallation") => {
-            Ok(Box::new(super::BuildingInstallation::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::BuildingInstallation(
+                    Box::new(
+                        super::BuildingInstallation::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "BuildingPart") => {
-            Ok(Box::new(super::BuildingPart::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::BuildingPart(
+                    Box::new(super::BuildingPart::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "BuildingRoom") => {
-            Ok(Box::new(super::BuildingRoom::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::BuildingRoom(
+                    Box::new(super::BuildingRoom::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "BuildingUnit") => {
-            Ok(Box::new(super::BuildingUnit::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::BuildingUnit(
+                    Box::new(super::BuildingUnit::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "Storey") => {
-            Ok(Box::new(super::Storey::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::Storey(
+                    Box::new(super::Storey::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CITY_FURNITURE, "CityFurniture") => {
-            Ok(Box::new(super::CityFurniture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::CityFurniture(
+                    Box::new(super::CityFurniture::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CITY_OBJECT_GROUP, "CityObjectGroup") => {
-            Ok(Box::new(super::CityObjectGroup::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::CityObjectGroup(
+                    Box::new(super::CityObjectGroup::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CORE, "CityModel") => {
-            Ok(Box::new(super::CityModel::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::CityModel(
+                    Box::new(super::CityModel::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CORE, "ClosureSurface") => {
-            Ok(Box::new(super::ClosureSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::ClosureSurface(
+                    Box::new(super::ClosureSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_GENERICS, "GenericLogicalSpace") => {
-            Ok(Box::new(super::GenericLogicalSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::GenericLogicalSpace(
+                    Box::new(
+                        super::GenericLogicalSpace::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_GENERICS, "GenericOccupiedSpace") => {
-            Ok(Box::new(super::GenericOccupiedSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::GenericOccupiedSpace(
+                    Box::new(
+                        super::GenericOccupiedSpace::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_GENERICS, "GenericThematicSurface") => {
             Ok(
-                Box::new(
-                    super::GenericThematicSurface::from_gml_with_info(reader, info)?,
+                super::AbstractFeatureWithLifespan::GenericThematicSurface(
+                    Box::new(
+                        super::GenericThematicSurface::from_gml_with_info(reader, info)?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_GENERICS, "GenericUnoccupiedSpace") => {
             Ok(
-                Box::new(
-                    super::GenericUnoccupiedSpace::from_gml_with_info(reader, info)?,
+                super::AbstractFeatureWithLifespan::GenericUnoccupiedSpace(
+                    Box::new(
+                        super::GenericUnoccupiedSpace::from_gml_with_info(reader, info)?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_LAND_USE, "LandUse") => {
-            Ok(Box::new(super::LandUse::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::LandUse(
+                    Box::new(super::LandUse::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_RELIEF, "BreaklineRelief") => {
-            Ok(Box::new(super::BreaklineRelief::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::BreaklineRelief(
+                    Box::new(super::BreaklineRelief::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_RELIEF, "MassPointRelief") => {
-            Ok(Box::new(super::MassPointRelief::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::MassPointRelief(
+                    Box::new(super::MassPointRelief::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_RELIEF, "RasterRelief") => {
-            Ok(Box::new(super::RasterRelief::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::RasterRelief(
+                    Box::new(super::RasterRelief::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_RELIEF, "ReliefFeature") => {
-            Ok(Box::new(super::ReliefFeature::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::ReliefFeature(
+                    Box::new(super::ReliefFeature::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_RELIEF, "TINRelief") => {
-            Ok(Box::new(super::TINRelief::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::TINRelief(
+                    Box::new(super::TINRelief::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "AuxiliaryTrafficArea") => {
-            Ok(Box::new(super::AuxiliaryTrafficArea::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::AuxiliaryTrafficArea(
+                    Box::new(
+                        super::AuxiliaryTrafficArea::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "AuxiliaryTrafficSpace") => {
-            Ok(Box::new(super::AuxiliaryTrafficSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::AuxiliaryTrafficSpace(
+                    Box::new(
+                        super::AuxiliaryTrafficSpace::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "ClearanceSpace") => {
-            Ok(Box::new(super::ClearanceSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::ClearanceSpace(
+                    Box::new(super::ClearanceSpace::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Hole") => {
-            Ok(Box::new(super::Hole::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::Hole(
+                    Box::new(super::Hole::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "HoleSurface") => {
-            Ok(Box::new(super::HoleSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::HoleSurface(
+                    Box::new(super::HoleSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Intersection") => {
-            Ok(Box::new(super::Intersection::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::Intersection(
+                    Box::new(super::Intersection::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Marking") => {
-            Ok(Box::new(super::Marking::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::Marking(
+                    Box::new(super::Marking::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Railway") => {
-            Ok(Box::new(super::Railway::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::Railway(
+                    Box::new(super::Railway::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Road") => {
-            Ok(Box::new(super::Road::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::Road(
+                    Box::new(super::Road::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Section") => {
-            Ok(Box::new(super::Section::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::Section(
+                    Box::new(super::Section::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Square") => {
-            Ok(Box::new(super::Square::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::Square(
+                    Box::new(super::Square::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Track") => {
-            Ok(Box::new(super::Track::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::Track(
+                    Box::new(super::Track::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "TrafficArea") => {
-            Ok(Box::new(super::TrafficArea::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::TrafficArea(
+                    Box::new(super::TrafficArea::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "TrafficSpace") => {
-            Ok(Box::new(super::TrafficSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::TrafficSpace(
+                    Box::new(super::TrafficSpace::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Waterway") => {
-            Ok(Box::new(super::Waterway::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::Waterway(
+                    Box::new(super::Waterway::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "HollowSpace") => {
-            Ok(Box::new(super::HollowSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::HollowSpace(
+                    Box::new(super::HollowSpace::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "Tunnel") => {
-            Ok(Box::new(super::Tunnel::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::Tunnel(
+                    Box::new(super::Tunnel::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "TunnelConstructiveElement") => {
             Ok(
-                Box::new(
-                    super::TunnelConstructiveElement::from_gml_with_info(reader, info)?,
+                super::AbstractFeatureWithLifespan::TunnelConstructiveElement(
+                    Box::new(
+                        super::TunnelConstructiveElement::from_gml_with_info(
+                            reader,
+                            info,
+                        )?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_TUNNEL, "TunnelFurniture") => {
-            Ok(Box::new(super::TunnelFurniture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::TunnelFurniture(
+                    Box::new(super::TunnelFurniture::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "TunnelInstallation") => {
-            Ok(Box::new(super::TunnelInstallation::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::TunnelInstallation(
+                    Box::new(
+                        super::TunnelInstallation::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "TunnelPart") => {
-            Ok(Box::new(super::TunnelPart::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::TunnelPart(
+                    Box::new(super::TunnelPart::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_VEGETATION, "PlantCover") => {
-            Ok(Box::new(super::PlantCover::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::PlantCover(
+                    Box::new(super::PlantCover::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_VEGETATION, "SolitaryVegetationObject") => {
             Ok(
-                Box::new(
-                    super::SolitaryVegetationObject::from_gml_with_info(reader, info)?,
+                super::AbstractFeatureWithLifespan::SolitaryVegetationObject(
+                    Box::new(
+                        super::SolitaryVegetationObject::from_gml_with_info(
+                            reader,
+                            info,
+                        )?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_WATER_BODY, "WaterBody") => {
-            Ok(Box::new(super::WaterBody::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::WaterBody(
+                    Box::new(super::WaterBody::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_WATER_BODY, "WaterGroundSurface") => {
-            Ok(Box::new(super::WaterGroundSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::WaterGroundSurface(
+                    Box::new(
+                        super::WaterGroundSurface::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_WATER_BODY, "WaterSurface") => {
-            Ok(Box::new(super::WaterSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractFeatureWithLifespan::WaterSurface(
+                    Box::new(super::WaterSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         _ => {
             Err(crate::error::ReaderError::UnsupportedFeature {
@@ -1151,22 +2245,38 @@ pub fn parse_dyn_abstract_feature_with_lifespan(
         }
     }
 }
-pub fn parse_dyn_abstract_logical_space(
+pub fn parse_abstract_logical_space(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractLogicalSpace>, crate::error::ReaderError> {
+) -> Result<super::AbstractLogicalSpace, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_BUILDING, "BuildingUnit") => {
-            Ok(Box::new(super::BuildingUnit::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractLogicalSpace::BuildingUnit(
+                    super::BuildingUnit::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "Storey") => {
-            Ok(Box::new(super::Storey::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractLogicalSpace::Storey(
+                    super::Storey::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_CITY_OBJECT_GROUP, "CityObjectGroup") => {
-            Ok(Box::new(super::CityObjectGroup::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractLogicalSpace::CityObjectGroup(
+                    super::CityObjectGroup::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_GENERICS, "GenericLogicalSpace") => {
-            Ok(Box::new(super::GenericLogicalSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractLogicalSpace::GenericLogicalSpace(
+                    super::GenericLogicalSpace::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         _ => {
             Err(crate::error::ReaderError::UnsupportedFeature {
@@ -1176,95 +2286,199 @@ pub fn parse_dyn_abstract_logical_space(
         }
     }
 }
-pub fn parse_dyn_abstract_occupied_space(
+pub fn parse_abstract_occupied_space(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractOccupiedSpace>, crate::error::ReaderError> {
+) -> Result<super::AbstractOccupiedSpace, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_CONSTRUCTION, "Door") => {
-            Ok(Box::new(super::Door::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractOccupiedSpace::Door(
+                    Box::new(super::Door::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "OtherConstruction") => {
-            Ok(Box::new(super::OtherConstruction::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractOccupiedSpace::OtherConstruction(
+                    Box::new(super::OtherConstruction::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "Window") => {
-            Ok(Box::new(super::Window::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractOccupiedSpace::Window(
+                    Box::new(super::Window::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BRIDGE, "Bridge") => {
-            Ok(Box::new(super::Bridge::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractOccupiedSpace::Bridge(
+                    Box::new(super::Bridge::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BRIDGE, "BridgeConstructiveElement") => {
             Ok(
-                Box::new(
-                    super::BridgeConstructiveElement::from_gml_with_info(reader, info)?,
+                super::AbstractOccupiedSpace::BridgeConstructiveElement(
+                    Box::new(
+                        super::BridgeConstructiveElement::from_gml_with_info(
+                            reader,
+                            info,
+                        )?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_BRIDGE, "BridgeFurniture") => {
-            Ok(Box::new(super::BridgeFurniture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractOccupiedSpace::BridgeFurniture(
+                    Box::new(super::BridgeFurniture::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BRIDGE, "BridgeInstallation") => {
-            Ok(Box::new(super::BridgeInstallation::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractOccupiedSpace::BridgeInstallation(
+                    Box::new(
+                        super::BridgeInstallation::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_BRIDGE, "BridgePart") => {
-            Ok(Box::new(super::BridgePart::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractOccupiedSpace::BridgePart(
+                    Box::new(super::BridgePart::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "Building") => {
-            Ok(Box::new(super::Building::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractOccupiedSpace::Building(
+                    Box::new(super::Building::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "BuildingConstructiveElement") => {
             Ok(
-                Box::new(
-                    super::BuildingConstructiveElement::from_gml_with_info(reader, info)?,
+                super::AbstractOccupiedSpace::BuildingConstructiveElement(
+                    Box::new(
+                        super::BuildingConstructiveElement::from_gml_with_info(
+                            reader,
+                            info,
+                        )?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_BUILDING, "BuildingFurniture") => {
-            Ok(Box::new(super::BuildingFurniture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractOccupiedSpace::BuildingFurniture(
+                    Box::new(super::BuildingFurniture::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "BuildingInstallation") => {
-            Ok(Box::new(super::BuildingInstallation::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractOccupiedSpace::BuildingInstallation(
+                    Box::new(
+                        super::BuildingInstallation::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "BuildingPart") => {
-            Ok(Box::new(super::BuildingPart::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractOccupiedSpace::BuildingPart(
+                    Box::new(super::BuildingPart::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CITY_FURNITURE, "CityFurniture") => {
-            Ok(Box::new(super::CityFurniture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractOccupiedSpace::CityFurniture(
+                    Box::new(super::CityFurniture::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_GENERICS, "GenericOccupiedSpace") => {
-            Ok(Box::new(super::GenericOccupiedSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractOccupiedSpace::GenericOccupiedSpace(
+                    Box::new(
+                        super::GenericOccupiedSpace::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "Tunnel") => {
-            Ok(Box::new(super::Tunnel::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractOccupiedSpace::Tunnel(
+                    Box::new(super::Tunnel::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "TunnelConstructiveElement") => {
             Ok(
-                Box::new(
-                    super::TunnelConstructiveElement::from_gml_with_info(reader, info)?,
+                super::AbstractOccupiedSpace::TunnelConstructiveElement(
+                    Box::new(
+                        super::TunnelConstructiveElement::from_gml_with_info(
+                            reader,
+                            info,
+                        )?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_TUNNEL, "TunnelFurniture") => {
-            Ok(Box::new(super::TunnelFurniture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractOccupiedSpace::TunnelFurniture(
+                    Box::new(super::TunnelFurniture::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "TunnelInstallation") => {
-            Ok(Box::new(super::TunnelInstallation::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractOccupiedSpace::TunnelInstallation(
+                    Box::new(
+                        super::TunnelInstallation::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "TunnelPart") => {
-            Ok(Box::new(super::TunnelPart::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractOccupiedSpace::TunnelPart(
+                    Box::new(super::TunnelPart::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_VEGETATION, "PlantCover") => {
-            Ok(Box::new(super::PlantCover::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractOccupiedSpace::PlantCover(
+                    Box::new(super::PlantCover::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_VEGETATION, "SolitaryVegetationObject") => {
             Ok(
-                Box::new(
-                    super::SolitaryVegetationObject::from_gml_with_info(reader, info)?,
+                super::AbstractOccupiedSpace::SolitaryVegetationObject(
+                    Box::new(
+                        super::SolitaryVegetationObject::from_gml_with_info(
+                            reader,
+                            info,
+                        )?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_WATER_BODY, "WaterBody") => {
-            Ok(Box::new(super::WaterBody::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractOccupiedSpace::WaterBody(
+                    Box::new(super::WaterBody::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         _ => {
             Err(crate::error::ReaderError::UnsupportedFeature {
@@ -1274,144 +2488,308 @@ pub fn parse_dyn_abstract_occupied_space(
         }
     }
 }
-pub fn parse_dyn_abstract_physical_space(
+pub fn parse_abstract_physical_space(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractPhysicalSpace>, crate::error::ReaderError> {
+) -> Result<super::AbstractPhysicalSpace, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_CONSTRUCTION, "Door") => {
-            Ok(Box::new(super::Door::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::Door(
+                    Box::new(super::Door::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "OtherConstruction") => {
-            Ok(Box::new(super::OtherConstruction::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::OtherConstruction(
+                    Box::new(super::OtherConstruction::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "Window") => {
-            Ok(Box::new(super::Window::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::Window(
+                    Box::new(super::Window::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BRIDGE, "Bridge") => {
-            Ok(Box::new(super::Bridge::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::Bridge(
+                    Box::new(super::Bridge::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BRIDGE, "BridgeConstructiveElement") => {
             Ok(
-                Box::new(
-                    super::BridgeConstructiveElement::from_gml_with_info(reader, info)?,
+                super::AbstractPhysicalSpace::BridgeConstructiveElement(
+                    Box::new(
+                        super::BridgeConstructiveElement::from_gml_with_info(
+                            reader,
+                            info,
+                        )?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_BRIDGE, "BridgeFurniture") => {
-            Ok(Box::new(super::BridgeFurniture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::BridgeFurniture(
+                    Box::new(super::BridgeFurniture::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BRIDGE, "BridgeInstallation") => {
-            Ok(Box::new(super::BridgeInstallation::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::BridgeInstallation(
+                    Box::new(
+                        super::BridgeInstallation::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_BRIDGE, "BridgePart") => {
-            Ok(Box::new(super::BridgePart::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::BridgePart(
+                    Box::new(super::BridgePart::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BRIDGE, "BridgeRoom") => {
-            Ok(Box::new(super::BridgeRoom::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::BridgeRoom(
+                    Box::new(super::BridgeRoom::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "Building") => {
-            Ok(Box::new(super::Building::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::Building(
+                    Box::new(super::Building::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "BuildingConstructiveElement") => {
             Ok(
-                Box::new(
-                    super::BuildingConstructiveElement::from_gml_with_info(reader, info)?,
+                super::AbstractPhysicalSpace::BuildingConstructiveElement(
+                    Box::new(
+                        super::BuildingConstructiveElement::from_gml_with_info(
+                            reader,
+                            info,
+                        )?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_BUILDING, "BuildingFurniture") => {
-            Ok(Box::new(super::BuildingFurniture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::BuildingFurniture(
+                    Box::new(super::BuildingFurniture::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "BuildingInstallation") => {
-            Ok(Box::new(super::BuildingInstallation::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::BuildingInstallation(
+                    Box::new(
+                        super::BuildingInstallation::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "BuildingPart") => {
-            Ok(Box::new(super::BuildingPart::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::BuildingPart(
+                    Box::new(super::BuildingPart::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "BuildingRoom") => {
-            Ok(Box::new(super::BuildingRoom::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::BuildingRoom(
+                    Box::new(super::BuildingRoom::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CITY_FURNITURE, "CityFurniture") => {
-            Ok(Box::new(super::CityFurniture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::CityFurniture(
+                    Box::new(super::CityFurniture::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_GENERICS, "GenericOccupiedSpace") => {
-            Ok(Box::new(super::GenericOccupiedSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::GenericOccupiedSpace(
+                    Box::new(
+                        super::GenericOccupiedSpace::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_GENERICS, "GenericUnoccupiedSpace") => {
             Ok(
-                Box::new(
-                    super::GenericUnoccupiedSpace::from_gml_with_info(reader, info)?,
+                super::AbstractPhysicalSpace::GenericUnoccupiedSpace(
+                    Box::new(
+                        super::GenericUnoccupiedSpace::from_gml_with_info(reader, info)?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_TRANSPORTATION, "AuxiliaryTrafficSpace") => {
-            Ok(Box::new(super::AuxiliaryTrafficSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::AuxiliaryTrafficSpace(
+                    Box::new(
+                        super::AuxiliaryTrafficSpace::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "ClearanceSpace") => {
-            Ok(Box::new(super::ClearanceSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::ClearanceSpace(
+                    Box::new(super::ClearanceSpace::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Hole") => {
-            Ok(Box::new(super::Hole::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::Hole(
+                    Box::new(super::Hole::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Intersection") => {
-            Ok(Box::new(super::Intersection::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::Intersection(
+                    Box::new(super::Intersection::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Railway") => {
-            Ok(Box::new(super::Railway::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::Railway(
+                    Box::new(super::Railway::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Road") => {
-            Ok(Box::new(super::Road::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::Road(
+                    Box::new(super::Road::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Section") => {
-            Ok(Box::new(super::Section::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::Section(
+                    Box::new(super::Section::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Square") => {
-            Ok(Box::new(super::Square::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::Square(
+                    Box::new(super::Square::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Track") => {
-            Ok(Box::new(super::Track::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::Track(
+                    Box::new(super::Track::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "TrafficSpace") => {
-            Ok(Box::new(super::TrafficSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::TrafficSpace(
+                    Box::new(super::TrafficSpace::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Waterway") => {
-            Ok(Box::new(super::Waterway::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::Waterway(
+                    Box::new(super::Waterway::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "HollowSpace") => {
-            Ok(Box::new(super::HollowSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::HollowSpace(
+                    Box::new(super::HollowSpace::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "Tunnel") => {
-            Ok(Box::new(super::Tunnel::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::Tunnel(
+                    Box::new(super::Tunnel::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "TunnelConstructiveElement") => {
             Ok(
-                Box::new(
-                    super::TunnelConstructiveElement::from_gml_with_info(reader, info)?,
+                super::AbstractPhysicalSpace::TunnelConstructiveElement(
+                    Box::new(
+                        super::TunnelConstructiveElement::from_gml_with_info(
+                            reader,
+                            info,
+                        )?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_TUNNEL, "TunnelFurniture") => {
-            Ok(Box::new(super::TunnelFurniture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::TunnelFurniture(
+                    Box::new(super::TunnelFurniture::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "TunnelInstallation") => {
-            Ok(Box::new(super::TunnelInstallation::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::TunnelInstallation(
+                    Box::new(
+                        super::TunnelInstallation::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "TunnelPart") => {
-            Ok(Box::new(super::TunnelPart::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::TunnelPart(
+                    Box::new(super::TunnelPart::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_VEGETATION, "PlantCover") => {
-            Ok(Box::new(super::PlantCover::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::PlantCover(
+                    Box::new(super::PlantCover::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_VEGETATION, "SolitaryVegetationObject") => {
             Ok(
-                Box::new(
-                    super::SolitaryVegetationObject::from_gml_with_info(reader, info)?,
+                super::AbstractPhysicalSpace::SolitaryVegetationObject(
+                    Box::new(
+                        super::SolitaryVegetationObject::from_gml_with_info(
+                            reader,
+                            info,
+                        )?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_WATER_BODY, "WaterBody") => {
-            Ok(Box::new(super::WaterBody::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPhysicalSpace::WaterBody(
+                    Box::new(super::WaterBody::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         _ => {
             Err(crate::error::ReaderError::UnsupportedFeature {
@@ -1421,13 +2799,17 @@ pub fn parse_dyn_abstract_physical_space(
         }
     }
 }
-pub fn parse_dyn_abstract_point_cloud(
+pub fn parse_abstract_point_cloud(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractPointCloud>, crate::error::ReaderError> {
+) -> Result<super::AbstractPointCloud, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_POINT_CLOUD, "PointCloud") => {
-            Ok(Box::new(super::PointCloud::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractPointCloud::PointCloud(
+                    super::PointCloud::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         _ => {
             Err(crate::error::ReaderError::UnsupportedFeature {
@@ -1437,156 +2819,338 @@ pub fn parse_dyn_abstract_point_cloud(
         }
     }
 }
-pub fn parse_dyn_abstract_space(
+pub fn parse_abstract_space(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractSpace>, crate::error::ReaderError> {
+) -> Result<super::AbstractSpace, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_CONSTRUCTION, "Door") => {
-            Ok(Box::new(super::Door::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::Door(
+                    Box::new(super::Door::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "OtherConstruction") => {
-            Ok(Box::new(super::OtherConstruction::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::OtherConstruction(
+                    Box::new(super::OtherConstruction::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "Window") => {
-            Ok(Box::new(super::Window::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::Window(
+                    Box::new(super::Window::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BRIDGE, "Bridge") => {
-            Ok(Box::new(super::Bridge::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::Bridge(
+                    Box::new(super::Bridge::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BRIDGE, "BridgeConstructiveElement") => {
             Ok(
-                Box::new(
-                    super::BridgeConstructiveElement::from_gml_with_info(reader, info)?,
+                super::AbstractSpace::BridgeConstructiveElement(
+                    Box::new(
+                        super::BridgeConstructiveElement::from_gml_with_info(
+                            reader,
+                            info,
+                        )?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_BRIDGE, "BridgeFurniture") => {
-            Ok(Box::new(super::BridgeFurniture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::BridgeFurniture(
+                    Box::new(super::BridgeFurniture::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BRIDGE, "BridgeInstallation") => {
-            Ok(Box::new(super::BridgeInstallation::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::BridgeInstallation(
+                    Box::new(
+                        super::BridgeInstallation::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_BRIDGE, "BridgePart") => {
-            Ok(Box::new(super::BridgePart::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::BridgePart(
+                    Box::new(super::BridgePart::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BRIDGE, "BridgeRoom") => {
-            Ok(Box::new(super::BridgeRoom::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::BridgeRoom(
+                    Box::new(super::BridgeRoom::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "Building") => {
-            Ok(Box::new(super::Building::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::Building(
+                    Box::new(super::Building::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "BuildingConstructiveElement") => {
             Ok(
-                Box::new(
-                    super::BuildingConstructiveElement::from_gml_with_info(reader, info)?,
+                super::AbstractSpace::BuildingConstructiveElement(
+                    Box::new(
+                        super::BuildingConstructiveElement::from_gml_with_info(
+                            reader,
+                            info,
+                        )?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_BUILDING, "BuildingFurniture") => {
-            Ok(Box::new(super::BuildingFurniture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::BuildingFurniture(
+                    Box::new(super::BuildingFurniture::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "BuildingInstallation") => {
-            Ok(Box::new(super::BuildingInstallation::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::BuildingInstallation(
+                    Box::new(
+                        super::BuildingInstallation::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "BuildingPart") => {
-            Ok(Box::new(super::BuildingPart::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::BuildingPart(
+                    Box::new(super::BuildingPart::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "BuildingRoom") => {
-            Ok(Box::new(super::BuildingRoom::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::BuildingRoom(
+                    Box::new(super::BuildingRoom::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "BuildingUnit") => {
-            Ok(Box::new(super::BuildingUnit::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::BuildingUnit(
+                    Box::new(super::BuildingUnit::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "Storey") => {
-            Ok(Box::new(super::Storey::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::Storey(
+                    Box::new(super::Storey::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CITY_FURNITURE, "CityFurniture") => {
-            Ok(Box::new(super::CityFurniture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::CityFurniture(
+                    Box::new(super::CityFurniture::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CITY_OBJECT_GROUP, "CityObjectGroup") => {
-            Ok(Box::new(super::CityObjectGroup::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::CityObjectGroup(
+                    Box::new(super::CityObjectGroup::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_GENERICS, "GenericLogicalSpace") => {
-            Ok(Box::new(super::GenericLogicalSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::GenericLogicalSpace(
+                    Box::new(
+                        super::GenericLogicalSpace::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_GENERICS, "GenericOccupiedSpace") => {
-            Ok(Box::new(super::GenericOccupiedSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::GenericOccupiedSpace(
+                    Box::new(
+                        super::GenericOccupiedSpace::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_GENERICS, "GenericUnoccupiedSpace") => {
             Ok(
-                Box::new(
-                    super::GenericUnoccupiedSpace::from_gml_with_info(reader, info)?,
+                super::AbstractSpace::GenericUnoccupiedSpace(
+                    Box::new(
+                        super::GenericUnoccupiedSpace::from_gml_with_info(reader, info)?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_TRANSPORTATION, "AuxiliaryTrafficSpace") => {
-            Ok(Box::new(super::AuxiliaryTrafficSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::AuxiliaryTrafficSpace(
+                    Box::new(
+                        super::AuxiliaryTrafficSpace::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "ClearanceSpace") => {
-            Ok(Box::new(super::ClearanceSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::ClearanceSpace(
+                    Box::new(super::ClearanceSpace::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Hole") => {
-            Ok(Box::new(super::Hole::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::Hole(
+                    Box::new(super::Hole::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Intersection") => {
-            Ok(Box::new(super::Intersection::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::Intersection(
+                    Box::new(super::Intersection::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Railway") => {
-            Ok(Box::new(super::Railway::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::Railway(
+                    Box::new(super::Railway::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Road") => {
-            Ok(Box::new(super::Road::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::Road(
+                    Box::new(super::Road::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Section") => {
-            Ok(Box::new(super::Section::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::Section(
+                    Box::new(super::Section::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Square") => {
-            Ok(Box::new(super::Square::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::Square(
+                    Box::new(super::Square::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Track") => {
-            Ok(Box::new(super::Track::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::Track(
+                    Box::new(super::Track::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "TrafficSpace") => {
-            Ok(Box::new(super::TrafficSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::TrafficSpace(
+                    Box::new(super::TrafficSpace::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Waterway") => {
-            Ok(Box::new(super::Waterway::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::Waterway(
+                    Box::new(super::Waterway::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "HollowSpace") => {
-            Ok(Box::new(super::HollowSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::HollowSpace(
+                    Box::new(super::HollowSpace::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "Tunnel") => {
-            Ok(Box::new(super::Tunnel::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::Tunnel(
+                    Box::new(super::Tunnel::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "TunnelConstructiveElement") => {
             Ok(
-                Box::new(
-                    super::TunnelConstructiveElement::from_gml_with_info(reader, info)?,
+                super::AbstractSpace::TunnelConstructiveElement(
+                    Box::new(
+                        super::TunnelConstructiveElement::from_gml_with_info(
+                            reader,
+                            info,
+                        )?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_TUNNEL, "TunnelFurniture") => {
-            Ok(Box::new(super::TunnelFurniture::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::TunnelFurniture(
+                    Box::new(super::TunnelFurniture::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "TunnelInstallation") => {
-            Ok(Box::new(super::TunnelInstallation::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::TunnelInstallation(
+                    Box::new(
+                        super::TunnelInstallation::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "TunnelPart") => {
-            Ok(Box::new(super::TunnelPart::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::TunnelPart(
+                    Box::new(super::TunnelPart::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_VEGETATION, "PlantCover") => {
-            Ok(Box::new(super::PlantCover::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::PlantCover(
+                    Box::new(super::PlantCover::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_VEGETATION, "SolitaryVegetationObject") => {
             Ok(
-                Box::new(
-                    super::SolitaryVegetationObject::from_gml_with_info(reader, info)?,
+                super::AbstractSpace::SolitaryVegetationObject(
+                    Box::new(
+                        super::SolitaryVegetationObject::from_gml_with_info(
+                            reader,
+                            info,
+                        )?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_WATER_BODY, "WaterBody") => {
-            Ok(Box::new(super::WaterBody::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpace::WaterBody(
+                    Box::new(super::WaterBody::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         _ => {
             Err(crate::error::ReaderError::UnsupportedFeature {
@@ -1596,86 +3160,188 @@ pub fn parse_dyn_abstract_space(
         }
     }
 }
-pub fn parse_dyn_abstract_space_boundary(
+pub fn parse_abstract_space_boundary(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractSpaceBoundary>, crate::error::ReaderError> {
+) -> Result<super::AbstractSpaceBoundary, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_CONSTRUCTION, "CeilingSurface") => {
-            Ok(Box::new(super::CeilingSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpaceBoundary::CeilingSurface(
+                    Box::new(super::CeilingSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "DoorSurface") => {
-            Ok(Box::new(super::DoorSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpaceBoundary::DoorSurface(
+                    Box::new(super::DoorSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "FloorSurface") => {
-            Ok(Box::new(super::FloorSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpaceBoundary::FloorSurface(
+                    Box::new(super::FloorSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "GroundSurface") => {
-            Ok(Box::new(super::GroundSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpaceBoundary::GroundSurface(
+                    Box::new(super::GroundSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "InteriorWallSurface") => {
-            Ok(Box::new(super::InteriorWallSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpaceBoundary::InteriorWallSurface(
+                    Box::new(
+                        super::InteriorWallSurface::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "OuterCeilingSurface") => {
-            Ok(Box::new(super::OuterCeilingSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpaceBoundary::OuterCeilingSurface(
+                    Box::new(
+                        super::OuterCeilingSurface::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "OuterFloorSurface") => {
-            Ok(Box::new(super::OuterFloorSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpaceBoundary::OuterFloorSurface(
+                    Box::new(super::OuterFloorSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "RoofSurface") => {
-            Ok(Box::new(super::RoofSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpaceBoundary::RoofSurface(
+                    Box::new(super::RoofSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "WallSurface") => {
-            Ok(Box::new(super::WallSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpaceBoundary::WallSurface(
+                    Box::new(super::WallSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "WindowSurface") => {
-            Ok(Box::new(super::WindowSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpaceBoundary::WindowSurface(
+                    Box::new(super::WindowSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CORE, "ClosureSurface") => {
-            Ok(Box::new(super::ClosureSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpaceBoundary::ClosureSurface(
+                    Box::new(super::ClosureSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_GENERICS, "GenericThematicSurface") => {
             Ok(
-                Box::new(
-                    super::GenericThematicSurface::from_gml_with_info(reader, info)?,
+                super::AbstractSpaceBoundary::GenericThematicSurface(
+                    Box::new(
+                        super::GenericThematicSurface::from_gml_with_info(reader, info)?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_LAND_USE, "LandUse") => {
-            Ok(Box::new(super::LandUse::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpaceBoundary::LandUse(
+                    Box::new(super::LandUse::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_RELIEF, "BreaklineRelief") => {
-            Ok(Box::new(super::BreaklineRelief::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpaceBoundary::BreaklineRelief(
+                    Box::new(super::BreaklineRelief::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_RELIEF, "MassPointRelief") => {
-            Ok(Box::new(super::MassPointRelief::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpaceBoundary::MassPointRelief(
+                    Box::new(super::MassPointRelief::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_RELIEF, "RasterRelief") => {
-            Ok(Box::new(super::RasterRelief::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpaceBoundary::RasterRelief(
+                    Box::new(super::RasterRelief::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_RELIEF, "ReliefFeature") => {
-            Ok(Box::new(super::ReliefFeature::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpaceBoundary::ReliefFeature(
+                    Box::new(super::ReliefFeature::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_RELIEF, "TINRelief") => {
-            Ok(Box::new(super::TINRelief::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpaceBoundary::TINRelief(
+                    Box::new(super::TINRelief::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "AuxiliaryTrafficArea") => {
-            Ok(Box::new(super::AuxiliaryTrafficArea::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpaceBoundary::AuxiliaryTrafficArea(
+                    Box::new(
+                        super::AuxiliaryTrafficArea::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "HoleSurface") => {
-            Ok(Box::new(super::HoleSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpaceBoundary::HoleSurface(
+                    Box::new(super::HoleSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Marking") => {
-            Ok(Box::new(super::Marking::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpaceBoundary::Marking(
+                    Box::new(super::Marking::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "TrafficArea") => {
-            Ok(Box::new(super::TrafficArea::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpaceBoundary::TrafficArea(
+                    Box::new(super::TrafficArea::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_WATER_BODY, "WaterGroundSurface") => {
-            Ok(Box::new(super::WaterGroundSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpaceBoundary::WaterGroundSurface(
+                    Box::new(
+                        super::WaterGroundSurface::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_WATER_BODY, "WaterSurface") => {
-            Ok(Box::new(super::WaterSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractSpaceBoundary::WaterSurface(
+                    Box::new(super::WaterSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         _ => {
             Err(crate::error::ReaderError::UnsupportedFeature {
@@ -1685,71 +3351,153 @@ pub fn parse_dyn_abstract_space_boundary(
         }
     }
 }
-pub fn parse_dyn_abstract_thematic_surface(
+pub fn parse_abstract_thematic_surface(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractThematicSurface>, crate::error::ReaderError> {
+) -> Result<super::AbstractThematicSurface, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_CONSTRUCTION, "CeilingSurface") => {
-            Ok(Box::new(super::CeilingSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractThematicSurface::CeilingSurface(
+                    Box::new(super::CeilingSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "DoorSurface") => {
-            Ok(Box::new(super::DoorSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractThematicSurface::DoorSurface(
+                    Box::new(super::DoorSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "FloorSurface") => {
-            Ok(Box::new(super::FloorSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractThematicSurface::FloorSurface(
+                    Box::new(super::FloorSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "GroundSurface") => {
-            Ok(Box::new(super::GroundSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractThematicSurface::GroundSurface(
+                    Box::new(super::GroundSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "InteriorWallSurface") => {
-            Ok(Box::new(super::InteriorWallSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractThematicSurface::InteriorWallSurface(
+                    Box::new(
+                        super::InteriorWallSurface::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "OuterCeilingSurface") => {
-            Ok(Box::new(super::OuterCeilingSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractThematicSurface::OuterCeilingSurface(
+                    Box::new(
+                        super::OuterCeilingSurface::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "OuterFloorSurface") => {
-            Ok(Box::new(super::OuterFloorSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractThematicSurface::OuterFloorSurface(
+                    Box::new(super::OuterFloorSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "RoofSurface") => {
-            Ok(Box::new(super::RoofSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractThematicSurface::RoofSurface(
+                    Box::new(super::RoofSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "WallSurface") => {
-            Ok(Box::new(super::WallSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractThematicSurface::WallSurface(
+                    Box::new(super::WallSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CONSTRUCTION, "WindowSurface") => {
-            Ok(Box::new(super::WindowSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractThematicSurface::WindowSurface(
+                    Box::new(super::WindowSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_CORE, "ClosureSurface") => {
-            Ok(Box::new(super::ClosureSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractThematicSurface::ClosureSurface(
+                    Box::new(super::ClosureSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_GENERICS, "GenericThematicSurface") => {
             Ok(
-                Box::new(
-                    super::GenericThematicSurface::from_gml_with_info(reader, info)?,
+                super::AbstractThematicSurface::GenericThematicSurface(
+                    Box::new(
+                        super::GenericThematicSurface::from_gml_with_info(reader, info)?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_LAND_USE, "LandUse") => {
-            Ok(Box::new(super::LandUse::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractThematicSurface::LandUse(
+                    Box::new(super::LandUse::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "AuxiliaryTrafficArea") => {
-            Ok(Box::new(super::AuxiliaryTrafficArea::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractThematicSurface::AuxiliaryTrafficArea(
+                    Box::new(
+                        super::AuxiliaryTrafficArea::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "HoleSurface") => {
-            Ok(Box::new(super::HoleSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractThematicSurface::HoleSurface(
+                    Box::new(super::HoleSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Marking") => {
-            Ok(Box::new(super::Marking::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractThematicSurface::Marking(
+                    Box::new(super::Marking::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "TrafficArea") => {
-            Ok(Box::new(super::TrafficArea::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractThematicSurface::TrafficArea(
+                    Box::new(super::TrafficArea::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_WATER_BODY, "WaterGroundSurface") => {
-            Ok(Box::new(super::WaterGroundSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractThematicSurface::WaterGroundSurface(
+                    Box::new(
+                        super::WaterGroundSurface::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_WATER_BODY, "WaterSurface") => {
-            Ok(Box::new(super::WaterSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractThematicSurface::WaterSurface(
+                    Box::new(super::WaterSurface::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         _ => {
             Err(crate::error::ReaderError::UnsupportedFeature {
@@ -1759,59 +3507,119 @@ pub fn parse_dyn_abstract_thematic_surface(
         }
     }
 }
-pub fn parse_dyn_abstract_unoccupied_space(
+pub fn parse_abstract_unoccupied_space(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractUnoccupiedSpace>, crate::error::ReaderError> {
+) -> Result<super::AbstractUnoccupiedSpace, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_BRIDGE, "BridgeRoom") => {
-            Ok(Box::new(super::BridgeRoom::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractUnoccupiedSpace::BridgeRoom(
+                    Box::new(super::BridgeRoom::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_BUILDING, "BuildingRoom") => {
-            Ok(Box::new(super::BuildingRoom::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractUnoccupiedSpace::BuildingRoom(
+                    Box::new(super::BuildingRoom::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_GENERICS, "GenericUnoccupiedSpace") => {
             Ok(
-                Box::new(
-                    super::GenericUnoccupiedSpace::from_gml_with_info(reader, info)?,
+                super::AbstractUnoccupiedSpace::GenericUnoccupiedSpace(
+                    Box::new(
+                        super::GenericUnoccupiedSpace::from_gml_with_info(reader, info)?,
+                    ),
                 ),
             )
         }
         (crate::namespace::NS_TRANSPORTATION, "AuxiliaryTrafficSpace") => {
-            Ok(Box::new(super::AuxiliaryTrafficSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractUnoccupiedSpace::AuxiliaryTrafficSpace(
+                    Box::new(
+                        super::AuxiliaryTrafficSpace::from_gml_with_info(reader, info)?,
+                    ),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "ClearanceSpace") => {
-            Ok(Box::new(super::ClearanceSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractUnoccupiedSpace::ClearanceSpace(
+                    Box::new(super::ClearanceSpace::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Hole") => {
-            Ok(Box::new(super::Hole::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractUnoccupiedSpace::Hole(
+                    Box::new(super::Hole::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Intersection") => {
-            Ok(Box::new(super::Intersection::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractUnoccupiedSpace::Intersection(
+                    Box::new(super::Intersection::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Railway") => {
-            Ok(Box::new(super::Railway::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractUnoccupiedSpace::Railway(
+                    Box::new(super::Railway::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Road") => {
-            Ok(Box::new(super::Road::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractUnoccupiedSpace::Road(
+                    Box::new(super::Road::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Section") => {
-            Ok(Box::new(super::Section::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractUnoccupiedSpace::Section(
+                    Box::new(super::Section::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Square") => {
-            Ok(Box::new(super::Square::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractUnoccupiedSpace::Square(
+                    Box::new(super::Square::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Track") => {
-            Ok(Box::new(super::Track::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractUnoccupiedSpace::Track(
+                    Box::new(super::Track::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "TrafficSpace") => {
-            Ok(Box::new(super::TrafficSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractUnoccupiedSpace::TrafficSpace(
+                    Box::new(super::TrafficSpace::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Waterway") => {
-            Ok(Box::new(super::Waterway::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractUnoccupiedSpace::Waterway(
+                    Box::new(super::Waterway::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "HollowSpace") => {
-            Ok(Box::new(super::HollowSpace::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractUnoccupiedSpace::HollowSpace(
+                    Box::new(super::HollowSpace::from_gml_with_info(reader, info)?),
+                ),
+            )
         }
         _ => {
             Err(crate::error::ReaderError::UnsupportedFeature {
@@ -1821,13 +3629,17 @@ pub fn parse_dyn_abstract_unoccupied_space(
         }
     }
 }
-pub fn parse_dyn_abstract_version(
+pub fn parse_abstract_version(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractVersion>, crate::error::ReaderError> {
+) -> Result<super::AbstractVersion, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_VERSIONING, "Version") => {
-            Ok(Box::new(super::Version::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractVersion::Version(
+                    super::Version::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         _ => {
             Err(crate::error::ReaderError::UnsupportedFeature {
@@ -1837,13 +3649,17 @@ pub fn parse_dyn_abstract_version(
         }
     }
 }
-pub fn parse_dyn_abstract_version_transition(
+pub fn parse_abstract_version_transition(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractVersionTransition>, crate::error::ReaderError> {
+) -> Result<super::AbstractVersionTransition, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_VERSIONING, "VersionTransition") => {
-            Ok(Box::new(super::VersionTransition::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractVersionTransition::VersionTransition(
+                    super::VersionTransition::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         _ => {
             Err(crate::error::ReaderError::UnsupportedFeature {
@@ -1853,22 +3669,38 @@ pub fn parse_dyn_abstract_version_transition(
         }
     }
 }
-pub fn parse_dyn_abstract_relief_component(
+pub fn parse_abstract_relief_component(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractReliefComponent>, crate::error::ReaderError> {
+) -> Result<super::AbstractReliefComponent, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_RELIEF, "BreaklineRelief") => {
-            Ok(Box::new(super::BreaklineRelief::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractReliefComponent::BreaklineRelief(
+                    super::BreaklineRelief::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_RELIEF, "MassPointRelief") => {
-            Ok(Box::new(super::MassPointRelief::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractReliefComponent::MassPointRelief(
+                    super::MassPointRelief::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_RELIEF, "RasterRelief") => {
-            Ok(Box::new(super::RasterRelief::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractReliefComponent::RasterRelief(
+                    super::RasterRelief::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_RELIEF, "TINRelief") => {
-            Ok(Box::new(super::TINRelief::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractReliefComponent::TINRelief(
+                    super::TINRelief::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         _ => {
             Err(crate::error::ReaderError::UnsupportedFeature {
@@ -1878,31 +3710,59 @@ pub fn parse_dyn_abstract_relief_component(
         }
     }
 }
-pub fn parse_dyn_abstract_transportation_space(
+pub fn parse_abstract_transportation_space(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractTransportationSpace>, crate::error::ReaderError> {
+) -> Result<super::AbstractTransportationSpace, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_TRANSPORTATION, "Intersection") => {
-            Ok(Box::new(super::Intersection::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractTransportationSpace::Intersection(
+                    super::Intersection::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Railway") => {
-            Ok(Box::new(super::Railway::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractTransportationSpace::Railway(
+                    super::Railway::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Road") => {
-            Ok(Box::new(super::Road::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractTransportationSpace::Road(
+                    super::Road::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Section") => {
-            Ok(Box::new(super::Section::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractTransportationSpace::Section(
+                    super::Section::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Square") => {
-            Ok(Box::new(super::Square::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractTransportationSpace::Square(
+                    super::Square::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Track") => {
-            Ok(Box::new(super::Track::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractTransportationSpace::Track(
+                    super::Track::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_TRANSPORTATION, "Waterway") => {
-            Ok(Box::new(super::Waterway::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractTransportationSpace::Waterway(
+                    super::Waterway::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         _ => {
             Err(crate::error::ReaderError::UnsupportedFeature {
@@ -1912,16 +3772,24 @@ pub fn parse_dyn_abstract_transportation_space(
         }
     }
 }
-pub fn parse_dyn_abstract_tunnel(
+pub fn parse_abstract_tunnel(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractTunnel>, crate::error::ReaderError> {
+) -> Result<super::AbstractTunnel, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_TUNNEL, "Tunnel") => {
-            Ok(Box::new(super::Tunnel::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractTunnel::Tunnel(
+                    super::Tunnel::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_TUNNEL, "TunnelPart") => {
-            Ok(Box::new(super::TunnelPart::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractTunnel::TunnelPart(
+                    super::TunnelPart::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         _ => {
             Err(crate::error::ReaderError::UnsupportedFeature {
@@ -1931,17 +3799,21 @@ pub fn parse_dyn_abstract_tunnel(
         }
     }
 }
-pub fn parse_dyn_abstract_vegetation_object(
+pub fn parse_abstract_vegetation_object(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractVegetationObject>, crate::error::ReaderError> {
+) -> Result<super::AbstractVegetationObject, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_VEGETATION, "PlantCover") => {
-            Ok(Box::new(super::PlantCover::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractVegetationObject::PlantCover(
+                    super::PlantCover::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_VEGETATION, "SolitaryVegetationObject") => {
             Ok(
-                Box::new(
+                super::AbstractVegetationObject::SolitaryVegetationObject(
                     super::SolitaryVegetationObject::from_gml_with_info(reader, info)?,
                 ),
             )
@@ -1954,16 +3826,24 @@ pub fn parse_dyn_abstract_vegetation_object(
         }
     }
 }
-pub fn parse_dyn_abstract_water_boundary_surface(
+pub fn parse_abstract_water_boundary_surface(
     reader: &mut crate::gml_reader::SubtreeReader<'_>,
     info: &crate::gml_reader::ElementInfo,
-) -> Result<Box<dyn super::AbstractWaterBoundarySurface>, crate::error::ReaderError> {
+) -> Result<super::AbstractWaterBoundarySurface, crate::error::ReaderError> {
     match (info.namespace.as_str(), info.local_name.as_str()) {
         (crate::namespace::NS_WATER_BODY, "WaterGroundSurface") => {
-            Ok(Box::new(super::WaterGroundSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractWaterBoundarySurface::WaterGroundSurface(
+                    super::WaterGroundSurface::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         (crate::namespace::NS_WATER_BODY, "WaterSurface") => {
-            Ok(Box::new(super::WaterSurface::from_gml_with_info(reader, info)?))
+            Ok(
+                super::AbstractWaterBoundarySurface::WaterSurface(
+                    super::WaterSurface::from_gml_with_info(reader, info)?,
+                ),
+            )
         }
         _ => {
             Err(crate::error::ReaderError::UnsupportedFeature {

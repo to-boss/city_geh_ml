@@ -52,13 +52,11 @@ impl TransitionTypeValue {
         }
     }
 }
-pub trait ADEOfVersion: std::fmt::Debug {}
-pub trait ADEOfVersionTransition: std::fmt::Debug {}
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct Transaction {
     pub type_: TransactionTypeValue,
-    pub new_feature: Option<Box<dyn AbstractFeatureWithLifespan>>,
-    pub old_feature: Option<Box<dyn AbstractFeatureWithLifespan>>,
+    pub new_feature: Option<AbstractFeatureWithLifespan>,
+    pub old_feature: Option<AbstractFeatureWithLifespan>,
 }
 impl crate::from_gml::FromGml for Transaction {
     fn from_gml(
@@ -78,7 +76,7 @@ impl crate::from_gml::FromGml for Transaction {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         new_feature = Some(
-                            super::dispatchers::parse_dyn_abstract_feature_with_lifespan(
+                            super::dispatchers::parse_abstract_feature_with_lifespan(
                                 &mut wrapper,
                                 &child_info,
                             )?,
@@ -89,7 +87,7 @@ impl crate::from_gml::FromGml for Transaction {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         old_feature = Some(
-                            super::dispatchers::parse_dyn_abstract_feature_with_lifespan(
+                            super::dispatchers::parse_abstract_feature_with_lifespan(
                                 &mut wrapper,
                                 &child_info,
                             )?,
@@ -108,26 +106,20 @@ impl crate::from_gml::FromGml for Transaction {
         })
     }
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct Version {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub creation_date: Option<String>,
     pub termination_date: Option<String>,
     pub valid_from: Option<String>,
     pub valid_to: Option<String>,
-    pub ade_of_abstract_feature_with_lifespan: Vec<
-        Box<dyn ADEOfAbstractFeatureWithLifespan>,
-    >,
-    pub ade_of_abstract_version: Vec<Box<dyn ADEOfAbstractVersion>>,
     pub tag: Vec<String>,
-    pub ade_of_version: Vec<Box<dyn ADEOfVersion>>,
-    pub version_member: Vec<Box<dyn AbstractFeatureWithLifespan>>,
+    pub version_member: Vec<AbstractFeatureWithLifespan>,
 }
-impl AbstractFeature for Version {
+impl AbstractFeatureTrait for Version {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -140,11 +132,8 @@ impl AbstractFeature for Version {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractFeatureWithLifespan for Version {
+impl AbstractFeatureWithLifespanTrait for Version {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
     }
@@ -157,17 +146,8 @@ impl AbstractFeatureWithLifespan for Version {
     fn valid_to(&self) -> Option<&String> {
         self.valid_to.as_ref()
     }
-    fn ade_of_abstract_feature_with_lifespan(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractFeatureWithLifespan>] {
-        &self.ade_of_abstract_feature_with_lifespan
-    }
 }
-impl AbstractVersion for Version {
-    fn ade_of_abstract_version(&self) -> &[Box<dyn ADEOfAbstractVersion>] {
-        &self.ade_of_abstract_version
-    }
-}
+impl AbstractVersionTrait for Version {}
 impl Version {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -178,15 +158,11 @@ impl Version {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut creation_date = None;
         let mut termination_date = None;
         let mut valid_from = None;
         let mut valid_to = None;
-        let mut ade_of_abstract_feature_with_lifespan = Vec::new();
-        let mut ade_of_abstract_version = Vec::new();
         let mut tag = Vec::new();
-        let mut ade_of_version = Vec::new();
         let mut version_member = Vec::new();
         let mut feature_id = ID(_gml_id);
         let mut sub = reader.subtree();
@@ -204,9 +180,6 @@ impl Version {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "creationDate") => {
                     creation_date = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
@@ -221,24 +194,15 @@ impl Version {
                 (crate::namespace::NS_CORE, "validTo") => {
                     valid_to = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeatureWithLifespan") => {
-                    sub.skip_element()?;
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractVersion") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_VERSIONING, "tag") => {
                     tag.push(crate::from_gml::FromGml::from_gml(&mut sub)?);
-                }
-                (crate::namespace::NS_VERSIONING, "adeOfVersion") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_VERSIONING, "versionMember") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         version_member
                             .push(
-                                super::dispatchers::parse_dyn_abstract_feature_with_lifespan(
+                                super::dispatchers::parse_abstract_feature_with_lifespan(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -255,15 +219,11 @@ impl Version {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             creation_date,
             termination_date,
             valid_from,
             valid_to,
-            ade_of_abstract_feature_with_lifespan,
-            ade_of_abstract_version,
             tag,
-            ade_of_version,
             version_member,
         })
     }
@@ -280,30 +240,24 @@ impl crate::from_gml::FromGml for Version {
         Self::from_gml_with_info(reader, &info)
     }
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct VersionTransition {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub creation_date: Option<String>,
     pub termination_date: Option<String>,
     pub valid_from: Option<String>,
     pub valid_to: Option<String>,
-    pub ade_of_abstract_feature_with_lifespan: Vec<
-        Box<dyn ADEOfAbstractFeatureWithLifespan>,
-    >,
-    pub ade_of_abstract_version_transition: Vec<Box<dyn ADEOfAbstractVersionTransition>>,
     pub reason: Option<String>,
     pub clone_predecessor: bool,
     pub type_: Option<TransitionTypeValue>,
-    pub ade_of_version_transition: Vec<Box<dyn ADEOfVersionTransition>>,
     pub from: Option<Version>,
     pub to: Option<Version>,
     pub transaction: Vec<Transaction>,
 }
-impl AbstractFeature for VersionTransition {
+impl AbstractFeatureTrait for VersionTransition {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -316,11 +270,8 @@ impl AbstractFeature for VersionTransition {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractFeatureWithLifespan for VersionTransition {
+impl AbstractFeatureWithLifespanTrait for VersionTransition {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
     }
@@ -333,19 +284,8 @@ impl AbstractFeatureWithLifespan for VersionTransition {
     fn valid_to(&self) -> Option<&String> {
         self.valid_to.as_ref()
     }
-    fn ade_of_abstract_feature_with_lifespan(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractFeatureWithLifespan>] {
-        &self.ade_of_abstract_feature_with_lifespan
-    }
 }
-impl AbstractVersionTransition for VersionTransition {
-    fn ade_of_abstract_version_transition(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractVersionTransition>] {
-        &self.ade_of_abstract_version_transition
-    }
-}
+impl AbstractVersionTransitionTrait for VersionTransition {}
 impl VersionTransition {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -356,17 +296,13 @@ impl VersionTransition {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut creation_date = None;
         let mut termination_date = None;
         let mut valid_from = None;
         let mut valid_to = None;
-        let mut ade_of_abstract_feature_with_lifespan = Vec::new();
-        let mut ade_of_abstract_version_transition = Vec::new();
         let mut reason = None;
         let mut clone_predecessor = false;
         let mut type_ = None;
-        let mut ade_of_version_transition = Vec::new();
         let mut from = None;
         let mut to = None;
         let mut transaction = Vec::new();
@@ -386,9 +322,6 @@ impl VersionTransition {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "creationDate") => {
                     creation_date = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
@@ -403,12 +336,6 @@ impl VersionTransition {
                 (crate::namespace::NS_CORE, "validTo") => {
                     valid_to = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeatureWithLifespan") => {
-                    sub.skip_element()?;
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractVersionTransition") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_VERSIONING, "reason") => {
                     reason = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
@@ -417,9 +344,6 @@ impl VersionTransition {
                 }
                 (crate::namespace::NS_VERSIONING, "type") => {
                     type_ = Some(TransitionTypeValue::from_gml_text(&sub.read_text()?)?);
-                }
-                (crate::namespace::NS_VERSIONING, "adeOfVersionTransition") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_VERSIONING, "from") => {
                     let mut wrapper = sub.subtree();
@@ -454,17 +378,13 @@ impl VersionTransition {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             creation_date,
             termination_date,
             valid_from,
             valid_to,
-            ade_of_abstract_feature_with_lifespan,
-            ade_of_abstract_version_transition,
             reason,
             clone_predecessor,
             type_,
-            ade_of_version_transition,
             from,
             to,
             transaction,

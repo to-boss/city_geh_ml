@@ -34,14 +34,7 @@ impl TimeseriesTypeValue {
         }
     }
 }
-pub trait ADEOfAbstractAtomicTimeseries: std::fmt::Debug {}
-pub trait ADEOfAbstractTimeseries: std::fmt::Debug {}
-pub trait ADEOfCompositeTimeseries: std::fmt::Debug {}
-pub trait ADEOfDynamizer: std::fmt::Debug {}
-pub trait ADEOfGenericTimeseries: std::fmt::Debug {}
-pub trait ADEOfStandardFileTimeseries: std::fmt::Debug {}
-pub trait ADEOfTabulatedFileTimeseries: std::fmt::Debug {}
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct SensorConnection {
     pub connection_type: SensorConnectionTypeValue,
     pub observation_property: String,
@@ -56,7 +49,7 @@ pub struct SensorConnection {
     pub mqtt_topic: Option<String>,
     pub link_to_observation: Option<String>,
     pub link_to_sensor_description: Option<String>,
-    pub sensor_location: Option<Box<dyn AbstractCityObject>>,
+    pub sensor_location: Option<AbstractCityObject>,
 }
 impl crate::from_gml::FromGml for SensorConnection {
     fn from_gml(
@@ -127,7 +120,7 @@ impl crate::from_gml::FromGml for SensorConnection {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         sensor_location = Some(
-                            super::dispatchers::parse_dyn_abstract_city_object(
+                            super::dispatchers::parse_abstract_city_object(
                                 &mut wrapper,
                                 &child_info,
                             )?,
@@ -157,11 +150,11 @@ impl crate::from_gml::FromGml for SensorConnection {
         })
     }
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct TimeseriesComponent {
     pub repetitions: i64,
     pub additional_gap: Option<String>,
-    pub timeseries: Option<Box<dyn AbstractTimeseries>>,
+    pub timeseries: Option<AbstractTimeseries>,
 }
 impl crate::from_gml::FromGml for TimeseriesComponent {
     fn from_gml(
@@ -184,7 +177,7 @@ impl crate::from_gml::FromGml for TimeseriesComponent {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         timeseries = Some(
-                            super::dispatchers::parse_dyn_abstract_timeseries(
+                            super::dispatchers::parse_abstract_timeseries(
                                 &mut wrapper,
                                 &child_info,
                             )?,
@@ -203,17 +196,17 @@ impl crate::from_gml::FromGml for TimeseriesComponent {
         })
     }
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct TimeValuePair {
     pub timestamp: String,
     pub int_value: Option<i64>,
     pub double_value: Option<f64>,
     pub string_value: Option<String>,
-    pub geometry_value: Option<Box<dyn std::any::Any>>,
+    pub geometry_value: Option<()>,
     pub uri_value: Option<String>,
     pub bool_value: Option<bool>,
     pub implicit_geometry_value: Option<ImplicitGeometry>,
-    pub appearance_value: Option<Box<dyn AbstractAppearance>>,
+    pub appearance_value: Option<AbstractAppearance>,
 }
 impl crate::from_gml::FromGml for TimeValuePair {
     fn from_gml(
@@ -272,7 +265,7 @@ impl crate::from_gml::FromGml for TimeValuePair {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         appearance_value = Some(
-                            super::dispatchers::parse_dyn_abstract_appearance(
+                            super::dispatchers::parse_abstract_appearance(
                                 &mut wrapper,
                                 &child_info,
                             )?,
@@ -333,32 +326,197 @@ impl crate::from_gml::FromGml for TabulatedFileTypeValue {
         Ok(TabulatedFileTypeValue(reader.read_text()?))
     }
 }
-pub trait AbstractTimeseries: AbstractFeature {
+pub trait AbstractTimeseriesTrait: AbstractFeatureTrait {
     fn first_timestamp(&self) -> Option<&String>;
     fn last_timestamp(&self) -> Option<&String>;
-    fn ade_of_abstract_timeseries(&self) -> &[Box<dyn ADEOfAbstractTimeseries>];
 }
-pub trait AbstractAtomicTimeseries: AbstractTimeseries {
+#[derive(Debug, Clone)]
+pub enum AbstractTimeseries {
+    CompositeTimeseries(CompositeTimeseries),
+    GenericTimeseries(GenericTimeseries),
+    StandardFileTimeseries(StandardFileTimeseries),
+    TabulatedFileTimeseries(TabulatedFileTimeseries),
+}
+impl Default for AbstractTimeseries {
+    fn default() -> Self {
+        Self::CompositeTimeseries(Default::default())
+    }
+}
+impl AbstractFeatureTrait for AbstractTimeseries {
+    fn feature_id(&self) -> &ID {
+        match self {
+            Self::CompositeTimeseries(v) => v.feature_id(),
+            Self::GenericTimeseries(v) => v.feature_id(),
+            Self::StandardFileTimeseries(v) => v.feature_id(),
+            Self::TabulatedFileTimeseries(v) => v.feature_id(),
+        }
+    }
+    fn identifier(&self) -> Option<&String> {
+        match self {
+            Self::CompositeTimeseries(v) => v.identifier(),
+            Self::GenericTimeseries(v) => v.identifier(),
+            Self::StandardFileTimeseries(v) => v.identifier(),
+            Self::TabulatedFileTimeseries(v) => v.identifier(),
+        }
+    }
+    fn name(&self) -> &[String] {
+        match self {
+            Self::CompositeTimeseries(v) => v.name(),
+            Self::GenericTimeseries(v) => v.name(),
+            Self::StandardFileTimeseries(v) => v.name(),
+            Self::TabulatedFileTimeseries(v) => v.name(),
+        }
+    }
+    fn description(&self) -> Option<&String> {
+        match self {
+            Self::CompositeTimeseries(v) => v.description(),
+            Self::GenericTimeseries(v) => v.description(),
+            Self::StandardFileTimeseries(v) => v.description(),
+            Self::TabulatedFileTimeseries(v) => v.description(),
+        }
+    }
+}
+impl AbstractTimeseriesTrait for AbstractTimeseries {
+    fn first_timestamp(&self) -> Option<&String> {
+        match self {
+            Self::CompositeTimeseries(v) => v.first_timestamp(),
+            Self::GenericTimeseries(v) => v.first_timestamp(),
+            Self::StandardFileTimeseries(v) => v.first_timestamp(),
+            Self::TabulatedFileTimeseries(v) => v.first_timestamp(),
+        }
+    }
+    fn last_timestamp(&self) -> Option<&String> {
+        match self {
+            Self::CompositeTimeseries(v) => v.last_timestamp(),
+            Self::GenericTimeseries(v) => v.last_timestamp(),
+            Self::StandardFileTimeseries(v) => v.last_timestamp(),
+            Self::TabulatedFileTimeseries(v) => v.last_timestamp(),
+        }
+    }
+}
+impl From<CompositeTimeseries> for AbstractTimeseries {
+    fn from(v: CompositeTimeseries) -> Self {
+        Self::CompositeTimeseries(v)
+    }
+}
+impl From<GenericTimeseries> for AbstractTimeseries {
+    fn from(v: GenericTimeseries) -> Self {
+        Self::GenericTimeseries(v)
+    }
+}
+impl From<StandardFileTimeseries> for AbstractTimeseries {
+    fn from(v: StandardFileTimeseries) -> Self {
+        Self::StandardFileTimeseries(v)
+    }
+}
+impl From<TabulatedFileTimeseries> for AbstractTimeseries {
+    fn from(v: TabulatedFileTimeseries) -> Self {
+        Self::TabulatedFileTimeseries(v)
+    }
+}
+pub trait AbstractAtomicTimeseriesTrait: AbstractTimeseriesTrait {
     fn observation_property(&self) -> &String;
     fn uom(&self) -> Option<&String>;
-    fn ade_of_abstract_atomic_timeseries(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractAtomicTimeseries>];
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone)]
+pub enum AbstractAtomicTimeseries {
+    GenericTimeseries(GenericTimeseries),
+    StandardFileTimeseries(StandardFileTimeseries),
+    TabulatedFileTimeseries(TabulatedFileTimeseries),
+}
+impl Default for AbstractAtomicTimeseries {
+    fn default() -> Self {
+        Self::GenericTimeseries(Default::default())
+    }
+}
+impl AbstractFeatureTrait for AbstractAtomicTimeseries {
+    fn feature_id(&self) -> &ID {
+        match self {
+            Self::GenericTimeseries(v) => v.feature_id(),
+            Self::StandardFileTimeseries(v) => v.feature_id(),
+            Self::TabulatedFileTimeseries(v) => v.feature_id(),
+        }
+    }
+    fn identifier(&self) -> Option<&String> {
+        match self {
+            Self::GenericTimeseries(v) => v.identifier(),
+            Self::StandardFileTimeseries(v) => v.identifier(),
+            Self::TabulatedFileTimeseries(v) => v.identifier(),
+        }
+    }
+    fn name(&self) -> &[String] {
+        match self {
+            Self::GenericTimeseries(v) => v.name(),
+            Self::StandardFileTimeseries(v) => v.name(),
+            Self::TabulatedFileTimeseries(v) => v.name(),
+        }
+    }
+    fn description(&self) -> Option<&String> {
+        match self {
+            Self::GenericTimeseries(v) => v.description(),
+            Self::StandardFileTimeseries(v) => v.description(),
+            Self::TabulatedFileTimeseries(v) => v.description(),
+        }
+    }
+}
+impl AbstractTimeseriesTrait for AbstractAtomicTimeseries {
+    fn first_timestamp(&self) -> Option<&String> {
+        match self {
+            Self::GenericTimeseries(v) => v.first_timestamp(),
+            Self::StandardFileTimeseries(v) => v.first_timestamp(),
+            Self::TabulatedFileTimeseries(v) => v.first_timestamp(),
+        }
+    }
+    fn last_timestamp(&self) -> Option<&String> {
+        match self {
+            Self::GenericTimeseries(v) => v.last_timestamp(),
+            Self::StandardFileTimeseries(v) => v.last_timestamp(),
+            Self::TabulatedFileTimeseries(v) => v.last_timestamp(),
+        }
+    }
+}
+impl AbstractAtomicTimeseriesTrait for AbstractAtomicTimeseries {
+    fn observation_property(&self) -> &String {
+        match self {
+            Self::GenericTimeseries(v) => v.observation_property(),
+            Self::StandardFileTimeseries(v) => v.observation_property(),
+            Self::TabulatedFileTimeseries(v) => v.observation_property(),
+        }
+    }
+    fn uom(&self) -> Option<&String> {
+        match self {
+            Self::GenericTimeseries(v) => v.uom(),
+            Self::StandardFileTimeseries(v) => v.uom(),
+            Self::TabulatedFileTimeseries(v) => v.uom(),
+        }
+    }
+}
+impl From<GenericTimeseries> for AbstractAtomicTimeseries {
+    fn from(v: GenericTimeseries) -> Self {
+        Self::GenericTimeseries(v)
+    }
+}
+impl From<StandardFileTimeseries> for AbstractAtomicTimeseries {
+    fn from(v: StandardFileTimeseries) -> Self {
+        Self::StandardFileTimeseries(v)
+    }
+}
+impl From<TabulatedFileTimeseries> for AbstractAtomicTimeseries {
+    fn from(v: TabulatedFileTimeseries) -> Self {
+        Self::TabulatedFileTimeseries(v)
+    }
+}
+#[derive(Debug, Clone, Default)]
 pub struct CompositeTimeseries {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub first_timestamp: Option<String>,
     pub last_timestamp: Option<String>,
-    pub ade_of_abstract_timeseries: Vec<Box<dyn ADEOfAbstractTimeseries>>,
-    pub ade_of_composite_timeseries: Vec<Box<dyn ADEOfCompositeTimeseries>>,
     pub component: Vec<TimeseriesComponent>,
 }
-impl AbstractFeature for CompositeTimeseries {
+impl AbstractFeatureTrait for CompositeTimeseries {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -371,19 +529,13 @@ impl AbstractFeature for CompositeTimeseries {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractTimeseries for CompositeTimeseries {
+impl AbstractTimeseriesTrait for CompositeTimeseries {
     fn first_timestamp(&self) -> Option<&String> {
         self.first_timestamp.as_ref()
     }
     fn last_timestamp(&self) -> Option<&String> {
         self.last_timestamp.as_ref()
-    }
-    fn ade_of_abstract_timeseries(&self) -> &[Box<dyn ADEOfAbstractTimeseries>] {
-        &self.ade_of_abstract_timeseries
     }
 }
 impl CompositeTimeseries {
@@ -396,11 +548,8 @@ impl CompositeTimeseries {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut first_timestamp = None;
         let mut last_timestamp = None;
-        let mut ade_of_abstract_timeseries = Vec::new();
-        let mut ade_of_composite_timeseries = Vec::new();
         let mut component = Vec::new();
         let mut feature_id = ID(_gml_id);
         let mut sub = reader.subtree();
@@ -418,9 +567,6 @@ impl CompositeTimeseries {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_DYNAMIZER, "firstTimestamp") => {
                     first_timestamp = Some(
                         crate::from_gml::FromGml::from_gml(&mut sub)?,
@@ -428,12 +574,6 @@ impl CompositeTimeseries {
                 }
                 (crate::namespace::NS_DYNAMIZER, "lastTimestamp") => {
                     last_timestamp = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
-                }
-                (crate::namespace::NS_DYNAMIZER, "adeOfAbstractTimeseries") => {
-                    sub.skip_element()?;
-                }
-                (crate::namespace::NS_DYNAMIZER, "adeOfCompositeTimeseries") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_DYNAMIZER, "component") => {
                     component.push(TimeseriesComponent::from_gml(&mut sub)?);
@@ -448,11 +588,8 @@ impl CompositeTimeseries {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             first_timestamp,
             last_timestamp,
-            ade_of_abstract_timeseries,
-            ade_of_composite_timeseries,
             component,
         })
     }
@@ -469,24 +606,20 @@ impl crate::from_gml::FromGml for CompositeTimeseries {
         Self::from_gml_with_info(reader, &info)
     }
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct GenericTimeseries {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub first_timestamp: Option<String>,
     pub last_timestamp: Option<String>,
-    pub ade_of_abstract_timeseries: Vec<Box<dyn ADEOfAbstractTimeseries>>,
     pub observation_property: String,
     pub uom: Option<String>,
-    pub ade_of_abstract_atomic_timeseries: Vec<Box<dyn ADEOfAbstractAtomicTimeseries>>,
     pub value_type: TimeseriesTypeValue,
-    pub ade_of_generic_timeseries: Vec<Box<dyn ADEOfGenericTimeseries>>,
     pub time_value_pair: Vec<TimeValuePair>,
 }
-impl AbstractFeature for GenericTimeseries {
+impl AbstractFeatureTrait for GenericTimeseries {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -499,32 +632,21 @@ impl AbstractFeature for GenericTimeseries {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractTimeseries for GenericTimeseries {
+impl AbstractTimeseriesTrait for GenericTimeseries {
     fn first_timestamp(&self) -> Option<&String> {
         self.first_timestamp.as_ref()
     }
     fn last_timestamp(&self) -> Option<&String> {
         self.last_timestamp.as_ref()
     }
-    fn ade_of_abstract_timeseries(&self) -> &[Box<dyn ADEOfAbstractTimeseries>] {
-        &self.ade_of_abstract_timeseries
-    }
 }
-impl AbstractAtomicTimeseries for GenericTimeseries {
+impl AbstractAtomicTimeseriesTrait for GenericTimeseries {
     fn observation_property(&self) -> &String {
         &self.observation_property
     }
     fn uom(&self) -> Option<&String> {
         self.uom.as_ref()
-    }
-    fn ade_of_abstract_atomic_timeseries(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractAtomicTimeseries>] {
-        &self.ade_of_abstract_atomic_timeseries
     }
 }
 impl GenericTimeseries {
@@ -537,15 +659,11 @@ impl GenericTimeseries {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut first_timestamp = None;
         let mut last_timestamp = None;
-        let mut ade_of_abstract_timeseries = Vec::new();
         let mut observation_property = Default::default();
         let mut uom = None;
-        let mut ade_of_abstract_atomic_timeseries = Vec::new();
         let mut value_type = Default::default();
-        let mut ade_of_generic_timeseries = Vec::new();
         let mut time_value_pair = Vec::new();
         let mut feature_id = ID(_gml_id);
         let mut sub = reader.subtree();
@@ -563,9 +681,6 @@ impl GenericTimeseries {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_DYNAMIZER, "firstTimestamp") => {
                     first_timestamp = Some(
                         crate::from_gml::FromGml::from_gml(&mut sub)?,
@@ -574,23 +689,14 @@ impl GenericTimeseries {
                 (crate::namespace::NS_DYNAMIZER, "lastTimestamp") => {
                     last_timestamp = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_DYNAMIZER, "adeOfAbstractTimeseries") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_DYNAMIZER, "observationProperty") => {
                     observation_property = crate::from_gml::FromGml::from_gml(&mut sub)?;
                 }
                 (crate::namespace::NS_DYNAMIZER, "uom") => {
                     uom = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_DYNAMIZER, "adeOfAbstractAtomicTimeseries") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_DYNAMIZER, "valueType") => {
                     value_type = TimeseriesTypeValue::from_gml_text(&sub.read_text()?)?;
-                }
-                (crate::namespace::NS_DYNAMIZER, "adeOfGenericTimeseries") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_DYNAMIZER, "timeValuePair") => {
                     time_value_pair.push(TimeValuePair::from_gml(&mut sub)?);
@@ -605,15 +711,11 @@ impl GenericTimeseries {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             first_timestamp,
             last_timestamp,
-            ade_of_abstract_timeseries,
             observation_property,
             uom,
-            ade_of_abstract_atomic_timeseries,
             value_type,
-            ade_of_generic_timeseries,
             time_value_pair,
         })
     }
@@ -630,25 +732,21 @@ impl crate::from_gml::FromGml for GenericTimeseries {
         Self::from_gml_with_info(reader, &info)
     }
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct StandardFileTimeseries {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub first_timestamp: Option<String>,
     pub last_timestamp: Option<String>,
-    pub ade_of_abstract_timeseries: Vec<Box<dyn ADEOfAbstractTimeseries>>,
     pub observation_property: String,
     pub uom: Option<String>,
-    pub ade_of_abstract_atomic_timeseries: Vec<Box<dyn ADEOfAbstractAtomicTimeseries>>,
     pub file_location: String,
     pub file_type: StandardFileTypeValue,
     pub mime_type: Option<MimeTypeValue>,
-    pub ade_of_standard_file_timeseries: Vec<Box<dyn ADEOfStandardFileTimeseries>>,
 }
-impl AbstractFeature for StandardFileTimeseries {
+impl AbstractFeatureTrait for StandardFileTimeseries {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -661,32 +759,21 @@ impl AbstractFeature for StandardFileTimeseries {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractTimeseries for StandardFileTimeseries {
+impl AbstractTimeseriesTrait for StandardFileTimeseries {
     fn first_timestamp(&self) -> Option<&String> {
         self.first_timestamp.as_ref()
     }
     fn last_timestamp(&self) -> Option<&String> {
         self.last_timestamp.as_ref()
     }
-    fn ade_of_abstract_timeseries(&self) -> &[Box<dyn ADEOfAbstractTimeseries>] {
-        &self.ade_of_abstract_timeseries
-    }
 }
-impl AbstractAtomicTimeseries for StandardFileTimeseries {
+impl AbstractAtomicTimeseriesTrait for StandardFileTimeseries {
     fn observation_property(&self) -> &String {
         &self.observation_property
     }
     fn uom(&self) -> Option<&String> {
         self.uom.as_ref()
-    }
-    fn ade_of_abstract_atomic_timeseries(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractAtomicTimeseries>] {
-        &self.ade_of_abstract_atomic_timeseries
     }
 }
 impl StandardFileTimeseries {
@@ -699,17 +786,13 @@ impl StandardFileTimeseries {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut first_timestamp = None;
         let mut last_timestamp = None;
-        let mut ade_of_abstract_timeseries = Vec::new();
         let mut observation_property = Default::default();
         let mut uom = None;
-        let mut ade_of_abstract_atomic_timeseries = Vec::new();
         let mut file_location = Default::default();
         let mut file_type = Default::default();
         let mut mime_type = None;
-        let mut ade_of_standard_file_timeseries = Vec::new();
         let mut feature_id = ID(_gml_id);
         let mut sub = reader.subtree();
         while let Some(info) = sub.next_element()? {
@@ -726,9 +809,6 @@ impl StandardFileTimeseries {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_DYNAMIZER, "firstTimestamp") => {
                     first_timestamp = Some(
                         crate::from_gml::FromGml::from_gml(&mut sub)?,
@@ -737,17 +817,11 @@ impl StandardFileTimeseries {
                 (crate::namespace::NS_DYNAMIZER, "lastTimestamp") => {
                     last_timestamp = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_DYNAMIZER, "adeOfAbstractTimeseries") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_DYNAMIZER, "observationProperty") => {
                     observation_property = crate::from_gml::FromGml::from_gml(&mut sub)?;
                 }
                 (crate::namespace::NS_DYNAMIZER, "uom") => {
                     uom = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
-                }
-                (crate::namespace::NS_DYNAMIZER, "adeOfAbstractAtomicTimeseries") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_DYNAMIZER, "fileLocation") => {
                     file_location = crate::from_gml::FromGml::from_gml(&mut sub)?;
@@ -757,9 +831,6 @@ impl StandardFileTimeseries {
                 }
                 (crate::namespace::NS_DYNAMIZER, "mimeType") => {
                     mime_type = Some(MimeTypeValue(sub.read_text()?));
-                }
-                (crate::namespace::NS_DYNAMIZER, "adeOfStandardFileTimeseries") => {
-                    sub.skip_element()?;
                 }
                 _ => {
                     sub.skip_element()?;
@@ -771,17 +842,13 @@ impl StandardFileTimeseries {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             first_timestamp,
             last_timestamp,
-            ade_of_abstract_timeseries,
             observation_property,
             uom,
-            ade_of_abstract_atomic_timeseries,
             file_location,
             file_type,
             mime_type,
-            ade_of_standard_file_timeseries,
         })
     }
 }
@@ -797,19 +864,16 @@ impl crate::from_gml::FromGml for StandardFileTimeseries {
         Self::from_gml_with_info(reader, &info)
     }
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct TabulatedFileTimeseries {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub first_timestamp: Option<String>,
     pub last_timestamp: Option<String>,
-    pub ade_of_abstract_timeseries: Vec<Box<dyn ADEOfAbstractTimeseries>>,
     pub observation_property: String,
     pub uom: Option<String>,
-    pub ade_of_abstract_atomic_timeseries: Vec<Box<dyn ADEOfAbstractAtomicTimeseries>>,
     pub file_location: String,
     pub file_type: TabulatedFileTypeValue,
     pub mime_type: Option<MimeTypeValue>,
@@ -824,9 +888,8 @@ pub struct TabulatedFileTimeseries {
     pub time_column_name: Option<String>,
     pub value_column_no: Option<i64>,
     pub value_column_name: Option<String>,
-    pub ade_of_tabulated_file_timeseries: Vec<Box<dyn ADEOfTabulatedFileTimeseries>>,
 }
-impl AbstractFeature for TabulatedFileTimeseries {
+impl AbstractFeatureTrait for TabulatedFileTimeseries {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -839,32 +902,21 @@ impl AbstractFeature for TabulatedFileTimeseries {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractTimeseries for TabulatedFileTimeseries {
+impl AbstractTimeseriesTrait for TabulatedFileTimeseries {
     fn first_timestamp(&self) -> Option<&String> {
         self.first_timestamp.as_ref()
     }
     fn last_timestamp(&self) -> Option<&String> {
         self.last_timestamp.as_ref()
     }
-    fn ade_of_abstract_timeseries(&self) -> &[Box<dyn ADEOfAbstractTimeseries>] {
-        &self.ade_of_abstract_timeseries
-    }
 }
-impl AbstractAtomicTimeseries for TabulatedFileTimeseries {
+impl AbstractAtomicTimeseriesTrait for TabulatedFileTimeseries {
     fn observation_property(&self) -> &String {
         &self.observation_property
     }
     fn uom(&self) -> Option<&String> {
         self.uom.as_ref()
-    }
-    fn ade_of_abstract_atomic_timeseries(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractAtomicTimeseries>] {
-        &self.ade_of_abstract_atomic_timeseries
     }
 }
 impl TabulatedFileTimeseries {
@@ -877,13 +929,10 @@ impl TabulatedFileTimeseries {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut first_timestamp = None;
         let mut last_timestamp = None;
-        let mut ade_of_abstract_timeseries = Vec::new();
         let mut observation_property = Default::default();
         let mut uom = None;
-        let mut ade_of_abstract_atomic_timeseries = Vec::new();
         let mut file_location = Default::default();
         let mut file_type = Default::default();
         let mut mime_type = None;
@@ -898,7 +947,6 @@ impl TabulatedFileTimeseries {
         let mut time_column_name = None;
         let mut value_column_no = None;
         let mut value_column_name = None;
-        let mut ade_of_tabulated_file_timeseries = Vec::new();
         let mut feature_id = ID(_gml_id);
         let mut sub = reader.subtree();
         while let Some(info) = sub.next_element()? {
@@ -915,9 +963,6 @@ impl TabulatedFileTimeseries {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_DYNAMIZER, "firstTimestamp") => {
                     first_timestamp = Some(
                         crate::from_gml::FromGml::from_gml(&mut sub)?,
@@ -926,17 +971,11 @@ impl TabulatedFileTimeseries {
                 (crate::namespace::NS_DYNAMIZER, "lastTimestamp") => {
                     last_timestamp = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_DYNAMIZER, "adeOfAbstractTimeseries") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_DYNAMIZER, "observationProperty") => {
                     observation_property = crate::from_gml::FromGml::from_gml(&mut sub)?;
                 }
                 (crate::namespace::NS_DYNAMIZER, "uom") => {
                     uom = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
-                }
-                (crate::namespace::NS_DYNAMIZER, "adeOfAbstractAtomicTimeseries") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_DYNAMIZER, "fileLocation") => {
                     file_location = crate::from_gml::FromGml::from_gml(&mut sub)?;
@@ -988,9 +1027,6 @@ impl TabulatedFileTimeseries {
                         crate::from_gml::FromGml::from_gml(&mut sub)?,
                     );
                 }
-                (crate::namespace::NS_DYNAMIZER, "adeOfTabulatedFileTimeseries") => {
-                    sub.skip_element()?;
-                }
                 _ => {
                     sub.skip_element()?;
                 }
@@ -1001,13 +1037,10 @@ impl TabulatedFileTimeseries {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             first_timestamp,
             last_timestamp,
-            ade_of_abstract_timeseries,
             observation_property,
             uom,
-            ade_of_abstract_atomic_timeseries,
             file_location,
             file_type,
             mime_type,
@@ -1022,7 +1055,6 @@ impl TabulatedFileTimeseries {
             time_column_name,
             value_column_no,
             value_column_name,
-            ade_of_tabulated_file_timeseries,
         })
     }
 }
@@ -1038,29 +1070,23 @@ impl crate::from_gml::FromGml for TabulatedFileTimeseries {
         Self::from_gml_with_info(reader, &info)
     }
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct Dynamizer {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub creation_date: Option<String>,
     pub termination_date: Option<String>,
     pub valid_from: Option<String>,
     pub valid_to: Option<String>,
-    pub ade_of_abstract_feature_with_lifespan: Vec<
-        Box<dyn ADEOfAbstractFeatureWithLifespan>,
-    >,
-    pub ade_of_abstract_dynamizer: Vec<Box<dyn ADEOfAbstractDynamizer>>,
     pub attribute_ref: String,
     pub start_time: Option<String>,
     pub end_time: Option<String>,
-    pub ade_of_dynamizer: Vec<Box<dyn ADEOfDynamizer>>,
-    pub dynamic_data: Option<Box<dyn AbstractTimeseries>>,
+    pub dynamic_data: Option<AbstractTimeseries>,
     pub sensor_connection: Option<SensorConnection>,
 }
-impl AbstractFeature for Dynamizer {
+impl AbstractFeatureTrait for Dynamizer {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -1073,11 +1099,8 @@ impl AbstractFeature for Dynamizer {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractFeatureWithLifespan for Dynamizer {
+impl AbstractFeatureWithLifespanTrait for Dynamizer {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
     }
@@ -1090,17 +1113,8 @@ impl AbstractFeatureWithLifespan for Dynamizer {
     fn valid_to(&self) -> Option<&String> {
         self.valid_to.as_ref()
     }
-    fn ade_of_abstract_feature_with_lifespan(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractFeatureWithLifespan>] {
-        &self.ade_of_abstract_feature_with_lifespan
-    }
 }
-impl AbstractDynamizer for Dynamizer {
-    fn ade_of_abstract_dynamizer(&self) -> &[Box<dyn ADEOfAbstractDynamizer>] {
-        &self.ade_of_abstract_dynamizer
-    }
-}
+impl AbstractDynamizerTrait for Dynamizer {}
 impl Dynamizer {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1111,17 +1125,13 @@ impl Dynamizer {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut creation_date = None;
         let mut termination_date = None;
         let mut valid_from = None;
         let mut valid_to = None;
-        let mut ade_of_abstract_feature_with_lifespan = Vec::new();
-        let mut ade_of_abstract_dynamizer = Vec::new();
         let mut attribute_ref = Default::default();
         let mut start_time = None;
         let mut end_time = None;
-        let mut ade_of_dynamizer = Vec::new();
         let mut dynamic_data = None;
         let mut sensor_connection = None;
         let mut feature_id = ID(_gml_id);
@@ -1140,9 +1150,6 @@ impl Dynamizer {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "creationDate") => {
                     creation_date = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
@@ -1157,12 +1164,6 @@ impl Dynamizer {
                 (crate::namespace::NS_CORE, "validTo") => {
                     valid_to = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeatureWithLifespan") => {
-                    sub.skip_element()?;
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractDynamizer") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_DYNAMIZER, "attributeRef") => {
                     attribute_ref = crate::from_gml::FromGml::from_gml(&mut sub)?;
                 }
@@ -1172,14 +1173,11 @@ impl Dynamizer {
                 (crate::namespace::NS_DYNAMIZER, "endTime") => {
                     end_time = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_DYNAMIZER, "adeOfDynamizer") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_DYNAMIZER, "dynamicData") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         dynamic_data = Some(
-                            super::dispatchers::parse_dyn_abstract_timeseries(
+                            super::dispatchers::parse_abstract_timeseries(
                                 &mut wrapper,
                                 &child_info,
                             )?,
@@ -1199,17 +1197,13 @@ impl Dynamizer {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             creation_date,
             termination_date,
             valid_from,
             valid_to,
-            ade_of_abstract_feature_with_lifespan,
-            ade_of_abstract_dynamizer,
             attribute_ref,
             start_time,
             end_time,
-            ade_of_dynamizer,
             dynamic_data,
             sensor_connection,
         })

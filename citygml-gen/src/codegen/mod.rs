@@ -1,5 +1,6 @@
 pub mod datatype_gen;
 pub mod enum_gen;
+pub mod enum_gen_dispatch;
 pub mod external_types;
 pub mod from_gml_gen;
 pub mod mapper;

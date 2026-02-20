@@ -51,13 +51,6 @@ impl WrapMode {
         }
     }
 }
-pub trait AbstractTextureParameterization: std::fmt::Debug {}
-pub trait ADEOfAbstractSurfaceData: std::fmt::Debug {}
-pub trait ADEOfAbstractTexture: std::fmt::Debug {}
-pub trait ADEOfAppearance: std::fmt::Debug {}
-pub trait ADEOfGeoreferencedTexture: std::fmt::Debug {}
-pub trait ADEOfParameterizedTexture: std::fmt::Debug {}
-pub trait ADEOfX3DMaterial: std::fmt::Debug {}
 #[derive(Debug, Clone, Default)]
 pub struct TexCoordGen {
     pub world_to_texture: TransformationMatrix3x4,
@@ -136,9 +129,73 @@ impl crate::from_gml::FromGml for TexCoordList {
         })
     }
 }
-pub trait AbstractSurfaceData: AbstractFeature {
+pub trait AbstractSurfaceDataTrait: AbstractFeatureTrait {
     fn is_front(&self) -> Option<bool>;
-    fn ade_of_abstract_surface_data(&self) -> &[Box<dyn ADEOfAbstractSurfaceData>];
+}
+#[derive(Debug, Clone)]
+pub enum AbstractSurfaceData {
+    GeoreferencedTexture(GeoreferencedTexture),
+    ParameterizedTexture(ParameterizedTexture),
+    X3DMaterial(X3DMaterial),
+}
+impl Default for AbstractSurfaceData {
+    fn default() -> Self {
+        Self::GeoreferencedTexture(Default::default())
+    }
+}
+impl AbstractFeatureTrait for AbstractSurfaceData {
+    fn feature_id(&self) -> &ID {
+        match self {
+            Self::GeoreferencedTexture(v) => v.feature_id(),
+            Self::ParameterizedTexture(v) => v.feature_id(),
+            Self::X3DMaterial(v) => v.feature_id(),
+        }
+    }
+    fn identifier(&self) -> Option<&String> {
+        match self {
+            Self::GeoreferencedTexture(v) => v.identifier(),
+            Self::ParameterizedTexture(v) => v.identifier(),
+            Self::X3DMaterial(v) => v.identifier(),
+        }
+    }
+    fn name(&self) -> &[String] {
+        match self {
+            Self::GeoreferencedTexture(v) => v.name(),
+            Self::ParameterizedTexture(v) => v.name(),
+            Self::X3DMaterial(v) => v.name(),
+        }
+    }
+    fn description(&self) -> Option<&String> {
+        match self {
+            Self::GeoreferencedTexture(v) => v.description(),
+            Self::ParameterizedTexture(v) => v.description(),
+            Self::X3DMaterial(v) => v.description(),
+        }
+    }
+}
+impl AbstractSurfaceDataTrait for AbstractSurfaceData {
+    fn is_front(&self) -> Option<bool> {
+        match self {
+            Self::GeoreferencedTexture(v) => v.is_front(),
+            Self::ParameterizedTexture(v) => v.is_front(),
+            Self::X3DMaterial(v) => v.is_front(),
+        }
+    }
+}
+impl From<GeoreferencedTexture> for AbstractSurfaceData {
+    fn from(v: GeoreferencedTexture) -> Self {
+        Self::GeoreferencedTexture(v)
+    }
+}
+impl From<ParameterizedTexture> for AbstractSurfaceData {
+    fn from(v: ParameterizedTexture) -> Self {
+        Self::ParameterizedTexture(v)
+    }
+}
+impl From<X3DMaterial> for AbstractSurfaceData {
+    fn from(v: X3DMaterial) -> Self {
+        Self::X3DMaterial(v)
+    }
 }
 #[derive(Debug, Clone, Default)]
 pub struct Color {
@@ -216,23 +273,106 @@ impl crate::from_gml::FromGml for ColorPlusOpacity {
         Self::from_gml_with_info(reader, &info)
     }
 }
-pub trait AbstractTexture: AbstractSurfaceData {
+pub trait AbstractTextureTrait: AbstractSurfaceDataTrait {
     fn image_uri(&self) -> &String;
     fn mime_type(&self) -> Option<&MimeTypeValue>;
     fn texture_type(&self) -> Option<TextureType>;
     fn wrap_mode(&self) -> Option<WrapMode>;
     fn border_color(&self) -> Option<&ColorPlusOpacity>;
-    fn ade_of_abstract_texture(&self) -> &[Box<dyn ADEOfAbstractTexture>];
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone)]
+pub enum AbstractTexture {
+    GeoreferencedTexture(GeoreferencedTexture),
+    ParameterizedTexture(ParameterizedTexture),
+}
+impl Default for AbstractTexture {
+    fn default() -> Self {
+        Self::GeoreferencedTexture(Default::default())
+    }
+}
+impl AbstractFeatureTrait for AbstractTexture {
+    fn feature_id(&self) -> &ID {
+        match self {
+            Self::GeoreferencedTexture(v) => v.feature_id(),
+            Self::ParameterizedTexture(v) => v.feature_id(),
+        }
+    }
+    fn identifier(&self) -> Option<&String> {
+        match self {
+            Self::GeoreferencedTexture(v) => v.identifier(),
+            Self::ParameterizedTexture(v) => v.identifier(),
+        }
+    }
+    fn name(&self) -> &[String] {
+        match self {
+            Self::GeoreferencedTexture(v) => v.name(),
+            Self::ParameterizedTexture(v) => v.name(),
+        }
+    }
+    fn description(&self) -> Option<&String> {
+        match self {
+            Self::GeoreferencedTexture(v) => v.description(),
+            Self::ParameterizedTexture(v) => v.description(),
+        }
+    }
+}
+impl AbstractSurfaceDataTrait for AbstractTexture {
+    fn is_front(&self) -> Option<bool> {
+        match self {
+            Self::GeoreferencedTexture(v) => v.is_front(),
+            Self::ParameterizedTexture(v) => v.is_front(),
+        }
+    }
+}
+impl AbstractTextureTrait for AbstractTexture {
+    fn image_uri(&self) -> &String {
+        match self {
+            Self::GeoreferencedTexture(v) => v.image_uri(),
+            Self::ParameterizedTexture(v) => v.image_uri(),
+        }
+    }
+    fn mime_type(&self) -> Option<&MimeTypeValue> {
+        match self {
+            Self::GeoreferencedTexture(v) => v.mime_type(),
+            Self::ParameterizedTexture(v) => v.mime_type(),
+        }
+    }
+    fn texture_type(&self) -> Option<TextureType> {
+        match self {
+            Self::GeoreferencedTexture(v) => v.texture_type(),
+            Self::ParameterizedTexture(v) => v.texture_type(),
+        }
+    }
+    fn wrap_mode(&self) -> Option<WrapMode> {
+        match self {
+            Self::GeoreferencedTexture(v) => v.wrap_mode(),
+            Self::ParameterizedTexture(v) => v.wrap_mode(),
+        }
+    }
+    fn border_color(&self) -> Option<&ColorPlusOpacity> {
+        match self {
+            Self::GeoreferencedTexture(v) => v.border_color(),
+            Self::ParameterizedTexture(v) => v.border_color(),
+        }
+    }
+}
+impl From<GeoreferencedTexture> for AbstractTexture {
+    fn from(v: GeoreferencedTexture) -> Self {
+        Self::GeoreferencedTexture(v)
+    }
+}
+impl From<ParameterizedTexture> for AbstractTexture {
+    fn from(v: ParameterizedTexture) -> Self {
+        Self::ParameterizedTexture(v)
+    }
+}
+#[derive(Debug, Clone, Default)]
 pub struct X3DMaterial {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub is_front: Option<bool>,
-    pub ade_of_abstract_surface_data: Vec<Box<dyn ADEOfAbstractSurfaceData>>,
     pub ambient_intensity: Option<DoubleBetween0and1>,
     pub diffuse_color: Option<Color>,
     pub emissive_color: Option<Color>,
@@ -241,9 +381,8 @@ pub struct X3DMaterial {
     pub transparency: Option<DoubleBetween0and1>,
     pub is_smooth: Option<bool>,
     pub target: Vec<String>,
-    pub ade_of_x3_d_material: Vec<Box<dyn ADEOfX3DMaterial>>,
 }
-impl AbstractFeature for X3DMaterial {
+impl AbstractFeatureTrait for X3DMaterial {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -256,16 +395,10 @@ impl AbstractFeature for X3DMaterial {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractSurfaceData for X3DMaterial {
+impl AbstractSurfaceDataTrait for X3DMaterial {
     fn is_front(&self) -> Option<bool> {
         self.is_front
-    }
-    fn ade_of_abstract_surface_data(&self) -> &[Box<dyn ADEOfAbstractSurfaceData>] {
-        &self.ade_of_abstract_surface_data
     }
 }
 impl X3DMaterial {
@@ -278,9 +411,7 @@ impl X3DMaterial {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut is_front = None;
-        let mut ade_of_abstract_surface_data = Vec::new();
         let mut ambient_intensity = None;
         let mut diffuse_color = None;
         let mut emissive_color = None;
@@ -289,7 +420,6 @@ impl X3DMaterial {
         let mut transparency = None;
         let mut is_smooth = None;
         let mut target = Vec::new();
-        let mut ade_of_x3_d_material = Vec::new();
         let mut feature_id = ID(_gml_id);
         let mut sub = reader.subtree();
         while let Some(info) = sub.next_element()? {
@@ -306,14 +436,8 @@ impl X3DMaterial {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_APPEARANCE, "isFront") => {
                     is_front = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
-                }
-                (crate::namespace::NS_APPEARANCE, "adeOfAbstractSurfaceData") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_APPEARANCE, "ambientIntensity") => {
                     ambient_intensity = Some(DoubleBetween0and1(sub.read_text()?));
@@ -360,9 +484,6 @@ impl X3DMaterial {
                 (crate::namespace::NS_APPEARANCE, "target") => {
                     target.push(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_APPEARANCE, "adeOfX3DMaterial") => {
-                    sub.skip_element()?;
-                }
                 _ => {
                     sub.skip_element()?;
                 }
@@ -373,9 +494,7 @@ impl X3DMaterial {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             is_front,
-            ade_of_abstract_surface_data,
             ambient_intensity,
             diffuse_color,
             emissive_color,
@@ -384,7 +503,6 @@ impl X3DMaterial {
             transparency,
             is_smooth,
             target,
-            ade_of_x3_d_material,
         })
     }
 }
@@ -400,28 +518,24 @@ impl crate::from_gml::FromGml for X3DMaterial {
         Self::from_gml_with_info(reader, &info)
     }
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct GeoreferencedTexture {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub is_front: Option<bool>,
-    pub ade_of_abstract_surface_data: Vec<Box<dyn ADEOfAbstractSurfaceData>>,
     pub image_uri: String,
     pub mime_type: Option<MimeTypeValue>,
     pub texture_type: Option<TextureType>,
     pub wrap_mode: Option<WrapMode>,
     pub border_color: Option<ColorPlusOpacity>,
-    pub ade_of_abstract_texture: Vec<Box<dyn ADEOfAbstractTexture>>,
     pub prefer_world_file: Option<bool>,
     pub orientation: Option<TransformationMatrix2x2>,
     pub target: Vec<String>,
-    pub ade_of_georeferenced_texture: Vec<Box<dyn ADEOfGeoreferencedTexture>>,
     pub reference_point: Option<crate::geometry::DirectPosition>,
 }
-impl AbstractFeature for GeoreferencedTexture {
+impl AbstractFeatureTrait for GeoreferencedTexture {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -434,19 +548,13 @@ impl AbstractFeature for GeoreferencedTexture {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractSurfaceData for GeoreferencedTexture {
+impl AbstractSurfaceDataTrait for GeoreferencedTexture {
     fn is_front(&self) -> Option<bool> {
         self.is_front
     }
-    fn ade_of_abstract_surface_data(&self) -> &[Box<dyn ADEOfAbstractSurfaceData>] {
-        &self.ade_of_abstract_surface_data
-    }
 }
-impl AbstractTexture for GeoreferencedTexture {
+impl AbstractTextureTrait for GeoreferencedTexture {
     fn image_uri(&self) -> &String {
         &self.image_uri
     }
@@ -462,9 +570,6 @@ impl AbstractTexture for GeoreferencedTexture {
     fn border_color(&self) -> Option<&ColorPlusOpacity> {
         self.border_color.as_ref()
     }
-    fn ade_of_abstract_texture(&self) -> &[Box<dyn ADEOfAbstractTexture>] {
-        &self.ade_of_abstract_texture
-    }
 }
 impl GeoreferencedTexture {
     pub fn from_gml_with_info(
@@ -476,19 +581,15 @@ impl GeoreferencedTexture {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut is_front = None;
-        let mut ade_of_abstract_surface_data = Vec::new();
         let mut image_uri = Default::default();
         let mut mime_type = None;
         let mut texture_type = None;
         let mut wrap_mode = None;
         let mut border_color = None;
-        let mut ade_of_abstract_texture = Vec::new();
         let mut prefer_world_file = None;
         let mut orientation = None;
         let mut target = Vec::new();
-        let mut ade_of_georeferenced_texture = Vec::new();
         let mut reference_point = None;
         let mut feature_id = ID(_gml_id);
         let mut sub = reader.subtree();
@@ -506,14 +607,8 @@ impl GeoreferencedTexture {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_APPEARANCE, "isFront") => {
                     is_front = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
-                }
-                (crate::namespace::NS_APPEARANCE, "adeOfAbstractSurfaceData") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_APPEARANCE, "imageURI") => {
                     image_uri = crate::from_gml::FromGml::from_gml(&mut sub)?;
@@ -540,9 +635,6 @@ impl GeoreferencedTexture {
                         border_color = Some(ColorPlusOpacity::from_gml(&mut sub)?);
                     }
                 }
-                (crate::namespace::NS_APPEARANCE, "adeOfAbstractTexture") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_APPEARANCE, "preferWorldFile") => {
                     prefer_world_file = Some(
                         crate::from_gml::FromGml::from_gml(&mut sub)?,
@@ -563,9 +655,6 @@ impl GeoreferencedTexture {
                 }
                 (crate::namespace::NS_APPEARANCE, "target") => {
                     target.push(crate::from_gml::FromGml::from_gml(&mut sub)?);
-                }
-                (crate::namespace::NS_APPEARANCE, "adeOfGeoreferencedTexture") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_APPEARANCE, "referencePoint") => {
                     reference_point = Some({
@@ -592,19 +681,15 @@ impl GeoreferencedTexture {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             is_front,
-            ade_of_abstract_surface_data,
             image_uri,
             mime_type,
             texture_type,
             wrap_mode,
             border_color,
-            ade_of_abstract_texture,
             prefer_world_file,
             orientation,
             target,
-            ade_of_georeferenced_texture,
             reference_point,
         })
     }
@@ -621,25 +706,20 @@ impl crate::from_gml::FromGml for GeoreferencedTexture {
         Self::from_gml_with_info(reader, &info)
     }
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct ParameterizedTexture {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub is_front: Option<bool>,
-    pub ade_of_abstract_surface_data: Vec<Box<dyn ADEOfAbstractSurfaceData>>,
     pub image_uri: String,
     pub mime_type: Option<MimeTypeValue>,
     pub texture_type: Option<TextureType>,
     pub wrap_mode: Option<WrapMode>,
     pub border_color: Option<ColorPlusOpacity>,
-    pub ade_of_abstract_texture: Vec<Box<dyn ADEOfAbstractTexture>>,
-    pub ade_of_parameterized_texture: Vec<Box<dyn ADEOfParameterizedTexture>>,
-    pub texture_parameterization: Vec<Box<dyn AbstractTextureParameterization>>,
 }
-impl AbstractFeature for ParameterizedTexture {
+impl AbstractFeatureTrait for ParameterizedTexture {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -652,19 +732,13 @@ impl AbstractFeature for ParameterizedTexture {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractSurfaceData for ParameterizedTexture {
+impl AbstractSurfaceDataTrait for ParameterizedTexture {
     fn is_front(&self) -> Option<bool> {
         self.is_front
     }
-    fn ade_of_abstract_surface_data(&self) -> &[Box<dyn ADEOfAbstractSurfaceData>] {
-        &self.ade_of_abstract_surface_data
-    }
 }
-impl AbstractTexture for ParameterizedTexture {
+impl AbstractTextureTrait for ParameterizedTexture {
     fn image_uri(&self) -> &String {
         &self.image_uri
     }
@@ -680,9 +754,6 @@ impl AbstractTexture for ParameterizedTexture {
     fn border_color(&self) -> Option<&ColorPlusOpacity> {
         self.border_color.as_ref()
     }
-    fn ade_of_abstract_texture(&self) -> &[Box<dyn ADEOfAbstractTexture>] {
-        &self.ade_of_abstract_texture
-    }
 }
 impl ParameterizedTexture {
     pub fn from_gml_with_info(
@@ -694,17 +765,12 @@ impl ParameterizedTexture {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut is_front = None;
-        let mut ade_of_abstract_surface_data = Vec::new();
         let mut image_uri = Default::default();
         let mut mime_type = None;
         let mut texture_type = None;
         let mut wrap_mode = None;
         let mut border_color = None;
-        let mut ade_of_abstract_texture = Vec::new();
-        let mut ade_of_parameterized_texture = Vec::new();
-        let mut texture_parameterization = Vec::new();
         let mut feature_id = ID(_gml_id);
         let mut sub = reader.subtree();
         while let Some(info) = sub.next_element()? {
@@ -721,14 +787,8 @@ impl ParameterizedTexture {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_APPEARANCE, "isFront") => {
                     is_front = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
-                }
-                (crate::namespace::NS_APPEARANCE, "adeOfAbstractSurfaceData") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_APPEARANCE, "imageURI") => {
                     image_uri = crate::from_gml::FromGml::from_gml(&mut sub)?;
@@ -755,15 +815,6 @@ impl ParameterizedTexture {
                         border_color = Some(ColorPlusOpacity::from_gml(&mut sub)?);
                     }
                 }
-                (crate::namespace::NS_APPEARANCE, "adeOfAbstractTexture") => {
-                    sub.skip_element()?;
-                }
-                (crate::namespace::NS_APPEARANCE, "adeOfParameterizedTexture") => {
-                    sub.skip_element()?;
-                }
-                (crate::namespace::NS_APPEARANCE, "textureParameterization") => {
-                    sub.skip_element()?;
-                }
                 _ => {
                     sub.skip_element()?;
                 }
@@ -774,17 +825,12 @@ impl ParameterizedTexture {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             is_front,
-            ade_of_abstract_surface_data,
             image_uri,
             mime_type,
             texture_type,
             wrap_mode,
             border_color,
-            ade_of_abstract_texture,
-            ade_of_parameterized_texture,
-            texture_parameterization,
         })
     }
 }
@@ -800,26 +846,20 @@ impl crate::from_gml::FromGml for ParameterizedTexture {
         Self::from_gml_with_info(reader, &info)
     }
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct Appearance {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub creation_date: Option<String>,
     pub termination_date: Option<String>,
     pub valid_from: Option<String>,
     pub valid_to: Option<String>,
-    pub ade_of_abstract_feature_with_lifespan: Vec<
-        Box<dyn ADEOfAbstractFeatureWithLifespan>,
-    >,
-    pub ade_of_abstract_appearance: Vec<Box<dyn ADEOfAbstractAppearance>>,
     pub theme: Option<String>,
-    pub ade_of_appearance: Vec<Box<dyn ADEOfAppearance>>,
-    pub surface_data: Vec<Box<dyn AbstractSurfaceData>>,
+    pub surface_data: Vec<AbstractSurfaceData>,
 }
-impl AbstractFeature for Appearance {
+impl AbstractFeatureTrait for Appearance {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -832,11 +872,8 @@ impl AbstractFeature for Appearance {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractFeatureWithLifespan for Appearance {
+impl AbstractFeatureWithLifespanTrait for Appearance {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
     }
@@ -849,17 +886,8 @@ impl AbstractFeatureWithLifespan for Appearance {
     fn valid_to(&self) -> Option<&String> {
         self.valid_to.as_ref()
     }
-    fn ade_of_abstract_feature_with_lifespan(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractFeatureWithLifespan>] {
-        &self.ade_of_abstract_feature_with_lifespan
-    }
 }
-impl AbstractAppearance for Appearance {
-    fn ade_of_abstract_appearance(&self) -> &[Box<dyn ADEOfAbstractAppearance>] {
-        &self.ade_of_abstract_appearance
-    }
-}
+impl AbstractAppearanceTrait for Appearance {}
 impl Appearance {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -870,15 +898,11 @@ impl Appearance {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut creation_date = None;
         let mut termination_date = None;
         let mut valid_from = None;
         let mut valid_to = None;
-        let mut ade_of_abstract_feature_with_lifespan = Vec::new();
-        let mut ade_of_abstract_appearance = Vec::new();
         let mut theme = None;
-        let mut ade_of_appearance = Vec::new();
         let mut surface_data = Vec::new();
         let mut feature_id = ID(_gml_id);
         let mut sub = reader.subtree();
@@ -896,9 +920,6 @@ impl Appearance {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "creationDate") => {
                     creation_date = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
@@ -913,24 +934,15 @@ impl Appearance {
                 (crate::namespace::NS_CORE, "validTo") => {
                     valid_to = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeatureWithLifespan") => {
-                    sub.skip_element()?;
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractAppearance") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_APPEARANCE, "theme") => {
                     theme = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
-                }
-                (crate::namespace::NS_APPEARANCE, "adeOfAppearance") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_APPEARANCE, "surfaceData") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         surface_data
                             .push(
-                                super::dispatchers::parse_dyn_abstract_surface_data(
+                                super::dispatchers::parse_abstract_surface_data(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -947,15 +959,11 @@ impl Appearance {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             creation_date,
             termination_date,
             valid_from,
             valid_to,
-            ade_of_abstract_feature_with_lifespan,
-            ade_of_abstract_appearance,
             theme,
-            ade_of_appearance,
             surface_data,
         })
     }

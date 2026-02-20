@@ -1,48 +1,208 @@
 #![allow(unused_imports, unused_mut, unused_variables)]
 use super::*;
 
-pub trait ADEOfAbstractReliefComponent: std::fmt::Debug {}
-pub trait ADEOfBreaklineRelief: std::fmt::Debug {}
-pub trait ADEOfMassPointRelief: std::fmt::Debug {}
-pub trait ADEOfRasterRelief: std::fmt::Debug {}
-pub trait ADEOfReliefFeature: std::fmt::Debug {}
-pub trait ADEOfTINRelief: std::fmt::Debug {}
-pub trait AbstractReliefComponent: AbstractSpaceBoundary {
+pub trait AbstractReliefComponentTrait: AbstractSpaceBoundaryTrait {
     fn lod(&self) -> &IntegerBetween0and3;
-    fn ade_of_abstract_relief_component(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractReliefComponent>];
     fn extent(&self) -> Option<&crate::geometry::Polygon>;
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone)]
+pub enum AbstractReliefComponent {
+    BreaklineRelief(BreaklineRelief),
+    MassPointRelief(MassPointRelief),
+    RasterRelief(RasterRelief),
+    TINRelief(TINRelief),
+}
+impl Default for AbstractReliefComponent {
+    fn default() -> Self {
+        Self::BreaklineRelief(Default::default())
+    }
+}
+impl AbstractFeatureTrait for AbstractReliefComponent {
+    fn feature_id(&self) -> &ID {
+        match self {
+            Self::BreaklineRelief(v) => v.feature_id(),
+            Self::MassPointRelief(v) => v.feature_id(),
+            Self::RasterRelief(v) => v.feature_id(),
+            Self::TINRelief(v) => v.feature_id(),
+        }
+    }
+    fn identifier(&self) -> Option<&String> {
+        match self {
+            Self::BreaklineRelief(v) => v.identifier(),
+            Self::MassPointRelief(v) => v.identifier(),
+            Self::RasterRelief(v) => v.identifier(),
+            Self::TINRelief(v) => v.identifier(),
+        }
+    }
+    fn name(&self) -> &[String] {
+        match self {
+            Self::BreaklineRelief(v) => v.name(),
+            Self::MassPointRelief(v) => v.name(),
+            Self::RasterRelief(v) => v.name(),
+            Self::TINRelief(v) => v.name(),
+        }
+    }
+    fn description(&self) -> Option<&String> {
+        match self {
+            Self::BreaklineRelief(v) => v.description(),
+            Self::MassPointRelief(v) => v.description(),
+            Self::RasterRelief(v) => v.description(),
+            Self::TINRelief(v) => v.description(),
+        }
+    }
+}
+impl AbstractFeatureWithLifespanTrait for AbstractReliefComponent {
+    fn creation_date(&self) -> Option<&String> {
+        match self {
+            Self::BreaklineRelief(v) => v.creation_date(),
+            Self::MassPointRelief(v) => v.creation_date(),
+            Self::RasterRelief(v) => v.creation_date(),
+            Self::TINRelief(v) => v.creation_date(),
+        }
+    }
+    fn termination_date(&self) -> Option<&String> {
+        match self {
+            Self::BreaklineRelief(v) => v.termination_date(),
+            Self::MassPointRelief(v) => v.termination_date(),
+            Self::RasterRelief(v) => v.termination_date(),
+            Self::TINRelief(v) => v.termination_date(),
+        }
+    }
+    fn valid_from(&self) -> Option<&String> {
+        match self {
+            Self::BreaklineRelief(v) => v.valid_from(),
+            Self::MassPointRelief(v) => v.valid_from(),
+            Self::RasterRelief(v) => v.valid_from(),
+            Self::TINRelief(v) => v.valid_from(),
+        }
+    }
+    fn valid_to(&self) -> Option<&String> {
+        match self {
+            Self::BreaklineRelief(v) => v.valid_to(),
+            Self::MassPointRelief(v) => v.valid_to(),
+            Self::RasterRelief(v) => v.valid_to(),
+            Self::TINRelief(v) => v.valid_to(),
+        }
+    }
+}
+impl AbstractCityObjectTrait for AbstractReliefComponent {
+    fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
+        match self {
+            Self::BreaklineRelief(v) => v.relative_to_terrain(),
+            Self::MassPointRelief(v) => v.relative_to_terrain(),
+            Self::RasterRelief(v) => v.relative_to_terrain(),
+            Self::TINRelief(v) => v.relative_to_terrain(),
+        }
+    }
+    fn relative_to_water(&self) -> Option<RelativeToWater> {
+        match self {
+            Self::BreaklineRelief(v) => v.relative_to_water(),
+            Self::MassPointRelief(v) => v.relative_to_water(),
+            Self::RasterRelief(v) => v.relative_to_water(),
+            Self::TINRelief(v) => v.relative_to_water(),
+        }
+    }
+    fn appearance(&self) -> &[AbstractAppearance] {
+        match self {
+            Self::BreaklineRelief(v) => v.appearance(),
+            Self::MassPointRelief(v) => v.appearance(),
+            Self::RasterRelief(v) => v.appearance(),
+            Self::TINRelief(v) => v.appearance(),
+        }
+    }
+    fn generalizes_to(&self) -> &[AbstractCityObject] {
+        match self {
+            Self::BreaklineRelief(v) => v.generalizes_to(),
+            Self::MassPointRelief(v) => v.generalizes_to(),
+            Self::RasterRelief(v) => v.generalizes_to(),
+            Self::TINRelief(v) => v.generalizes_to(),
+        }
+    }
+    fn external_reference(&self) -> &[ExternalReference] {
+        match self {
+            Self::BreaklineRelief(v) => v.external_reference(),
+            Self::MassPointRelief(v) => v.external_reference(),
+            Self::RasterRelief(v) => v.external_reference(),
+            Self::TINRelief(v) => v.external_reference(),
+        }
+    }
+    fn related_to(&self) -> &[AbstractCityObject] {
+        match self {
+            Self::BreaklineRelief(v) => v.related_to(),
+            Self::MassPointRelief(v) => v.related_to(),
+            Self::RasterRelief(v) => v.related_to(),
+            Self::TINRelief(v) => v.related_to(),
+        }
+    }
+    fn dynamizer(&self) -> &[AbstractDynamizer] {
+        match self {
+            Self::BreaklineRelief(v) => v.dynamizer(),
+            Self::MassPointRelief(v) => v.dynamizer(),
+            Self::RasterRelief(v) => v.dynamizer(),
+            Self::TINRelief(v) => v.dynamizer(),
+        }
+    }
+}
+impl AbstractSpaceBoundaryTrait for AbstractReliefComponent {}
+impl AbstractReliefComponentTrait for AbstractReliefComponent {
+    fn lod(&self) -> &IntegerBetween0and3 {
+        match self {
+            Self::BreaklineRelief(v) => v.lod(),
+            Self::MassPointRelief(v) => v.lod(),
+            Self::RasterRelief(v) => v.lod(),
+            Self::TINRelief(v) => v.lod(),
+        }
+    }
+    fn extent(&self) -> Option<&crate::geometry::Polygon> {
+        match self {
+            Self::BreaklineRelief(v) => v.extent(),
+            Self::MassPointRelief(v) => v.extent(),
+            Self::RasterRelief(v) => v.extent(),
+            Self::TINRelief(v) => v.extent(),
+        }
+    }
+}
+impl From<BreaklineRelief> for AbstractReliefComponent {
+    fn from(v: BreaklineRelief) -> Self {
+        Self::BreaklineRelief(v)
+    }
+}
+impl From<MassPointRelief> for AbstractReliefComponent {
+    fn from(v: MassPointRelief) -> Self {
+        Self::MassPointRelief(v)
+    }
+}
+impl From<RasterRelief> for AbstractReliefComponent {
+    fn from(v: RasterRelief) -> Self {
+        Self::RasterRelief(v)
+    }
+}
+impl From<TINRelief> for AbstractReliefComponent {
+    fn from(v: TINRelief) -> Self {
+        Self::TINRelief(v)
+    }
+}
+#[derive(Debug, Clone, Default)]
 pub struct ReliefFeature {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub creation_date: Option<String>,
     pub termination_date: Option<String>,
     pub valid_from: Option<String>,
     pub valid_to: Option<String>,
-    pub ade_of_abstract_feature_with_lifespan: Vec<
-        Box<dyn ADEOfAbstractFeatureWithLifespan>,
-    >,
     pub relative_to_terrain: Option<RelativeToTerrain>,
     pub relative_to_water: Option<RelativeToWater>,
-    pub ade_of_abstract_city_object: Vec<Box<dyn ADEOfAbstractCityObject>>,
-    pub appearance: Vec<Box<dyn AbstractAppearance>>,
-    pub generic_attribute: Vec<Box<dyn AbstractGenericAttribute>>,
-    pub generalizes_to: Vec<Box<dyn AbstractCityObject>>,
+    pub appearance: Vec<AbstractAppearance>,
+    pub generalizes_to: Vec<AbstractCityObject>,
     pub external_reference: Vec<ExternalReference>,
-    pub related_to: Vec<Box<dyn AbstractCityObject>>,
-    pub dynamizer: Vec<Box<dyn AbstractDynamizer>>,
-    pub ade_of_abstract_space_boundary: Vec<Box<dyn ADEOfAbstractSpaceBoundary>>,
+    pub related_to: Vec<AbstractCityObject>,
+    pub dynamizer: Vec<AbstractDynamizer>,
     pub lod: IntegerBetween0and3,
-    pub ade_of_relief_feature: Vec<Box<dyn ADEOfReliefFeature>>,
-    pub relief_component: Vec<Box<dyn AbstractReliefComponent>>,
+    pub relief_component: Vec<AbstractReliefComponent>,
 }
-impl AbstractFeature for ReliefFeature {
+impl AbstractFeatureTrait for ReliefFeature {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -55,11 +215,8 @@ impl AbstractFeature for ReliefFeature {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractFeatureWithLifespan for ReliefFeature {
+impl AbstractFeatureWithLifespanTrait for ReliefFeature {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
     }
@@ -72,46 +229,31 @@ impl AbstractFeatureWithLifespan for ReliefFeature {
     fn valid_to(&self) -> Option<&String> {
         self.valid_to.as_ref()
     }
-    fn ade_of_abstract_feature_with_lifespan(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractFeatureWithLifespan>] {
-        &self.ade_of_abstract_feature_with_lifespan
-    }
 }
-impl AbstractCityObject for ReliefFeature {
+impl AbstractCityObjectTrait for ReliefFeature {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
     }
     fn relative_to_water(&self) -> Option<RelativeToWater> {
         self.relative_to_water
     }
-    fn ade_of_abstract_city_object(&self) -> &[Box<dyn ADEOfAbstractCityObject>] {
-        &self.ade_of_abstract_city_object
-    }
-    fn appearance(&self) -> &[Box<dyn AbstractAppearance>] {
+    fn appearance(&self) -> &[AbstractAppearance] {
         &self.appearance
     }
-    fn generic_attribute(&self) -> &[Box<dyn AbstractGenericAttribute>] {
-        &self.generic_attribute
-    }
-    fn generalizes_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn generalizes_to(&self) -> &[AbstractCityObject] {
         &self.generalizes_to
     }
     fn external_reference(&self) -> &[ExternalReference] {
         &self.external_reference
     }
-    fn related_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn related_to(&self) -> &[AbstractCityObject] {
         &self.related_to
     }
-    fn dynamizer(&self) -> &[Box<dyn AbstractDynamizer>] {
+    fn dynamizer(&self) -> &[AbstractDynamizer] {
         &self.dynamizer
     }
 }
-impl AbstractSpaceBoundary for ReliefFeature {
-    fn ade_of_abstract_space_boundary(&self) -> &[Box<dyn ADEOfAbstractSpaceBoundary>] {
-        &self.ade_of_abstract_space_boundary
-    }
-}
+impl AbstractSpaceBoundaryTrait for ReliefFeature {}
 impl ReliefFeature {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -122,24 +264,18 @@ impl ReliefFeature {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut creation_date = None;
         let mut termination_date = None;
         let mut valid_from = None;
         let mut valid_to = None;
-        let mut ade_of_abstract_feature_with_lifespan = Vec::new();
         let mut relative_to_terrain = None;
         let mut relative_to_water = None;
-        let mut ade_of_abstract_city_object = Vec::new();
         let mut appearance = Vec::new();
-        let mut generic_attribute = Vec::new();
         let mut generalizes_to = Vec::new();
         let mut external_reference = Vec::new();
         let mut related_to = Vec::new();
         let mut dynamizer = Vec::new();
-        let mut ade_of_abstract_space_boundary = Vec::new();
         let mut lod = Default::default();
-        let mut ade_of_relief_feature = Vec::new();
         let mut relief_component = Vec::new();
         let mut feature_id = ID(_gml_id);
         let mut sub = reader.subtree();
@@ -157,9 +293,6 @@ impl ReliefFeature {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "creationDate") => {
                     creation_date = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
@@ -174,9 +307,6 @@ impl ReliefFeature {
                 (crate::namespace::NS_CORE, "validTo") => {
                     valid_to = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeatureWithLifespan") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "relativeToTerrain") => {
                     relative_to_terrain = Some(
                         RelativeToTerrain::from_gml_text(&sub.read_text()?)?,
@@ -187,30 +317,24 @@ impl ReliefFeature {
                         RelativeToWater::from_gml_text(&sub.read_text()?)?,
                     );
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractCityObject") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "appearance") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         appearance
                             .push(
-                                super::dispatchers::parse_dyn_abstract_appearance(
+                                super::dispatchers::parse_abstract_appearance(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
                             );
                     }
                 }
-                (crate::namespace::NS_CORE, "genericAttribute") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "generalizesTo") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         generalizes_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -225,7 +349,7 @@ impl ReliefFeature {
                     if let Some(child_info) = wrapper.next_element()? {
                         related_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -237,28 +361,22 @@ impl ReliefFeature {
                     if let Some(child_info) = wrapper.next_element()? {
                         dynamizer
                             .push(
-                                super::dispatchers::parse_dyn_abstract_dynamizer(
+                                super::dispatchers::parse_abstract_dynamizer(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
                             );
                     }
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractSpaceBoundary") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_RELIEF, "lod") => {
                     lod = IntegerBetween0and3(sub.read_text()?);
-                }
-                (crate::namespace::NS_RELIEF, "adeOfReliefFeature") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_RELIEF, "reliefComponent") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         relief_component
                             .push(
-                                super::dispatchers::parse_dyn_abstract_relief_component(
+                                super::dispatchers::parse_abstract_relief_component(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -275,24 +393,18 @@ impl ReliefFeature {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             creation_date,
             termination_date,
             valid_from,
             valid_to,
-            ade_of_abstract_feature_with_lifespan,
             relative_to_terrain,
             relative_to_water,
-            ade_of_abstract_city_object,
             appearance,
-            generic_attribute,
             generalizes_to,
             external_reference,
             related_to,
             dynamizer,
-            ade_of_abstract_space_boundary,
             lod,
-            ade_of_relief_feature,
             relief_component,
         })
     }
@@ -309,38 +421,29 @@ impl crate::from_gml::FromGml for ReliefFeature {
         Self::from_gml_with_info(reader, &info)
     }
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct BreaklineRelief {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub creation_date: Option<String>,
     pub termination_date: Option<String>,
     pub valid_from: Option<String>,
     pub valid_to: Option<String>,
-    pub ade_of_abstract_feature_with_lifespan: Vec<
-        Box<dyn ADEOfAbstractFeatureWithLifespan>,
-    >,
     pub relative_to_terrain: Option<RelativeToTerrain>,
     pub relative_to_water: Option<RelativeToWater>,
-    pub ade_of_abstract_city_object: Vec<Box<dyn ADEOfAbstractCityObject>>,
-    pub appearance: Vec<Box<dyn AbstractAppearance>>,
-    pub generic_attribute: Vec<Box<dyn AbstractGenericAttribute>>,
-    pub generalizes_to: Vec<Box<dyn AbstractCityObject>>,
+    pub appearance: Vec<AbstractAppearance>,
+    pub generalizes_to: Vec<AbstractCityObject>,
     pub external_reference: Vec<ExternalReference>,
-    pub related_to: Vec<Box<dyn AbstractCityObject>>,
-    pub dynamizer: Vec<Box<dyn AbstractDynamizer>>,
-    pub ade_of_abstract_space_boundary: Vec<Box<dyn ADEOfAbstractSpaceBoundary>>,
+    pub related_to: Vec<AbstractCityObject>,
+    pub dynamizer: Vec<AbstractDynamizer>,
     pub lod: IntegerBetween0and3,
-    pub ade_of_abstract_relief_component: Vec<Box<dyn ADEOfAbstractReliefComponent>>,
     pub extent: Option<crate::geometry::Polygon>,
-    pub ade_of_breakline_relief: Vec<Box<dyn ADEOfBreaklineRelief>>,
     pub ridge_or_valley_lines: Option<crate::geometry::MultiCurve>,
     pub breaklines: Option<crate::geometry::MultiCurve>,
 }
-impl AbstractFeature for BreaklineRelief {
+impl AbstractFeatureTrait for BreaklineRelief {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -353,11 +456,8 @@ impl AbstractFeature for BreaklineRelief {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractFeatureWithLifespan for BreaklineRelief {
+impl AbstractFeatureWithLifespanTrait for BreaklineRelief {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
     }
@@ -370,54 +470,34 @@ impl AbstractFeatureWithLifespan for BreaklineRelief {
     fn valid_to(&self) -> Option<&String> {
         self.valid_to.as_ref()
     }
-    fn ade_of_abstract_feature_with_lifespan(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractFeatureWithLifespan>] {
-        &self.ade_of_abstract_feature_with_lifespan
-    }
 }
-impl AbstractCityObject for BreaklineRelief {
+impl AbstractCityObjectTrait for BreaklineRelief {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
     }
     fn relative_to_water(&self) -> Option<RelativeToWater> {
         self.relative_to_water
     }
-    fn ade_of_abstract_city_object(&self) -> &[Box<dyn ADEOfAbstractCityObject>] {
-        &self.ade_of_abstract_city_object
-    }
-    fn appearance(&self) -> &[Box<dyn AbstractAppearance>] {
+    fn appearance(&self) -> &[AbstractAppearance] {
         &self.appearance
     }
-    fn generic_attribute(&self) -> &[Box<dyn AbstractGenericAttribute>] {
-        &self.generic_attribute
-    }
-    fn generalizes_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn generalizes_to(&self) -> &[AbstractCityObject] {
         &self.generalizes_to
     }
     fn external_reference(&self) -> &[ExternalReference] {
         &self.external_reference
     }
-    fn related_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn related_to(&self) -> &[AbstractCityObject] {
         &self.related_to
     }
-    fn dynamizer(&self) -> &[Box<dyn AbstractDynamizer>] {
+    fn dynamizer(&self) -> &[AbstractDynamizer] {
         &self.dynamizer
     }
 }
-impl AbstractSpaceBoundary for BreaklineRelief {
-    fn ade_of_abstract_space_boundary(&self) -> &[Box<dyn ADEOfAbstractSpaceBoundary>] {
-        &self.ade_of_abstract_space_boundary
-    }
-}
-impl AbstractReliefComponent for BreaklineRelief {
+impl AbstractSpaceBoundaryTrait for BreaklineRelief {}
+impl AbstractReliefComponentTrait for BreaklineRelief {
     fn lod(&self) -> &IntegerBetween0and3 {
         &self.lod
-    }
-    fn ade_of_abstract_relief_component(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractReliefComponent>] {
-        &self.ade_of_abstract_relief_component
     }
     fn extent(&self) -> Option<&crate::geometry::Polygon> {
         self.extent.as_ref()
@@ -433,26 +513,19 @@ impl BreaklineRelief {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut creation_date = None;
         let mut termination_date = None;
         let mut valid_from = None;
         let mut valid_to = None;
-        let mut ade_of_abstract_feature_with_lifespan = Vec::new();
         let mut relative_to_terrain = None;
         let mut relative_to_water = None;
-        let mut ade_of_abstract_city_object = Vec::new();
         let mut appearance = Vec::new();
-        let mut generic_attribute = Vec::new();
         let mut generalizes_to = Vec::new();
         let mut external_reference = Vec::new();
         let mut related_to = Vec::new();
         let mut dynamizer = Vec::new();
-        let mut ade_of_abstract_space_boundary = Vec::new();
         let mut lod = Default::default();
-        let mut ade_of_abstract_relief_component = Vec::new();
         let mut extent = None;
-        let mut ade_of_breakline_relief = Vec::new();
         let mut ridge_or_valley_lines = None;
         let mut breaklines = None;
         let mut feature_id = ID(_gml_id);
@@ -471,9 +544,6 @@ impl BreaklineRelief {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "creationDate") => {
                     creation_date = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
@@ -488,9 +558,6 @@ impl BreaklineRelief {
                 (crate::namespace::NS_CORE, "validTo") => {
                     valid_to = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeatureWithLifespan") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "relativeToTerrain") => {
                     relative_to_terrain = Some(
                         RelativeToTerrain::from_gml_text(&sub.read_text()?)?,
@@ -501,30 +568,24 @@ impl BreaklineRelief {
                         RelativeToWater::from_gml_text(&sub.read_text()?)?,
                     );
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractCityObject") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "appearance") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         appearance
                             .push(
-                                super::dispatchers::parse_dyn_abstract_appearance(
+                                super::dispatchers::parse_abstract_appearance(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
                             );
                     }
                 }
-                (crate::namespace::NS_CORE, "genericAttribute") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "generalizesTo") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         generalizes_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -539,7 +600,7 @@ impl BreaklineRelief {
                     if let Some(child_info) = wrapper.next_element()? {
                         related_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -551,21 +612,15 @@ impl BreaklineRelief {
                     if let Some(child_info) = wrapper.next_element()? {
                         dynamizer
                             .push(
-                                super::dispatchers::parse_dyn_abstract_dynamizer(
+                                super::dispatchers::parse_abstract_dynamizer(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
                             );
                     }
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractSpaceBoundary") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_RELIEF, "lod") => {
                     lod = IntegerBetween0and3(sub.read_text()?);
-                }
-                (crate::namespace::NS_RELIEF, "adeOfAbstractReliefComponent") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_RELIEF, "extent") => {
                     extent = Some({
@@ -581,9 +636,6 @@ impl BreaklineRelief {
                             crate::geometry::Polygon::default()
                         }
                     });
-                }
-                (crate::namespace::NS_RELIEF, "adeOfBreaklineRelief") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_RELIEF, "ridgeOrValleyLines") => {
                     ridge_or_valley_lines = Some({
@@ -625,26 +677,19 @@ impl BreaklineRelief {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             creation_date,
             termination_date,
             valid_from,
             valid_to,
-            ade_of_abstract_feature_with_lifespan,
             relative_to_terrain,
             relative_to_water,
-            ade_of_abstract_city_object,
             appearance,
-            generic_attribute,
             generalizes_to,
             external_reference,
             related_to,
             dynamizer,
-            ade_of_abstract_space_boundary,
             lod,
-            ade_of_abstract_relief_component,
             extent,
-            ade_of_breakline_relief,
             ridge_or_valley_lines,
             breaklines,
         })
@@ -662,38 +707,29 @@ impl crate::from_gml::FromGml for BreaklineRelief {
         Self::from_gml_with_info(reader, &info)
     }
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct MassPointRelief {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub creation_date: Option<String>,
     pub termination_date: Option<String>,
     pub valid_from: Option<String>,
     pub valid_to: Option<String>,
-    pub ade_of_abstract_feature_with_lifespan: Vec<
-        Box<dyn ADEOfAbstractFeatureWithLifespan>,
-    >,
     pub relative_to_terrain: Option<RelativeToTerrain>,
     pub relative_to_water: Option<RelativeToWater>,
-    pub ade_of_abstract_city_object: Vec<Box<dyn ADEOfAbstractCityObject>>,
-    pub appearance: Vec<Box<dyn AbstractAppearance>>,
-    pub generic_attribute: Vec<Box<dyn AbstractGenericAttribute>>,
-    pub generalizes_to: Vec<Box<dyn AbstractCityObject>>,
+    pub appearance: Vec<AbstractAppearance>,
+    pub generalizes_to: Vec<AbstractCityObject>,
     pub external_reference: Vec<ExternalReference>,
-    pub related_to: Vec<Box<dyn AbstractCityObject>>,
-    pub dynamizer: Vec<Box<dyn AbstractDynamizer>>,
-    pub ade_of_abstract_space_boundary: Vec<Box<dyn ADEOfAbstractSpaceBoundary>>,
+    pub related_to: Vec<AbstractCityObject>,
+    pub dynamizer: Vec<AbstractDynamizer>,
     pub lod: IntegerBetween0and3,
-    pub ade_of_abstract_relief_component: Vec<Box<dyn ADEOfAbstractReliefComponent>>,
     pub extent: Option<crate::geometry::Polygon>,
-    pub ade_of_mass_point_relief: Vec<Box<dyn ADEOfMassPointRelief>>,
-    pub point_cloud: Option<Box<dyn AbstractPointCloud>>,
+    pub point_cloud: Option<AbstractPointCloud>,
     pub relief_points: Option<Vec<crate::geometry::DirectPosition>>,
 }
-impl AbstractFeature for MassPointRelief {
+impl AbstractFeatureTrait for MassPointRelief {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -706,11 +742,8 @@ impl AbstractFeature for MassPointRelief {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractFeatureWithLifespan for MassPointRelief {
+impl AbstractFeatureWithLifespanTrait for MassPointRelief {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
     }
@@ -723,54 +756,34 @@ impl AbstractFeatureWithLifespan for MassPointRelief {
     fn valid_to(&self) -> Option<&String> {
         self.valid_to.as_ref()
     }
-    fn ade_of_abstract_feature_with_lifespan(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractFeatureWithLifespan>] {
-        &self.ade_of_abstract_feature_with_lifespan
-    }
 }
-impl AbstractCityObject for MassPointRelief {
+impl AbstractCityObjectTrait for MassPointRelief {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
     }
     fn relative_to_water(&self) -> Option<RelativeToWater> {
         self.relative_to_water
     }
-    fn ade_of_abstract_city_object(&self) -> &[Box<dyn ADEOfAbstractCityObject>] {
-        &self.ade_of_abstract_city_object
-    }
-    fn appearance(&self) -> &[Box<dyn AbstractAppearance>] {
+    fn appearance(&self) -> &[AbstractAppearance] {
         &self.appearance
     }
-    fn generic_attribute(&self) -> &[Box<dyn AbstractGenericAttribute>] {
-        &self.generic_attribute
-    }
-    fn generalizes_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn generalizes_to(&self) -> &[AbstractCityObject] {
         &self.generalizes_to
     }
     fn external_reference(&self) -> &[ExternalReference] {
         &self.external_reference
     }
-    fn related_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn related_to(&self) -> &[AbstractCityObject] {
         &self.related_to
     }
-    fn dynamizer(&self) -> &[Box<dyn AbstractDynamizer>] {
+    fn dynamizer(&self) -> &[AbstractDynamizer] {
         &self.dynamizer
     }
 }
-impl AbstractSpaceBoundary for MassPointRelief {
-    fn ade_of_abstract_space_boundary(&self) -> &[Box<dyn ADEOfAbstractSpaceBoundary>] {
-        &self.ade_of_abstract_space_boundary
-    }
-}
-impl AbstractReliefComponent for MassPointRelief {
+impl AbstractSpaceBoundaryTrait for MassPointRelief {}
+impl AbstractReliefComponentTrait for MassPointRelief {
     fn lod(&self) -> &IntegerBetween0and3 {
         &self.lod
-    }
-    fn ade_of_abstract_relief_component(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractReliefComponent>] {
-        &self.ade_of_abstract_relief_component
     }
     fn extent(&self) -> Option<&crate::geometry::Polygon> {
         self.extent.as_ref()
@@ -786,26 +799,19 @@ impl MassPointRelief {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut creation_date = None;
         let mut termination_date = None;
         let mut valid_from = None;
         let mut valid_to = None;
-        let mut ade_of_abstract_feature_with_lifespan = Vec::new();
         let mut relative_to_terrain = None;
         let mut relative_to_water = None;
-        let mut ade_of_abstract_city_object = Vec::new();
         let mut appearance = Vec::new();
-        let mut generic_attribute = Vec::new();
         let mut generalizes_to = Vec::new();
         let mut external_reference = Vec::new();
         let mut related_to = Vec::new();
         let mut dynamizer = Vec::new();
-        let mut ade_of_abstract_space_boundary = Vec::new();
         let mut lod = Default::default();
-        let mut ade_of_abstract_relief_component = Vec::new();
         let mut extent = None;
-        let mut ade_of_mass_point_relief = Vec::new();
         let mut point_cloud = None;
         let mut relief_points = None;
         let mut feature_id = ID(_gml_id);
@@ -824,9 +830,6 @@ impl MassPointRelief {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "creationDate") => {
                     creation_date = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
@@ -841,9 +844,6 @@ impl MassPointRelief {
                 (crate::namespace::NS_CORE, "validTo") => {
                     valid_to = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeatureWithLifespan") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "relativeToTerrain") => {
                     relative_to_terrain = Some(
                         RelativeToTerrain::from_gml_text(&sub.read_text()?)?,
@@ -854,30 +854,24 @@ impl MassPointRelief {
                         RelativeToWater::from_gml_text(&sub.read_text()?)?,
                     );
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractCityObject") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "appearance") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         appearance
                             .push(
-                                super::dispatchers::parse_dyn_abstract_appearance(
+                                super::dispatchers::parse_abstract_appearance(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
                             );
                     }
                 }
-                (crate::namespace::NS_CORE, "genericAttribute") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "generalizesTo") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         generalizes_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -892,7 +886,7 @@ impl MassPointRelief {
                     if let Some(child_info) = wrapper.next_element()? {
                         related_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -904,21 +898,15 @@ impl MassPointRelief {
                     if let Some(child_info) = wrapper.next_element()? {
                         dynamizer
                             .push(
-                                super::dispatchers::parse_dyn_abstract_dynamizer(
+                                super::dispatchers::parse_abstract_dynamizer(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
                             );
                     }
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractSpaceBoundary") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_RELIEF, "lod") => {
                     lod = IntegerBetween0and3(sub.read_text()?);
-                }
-                (crate::namespace::NS_RELIEF, "adeOfAbstractReliefComponent") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_RELIEF, "extent") => {
                     extent = Some({
@@ -935,14 +923,11 @@ impl MassPointRelief {
                         }
                     });
                 }
-                (crate::namespace::NS_RELIEF, "adeOfMassPointRelief") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_RELIEF, "pointCloud") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         point_cloud = Some(
-                            super::dispatchers::parse_dyn_abstract_point_cloud(
+                            super::dispatchers::parse_abstract_point_cloud(
                                 &mut wrapper,
                                 &child_info,
                             )?,
@@ -974,26 +959,19 @@ impl MassPointRelief {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             creation_date,
             termination_date,
             valid_from,
             valid_to,
-            ade_of_abstract_feature_with_lifespan,
             relative_to_terrain,
             relative_to_water,
-            ade_of_abstract_city_object,
             appearance,
-            generic_attribute,
             generalizes_to,
             external_reference,
             related_to,
             dynamizer,
-            ade_of_abstract_space_boundary,
             lod,
-            ade_of_abstract_relief_component,
             extent,
-            ade_of_mass_point_relief,
             point_cloud,
             relief_points,
         })
@@ -1011,37 +989,28 @@ impl crate::from_gml::FromGml for MassPointRelief {
         Self::from_gml_with_info(reader, &info)
     }
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct RasterRelief {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub creation_date: Option<String>,
     pub termination_date: Option<String>,
     pub valid_from: Option<String>,
     pub valid_to: Option<String>,
-    pub ade_of_abstract_feature_with_lifespan: Vec<
-        Box<dyn ADEOfAbstractFeatureWithLifespan>,
-    >,
     pub relative_to_terrain: Option<RelativeToTerrain>,
     pub relative_to_water: Option<RelativeToWater>,
-    pub ade_of_abstract_city_object: Vec<Box<dyn ADEOfAbstractCityObject>>,
-    pub appearance: Vec<Box<dyn AbstractAppearance>>,
-    pub generic_attribute: Vec<Box<dyn AbstractGenericAttribute>>,
-    pub generalizes_to: Vec<Box<dyn AbstractCityObject>>,
+    pub appearance: Vec<AbstractAppearance>,
+    pub generalizes_to: Vec<AbstractCityObject>,
     pub external_reference: Vec<ExternalReference>,
-    pub related_to: Vec<Box<dyn AbstractCityObject>>,
-    pub dynamizer: Vec<Box<dyn AbstractDynamizer>>,
-    pub ade_of_abstract_space_boundary: Vec<Box<dyn ADEOfAbstractSpaceBoundary>>,
+    pub related_to: Vec<AbstractCityObject>,
+    pub dynamizer: Vec<AbstractDynamizer>,
     pub lod: IntegerBetween0and3,
-    pub ade_of_abstract_relief_component: Vec<Box<dyn ADEOfAbstractReliefComponent>>,
     pub extent: Option<crate::geometry::Polygon>,
-    pub ade_of_raster_relief: Vec<Box<dyn ADEOfRasterRelief>>,
     pub grid: (),
 }
-impl AbstractFeature for RasterRelief {
+impl AbstractFeatureTrait for RasterRelief {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -1054,11 +1023,8 @@ impl AbstractFeature for RasterRelief {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractFeatureWithLifespan for RasterRelief {
+impl AbstractFeatureWithLifespanTrait for RasterRelief {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
     }
@@ -1071,54 +1037,34 @@ impl AbstractFeatureWithLifespan for RasterRelief {
     fn valid_to(&self) -> Option<&String> {
         self.valid_to.as_ref()
     }
-    fn ade_of_abstract_feature_with_lifespan(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractFeatureWithLifespan>] {
-        &self.ade_of_abstract_feature_with_lifespan
-    }
 }
-impl AbstractCityObject for RasterRelief {
+impl AbstractCityObjectTrait for RasterRelief {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
     }
     fn relative_to_water(&self) -> Option<RelativeToWater> {
         self.relative_to_water
     }
-    fn ade_of_abstract_city_object(&self) -> &[Box<dyn ADEOfAbstractCityObject>] {
-        &self.ade_of_abstract_city_object
-    }
-    fn appearance(&self) -> &[Box<dyn AbstractAppearance>] {
+    fn appearance(&self) -> &[AbstractAppearance] {
         &self.appearance
     }
-    fn generic_attribute(&self) -> &[Box<dyn AbstractGenericAttribute>] {
-        &self.generic_attribute
-    }
-    fn generalizes_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn generalizes_to(&self) -> &[AbstractCityObject] {
         &self.generalizes_to
     }
     fn external_reference(&self) -> &[ExternalReference] {
         &self.external_reference
     }
-    fn related_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn related_to(&self) -> &[AbstractCityObject] {
         &self.related_to
     }
-    fn dynamizer(&self) -> &[Box<dyn AbstractDynamizer>] {
+    fn dynamizer(&self) -> &[AbstractDynamizer] {
         &self.dynamizer
     }
 }
-impl AbstractSpaceBoundary for RasterRelief {
-    fn ade_of_abstract_space_boundary(&self) -> &[Box<dyn ADEOfAbstractSpaceBoundary>] {
-        &self.ade_of_abstract_space_boundary
-    }
-}
-impl AbstractReliefComponent for RasterRelief {
+impl AbstractSpaceBoundaryTrait for RasterRelief {}
+impl AbstractReliefComponentTrait for RasterRelief {
     fn lod(&self) -> &IntegerBetween0and3 {
         &self.lod
-    }
-    fn ade_of_abstract_relief_component(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractReliefComponent>] {
-        &self.ade_of_abstract_relief_component
     }
     fn extent(&self) -> Option<&crate::geometry::Polygon> {
         self.extent.as_ref()
@@ -1134,26 +1080,19 @@ impl RasterRelief {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut creation_date = None;
         let mut termination_date = None;
         let mut valid_from = None;
         let mut valid_to = None;
-        let mut ade_of_abstract_feature_with_lifespan = Vec::new();
         let mut relative_to_terrain = None;
         let mut relative_to_water = None;
-        let mut ade_of_abstract_city_object = Vec::new();
         let mut appearance = Vec::new();
-        let mut generic_attribute = Vec::new();
         let mut generalizes_to = Vec::new();
         let mut external_reference = Vec::new();
         let mut related_to = Vec::new();
         let mut dynamizer = Vec::new();
-        let mut ade_of_abstract_space_boundary = Vec::new();
         let mut lod = Default::default();
-        let mut ade_of_abstract_relief_component = Vec::new();
         let mut extent = None;
-        let mut ade_of_raster_relief = Vec::new();
         let mut grid = Default::default();
         let mut feature_id = ID(_gml_id);
         let mut sub = reader.subtree();
@@ -1171,9 +1110,6 @@ impl RasterRelief {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "creationDate") => {
                     creation_date = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
@@ -1188,9 +1124,6 @@ impl RasterRelief {
                 (crate::namespace::NS_CORE, "validTo") => {
                     valid_to = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeatureWithLifespan") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "relativeToTerrain") => {
                     relative_to_terrain = Some(
                         RelativeToTerrain::from_gml_text(&sub.read_text()?)?,
@@ -1201,30 +1134,24 @@ impl RasterRelief {
                         RelativeToWater::from_gml_text(&sub.read_text()?)?,
                     );
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractCityObject") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "appearance") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         appearance
                             .push(
-                                super::dispatchers::parse_dyn_abstract_appearance(
+                                super::dispatchers::parse_abstract_appearance(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
                             );
                     }
                 }
-                (crate::namespace::NS_CORE, "genericAttribute") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "generalizesTo") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         generalizes_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -1239,7 +1166,7 @@ impl RasterRelief {
                     if let Some(child_info) = wrapper.next_element()? {
                         related_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -1251,21 +1178,15 @@ impl RasterRelief {
                     if let Some(child_info) = wrapper.next_element()? {
                         dynamizer
                             .push(
-                                super::dispatchers::parse_dyn_abstract_dynamizer(
+                                super::dispatchers::parse_abstract_dynamizer(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
                             );
                     }
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractSpaceBoundary") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_RELIEF, "lod") => {
                     lod = IntegerBetween0and3(sub.read_text()?);
-                }
-                (crate::namespace::NS_RELIEF, "adeOfAbstractReliefComponent") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_RELIEF, "extent") => {
                     extent = Some({
@@ -1282,9 +1203,6 @@ impl RasterRelief {
                         }
                     });
                 }
-                (crate::namespace::NS_RELIEF, "adeOfRasterRelief") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_RELIEF, "grid") => {
                     sub.skip_element()?;
                 }
@@ -1298,26 +1216,19 @@ impl RasterRelief {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             creation_date,
             termination_date,
             valid_from,
             valid_to,
-            ade_of_abstract_feature_with_lifespan,
             relative_to_terrain,
             relative_to_water,
-            ade_of_abstract_city_object,
             appearance,
-            generic_attribute,
             generalizes_to,
             external_reference,
             related_to,
             dynamizer,
-            ade_of_abstract_space_boundary,
             lod,
-            ade_of_abstract_relief_component,
             extent,
-            ade_of_raster_relief,
             grid,
         })
     }
@@ -1334,37 +1245,28 @@ impl crate::from_gml::FromGml for RasterRelief {
         Self::from_gml_with_info(reader, &info)
     }
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct TINRelief {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub creation_date: Option<String>,
     pub termination_date: Option<String>,
     pub valid_from: Option<String>,
     pub valid_to: Option<String>,
-    pub ade_of_abstract_feature_with_lifespan: Vec<
-        Box<dyn ADEOfAbstractFeatureWithLifespan>,
-    >,
     pub relative_to_terrain: Option<RelativeToTerrain>,
     pub relative_to_water: Option<RelativeToWater>,
-    pub ade_of_abstract_city_object: Vec<Box<dyn ADEOfAbstractCityObject>>,
-    pub appearance: Vec<Box<dyn AbstractAppearance>>,
-    pub generic_attribute: Vec<Box<dyn AbstractGenericAttribute>>,
-    pub generalizes_to: Vec<Box<dyn AbstractCityObject>>,
+    pub appearance: Vec<AbstractAppearance>,
+    pub generalizes_to: Vec<AbstractCityObject>,
     pub external_reference: Vec<ExternalReference>,
-    pub related_to: Vec<Box<dyn AbstractCityObject>>,
-    pub dynamizer: Vec<Box<dyn AbstractDynamizer>>,
-    pub ade_of_abstract_space_boundary: Vec<Box<dyn ADEOfAbstractSpaceBoundary>>,
+    pub related_to: Vec<AbstractCityObject>,
+    pub dynamizer: Vec<AbstractDynamizer>,
     pub lod: IntegerBetween0and3,
-    pub ade_of_abstract_relief_component: Vec<Box<dyn ADEOfAbstractReliefComponent>>,
     pub extent: Option<crate::geometry::Polygon>,
-    pub ade_of_tin_relief: Vec<Box<dyn ADEOfTINRelief>>,
     pub tin: crate::geometry::TriangulatedSurface,
 }
-impl AbstractFeature for TINRelief {
+impl AbstractFeatureTrait for TINRelief {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -1377,11 +1279,8 @@ impl AbstractFeature for TINRelief {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractFeatureWithLifespan for TINRelief {
+impl AbstractFeatureWithLifespanTrait for TINRelief {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
     }
@@ -1394,54 +1293,34 @@ impl AbstractFeatureWithLifespan for TINRelief {
     fn valid_to(&self) -> Option<&String> {
         self.valid_to.as_ref()
     }
-    fn ade_of_abstract_feature_with_lifespan(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractFeatureWithLifespan>] {
-        &self.ade_of_abstract_feature_with_lifespan
-    }
 }
-impl AbstractCityObject for TINRelief {
+impl AbstractCityObjectTrait for TINRelief {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
     }
     fn relative_to_water(&self) -> Option<RelativeToWater> {
         self.relative_to_water
     }
-    fn ade_of_abstract_city_object(&self) -> &[Box<dyn ADEOfAbstractCityObject>] {
-        &self.ade_of_abstract_city_object
-    }
-    fn appearance(&self) -> &[Box<dyn AbstractAppearance>] {
+    fn appearance(&self) -> &[AbstractAppearance] {
         &self.appearance
     }
-    fn generic_attribute(&self) -> &[Box<dyn AbstractGenericAttribute>] {
-        &self.generic_attribute
-    }
-    fn generalizes_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn generalizes_to(&self) -> &[AbstractCityObject] {
         &self.generalizes_to
     }
     fn external_reference(&self) -> &[ExternalReference] {
         &self.external_reference
     }
-    fn related_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn related_to(&self) -> &[AbstractCityObject] {
         &self.related_to
     }
-    fn dynamizer(&self) -> &[Box<dyn AbstractDynamizer>] {
+    fn dynamizer(&self) -> &[AbstractDynamizer] {
         &self.dynamizer
     }
 }
-impl AbstractSpaceBoundary for TINRelief {
-    fn ade_of_abstract_space_boundary(&self) -> &[Box<dyn ADEOfAbstractSpaceBoundary>] {
-        &self.ade_of_abstract_space_boundary
-    }
-}
-impl AbstractReliefComponent for TINRelief {
+impl AbstractSpaceBoundaryTrait for TINRelief {}
+impl AbstractReliefComponentTrait for TINRelief {
     fn lod(&self) -> &IntegerBetween0and3 {
         &self.lod
-    }
-    fn ade_of_abstract_relief_component(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractReliefComponent>] {
-        &self.ade_of_abstract_relief_component
     }
     fn extent(&self) -> Option<&crate::geometry::Polygon> {
         self.extent.as_ref()
@@ -1457,26 +1336,19 @@ impl TINRelief {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut creation_date = None;
         let mut termination_date = None;
         let mut valid_from = None;
         let mut valid_to = None;
-        let mut ade_of_abstract_feature_with_lifespan = Vec::new();
         let mut relative_to_terrain = None;
         let mut relative_to_water = None;
-        let mut ade_of_abstract_city_object = Vec::new();
         let mut appearance = Vec::new();
-        let mut generic_attribute = Vec::new();
         let mut generalizes_to = Vec::new();
         let mut external_reference = Vec::new();
         let mut related_to = Vec::new();
         let mut dynamizer = Vec::new();
-        let mut ade_of_abstract_space_boundary = Vec::new();
         let mut lod = Default::default();
-        let mut ade_of_abstract_relief_component = Vec::new();
         let mut extent = None;
-        let mut ade_of_tin_relief = Vec::new();
         let mut tin = Default::default();
         let mut feature_id = ID(_gml_id);
         let mut sub = reader.subtree();
@@ -1494,9 +1366,6 @@ impl TINRelief {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "creationDate") => {
                     creation_date = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
@@ -1511,9 +1380,6 @@ impl TINRelief {
                 (crate::namespace::NS_CORE, "validTo") => {
                     valid_to = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeatureWithLifespan") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "relativeToTerrain") => {
                     relative_to_terrain = Some(
                         RelativeToTerrain::from_gml_text(&sub.read_text()?)?,
@@ -1524,30 +1390,24 @@ impl TINRelief {
                         RelativeToWater::from_gml_text(&sub.read_text()?)?,
                     );
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractCityObject") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "appearance") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         appearance
                             .push(
-                                super::dispatchers::parse_dyn_abstract_appearance(
+                                super::dispatchers::parse_abstract_appearance(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
                             );
                     }
                 }
-                (crate::namespace::NS_CORE, "genericAttribute") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "generalizesTo") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         generalizes_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -1562,7 +1422,7 @@ impl TINRelief {
                     if let Some(child_info) = wrapper.next_element()? {
                         related_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -1574,21 +1434,15 @@ impl TINRelief {
                     if let Some(child_info) = wrapper.next_element()? {
                         dynamizer
                             .push(
-                                super::dispatchers::parse_dyn_abstract_dynamizer(
+                                super::dispatchers::parse_abstract_dynamizer(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
                             );
                     }
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractSpaceBoundary") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_RELIEF, "lod") => {
                     lod = IntegerBetween0and3(sub.read_text()?);
-                }
-                (crate::namespace::NS_RELIEF, "adeOfAbstractReliefComponent") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_RELIEF, "extent") => {
                     extent = Some({
@@ -1604,9 +1458,6 @@ impl TINRelief {
                             crate::geometry::Polygon::default()
                         }
                     });
-                }
-                (crate::namespace::NS_RELIEF, "adeOfTINRelief") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_RELIEF, "tin") => {
                     tin = {
@@ -1637,26 +1488,19 @@ impl TINRelief {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             creation_date,
             termination_date,
             valid_from,
             valid_to,
-            ade_of_abstract_feature_with_lifespan,
             relative_to_terrain,
             relative_to_water,
-            ade_of_abstract_city_object,
             appearance,
-            generic_attribute,
             generalizes_to,
             external_reference,
             related_to,
             dynamizer,
-            ade_of_abstract_space_boundary,
             lod,
-            ade_of_abstract_relief_component,
             extent,
-            ade_of_tin_relief,
             tin,
         })
     }

@@ -5,8 +5,8 @@ use proc_macro2::TokenStream;
 use quote::quote;
 
 use crate::codegen::mapper::{
-    is_trait_object_prop, prop_field_ident, prop_method_ident, prop_to_field_type,
-    prop_to_impl_body, prop_to_return_type, type_ident,
+    prop_field_ident, prop_method_ident, prop_to_field_type,
+    prop_to_impl_body, prop_to_return_type, trait_ident, type_ident,
 };
 use crate::ir::model::UmlModel;
 use crate::ir::types::{UmlClass, UmlProperty};
@@ -29,8 +29,12 @@ pub fn generate_struct(cls: &UmlClass, model: &UmlModel) -> TokenStream {
     let struct_name = type_ident(&cls.name);
 
     // All properties: ancestor root first, own properties last
+    // Filter out ADEOf* and dead abstract type properties
     let all_props_raw = model.all_properties(&cls.xmi_id);
-    let all_props = dedup_properties(&all_props_raw);
+    let all_props: Vec<&UmlProperty> = dedup_properties(&all_props_raw)
+        .into_iter()
+        .filter(|prop| !model.should_skip_prop(prop))
+        .collect();
 
     // Struct fields
     let fields: Vec<TokenStream> = all_props
@@ -42,19 +46,19 @@ pub fn generate_struct(cls: &UmlClass, model: &UmlModel) -> TokenStream {
         })
         .collect();
 
-    // Check if any field is a trait object — if so, we can't derive Clone
-    let has_trait_objects = all_props.iter().any(|prop| is_trait_object_prop(prop, model));
-
-    let struct_def = if has_trait_objects {
+    // Check if this class is non-cloneable (transitively contains Box<dyn Any>)
+    let non_clone = model.non_cloneable_ids();
+    let can_clone = !non_clone.contains(&cls.xmi_id);
+    let struct_def = if can_clone {
         quote! {
-            #[derive(Debug, Default)]
+            #[derive(Debug, Clone, Default)]
             pub struct #struct_name {
                 #(#fields,)*
             }
         }
     } else {
         quote! {
-            #[derive(Debug, Clone, Default)]
+            #[derive(Debug, Default)]
             pub struct #struct_name {
                 #(#fields,)*
             }
@@ -71,10 +75,11 @@ pub fn generate_struct(cls: &UmlClass, model: &UmlModel) -> TokenStream {
     // Impl for each abstract ancestor (root first → most derived last)
     for ancestor in ancestors.iter().rev() {
         if ancestor.is_abstract {
-            let trait_name = type_ident(&ancestor.name);
+            let trait_name = trait_ident(&ancestor.name);
             let methods: Vec<TokenStream> = ancestor
                 .own_properties
                 .iter()
+                .filter(|prop| !model.should_skip_prop(prop))
                 .filter(|prop| {
                     let method_key = escape_keyword(&to_snake_case(&prop.name));
                     seen_methods.insert(method_key)

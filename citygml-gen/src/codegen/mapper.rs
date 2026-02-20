@@ -7,29 +7,22 @@ use crate::ir::types::*;
 use crate::util::naming::{escape_keyword, to_snake_case};
 
 /// Convert a UmlTypeRef to a base Rust type token stream (no Option/Vec wrapping).
+/// Abstract classes with concrete descendants use the enum dispatch type (same name).
 pub fn type_ref_to_tokens(type_ref: &UmlTypeRef, model: &UmlModel) -> TokenStream {
     match type_ref {
         UmlTypeRef::Known(id) => {
             // Look up the name from classes, enums, or datatypes
             if let Some(cls) = model.classes.get(id.as_str()) {
                 let name = Ident::new(&cls.name, Span::call_site());
-                if cls.is_abstract {
-                    // Abstract class → use Box<dyn Trait>
-                    quote! { Box<dyn #name> }
-                } else {
-                    quote! { #name }
-                }
+                // Abstract classes → enum dispatch type (same name as the trait)
+                // The enum is generated alongside the trait.
+                quote! { #name }
             } else if let Some(en) = model.enumerations.get(id.as_str()) {
                 let name = Ident::new(&en.name, Span::call_site());
                 quote! { #name }
             } else if let Some(dt) = model.data_types.get(id.as_str()) {
                 let name = Ident::new(&dt.name, Span::call_site());
-                if dt.is_abstract {
-                    // Abstract data type (ADEOf*) → use Box<dyn Trait>
-                    quote! { Box<dyn #name> }
-                } else {
-                    quote! { #name }
-                }
+                quote! { #name }
             } else {
                 // Shouldn't happen if resolution is correct
                 quote! { () }
@@ -45,7 +38,7 @@ pub fn type_ref_to_tokens(type_ref: &UmlTypeRef, model: &UmlModel) -> TokenStrea
 /// cannot construct a default value for `Box<dyn Trait>`.
 pub fn prop_to_field_type(prop: &UmlProperty, model: &UmlModel) -> TokenStream {
     let base = type_ref_to_tokens(&prop.type_ref, model);
-    let is_abstract = is_trait_object_prop(prop, model);
+    let is_abstract = is_abstract_prop(prop, model);
     match prop.multiplicity {
         Multiplicity::Required => {
             if is_abstract {
@@ -63,7 +56,7 @@ pub fn prop_to_field_type(prop: &UmlProperty, model: &UmlModel) -> TokenStream {
 /// Return type for trait method — uses references.
 pub fn prop_to_return_type(prop: &UmlProperty, model: &UmlModel) -> TokenStream {
     let base = type_ref_to_tokens(&prop.type_ref, model);
-    let is_abstract = is_trait_object_prop(prop, model);
+    let is_abstract = is_abstract_prop(prop, model);
     // Check if the base type is a simple Copy type
     let is_copy = matches!(
         &prop.type_ref,
@@ -107,7 +100,7 @@ pub fn prop_to_return_type(prop: &UmlProperty, model: &UmlModel) -> TokenStream 
 /// Generate the body expression for a trait method implementation.
 pub fn prop_to_impl_body(prop: &UmlProperty, model: &UmlModel) -> TokenStream {
     let field_name = Ident::new(&escape_keyword(&to_snake_case(&prop.name)), Span::call_site());
-    let is_abstract = is_trait_object_prop(prop, model);
+    let is_abstract = is_abstract_prop(prop, model);
 
     let is_copy = matches!(
         &prop.type_ref,
@@ -165,8 +158,14 @@ pub fn type_ident(name: &str) -> Ident {
     Ident::new(name, Span::call_site())
 }
 
-/// Returns true if a property's type resolves to a `Box<dyn Trait>` (abstract class or abstract data type).
-pub fn is_trait_object_prop(prop: &UmlProperty, model: &UmlModel) -> bool {
+/// Convert an abstract class name to its trait identifier (appends "Trait" suffix).
+/// This avoids name collisions with the enum dispatch type which uses the plain name.
+pub fn trait_ident(name: &str) -> Ident {
+    Ident::new(&format!("{name}Trait"), Span::call_site())
+}
+
+/// Returns true if a property's type resolves to an abstract type (class or data type).
+pub fn is_abstract_prop(prop: &UmlProperty, model: &UmlModel) -> bool {
     match &prop.type_ref {
         UmlTypeRef::Known(id) => {
             if let Some(cls) = model.classes.get(id.as_str()) {

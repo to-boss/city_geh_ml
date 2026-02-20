@@ -47,7 +47,10 @@ cargo test -p citygml-io --test read_building -- --nocapture
 - **Rust 2024 edition** — No `ref mut` in pattern matching. Use `option.as_mut()` instead.
 - **Property namespace resolution** — Each property's XML namespace comes from its defining ancestor's package. GML-inherited properties (`name`, `description`, `identifier`, `boundedBy`) use `gml:` namespace.
 - **Property deduplication** — When inherited properties collide by snake_case name, first/ancestor occurrence wins.
-- **Abstract types** — Required `Box<dyn Trait>` fields are promoted to `Option<Box<dyn Trait>>` since trait objects can't implement `Default`.
+- **Abstract types** — Use enum dispatch: each abstract class generates a trait (with `Trait` suffix, e.g. `AbstractCityObjectTrait`) + an enum (plain name, e.g. `AbstractCityObject`) with one variant per concrete descendant. Required abstract fields are promoted to `Option<EnumType>` since enums can't implement `Default` meaningfully.
+- **Enum boxing** — Enum variants are boxed when the abstract class has >8 concrete descendants to control stack size.
+- **ADEOf* types** — Removed entirely (114 types, 0 implementations). Fields referencing them are skipped.
+- **All structs derive Clone** — No more `Box<dyn Trait>` fields anywhere.
 - **Self-closing XML** — `Event::Empty` elements require `pop_empty_if_needed()` before reading the next event to keep depth tracking correct.
 
 ## Code Generation Notes

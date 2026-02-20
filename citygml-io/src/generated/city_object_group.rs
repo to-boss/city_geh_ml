@@ -1,7 +1,6 @@
 #![allow(unused_imports, unused_mut, unused_variables)]
 use super::*;
 
-pub trait ADEOfCityObjectGroup: std::fmt::Debug {}
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct CityObjectGroupClassValue(pub String);
 impl crate::from_gml::FromGml for CityObjectGroupClassValue {
@@ -29,53 +28,44 @@ impl crate::from_gml::FromGml for CityObjectGroupUsageValue {
         Ok(CityObjectGroupUsageValue(reader.read_text()?))
     }
 }
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct CityObjectGroup {
     pub feature_id: ID,
     pub identifier: Option<String>,
     pub name: Vec<String>,
     pub description: Option<String>,
-    pub ade_of_abstract_feature: Vec<Box<dyn ADEOfAbstractFeature>>,
     pub creation_date: Option<String>,
     pub termination_date: Option<String>,
     pub valid_from: Option<String>,
     pub valid_to: Option<String>,
-    pub ade_of_abstract_feature_with_lifespan: Vec<
-        Box<dyn ADEOfAbstractFeatureWithLifespan>,
-    >,
     pub relative_to_terrain: Option<RelativeToTerrain>,
     pub relative_to_water: Option<RelativeToWater>,
-    pub ade_of_abstract_city_object: Vec<Box<dyn ADEOfAbstractCityObject>>,
-    pub appearance: Vec<Box<dyn AbstractAppearance>>,
-    pub generic_attribute: Vec<Box<dyn AbstractGenericAttribute>>,
-    pub generalizes_to: Vec<Box<dyn AbstractCityObject>>,
+    pub appearance: Vec<AbstractAppearance>,
+    pub generalizes_to: Vec<AbstractCityObject>,
     pub external_reference: Vec<ExternalReference>,
-    pub related_to: Vec<Box<dyn AbstractCityObject>>,
-    pub dynamizer: Vec<Box<dyn AbstractDynamizer>>,
+    pub related_to: Vec<AbstractCityObject>,
+    pub dynamizer: Vec<AbstractDynamizer>,
     pub space_type: Option<SpaceType>,
     pub volume: Vec<QualifiedVolume>,
     pub area: Vec<QualifiedArea>,
-    pub ade_of_abstract_space: Vec<Box<dyn ADEOfAbstractSpace>>,
     pub lod2_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod3_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod0_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod1_solid: Option<crate::geometry::Solid>,
     pub lod3_solid: Option<crate::geometry::Solid>,
-    pub boundary: Vec<Box<dyn AbstractSpaceBoundary>>,
+    pub boundary: Vec<AbstractSpaceBoundary>,
     pub lod0_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_solid: Option<crate::geometry::Solid>,
     pub lod0_point: Option<crate::geometry::DirectPosition>,
     pub lod3_multi_curve: Option<crate::geometry::MultiCurve>,
     pub lod2_multi_surface: Option<crate::geometry::MultiSurface>,
-    pub ade_of_abstract_logical_space: Vec<Box<dyn ADEOfAbstractLogicalSpace>>,
     pub class_: Option<CityObjectGroupClassValue>,
     pub function: Vec<CityObjectGroupFunctionValue>,
     pub usage: Vec<CityObjectGroupUsageValue>,
-    pub ade_of_city_object_group: Vec<Box<dyn ADEOfCityObjectGroup>>,
-    pub parent: Option<Box<dyn AbstractCityObject>>,
-    pub group_member: Vec<Box<dyn AbstractCityObject>>,
+    pub parent: Option<AbstractCityObject>,
+    pub group_member: Vec<AbstractCityObject>,
 }
-impl AbstractFeature for CityObjectGroup {
+impl AbstractFeatureTrait for CityObjectGroup {
     fn feature_id(&self) -> &ID {
         &self.feature_id
     }
@@ -88,11 +78,8 @@ impl AbstractFeature for CityObjectGroup {
     fn description(&self) -> Option<&String> {
         self.description.as_ref()
     }
-    fn ade_of_abstract_feature(&self) -> &[Box<dyn ADEOfAbstractFeature>] {
-        &self.ade_of_abstract_feature
-    }
 }
-impl AbstractFeatureWithLifespan for CityObjectGroup {
+impl AbstractFeatureWithLifespanTrait for CityObjectGroup {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
     }
@@ -105,42 +92,31 @@ impl AbstractFeatureWithLifespan for CityObjectGroup {
     fn valid_to(&self) -> Option<&String> {
         self.valid_to.as_ref()
     }
-    fn ade_of_abstract_feature_with_lifespan(
-        &self,
-    ) -> &[Box<dyn ADEOfAbstractFeatureWithLifespan>] {
-        &self.ade_of_abstract_feature_with_lifespan
-    }
 }
-impl AbstractCityObject for CityObjectGroup {
+impl AbstractCityObjectTrait for CityObjectGroup {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
     }
     fn relative_to_water(&self) -> Option<RelativeToWater> {
         self.relative_to_water
     }
-    fn ade_of_abstract_city_object(&self) -> &[Box<dyn ADEOfAbstractCityObject>] {
-        &self.ade_of_abstract_city_object
-    }
-    fn appearance(&self) -> &[Box<dyn AbstractAppearance>] {
+    fn appearance(&self) -> &[AbstractAppearance] {
         &self.appearance
     }
-    fn generic_attribute(&self) -> &[Box<dyn AbstractGenericAttribute>] {
-        &self.generic_attribute
-    }
-    fn generalizes_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn generalizes_to(&self) -> &[AbstractCityObject] {
         &self.generalizes_to
     }
     fn external_reference(&self) -> &[ExternalReference] {
         &self.external_reference
     }
-    fn related_to(&self) -> &[Box<dyn AbstractCityObject>] {
+    fn related_to(&self) -> &[AbstractCityObject] {
         &self.related_to
     }
-    fn dynamizer(&self) -> &[Box<dyn AbstractDynamizer>] {
+    fn dynamizer(&self) -> &[AbstractDynamizer] {
         &self.dynamizer
     }
 }
-impl AbstractSpace for CityObjectGroup {
+impl AbstractSpaceTrait for CityObjectGroup {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
     }
@@ -149,9 +125,6 @@ impl AbstractSpace for CityObjectGroup {
     }
     fn area(&self) -> &[QualifiedArea] {
         &self.area
-    }
-    fn ade_of_abstract_space(&self) -> &[Box<dyn ADEOfAbstractSpace>] {
-        &self.ade_of_abstract_space
     }
     fn lod2_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod2_multi_curve.as_ref()
@@ -168,7 +141,7 @@ impl AbstractSpace for CityObjectGroup {
     fn lod3_solid(&self) -> Option<&crate::geometry::Solid> {
         self.lod3_solid.as_ref()
     }
-    fn boundary(&self) -> &[Box<dyn AbstractSpaceBoundary>] {
+    fn boundary(&self) -> &[AbstractSpaceBoundary] {
         &self.boundary
     }
     fn lod0_multi_curve(&self) -> Option<&crate::geometry::MultiCurve> {
@@ -187,11 +160,7 @@ impl AbstractSpace for CityObjectGroup {
         self.lod2_multi_surface.as_ref()
     }
 }
-impl AbstractLogicalSpace for CityObjectGroup {
-    fn ade_of_abstract_logical_space(&self) -> &[Box<dyn ADEOfAbstractLogicalSpace>] {
-        &self.ade_of_abstract_logical_space
-    }
-}
+impl AbstractLogicalSpaceTrait for CityObjectGroup {}
 impl CityObjectGroup {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -202,17 +171,13 @@ impl CityObjectGroup {
         let mut identifier = None;
         let mut name = Vec::new();
         let mut description = None;
-        let mut ade_of_abstract_feature = Vec::new();
         let mut creation_date = None;
         let mut termination_date = None;
         let mut valid_from = None;
         let mut valid_to = None;
-        let mut ade_of_abstract_feature_with_lifespan = Vec::new();
         let mut relative_to_terrain = None;
         let mut relative_to_water = None;
-        let mut ade_of_abstract_city_object = Vec::new();
         let mut appearance = Vec::new();
-        let mut generic_attribute = Vec::new();
         let mut generalizes_to = Vec::new();
         let mut external_reference = Vec::new();
         let mut related_to = Vec::new();
@@ -220,7 +185,6 @@ impl CityObjectGroup {
         let mut space_type = None;
         let mut volume = Vec::new();
         let mut area = Vec::new();
-        let mut ade_of_abstract_space = Vec::new();
         let mut lod2_multi_curve = None;
         let mut lod3_multi_surface = None;
         let mut lod0_multi_surface = None;
@@ -232,11 +196,9 @@ impl CityObjectGroup {
         let mut lod0_point = None;
         let mut lod3_multi_curve = None;
         let mut lod2_multi_surface = None;
-        let mut ade_of_abstract_logical_space = Vec::new();
         let mut class_ = None;
         let mut function = Vec::new();
         let mut usage = Vec::new();
-        let mut ade_of_city_object_group = Vec::new();
         let mut parent = None;
         let mut group_member = Vec::new();
         let mut feature_id = ID(_gml_id);
@@ -255,9 +217,6 @@ impl CityObjectGroup {
                 (crate::namespace::NS_GML, "description") => {
                     description = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeature") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "creationDate") => {
                     creation_date = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
@@ -272,9 +231,6 @@ impl CityObjectGroup {
                 (crate::namespace::NS_CORE, "validTo") => {
                     valid_to = Some(crate::from_gml::FromGml::from_gml(&mut sub)?);
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractFeatureWithLifespan") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "relativeToTerrain") => {
                     relative_to_terrain = Some(
                         RelativeToTerrain::from_gml_text(&sub.read_text()?)?,
@@ -285,30 +241,24 @@ impl CityObjectGroup {
                         RelativeToWater::from_gml_text(&sub.read_text()?)?,
                     );
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractCityObject") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "appearance") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         appearance
                             .push(
-                                super::dispatchers::parse_dyn_abstract_appearance(
+                                super::dispatchers::parse_abstract_appearance(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
                             );
                     }
                 }
-                (crate::namespace::NS_CORE, "genericAttribute") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CORE, "generalizesTo") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         generalizes_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -323,7 +273,7 @@ impl CityObjectGroup {
                     if let Some(child_info) = wrapper.next_element()? {
                         related_to
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -335,7 +285,7 @@ impl CityObjectGroup {
                     if let Some(child_info) = wrapper.next_element()? {
                         dynamizer
                             .push(
-                                super::dispatchers::parse_dyn_abstract_dynamizer(
+                                super::dispatchers::parse_abstract_dynamizer(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -350,9 +300,6 @@ impl CityObjectGroup {
                 }
                 (crate::namespace::NS_CORE, "area") => {
                     area.push(QualifiedArea::from_gml(&mut sub)?);
-                }
-                (crate::namespace::NS_CORE, "adeOfAbstractSpace") => {
-                    sub.skip_element()?;
                 }
                 (crate::namespace::NS_CORE, "lod2MultiCurve") => {
                     lod2_multi_curve = Some({
@@ -434,7 +381,7 @@ impl CityObjectGroup {
                     if let Some(child_info) = wrapper.next_element()? {
                         boundary
                             .push(
-                                super::dispatchers::parse_dyn_abstract_space_boundary(
+                                super::dispatchers::parse_abstract_space_boundary(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -516,9 +463,6 @@ impl CityObjectGroup {
                         }
                     });
                 }
-                (crate::namespace::NS_CORE, "adeOfAbstractLogicalSpace") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CITY_OBJECT_GROUP, "class") => {
                     class_ = Some(CityObjectGroupClassValue(sub.read_text()?));
                 }
@@ -528,14 +472,11 @@ impl CityObjectGroup {
                 (crate::namespace::NS_CITY_OBJECT_GROUP, "usage") => {
                     usage.push(CityObjectGroupUsageValue(sub.read_text()?));
                 }
-                (crate::namespace::NS_CITY_OBJECT_GROUP, "adeOfCityObjectGroup") => {
-                    sub.skip_element()?;
-                }
                 (crate::namespace::NS_CITY_OBJECT_GROUP, "parent") => {
                     let mut wrapper = sub.subtree();
                     if let Some(child_info) = wrapper.next_element()? {
                         parent = Some(
-                            super::dispatchers::parse_dyn_abstract_city_object(
+                            super::dispatchers::parse_abstract_city_object(
                                 &mut wrapper,
                                 &child_info,
                             )?,
@@ -547,7 +488,7 @@ impl CityObjectGroup {
                     if let Some(child_info) = wrapper.next_element()? {
                         group_member
                             .push(
-                                super::dispatchers::parse_dyn_abstract_city_object(
+                                super::dispatchers::parse_abstract_city_object(
                                     &mut wrapper,
                                     &child_info,
                                 )?,
@@ -564,17 +505,13 @@ impl CityObjectGroup {
             identifier,
             name,
             description,
-            ade_of_abstract_feature,
             creation_date,
             termination_date,
             valid_from,
             valid_to,
-            ade_of_abstract_feature_with_lifespan,
             relative_to_terrain,
             relative_to_water,
-            ade_of_abstract_city_object,
             appearance,
-            generic_attribute,
             generalizes_to,
             external_reference,
             related_to,
@@ -582,7 +519,6 @@ impl CityObjectGroup {
             space_type,
             volume,
             area,
-            ade_of_abstract_space,
             lod2_multi_curve,
             lod3_multi_surface,
             lod0_multi_surface,
@@ -594,11 +530,9 @@ impl CityObjectGroup {
             lod0_point,
             lod3_multi_curve,
             lod2_multi_surface,
-            ade_of_abstract_logical_space,
             class_,
             function,
             usage,
-            ade_of_city_object_group,
             parent,
             group_member,
         })
