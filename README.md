@@ -169,7 +169,7 @@ Integration tests use CityGML 3.0 example files from the [OGC CityGML-3.0Encodin
 
 ## Known Limitations
 
-- **No xlink resolution**: Geometry elements using `xlink:href` references (e.g., `<gml:surfaceMember xlink:href="#id"/>`) are not resolved. The referenced geometry is skipped.
+- **Limited xlink resolution**: Geometry-level `xlink:href` references (e.g., `<gml:surfaceMember xlink:href="#p1"/>`) are resolved via a polygon registry (single-pass, forward-defined polygons only). Feature-level xlink references are not supported.
 - **Partial feature dispatch**: `ParsedCityModel` currently collects Building, BuildingPart, and ReliefFeature. Other CityGML feature types are parsed but not yet collected.
 - **No CRS handling**: Coordinate reference systems are not interpreted. Coordinates are stored as raw `f64` values.
 - **One unresolved external type**: The `grid` attribute in `RasterRelief` references an external grid coverage type that is not modeled.
