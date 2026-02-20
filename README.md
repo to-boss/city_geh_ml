@@ -174,6 +174,11 @@ Integration tests use CityGML 3.0 example files from the [OGC CityGML-3.0Encodin
 - **No CRS handling**: Coordinate reference systems are not interpreted. Coordinates are stored as raw `f64` values.
 - **One unresolved external type**: The `grid` attribute in `RasterRelief` references an external grid coverage type that is not modeled.
 
+## Future Plans
+
+- [**Standalone generated crate**](docs/standalone-crate-plan.md) — Restructure the workspace so the code generator produces a complete, self-contained `citygml-types` crate instead of generating into `citygml-io/src/generated/`. Splits the workspace into `citygml-core` (hand-written framework), `citygml-types` (fully generated), and a slimmed `citygml-io` wrapper.
+- [**XSD-based code generation**](docs/xsd-migration-plan.md) — Replace the XMI (Enterprise Architect UML export) parser with an XSD parser that reads the official OGC XML Schema files directly. This resolves the unresolved `grid` type, eliminates EA lock-in, and aligns generated element names exactly with GML encoding.
+
 ## License
 
 This project is not yet licensed. The CityGML 3.0 conceptual model is an OGC standard.
