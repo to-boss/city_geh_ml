@@ -24,7 +24,12 @@ pub fn type_ref_to_tokens(type_ref: &UmlTypeRef, model: &UmlModel) -> TokenStrea
                 quote! { #name }
             } else if let Some(dt) = model.data_types.get(id.as_str()) {
                 let name = Ident::new(&dt.name, Span::call_site());
-                quote! { #name }
+                if dt.is_abstract {
+                    // Abstract data type (ADEOf*) → use Box<dyn Trait>
+                    quote! { Box<dyn #name> }
+                } else {
+                    quote! { #name }
+                }
             } else {
                 // Shouldn't happen if resolution is correct
                 quote! { () }
@@ -36,10 +41,19 @@ pub fn type_ref_to_tokens(type_ref: &UmlTypeRef, model: &UmlModel) -> TokenStrea
 }
 
 /// Wrap a base type with Option/Vec based on multiplicity — for struct fields.
+/// Required abstract types (trait objects) are promoted to Optional since we
+/// cannot construct a default value for `Box<dyn Trait>`.
 pub fn prop_to_field_type(prop: &UmlProperty, model: &UmlModel) -> TokenStream {
     let base = type_ref_to_tokens(&prop.type_ref, model);
+    let is_abstract = is_trait_object_prop(prop, model);
     match prop.multiplicity {
-        Multiplicity::Required => base,
+        Multiplicity::Required => {
+            if is_abstract {
+                quote! { Option<#base> }
+            } else {
+                base
+            }
+        }
         Multiplicity::Optional => quote! { Option<#base> },
         Multiplicity::Many => quote! { Vec<#base> },
         Multiplicity::RequiredMany => quote! { Vec<#base> },
@@ -49,6 +63,7 @@ pub fn prop_to_field_type(prop: &UmlProperty, model: &UmlModel) -> TokenStream {
 /// Return type for trait method — uses references.
 pub fn prop_to_return_type(prop: &UmlProperty, model: &UmlModel) -> TokenStream {
     let base = type_ref_to_tokens(&prop.type_ref, model);
+    let is_abstract = is_trait_object_prop(prop, model);
     // Check if the base type is a simple Copy type
     let is_copy = matches!(
         &prop.type_ref,
@@ -69,7 +84,10 @@ pub fn prop_to_return_type(prop: &UmlProperty, model: &UmlModel) -> TokenStream 
 
     match prop.multiplicity {
         Multiplicity::Required => {
-            if is_copy || is_enum {
+            if is_abstract {
+                // Abstract types promoted to Optional
+                quote! { Option<&#base> }
+            } else if is_copy || is_enum {
                 base
             } else {
                 quote! { &#base }
@@ -89,6 +107,7 @@ pub fn prop_to_return_type(prop: &UmlProperty, model: &UmlModel) -> TokenStream 
 /// Generate the body expression for a trait method implementation.
 pub fn prop_to_impl_body(prop: &UmlProperty, model: &UmlModel) -> TokenStream {
     let field_name = Ident::new(&escape_keyword(&to_snake_case(&prop.name)), Span::call_site());
+    let is_abstract = is_trait_object_prop(prop, model);
 
     let is_copy = matches!(
         &prop.type_ref,
@@ -109,7 +128,10 @@ pub fn prop_to_impl_body(prop: &UmlProperty, model: &UmlModel) -> TokenStream {
 
     match prop.multiplicity {
         Multiplicity::Required => {
-            if is_copy || is_enum {
+            if is_abstract {
+                // Abstract types promoted to Optional
+                quote! { self.#field_name.as_ref() }
+            } else if is_copy || is_enum {
                 quote! { self.#field_name }
             } else {
                 quote! { &self.#field_name }
@@ -141,4 +163,20 @@ pub fn prop_method_ident(name: &str) -> Ident {
 /// Convert a class/trait name to a PascalCase Rust identifier.
 pub fn type_ident(name: &str) -> Ident {
     Ident::new(name, Span::call_site())
+}
+
+/// Returns true if a property's type resolves to a `Box<dyn Trait>` (abstract class or abstract data type).
+pub fn is_trait_object_prop(prop: &UmlProperty, model: &UmlModel) -> bool {
+    match &prop.type_ref {
+        UmlTypeRef::Known(id) => {
+            if let Some(cls) = model.classes.get(id.as_str()) {
+                cls.is_abstract
+            } else if let Some(dt) = model.data_types.get(id.as_str()) {
+                dt.is_abstract
+            } else {
+                false
+            }
+        }
+        _ => false,
+    }
 }

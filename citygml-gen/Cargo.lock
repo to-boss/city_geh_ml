@@ -65,7 +65,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9330f8b2ff13f34540b44e946ef35111825727b38d33286ef986142615121801"
 
 [[package]]
-name = "citygml-gen"
+name = "city_geh_ml"
 version = "0.1.0"
 dependencies = [
  "anyhow",
@@ -77,15 +77,6 @@ dependencies = [
  "quick-xml",
  "quote",
  "syn",
- "thiserror",
-]
-
-[[package]]
-name = "citygml-io"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "quick-xml",
  "thiserror",
 ]
 

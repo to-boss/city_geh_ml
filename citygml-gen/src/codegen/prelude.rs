@@ -2,16 +2,27 @@ use std::path::Path;
 
 use crate::error::GenError;
 
-/// Write a mod.rs file with `pub mod` declarations for each generated module.
+/// Write a mod.rs file with `pub mod` declarations and `pub use` re-exports.
 pub fn write_mod_file(
     output_dir: &Path,
     module_names: &[String],
     dry_run: bool,
     verbose: bool,
 ) -> Result<(), GenError> {
-    let mut content = String::new();
+    let mut content = String::from("#![allow(unused_imports)]\n\n");
+
+    // Module declarations
     for name in module_names {
         content.push_str(&format!("pub mod {name};\n"));
+    }
+
+    content.push('\n');
+
+    // Re-export all types for cross-module visibility
+    for name in module_names {
+        if name != "dispatchers" {
+            content.push_str(&format!("pub use {name}::*;\n"));
+        }
     }
 
     if dry_run {

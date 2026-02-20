@@ -24,26 +24,25 @@ pub fn external_type_tokens(ext: ExternalType) -> TokenStream {
         ExternalType::MeasureOrNilReasonList => quote! { Vec<f64> },
         ExternalType::Character => quote! { char },
         ExternalType::GmPoint | ExternalType::DirectPosition => {
-            quote! { egml_core::model::geometry::DirectPosition }
+            quote! { crate::geometry::DirectPosition }
         }
         ExternalType::GmMultiSurface => {
-            quote! { egml_core::model::geometry::MultiSurface }
+            quote! { crate::geometry::MultiSurface }
         }
         ExternalType::GmSolid => {
-            quote! { egml_core::model::geometry::Solid }
+            quote! { crate::geometry::Solid }
         }
         ExternalType::GmSurface => {
-            quote! { egml_core::model::geometry::Surface }
+            quote! { crate::geometry::Polygon }
         }
         ExternalType::GmTriangulatedSurface => {
-            quote! { egml_core::model::geometry::TriangulatedSurface }
+            quote! { crate::geometry::TriangulatedSurface }
         }
         ExternalType::GmMultiCurve => {
-            // No direct egml equivalent yet — use Vec of curves
-            quote! { Vec<egml_core::model::geometry::Surface> }
+            quote! { crate::geometry::MultiCurve }
         }
         ExternalType::GmMultiPoint => {
-            quote! { Vec<egml_core::model::geometry::DirectPosition> }
+            quote! { Vec<crate::geometry::DirectPosition> }
         }
         ExternalType::GmObject | ExternalType::AnyFeature => {
             quote! { Box<dyn std::any::Any> }
@@ -52,4 +51,19 @@ pub fn external_type_tokens(ext: ExternalType) -> TokenStream {
             quote! { String }
         }
     }
+}
+
+/// Check if an ExternalType is a geometry type that can be parsed from GML.
+pub fn is_geometry_type(ext: ExternalType) -> bool {
+    matches!(
+        ext,
+        ExternalType::GmPoint
+            | ExternalType::DirectPosition
+            | ExternalType::GmMultiSurface
+            | ExternalType::GmSolid
+            | ExternalType::GmSurface
+            | ExternalType::GmTriangulatedSurface
+            | ExternalType::GmMultiCurve
+            | ExternalType::GmMultiPoint
+    )
 }

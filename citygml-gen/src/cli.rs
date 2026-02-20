@@ -28,4 +28,9 @@ pub struct Args {
     /// Only generate for the specified packages (comma-separated).
     #[arg(long, value_delimiter = ',')]
     pub packages: Option<Vec<String>>,
+
+    /// Also generate FromGml reader impls to this directory.
+    /// Defaults to `<output>/` (same as type output) if flag is present without value.
+    #[arg(long)]
+    pub with_reader: Option<Option<PathBuf>>,
 }

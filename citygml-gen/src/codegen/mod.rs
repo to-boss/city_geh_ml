@@ -1,6 +1,7 @@
 pub mod datatype_gen;
 pub mod enum_gen;
 pub mod external_types;
+pub mod from_gml_gen;
 pub mod mapper;
 pub mod module_writer;
 pub mod prelude;

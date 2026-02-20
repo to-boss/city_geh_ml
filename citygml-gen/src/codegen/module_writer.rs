@@ -5,6 +5,7 @@ use proc_macro2::TokenStream;
 
 use crate::codegen::datatype_gen::generate_datatype;
 use crate::codegen::enum_gen::generate_enum;
+use crate::codegen::from_gml_gen;
 use crate::codegen::struct_gen::{generate_codelist, generate_struct};
 use crate::codegen::trait_gen::generate_trait;
 use crate::error::GenError;
@@ -18,9 +19,11 @@ struct PackageTokens {
 }
 
 /// Generate all .rs files from the model.
+/// When `with_reader` is true, also generates `FromGml` impls and dispatchers.
 pub fn generate_all(
     model: &UmlModel,
     output_dir: &Path,
+    with_reader: bool,
     dry_run: bool,
     verbose: bool,
 ) -> Result<Vec<String>, GenError> {
@@ -36,11 +39,20 @@ pub fn generate_all(
         });
     }
 
+    // ── Type definitions ──
+
     // Generate enumerations
     for (_id, uml_enum) in &model.enumerations {
         let ts = generate_enum(uml_enum);
         if let Some(pt) = pkg_tokens.get_mut(&uml_enum.package_id) {
             pt.tokens.push(ts);
+        }
+        // Also generate FromGml for this enum
+        if with_reader {
+            let reader_ts = from_gml_gen::generate_from_gml_enum(uml_enum);
+            if let Some(pt) = pkg_tokens.get_mut(&uml_enum.package_id) {
+                pt.tokens.push(reader_ts);
+            }
         }
     }
 
@@ -49,6 +61,15 @@ pub fn generate_all(
         let ts = generate_datatype(dt, model);
         if let Some(pt) = pkg_tokens.get_mut(&dt.package_id) {
             pt.tokens.push(ts);
+        }
+        // Also generate FromGml
+        if with_reader {
+            let reader_ts = from_gml_gen::generate_from_gml_datatype(dt, model);
+            if !reader_ts.is_empty() {
+                if let Some(pt) = pkg_tokens.get_mut(&dt.package_id) {
+                    pt.tokens.push(reader_ts);
+                }
+            }
         }
     }
 
@@ -70,6 +91,20 @@ pub fn generate_all(
             if let Some(pt) = pkg_tokens.get_mut(&cls.package_id) {
                 pt.tokens.push(ts);
             }
+
+            // Also generate FromGml for non-abstract classes
+            if with_reader && !cls.is_abstract {
+                let reader_ts = if cls.own_properties.is_empty()
+                    && cls.parent_ids.is_empty()
+                {
+                    from_gml_gen::generate_from_gml_codelist(&cls.name)
+                } else {
+                    from_gml_gen::generate_from_gml_class(cls, model)
+                };
+                if let Some(pt) = pkg_tokens.get_mut(&cls.package_id) {
+                    pt.tokens.push(reader_ts);
+                }
+            }
         }
     }
 
@@ -84,7 +119,12 @@ pub fn generate_all(
         let combined: TokenStream = pt.tokens.iter().cloned().collect();
 
         // Format with prettyplease
-        let file_content = format_tokens(combined)?;
+        let mut file_content = format_tokens(combined)?;
+
+        // Prepend cross-module imports
+        file_content = format!(
+            "#![allow(unused_imports, unused_mut, unused_variables)]\nuse super::*;\n\n{file_content}"
+        );
 
         let filename = format!("{}.rs", pt.module_name);
         module_names.push(pt.module_name.clone());
@@ -99,6 +139,30 @@ pub fn generate_all(
                 eprintln!("  Writing {filename}...");
             }
             std::fs::write(&file_path, &file_content)?;
+        }
+    }
+
+    // Generate dispatchers module if with_reader
+    if with_reader {
+        let dispatcher_tokens = from_gml_gen::generate_dispatchers(model);
+        if !dispatcher_tokens.is_empty() {
+            let mut file_content = format_tokens(dispatcher_tokens)?;
+            file_content = format!(
+                "#![allow(unused_imports, unused_mut, unused_variables)]\nuse super::*;\n\n{file_content}"
+            );
+            module_names.push("dispatchers".to_string());
+
+            if dry_run {
+                if verbose {
+                    eprintln!("  [dry-run] Would write dispatchers.rs ({} bytes)", file_content.len());
+                }
+            } else {
+                let file_path = output_dir.join("dispatchers.rs");
+                if verbose {
+                    eprintln!("  Writing dispatchers.rs...");
+                }
+                std::fs::write(&file_path, &file_content)?;
+            }
         }
     }
 

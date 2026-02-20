@@ -16,10 +16,15 @@ use cli::Args;
 fn main() -> Result<()> {
     let args = Args::parse();
 
+    let with_reader = args.with_reader.is_some();
+
     if args.verbose {
         eprintln!("citygml-gen — CityGML 3.0 Rust code generator");
         eprintln!("  Input:  {}", args.input.display());
         eprintln!("  Output: {}", args.output.display());
+        if with_reader {
+            eprintln!("  Reader: enabled");
+        }
         if args.dry_run {
             eprintln!("  Mode:   dry-run");
         }
@@ -41,7 +46,7 @@ fn main() -> Result<()> {
         eprintln!("  GeometryRefs:{}", raw_model.geometry_refs.len());
     }
 
-    // Phase 2+3: Resolve to IR
+    // Phase 2: Resolve to IR
     if args.verbose {
         eprintln!("\nPhase 2: Resolving types...");
     }
@@ -53,20 +58,18 @@ fn main() -> Result<()> {
         eprintln!("  Resolved data types:  {}", model.data_types.len());
         eprintln!("  Sorted class order:   {} entries", model.sorted_class_ids.len());
 
-        // Count total own properties
         let total_props: usize = model.classes.values().map(|c| c.own_properties.len()).sum();
         eprintln!("  Total own properties: {total_props}");
 
-        // Show abstract vs concrete
         let abstract_count = model.classes.values().filter(|c| c.is_abstract).count();
         let concrete_count = model.classes.values().filter(|c| !c.is_abstract).count();
         eprintln!("  Abstract classes:     {abstract_count}");
         eprintln!("  Concrete classes:     {concrete_count}");
     }
 
-    // Phase 4: Code generation
+    // Phase 3: Code generation
     if args.verbose {
-        eprintln!("\nPhase 3: Generating code...");
+        eprintln!("\nPhase 3: Generating code{}...", if with_reader { " + reader impls" } else { "" });
     }
 
     if !args.dry_run {
@@ -74,8 +77,13 @@ fn main() -> Result<()> {
             .with_context(|| format!("Failed to create output directory: {}", args.output.display()))?;
     }
 
-    let module_names =
-        codegen::module_writer::generate_all(&model, &args.output, args.dry_run, args.verbose)?;
+    let module_names = codegen::module_writer::generate_all(
+        &model,
+        &args.output,
+        with_reader,
+        args.dry_run,
+        args.verbose,
+    )?;
 
     // Write mod.rs
     codegen::prelude::write_mod_file(&args.output, &module_names, args.dry_run, args.verbose)?;
