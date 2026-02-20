@@ -32,13 +32,13 @@ fn test_read_building_lod2() {
         b.boundary.len()
     );
 
-    // Check lod2Solid geometry
-    assert!(
-        b.lod2_solid.is_some(),
-        "Building should have lod2Solid geometry"
+    // Check lod2Solid geometry — xlink:href references should be resolved
+    let solid = b.lod2_solid.as_ref().expect("Building should have lod2Solid geometry");
+    assert_eq!(
+        solid.exterior_shell.len(),
+        11,
+        "Solid exterior shell should have 11 polygons (resolved via xlink:href)"
     );
-    // Note: this file's Solid uses xlink:href references (not inline polygons),
-    // so exterior_shell is empty until xlink resolution is implemented.
 
     // Check creation date
     assert!(b.creation_date.is_some());

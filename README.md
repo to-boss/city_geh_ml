@@ -1,6 +1,6 @@
 # CityGML 3.0 Rust Toolkit
 
-A Rust workspace for working with [OGC CityGML 3.0](https://www.ogc.org/standard/citygml/) data. Parses the official UML model (XMI) to generate strongly-typed Rust structs, traits, and enums covering all 18 CityGML packages, then provides a GML reader to deserialize `.gml` files into those types.
+A Rust workspace for working with [OGC CityGML 3.0](https://www.ogc.org/standard/citygml/) data. Parses the official UML model (XMI) to generate strongly-typed Rust structs, traits, and enums covering all 17 CityGML packages, then provides a GML reader to deserialize `.gml` files into those types.
 
 ## Crates
 
@@ -45,7 +45,7 @@ cargo run -p citygml-gen -- \
   --with-reader
 ```
 
-The XMI file is the CityGML 3.0 UML model exported from Enterprise Architect. It can be obtained from the [OGC CityGML 3.0 Conceptual Model](https://github.com/opengeospatial/CityGML3-Workspace).
+The XMI file is the CityGML 3.0 UML model exported from Enterprise Architect. It can be obtained from the [OGC CityGML 3.0 Conceptual Model](https://github.com/opengeospatial/CityGML-3.0CM).
 
 #### Generator options
 
@@ -53,14 +53,14 @@ The XMI file is the CityGML 3.0 UML model exported from Enterprise Architect. It
 |------|-------------|
 | `--input <PATH>` | Path to the CityGML 3.0 XMI file (required) |
 | `--output <DIR>` | Output directory for generated `.rs` files (default: `src/generated`) |
-| `--with-reader` | Also generate `FromGml` deserialization impls |
+| `--with-reader [DIR]` | Also generate `FromGml` deserialization impls (optionally into a separate directory) |
 | `--packages core,building` | Only generate specific packages (comma-separated) |
 | `--verbose` | Print detailed progress |
 | `--dry-run` | Parse and resolve without writing files |
 
 ## Generated Code
 
-The generator produces Rust code for all 268 classes across 18 CityGML packages:
+The generator produces Rust code for all 268 classes across 17 CityGML packages:
 
 - **34 abstract classes** &rarr; traits (with `Trait` suffix) + enum dispatch types with one variant per concrete descendant
 - **234 concrete classes** &rarr; structs implementing the appropriate traits, all deriving `Clone`

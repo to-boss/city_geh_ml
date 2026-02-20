@@ -88,17 +88,29 @@ fn parse_surface_element(reader: &mut SubtreeReader<'_>, info: &crate::gml_reade
     if info.namespace == NS_GML {
         match info.local_name.as_str() {
             "Polygon" => {
-                Ok(vec![parse_polygon(reader)?])
+                let mut polygon = parse_polygon(reader)?;
+                polygon.gml_id = SubtreeReader::gml_id(info);
+                if let Some(id) = polygon.gml_id.as_ref() {
+                    reader.register_polygon(id.clone(), polygon.clone());
+                }
+                Ok(vec![polygon])
             }
             "CompositeSurface" => {
                 let mut polygons = Vec::new();
                 let mut sub = reader.subtree();
                 while let Some(child) = sub.next_element()? {
                     if child.namespace == NS_GML && child.local_name == "surfaceMember" {
-                        let mut member_sub = sub.subtree();
-                        while let Some(surf) = member_sub.next_element()? {
-                            let mut polys = parse_surface_element(&mut member_sub, &surf)?;
-                            polygons.append(&mut polys);
+                        if let Some(href) = SubtreeReader::xlink_href(&child) {
+                            if let Some(p) = sub.resolve_polygon_href(href) {
+                                polygons.push(p);
+                            }
+                            sub.skip_element()?;
+                        } else {
+                            let mut member_sub = sub.subtree();
+                            while let Some(surf) = member_sub.next_element()? {
+                                let mut polys = parse_surface_element(&mut member_sub, &surf)?;
+                                polygons.append(&mut polys);
+                            }
                         }
                     } else {
                         sub.skip_element()?;
@@ -141,10 +153,17 @@ pub fn parse_multi_surface(reader: &mut SubtreeReader<'_>) -> Result<MultiSurfac
         if info.namespace == NS_GML {
             match info.local_name.as_str() {
                 "surfaceMember" => {
-                    let mut member_sub = sub.subtree();
-                    while let Some(surf_info) = member_sub.next_element()? {
-                        let mut polys = parse_surface_element(&mut member_sub, &surf_info)?;
-                        ms.surface_members.append(&mut polys);
+                    if let Some(href) = SubtreeReader::xlink_href(&info) {
+                        if let Some(p) = sub.resolve_polygon_href(href) {
+                            ms.surface_members.push(p);
+                        }
+                        sub.skip_element()?;
+                    } else {
+                        let mut member_sub = sub.subtree();
+                        while let Some(surf_info) = member_sub.next_element()? {
+                            let mut polys = parse_surface_element(&mut member_sub, &surf_info)?;
+                            ms.surface_members.append(&mut polys);
+                        }
                     }
                 }
                 _ => {
@@ -175,10 +194,17 @@ pub fn parse_solid(reader: &mut SubtreeReader<'_>) -> Result<Solid, ReaderError>
                                     let mut shell_sub = ext_sub.subtree();
                                     while let Some(member) = shell_sub.next_element()? {
                                         if member.namespace == NS_GML && member.local_name == "surfaceMember" {
-                                            let mut member_sub = shell_sub.subtree();
-                                            while let Some(surf_info) = member_sub.next_element()? {
-                                                let mut polys = parse_surface_element(&mut member_sub, &surf_info)?;
-                                                solid.exterior_shell.append(&mut polys);
+                                            if let Some(href) = SubtreeReader::xlink_href(&member) {
+                                                if let Some(p) = shell_sub.resolve_polygon_href(href) {
+                                                    solid.exterior_shell.push(p);
+                                                }
+                                                shell_sub.skip_element()?;
+                                            } else {
+                                                let mut member_sub = shell_sub.subtree();
+                                                while let Some(surf_info) = member_sub.next_element()? {
+                                                    let mut polys = parse_surface_element(&mut member_sub, &surf_info)?;
+                                                    solid.exterior_shell.append(&mut polys);
+                                                }
                                             }
                                         } else {
                                             shell_sub.skip_element()?;

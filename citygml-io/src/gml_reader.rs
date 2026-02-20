@@ -5,6 +5,7 @@ use quick_xml::events::Event;
 use quick_xml::Reader;
 
 use crate::error::ReaderError;
+use crate::geometry::Polygon;
 
 /// Information about an XML element after namespace resolution.
 #[derive(Debug, Clone)]
@@ -91,6 +92,7 @@ struct GmlReaderInner {
     ns_stack: Vec<HashMap<String, String>>,
     depth: u32,
     last_was_empty: bool,
+    polygon_registry: HashMap<String, Polygon>,
 }
 
 /// A namespace-aware XML reader wrapping quick_xml.
@@ -109,6 +111,7 @@ impl GmlReader {
                 ns_stack: vec![HashMap::new()],
                 depth: 0,
                 last_was_empty: false,
+                polygon_registry: HashMap::new(),
             },
         }
     }
@@ -348,6 +351,25 @@ impl<'a> SubtreeReader<'a> {
             .iter()
             .find(|(k, _)| k == "gml:id" || k == "id")
             .map(|(_, v)| v.clone())
+    }
+
+    /// Extract the xlink:href attribute value from an element.
+    pub fn xlink_href(info: &ElementInfo) -> Option<&str> {
+        info.attributes
+            .iter()
+            .find(|(k, _)| k == "xlink:href")
+            .map(|(_, v)| v.as_str())
+    }
+
+    /// Register a polygon by its gml:id for later xlink:href resolution.
+    pub fn register_polygon(&mut self, id: String, polygon: Polygon) {
+        self.inner.polygon_registry.insert(id, polygon);
+    }
+
+    /// Resolve an xlink:href (e.g. "#polygon_id") to a previously registered polygon.
+    pub fn resolve_polygon_href(&self, href: &str) -> Option<Polygon> {
+        let id = href.strip_prefix('#').unwrap_or(href);
+        self.inner.polygon_registry.get(id).cloned()
     }
 }
 

@@ -67,6 +67,6 @@ Located in `citygml-io/tests/fixtures/`. Downloaded from the OGC CityGML-3.0Enco
 
 ## Known Limitations
 
-- xlink:href references in geometry (e.g., Solid with `<gml:surfaceMember xlink:href="#..."/>`) are not resolved — the referenced polygons are skipped.
+- xlink:href references in geometry (surfaceMember → Polygon) are resolved via a polygon registry (single-pass, forward-defined polygons only). Feature-level xlink references are not supported.
 - `ParsedCityModel` currently only dispatches Building, BuildingPart, and ReliefFeature. Other feature types are silently skipped.
 - 1 unresolved external type: `grid` attribute in `RasterRelief`.
