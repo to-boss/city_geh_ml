@@ -3,7 +3,10 @@ use std::collections::HashSet;
 use proc_macro2::TokenStream;
 use quote::quote;
 
-use crate::codegen::mapper::{prop_method_ident, prop_to_return_type, trait_ident, type_ident};
+use crate::codegen::mapper::{
+    accessor_method_ident, accessor_trait_ident, prop_method_ident, prop_to_return_type,
+    trait_ident, type_ident,
+};
 use crate::ir::model::UmlModel;
 use crate::ir::types::UmlClass;
 use crate::util::naming::{escape_keyword, to_snake_case};
@@ -103,11 +106,94 @@ pub fn generate_enum_dispatch(
         })
         .collect();
 
+    // ── Accessor trait ──
+    let accessor_trait = generate_accessor_trait(abs_cls, descendants, use_box);
+
     quote! {
         #enum_def
         #default_impl
         #trait_impl
         #(#from_impls)*
+        #accessor_trait
+    }
+}
+
+/// Generate a typed accessor trait on `[EnumName]` with one filter method per variant.
+///
+/// For example, `AbstractSpaceBoundary` with variants `WallSurface`, `RoofSurface`, etc.
+/// generates:
+/// ```ignore
+/// pub trait AbstractSpaceBoundaryAccessors {
+///     fn wall_surfaces(&self) -> impl Iterator<Item = &WallSurface>;
+///     fn roof_surfaces(&self) -> impl Iterator<Item = &RoofSurface>;
+/// }
+/// impl AbstractSpaceBoundaryAccessors for [AbstractSpaceBoundary] { ... }
+/// ```
+fn generate_accessor_trait(
+    abs_cls: &UmlClass,
+    descendants: &[&UmlClass],
+    use_box: bool,
+) -> TokenStream {
+    let enum_name = type_ident(&abs_cls.name);
+    let trait_name = accessor_trait_ident(&abs_cls.name);
+
+    let methods: Vec<TokenStream> = descendants
+        .iter()
+        .map(|cls| {
+            let variant_name = type_ident(&cls.name);
+            let method_name = accessor_method_ident(&cls.name);
+            quote! {
+                fn #method_name(&self) -> impl Iterator<Item = &#variant_name>;
+            }
+        })
+        .collect();
+
+    let single_variant = descendants.len() == 1;
+    let method_impls: Vec<TokenStream> = descendants
+        .iter()
+        .map(|cls| {
+            let variant_name = type_ident(&cls.name);
+            let method_name = accessor_method_ident(&cls.name);
+            let extract = if use_box {
+                quote! { Some(v.as_ref()) }
+            } else {
+                quote! { Some(v) }
+            };
+            // Skip the wildcard arm for single-variant enums to avoid unreachable_patterns warning
+            let single_extract = if use_box {
+                quote! { v.as_ref() }
+            } else {
+                quote! { v }
+            };
+            let match_body = if single_variant {
+                quote! {
+                    self.iter().map(|item| match item {
+                        #enum_name::#variant_name(v) => #single_extract,
+                    })
+                }
+            } else {
+                quote! {
+                    self.iter().filter_map(|item| match item {
+                        #enum_name::#variant_name(v) => #extract,
+                        _ => None,
+                    })
+                }
+            };
+            quote! {
+                fn #method_name(&self) -> impl Iterator<Item = &#variant_name> {
+                    #match_body
+                }
+            }
+        })
+        .collect();
+
+    quote! {
+        pub trait #trait_name {
+            #(#methods)*
+        }
+        impl #trait_name for [#enum_name] {
+            #(#method_impls)*
+        }
     }
 }
 

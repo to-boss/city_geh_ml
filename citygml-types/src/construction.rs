@@ -647,6 +647,74 @@ impl From<WallSurface> for AbstractConstructionSurface {
         Self::WallSurface(v)
     }
 }
+pub trait AbstractConstructionSurfaceAccessors {
+    fn ceiling_surfaces(&self) -> impl Iterator<Item = &CeilingSurface>;
+    fn floor_surfaces(&self) -> impl Iterator<Item = &FloorSurface>;
+    fn ground_surfaces(&self) -> impl Iterator<Item = &GroundSurface>;
+    fn interior_wall_surfaces(&self) -> impl Iterator<Item = &InteriorWallSurface>;
+    fn outer_ceiling_surfaces(&self) -> impl Iterator<Item = &OuterCeilingSurface>;
+    fn outer_floor_surfaces(&self) -> impl Iterator<Item = &OuterFloorSurface>;
+    fn roof_surfaces(&self) -> impl Iterator<Item = &RoofSurface>;
+    fn wall_surfaces(&self) -> impl Iterator<Item = &WallSurface>;
+}
+impl AbstractConstructionSurfaceAccessors for [AbstractConstructionSurface] {
+    fn ceiling_surfaces(&self) -> impl Iterator<Item = &CeilingSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractConstructionSurface::CeilingSurface(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn floor_surfaces(&self) -> impl Iterator<Item = &FloorSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractConstructionSurface::FloorSurface(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn ground_surfaces(&self) -> impl Iterator<Item = &GroundSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractConstructionSurface::GroundSurface(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn interior_wall_surfaces(&self) -> impl Iterator<Item = &InteriorWallSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractConstructionSurface::InteriorWallSurface(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn outer_ceiling_surfaces(&self) -> impl Iterator<Item = &OuterCeilingSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractConstructionSurface::OuterCeilingSurface(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn outer_floor_surfaces(&self) -> impl Iterator<Item = &OuterFloorSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractConstructionSurface::OuterFloorSurface(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn roof_surfaces(&self) -> impl Iterator<Item = &RoofSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractConstructionSurface::RoofSurface(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn wall_surfaces(&self) -> impl Iterator<Item = &WallSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractConstructionSurface::WallSurface(v) => Some(v),
+                _ => None,
+            })
+    }
+}
 pub trait AbstractFillingSurfaceTrait: AbstractThematicSurfaceTrait {}
 #[derive(Debug, Clone)]
 pub enum AbstractFillingSurface {
@@ -808,6 +876,26 @@ impl From<DoorSurface> for AbstractFillingSurface {
 impl From<WindowSurface> for AbstractFillingSurface {
     fn from(v: WindowSurface) -> Self {
         Self::WindowSurface(v)
+    }
+}
+pub trait AbstractFillingSurfaceAccessors {
+    fn door_surfaces(&self) -> impl Iterator<Item = &DoorSurface>;
+    fn window_surfaces(&self) -> impl Iterator<Item = &WindowSurface>;
+}
+impl AbstractFillingSurfaceAccessors for [AbstractFillingSurface] {
+    fn door_surfaces(&self) -> impl Iterator<Item = &DoorSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFillingSurface::DoorSurface(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn window_surfaces(&self) -> impl Iterator<Item = &WindowSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFillingSurface::WindowSurface(v) => Some(v),
+                _ => None,
+            })
     }
 }
 pub trait AbstractConstructionTrait: AbstractOccupiedSpaceTrait {
@@ -1356,6 +1444,66 @@ impl From<TunnelPart> for AbstractConstruction {
         Self::TunnelPart(v)
     }
 }
+pub trait AbstractConstructionAccessors {
+    fn other_constructions(&self) -> impl Iterator<Item = &OtherConstruction>;
+    fn bridges(&self) -> impl Iterator<Item = &Bridge>;
+    fn bridge_parts(&self) -> impl Iterator<Item = &BridgePart>;
+    fn buildings(&self) -> impl Iterator<Item = &Building>;
+    fn building_parts(&self) -> impl Iterator<Item = &BuildingPart>;
+    fn tunnels(&self) -> impl Iterator<Item = &Tunnel>;
+    fn tunnel_parts(&self) -> impl Iterator<Item = &TunnelPart>;
+}
+impl AbstractConstructionAccessors for [AbstractConstruction] {
+    fn other_constructions(&self) -> impl Iterator<Item = &OtherConstruction> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractConstruction::OtherConstruction(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn bridges(&self) -> impl Iterator<Item = &Bridge> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractConstruction::Bridge(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn bridge_parts(&self) -> impl Iterator<Item = &BridgePart> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractConstruction::BridgePart(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn buildings(&self) -> impl Iterator<Item = &Building> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractConstruction::Building(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn building_parts(&self) -> impl Iterator<Item = &BuildingPart> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractConstruction::BuildingPart(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn tunnels(&self) -> impl Iterator<Item = &Tunnel> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractConstruction::Tunnel(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn tunnel_parts(&self) -> impl Iterator<Item = &TunnelPart> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractConstruction::TunnelPart(v) => Some(v),
+                _ => None,
+            })
+    }
+}
 pub trait AbstractConstructiveElementTrait: AbstractOccupiedSpaceTrait {
     fn is_structural_element(&self) -> Option<bool>;
     fn filling(&self) -> &[AbstractFillingElement];
@@ -1666,6 +1814,46 @@ impl From<TunnelConstructiveElement> for AbstractConstructiveElement {
         Self::TunnelConstructiveElement(v)
     }
 }
+pub trait AbstractConstructiveElementAccessors {
+    fn bridge_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &BridgeConstructiveElement>;
+    fn building_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &BuildingConstructiveElement>;
+    fn tunnel_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &TunnelConstructiveElement>;
+}
+impl AbstractConstructiveElementAccessors for [AbstractConstructiveElement] {
+    fn bridge_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &BridgeConstructiveElement> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractConstructiveElement::BridgeConstructiveElement(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn building_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &BuildingConstructiveElement> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractConstructiveElement::BuildingConstructiveElement(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn tunnel_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &TunnelConstructiveElement> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractConstructiveElement::TunnelConstructiveElement(v) => Some(v),
+                _ => None,
+            })
+    }
+}
 pub trait AbstractFillingElementTrait: AbstractOccupiedSpaceTrait {}
 #[derive(Debug, Clone)]
 pub enum AbstractFillingElement {
@@ -1914,6 +2102,26 @@ impl From<Door> for AbstractFillingElement {
 impl From<Window> for AbstractFillingElement {
     fn from(v: Window) -> Self {
         Self::Window(v)
+    }
+}
+pub trait AbstractFillingElementAccessors {
+    fn doors(&self) -> impl Iterator<Item = &Door>;
+    fn windows(&self) -> impl Iterator<Item = &Window>;
+}
+impl AbstractFillingElementAccessors for [AbstractFillingElement] {
+    fn doors(&self) -> impl Iterator<Item = &Door> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFillingElement::Door(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn windows(&self) -> impl Iterator<Item = &Window> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFillingElement::Window(v) => Some(v),
+                _ => None,
+            })
     }
 }
 pub trait AbstractFurnitureTrait: AbstractOccupiedSpaceTrait {}
@@ -2206,6 +2414,34 @@ impl From<BuildingFurniture> for AbstractFurniture {
 impl From<TunnelFurniture> for AbstractFurniture {
     fn from(v: TunnelFurniture) -> Self {
         Self::TunnelFurniture(v)
+    }
+}
+pub trait AbstractFurnitureAccessors {
+    fn bridge_furnitures(&self) -> impl Iterator<Item = &BridgeFurniture>;
+    fn building_furnitures(&self) -> impl Iterator<Item = &BuildingFurniture>;
+    fn tunnel_furnitures(&self) -> impl Iterator<Item = &TunnelFurniture>;
+}
+impl AbstractFurnitureAccessors for [AbstractFurniture] {
+    fn bridge_furnitures(&self) -> impl Iterator<Item = &BridgeFurniture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFurniture::BridgeFurniture(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn building_furnitures(&self) -> impl Iterator<Item = &BuildingFurniture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFurniture::BuildingFurniture(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn tunnel_furnitures(&self) -> impl Iterator<Item = &TunnelFurniture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFurniture::TunnelFurniture(v) => Some(v),
+                _ => None,
+            })
     }
 }
 pub trait AbstractInstallationTrait: AbstractOccupiedSpaceTrait {
@@ -2508,6 +2744,34 @@ impl From<BuildingInstallation> for AbstractInstallation {
 impl From<TunnelInstallation> for AbstractInstallation {
     fn from(v: TunnelInstallation) -> Self {
         Self::TunnelInstallation(v)
+    }
+}
+pub trait AbstractInstallationAccessors {
+    fn bridge_installations(&self) -> impl Iterator<Item = &BridgeInstallation>;
+    fn building_installations(&self) -> impl Iterator<Item = &BuildingInstallation>;
+    fn tunnel_installations(&self) -> impl Iterator<Item = &TunnelInstallation>;
+}
+impl AbstractInstallationAccessors for [AbstractInstallation] {
+    fn bridge_installations(&self) -> impl Iterator<Item = &BridgeInstallation> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractInstallation::BridgeInstallation(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn building_installations(&self) -> impl Iterator<Item = &BuildingInstallation> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractInstallation::BuildingInstallation(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn tunnel_installations(&self) -> impl Iterator<Item = &TunnelInstallation> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractInstallation::TunnelInstallation(v) => Some(v),
+                _ => None,
+            })
     }
 }
 #[derive(Debug, Clone, Default)]

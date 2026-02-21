@@ -164,6 +164,19 @@ pub fn trait_ident(name: &str) -> Ident {
     Ident::new(&format!("{name}Trait"), Span::call_site())
 }
 
+/// Convert an abstract class name to its accessor trait identifier (appends "Accessors" suffix).
+/// E.g., "AbstractSpaceBoundary" → `AbstractSpaceBoundaryAccessors`.
+pub fn accessor_trait_ident(name: &str) -> Ident {
+    Ident::new(&format!("{name}Accessors"), Span::call_site())
+}
+
+/// Convert a concrete class name to a pluralized snake_case method name for accessor traits.
+/// E.g., "WallSurface" → `wall_surfaces`.
+pub fn accessor_method_ident(name: &str) -> Ident {
+    let snake = to_snake_case(name);
+    Ident::new(&escape_keyword(&format!("{snake}s")), Span::call_site())
+}
+
 /// Returns true if a property's type resolves to an abstract type (class or data type).
 pub fn is_abstract_prop(prop: &UmlProperty, model: &UmlModel) -> bool {
     match &prop.type_ref {

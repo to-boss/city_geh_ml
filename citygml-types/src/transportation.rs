@@ -2301,6 +2301,66 @@ impl From<Waterway> for AbstractTransportationSpace {
         Self::Waterway(v)
     }
 }
+pub trait AbstractTransportationSpaceAccessors {
+    fn intersections(&self) -> impl Iterator<Item = &Intersection>;
+    fn railways(&self) -> impl Iterator<Item = &Railway>;
+    fn roads(&self) -> impl Iterator<Item = &Road>;
+    fn sections(&self) -> impl Iterator<Item = &Section>;
+    fn squares(&self) -> impl Iterator<Item = &Square>;
+    fn tracks(&self) -> impl Iterator<Item = &Track>;
+    fn waterways(&self) -> impl Iterator<Item = &Waterway>;
+}
+impl AbstractTransportationSpaceAccessors for [AbstractTransportationSpace] {
+    fn intersections(&self) -> impl Iterator<Item = &Intersection> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractTransportationSpace::Intersection(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn railways(&self) -> impl Iterator<Item = &Railway> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractTransportationSpace::Railway(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn roads(&self) -> impl Iterator<Item = &Road> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractTransportationSpace::Road(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn sections(&self) -> impl Iterator<Item = &Section> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractTransportationSpace::Section(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn squares(&self) -> impl Iterator<Item = &Square> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractTransportationSpace::Square(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn tracks(&self) -> impl Iterator<Item = &Track> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractTransportationSpace::Track(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn waterways(&self) -> impl Iterator<Item = &Waterway> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractTransportationSpace::Waterway(v) => Some(v),
+                _ => None,
+            })
+    }
+}
 #[derive(Debug, Clone, Default)]
 pub struct AuxiliaryTrafficSpace {
     pub feature_id: ID,

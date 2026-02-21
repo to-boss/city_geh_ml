@@ -495,6 +495,26 @@ impl From<Storey> for AbstractBuildingSubdivision {
         Self::Storey(v)
     }
 }
+pub trait AbstractBuildingSubdivisionAccessors {
+    fn building_units(&self) -> impl Iterator<Item = &BuildingUnit>;
+    fn storeys(&self) -> impl Iterator<Item = &Storey>;
+}
+impl AbstractBuildingSubdivisionAccessors for [AbstractBuildingSubdivision] {
+    fn building_units(&self) -> impl Iterator<Item = &BuildingUnit> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractBuildingSubdivision::BuildingUnit(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn storeys(&self) -> impl Iterator<Item = &Storey> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractBuildingSubdivision::Storey(v) => Some(v),
+                _ => None,
+            })
+    }
+}
 #[derive(Debug, Clone, Default)]
 pub struct BuildingUnit {
     pub feature_id: ID,
@@ -2716,6 +2736,26 @@ impl From<Building> for AbstractBuilding {
 impl From<BuildingPart> for AbstractBuilding {
     fn from(v: BuildingPart) -> Self {
         Self::BuildingPart(v)
+    }
+}
+pub trait AbstractBuildingAccessors {
+    fn buildings(&self) -> impl Iterator<Item = &Building>;
+    fn building_parts(&self) -> impl Iterator<Item = &BuildingPart>;
+}
+impl AbstractBuildingAccessors for [AbstractBuilding] {
+    fn buildings(&self) -> impl Iterator<Item = &Building> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractBuilding::Building(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn building_parts(&self) -> impl Iterator<Item = &BuildingPart> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractBuilding::BuildingPart(v) => Some(v),
+                _ => None,
+            })
     }
 }
 #[derive(Debug, Clone, Default)]

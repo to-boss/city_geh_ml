@@ -182,6 +182,42 @@ impl From<TINRelief> for AbstractReliefComponent {
         Self::TINRelief(v)
     }
 }
+pub trait AbstractReliefComponentAccessors {
+    fn breakline_reliefs(&self) -> impl Iterator<Item = &BreaklineRelief>;
+    fn mass_point_reliefs(&self) -> impl Iterator<Item = &MassPointRelief>;
+    fn raster_reliefs(&self) -> impl Iterator<Item = &RasterRelief>;
+    fn tin_reliefs(&self) -> impl Iterator<Item = &TINRelief>;
+}
+impl AbstractReliefComponentAccessors for [AbstractReliefComponent] {
+    fn breakline_reliefs(&self) -> impl Iterator<Item = &BreaklineRelief> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractReliefComponent::BreaklineRelief(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn mass_point_reliefs(&self) -> impl Iterator<Item = &MassPointRelief> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractReliefComponent::MassPointRelief(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn raster_reliefs(&self) -> impl Iterator<Item = &RasterRelief> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractReliefComponent::RasterRelief(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn tin_reliefs(&self) -> impl Iterator<Item = &TINRelief> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractReliefComponent::TINRelief(v) => Some(v),
+                _ => None,
+            })
+    }
+}
 #[derive(Debug, Clone, Default)]
 pub struct ReliefFeature {
     pub feature_id: ID,

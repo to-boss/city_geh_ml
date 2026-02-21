@@ -314,6 +314,30 @@ impl From<SolitaryVegetationObject> for AbstractVegetationObject {
         Self::SolitaryVegetationObject(v)
     }
 }
+pub trait AbstractVegetationObjectAccessors {
+    fn plant_covers(&self) -> impl Iterator<Item = &PlantCover>;
+    fn solitary_vegetation_objects(
+        &self,
+    ) -> impl Iterator<Item = &SolitaryVegetationObject>;
+}
+impl AbstractVegetationObjectAccessors for [AbstractVegetationObject] {
+    fn plant_covers(&self) -> impl Iterator<Item = &PlantCover> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractVegetationObject::PlantCover(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn solitary_vegetation_objects(
+        &self,
+    ) -> impl Iterator<Item = &SolitaryVegetationObject> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractVegetationObject::SolitaryVegetationObject(v) => Some(v),
+                _ => None,
+            })
+    }
+}
 #[derive(Debug, Clone, Default)]
 pub struct PlantCover {
     pub feature_id: ID,

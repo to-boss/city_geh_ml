@@ -7,7 +7,7 @@ Cargo workspace with four crates that parse the CityGML 3.0 UML model (XMI) and 
 - **`citygml-gen`** — Binary. Parses CityGML 3.0 XMI from Enterprise Architect, generates the `citygml-types` crate.
 - **`citygml-core`** — Library. Hand-written framework: GML reader, geometry types, `FromGml` trait, namespace constants, error types.
 - **`citygml-types`** — Library. Auto-generated types + reader impls. Re-exports `citygml-core` modules so `crate::` paths resolve. **Do not edit by hand — overwritten by the generator.**
-- **`citygml-io`** — Library. High-level API (`CitygmlReader::from_path()`), `BoundaryAccessors` trait. Re-exports both `citygml-core` and `citygml-types`.
+- **`citygml-io`** — Library. High-level API (`CitygmlReader::from_path()`). Re-exports both `citygml-core` and `citygml-types`.
 
 ## Quick Commands
 
@@ -53,7 +53,6 @@ cargo test -p citygml-io --test read_building -- --nocapture
 ### citygml-io (high-level API)
 
 - `city_model.rs` — Top-level `CitygmlReader::from_path()` API.
-- `boundary_accessors.rs` — Typed accessor methods for filtering `AbstractSpaceBoundary` slices.
 
 ## Key Conventions
 

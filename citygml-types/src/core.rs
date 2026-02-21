@@ -1231,6 +1231,676 @@ impl From<WaterSurface> for AbstractFeature {
         Self::WaterSurface(Box::new(v))
     }
 }
+pub trait AbstractFeatureAccessors {
+    fn ceiling_surfaces(&self) -> impl Iterator<Item = &CeilingSurface>;
+    fn doors(&self) -> impl Iterator<Item = &Door>;
+    fn door_surfaces(&self) -> impl Iterator<Item = &DoorSurface>;
+    fn floor_surfaces(&self) -> impl Iterator<Item = &FloorSurface>;
+    fn ground_surfaces(&self) -> impl Iterator<Item = &GroundSurface>;
+    fn interior_wall_surfaces(&self) -> impl Iterator<Item = &InteriorWallSurface>;
+    fn other_constructions(&self) -> impl Iterator<Item = &OtherConstruction>;
+    fn outer_ceiling_surfaces(&self) -> impl Iterator<Item = &OuterCeilingSurface>;
+    fn outer_floor_surfaces(&self) -> impl Iterator<Item = &OuterFloorSurface>;
+    fn roof_surfaces(&self) -> impl Iterator<Item = &RoofSurface>;
+    fn wall_surfaces(&self) -> impl Iterator<Item = &WallSurface>;
+    fn windows(&self) -> impl Iterator<Item = &Window>;
+    fn window_surfaces(&self) -> impl Iterator<Item = &WindowSurface>;
+    fn composite_timeseriess(&self) -> impl Iterator<Item = &CompositeTimeseries>;
+    fn dynamizers(&self) -> impl Iterator<Item = &Dynamizer>;
+    fn generic_timeseriess(&self) -> impl Iterator<Item = &GenericTimeseries>;
+    fn standard_file_timeseriess(&self) -> impl Iterator<Item = &StandardFileTimeseries>;
+    fn tabulated_file_timeseriess(
+        &self,
+    ) -> impl Iterator<Item = &TabulatedFileTimeseries>;
+    fn point_clouds(&self) -> impl Iterator<Item = &PointCloud>;
+    fn versions(&self) -> impl Iterator<Item = &Version>;
+    fn version_transitions(&self) -> impl Iterator<Item = &VersionTransition>;
+    fn appearances(&self) -> impl Iterator<Item = &Appearance>;
+    fn georeferenced_textures(&self) -> impl Iterator<Item = &GeoreferencedTexture>;
+    fn parameterized_textures(&self) -> impl Iterator<Item = &ParameterizedTexture>;
+    fn x3_d_materials(&self) -> impl Iterator<Item = &X3DMaterial>;
+    fn bridges(&self) -> impl Iterator<Item = &Bridge>;
+    fn bridge_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &BridgeConstructiveElement>;
+    fn bridge_furnitures(&self) -> impl Iterator<Item = &BridgeFurniture>;
+    fn bridge_installations(&self) -> impl Iterator<Item = &BridgeInstallation>;
+    fn bridge_parts(&self) -> impl Iterator<Item = &BridgePart>;
+    fn bridge_rooms(&self) -> impl Iterator<Item = &BridgeRoom>;
+    fn buildings(&self) -> impl Iterator<Item = &Building>;
+    fn building_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &BuildingConstructiveElement>;
+    fn building_furnitures(&self) -> impl Iterator<Item = &BuildingFurniture>;
+    fn building_installations(&self) -> impl Iterator<Item = &BuildingInstallation>;
+    fn building_parts(&self) -> impl Iterator<Item = &BuildingPart>;
+    fn building_rooms(&self) -> impl Iterator<Item = &BuildingRoom>;
+    fn building_units(&self) -> impl Iterator<Item = &BuildingUnit>;
+    fn storeys(&self) -> impl Iterator<Item = &Storey>;
+    fn city_furnitures(&self) -> impl Iterator<Item = &CityFurniture>;
+    fn city_object_groups(&self) -> impl Iterator<Item = &CityObjectGroup>;
+    fn addresss(&self) -> impl Iterator<Item = &Address>;
+    fn city_models(&self) -> impl Iterator<Item = &CityModel>;
+    fn closure_surfaces(&self) -> impl Iterator<Item = &ClosureSurface>;
+    fn generic_logical_spaces(&self) -> impl Iterator<Item = &GenericLogicalSpace>;
+    fn generic_occupied_spaces(&self) -> impl Iterator<Item = &GenericOccupiedSpace>;
+    fn generic_thematic_surfaces(&self) -> impl Iterator<Item = &GenericThematicSurface>;
+    fn generic_unoccupied_spaces(&self) -> impl Iterator<Item = &GenericUnoccupiedSpace>;
+    fn land_uses(&self) -> impl Iterator<Item = &LandUse>;
+    fn breakline_reliefs(&self) -> impl Iterator<Item = &BreaklineRelief>;
+    fn mass_point_reliefs(&self) -> impl Iterator<Item = &MassPointRelief>;
+    fn raster_reliefs(&self) -> impl Iterator<Item = &RasterRelief>;
+    fn relief_features(&self) -> impl Iterator<Item = &ReliefFeature>;
+    fn tin_reliefs(&self) -> impl Iterator<Item = &TINRelief>;
+    fn auxiliary_traffic_areas(&self) -> impl Iterator<Item = &AuxiliaryTrafficArea>;
+    fn auxiliary_traffic_spaces(&self) -> impl Iterator<Item = &AuxiliaryTrafficSpace>;
+    fn clearance_spaces(&self) -> impl Iterator<Item = &ClearanceSpace>;
+    fn holes(&self) -> impl Iterator<Item = &Hole>;
+    fn hole_surfaces(&self) -> impl Iterator<Item = &HoleSurface>;
+    fn intersections(&self) -> impl Iterator<Item = &Intersection>;
+    fn markings(&self) -> impl Iterator<Item = &Marking>;
+    fn railways(&self) -> impl Iterator<Item = &Railway>;
+    fn roads(&self) -> impl Iterator<Item = &Road>;
+    fn sections(&self) -> impl Iterator<Item = &Section>;
+    fn squares(&self) -> impl Iterator<Item = &Square>;
+    fn tracks(&self) -> impl Iterator<Item = &Track>;
+    fn traffic_areas(&self) -> impl Iterator<Item = &TrafficArea>;
+    fn traffic_spaces(&self) -> impl Iterator<Item = &TrafficSpace>;
+    fn waterways(&self) -> impl Iterator<Item = &Waterway>;
+    fn hollow_spaces(&self) -> impl Iterator<Item = &HollowSpace>;
+    fn tunnels(&self) -> impl Iterator<Item = &Tunnel>;
+    fn tunnel_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &TunnelConstructiveElement>;
+    fn tunnel_furnitures(&self) -> impl Iterator<Item = &TunnelFurniture>;
+    fn tunnel_installations(&self) -> impl Iterator<Item = &TunnelInstallation>;
+    fn tunnel_parts(&self) -> impl Iterator<Item = &TunnelPart>;
+    fn plant_covers(&self) -> impl Iterator<Item = &PlantCover>;
+    fn solitary_vegetation_objects(
+        &self,
+    ) -> impl Iterator<Item = &SolitaryVegetationObject>;
+    fn water_bodys(&self) -> impl Iterator<Item = &WaterBody>;
+    fn water_ground_surfaces(&self) -> impl Iterator<Item = &WaterGroundSurface>;
+    fn water_surfaces(&self) -> impl Iterator<Item = &WaterSurface>;
+}
+impl AbstractFeatureAccessors for [AbstractFeature] {
+    fn ceiling_surfaces(&self) -> impl Iterator<Item = &CeilingSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::CeilingSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn doors(&self) -> impl Iterator<Item = &Door> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::Door(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn door_surfaces(&self) -> impl Iterator<Item = &DoorSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::DoorSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn floor_surfaces(&self) -> impl Iterator<Item = &FloorSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::FloorSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn ground_surfaces(&self) -> impl Iterator<Item = &GroundSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::GroundSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn interior_wall_surfaces(&self) -> impl Iterator<Item = &InteriorWallSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::InteriorWallSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn other_constructions(&self) -> impl Iterator<Item = &OtherConstruction> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::OtherConstruction(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn outer_ceiling_surfaces(&self) -> impl Iterator<Item = &OuterCeilingSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::OuterCeilingSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn outer_floor_surfaces(&self) -> impl Iterator<Item = &OuterFloorSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::OuterFloorSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn roof_surfaces(&self) -> impl Iterator<Item = &RoofSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::RoofSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn wall_surfaces(&self) -> impl Iterator<Item = &WallSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::WallSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn windows(&self) -> impl Iterator<Item = &Window> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::Window(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn window_surfaces(&self) -> impl Iterator<Item = &WindowSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::WindowSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn composite_timeseriess(&self) -> impl Iterator<Item = &CompositeTimeseries> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::CompositeTimeseries(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn dynamizers(&self) -> impl Iterator<Item = &Dynamizer> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::Dynamizer(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn generic_timeseriess(&self) -> impl Iterator<Item = &GenericTimeseries> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::GenericTimeseries(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn standard_file_timeseriess(
+        &self,
+    ) -> impl Iterator<Item = &StandardFileTimeseries> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::StandardFileTimeseries(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tabulated_file_timeseriess(
+        &self,
+    ) -> impl Iterator<Item = &TabulatedFileTimeseries> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::TabulatedFileTimeseries(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn point_clouds(&self) -> impl Iterator<Item = &PointCloud> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::PointCloud(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn versions(&self) -> impl Iterator<Item = &Version> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::Version(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn version_transitions(&self) -> impl Iterator<Item = &VersionTransition> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::VersionTransition(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn appearances(&self) -> impl Iterator<Item = &Appearance> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::Appearance(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn georeferenced_textures(&self) -> impl Iterator<Item = &GeoreferencedTexture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::GeoreferencedTexture(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn parameterized_textures(&self) -> impl Iterator<Item = &ParameterizedTexture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::ParameterizedTexture(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn x3_d_materials(&self) -> impl Iterator<Item = &X3DMaterial> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::X3DMaterial(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridges(&self) -> impl Iterator<Item = &Bridge> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::Bridge(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridge_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &BridgeConstructiveElement> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::BridgeConstructiveElement(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridge_furnitures(&self) -> impl Iterator<Item = &BridgeFurniture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::BridgeFurniture(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridge_installations(&self) -> impl Iterator<Item = &BridgeInstallation> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::BridgeInstallation(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridge_parts(&self) -> impl Iterator<Item = &BridgePart> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::BridgePart(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridge_rooms(&self) -> impl Iterator<Item = &BridgeRoom> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::BridgeRoom(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn buildings(&self) -> impl Iterator<Item = &Building> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::Building(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &BuildingConstructiveElement> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::BuildingConstructiveElement(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_furnitures(&self) -> impl Iterator<Item = &BuildingFurniture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::BuildingFurniture(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_installations(&self) -> impl Iterator<Item = &BuildingInstallation> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::BuildingInstallation(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_parts(&self) -> impl Iterator<Item = &BuildingPart> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::BuildingPart(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_rooms(&self) -> impl Iterator<Item = &BuildingRoom> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::BuildingRoom(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_units(&self) -> impl Iterator<Item = &BuildingUnit> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::BuildingUnit(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn storeys(&self) -> impl Iterator<Item = &Storey> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::Storey(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn city_furnitures(&self) -> impl Iterator<Item = &CityFurniture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::CityFurniture(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn city_object_groups(&self) -> impl Iterator<Item = &CityObjectGroup> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::CityObjectGroup(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn addresss(&self) -> impl Iterator<Item = &Address> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::Address(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn city_models(&self) -> impl Iterator<Item = &CityModel> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::CityModel(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn closure_surfaces(&self) -> impl Iterator<Item = &ClosureSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::ClosureSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn generic_logical_spaces(&self) -> impl Iterator<Item = &GenericLogicalSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::GenericLogicalSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn generic_occupied_spaces(&self) -> impl Iterator<Item = &GenericOccupiedSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::GenericOccupiedSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn generic_thematic_surfaces(
+        &self,
+    ) -> impl Iterator<Item = &GenericThematicSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::GenericThematicSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn generic_unoccupied_spaces(
+        &self,
+    ) -> impl Iterator<Item = &GenericUnoccupiedSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::GenericUnoccupiedSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn land_uses(&self) -> impl Iterator<Item = &LandUse> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::LandUse(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn breakline_reliefs(&self) -> impl Iterator<Item = &BreaklineRelief> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::BreaklineRelief(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn mass_point_reliefs(&self) -> impl Iterator<Item = &MassPointRelief> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::MassPointRelief(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn raster_reliefs(&self) -> impl Iterator<Item = &RasterRelief> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::RasterRelief(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn relief_features(&self) -> impl Iterator<Item = &ReliefFeature> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::ReliefFeature(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tin_reliefs(&self) -> impl Iterator<Item = &TINRelief> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::TINRelief(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn auxiliary_traffic_areas(&self) -> impl Iterator<Item = &AuxiliaryTrafficArea> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::AuxiliaryTrafficArea(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn auxiliary_traffic_spaces(&self) -> impl Iterator<Item = &AuxiliaryTrafficSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::AuxiliaryTrafficSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn clearance_spaces(&self) -> impl Iterator<Item = &ClearanceSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::ClearanceSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn holes(&self) -> impl Iterator<Item = &Hole> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::Hole(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn hole_surfaces(&self) -> impl Iterator<Item = &HoleSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::HoleSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn intersections(&self) -> impl Iterator<Item = &Intersection> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::Intersection(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn markings(&self) -> impl Iterator<Item = &Marking> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::Marking(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn railways(&self) -> impl Iterator<Item = &Railway> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::Railway(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn roads(&self) -> impl Iterator<Item = &Road> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::Road(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn sections(&self) -> impl Iterator<Item = &Section> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::Section(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn squares(&self) -> impl Iterator<Item = &Square> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::Square(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tracks(&self) -> impl Iterator<Item = &Track> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::Track(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn traffic_areas(&self) -> impl Iterator<Item = &TrafficArea> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::TrafficArea(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn traffic_spaces(&self) -> impl Iterator<Item = &TrafficSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::TrafficSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn waterways(&self) -> impl Iterator<Item = &Waterway> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::Waterway(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn hollow_spaces(&self) -> impl Iterator<Item = &HollowSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::HollowSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tunnels(&self) -> impl Iterator<Item = &Tunnel> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::Tunnel(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tunnel_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &TunnelConstructiveElement> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::TunnelConstructiveElement(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tunnel_furnitures(&self) -> impl Iterator<Item = &TunnelFurniture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::TunnelFurniture(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tunnel_installations(&self) -> impl Iterator<Item = &TunnelInstallation> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::TunnelInstallation(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tunnel_parts(&self) -> impl Iterator<Item = &TunnelPart> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::TunnelPart(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn plant_covers(&self) -> impl Iterator<Item = &PlantCover> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::PlantCover(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn solitary_vegetation_objects(
+        &self,
+    ) -> impl Iterator<Item = &SolitaryVegetationObject> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::SolitaryVegetationObject(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn water_bodys(&self) -> impl Iterator<Item = &WaterBody> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::WaterBody(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn water_ground_surfaces(&self) -> impl Iterator<Item = &WaterGroundSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::WaterGroundSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn water_surfaces(&self) -> impl Iterator<Item = &WaterSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeature::WaterSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+}
 #[derive(Debug, Clone, Default)]
 pub struct Code {
     pub code_space: Option<String>,
@@ -2622,6 +3292,610 @@ impl From<WaterSurface> for AbstractFeatureWithLifespan {
         Self::WaterSurface(Box::new(v))
     }
 }
+pub trait AbstractFeatureWithLifespanAccessors {
+    fn ceiling_surfaces(&self) -> impl Iterator<Item = &CeilingSurface>;
+    fn doors(&self) -> impl Iterator<Item = &Door>;
+    fn door_surfaces(&self) -> impl Iterator<Item = &DoorSurface>;
+    fn floor_surfaces(&self) -> impl Iterator<Item = &FloorSurface>;
+    fn ground_surfaces(&self) -> impl Iterator<Item = &GroundSurface>;
+    fn interior_wall_surfaces(&self) -> impl Iterator<Item = &InteriorWallSurface>;
+    fn other_constructions(&self) -> impl Iterator<Item = &OtherConstruction>;
+    fn outer_ceiling_surfaces(&self) -> impl Iterator<Item = &OuterCeilingSurface>;
+    fn outer_floor_surfaces(&self) -> impl Iterator<Item = &OuterFloorSurface>;
+    fn roof_surfaces(&self) -> impl Iterator<Item = &RoofSurface>;
+    fn wall_surfaces(&self) -> impl Iterator<Item = &WallSurface>;
+    fn windows(&self) -> impl Iterator<Item = &Window>;
+    fn window_surfaces(&self) -> impl Iterator<Item = &WindowSurface>;
+    fn dynamizers(&self) -> impl Iterator<Item = &Dynamizer>;
+    fn versions(&self) -> impl Iterator<Item = &Version>;
+    fn version_transitions(&self) -> impl Iterator<Item = &VersionTransition>;
+    fn appearances(&self) -> impl Iterator<Item = &Appearance>;
+    fn bridges(&self) -> impl Iterator<Item = &Bridge>;
+    fn bridge_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &BridgeConstructiveElement>;
+    fn bridge_furnitures(&self) -> impl Iterator<Item = &BridgeFurniture>;
+    fn bridge_installations(&self) -> impl Iterator<Item = &BridgeInstallation>;
+    fn bridge_parts(&self) -> impl Iterator<Item = &BridgePart>;
+    fn bridge_rooms(&self) -> impl Iterator<Item = &BridgeRoom>;
+    fn buildings(&self) -> impl Iterator<Item = &Building>;
+    fn building_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &BuildingConstructiveElement>;
+    fn building_furnitures(&self) -> impl Iterator<Item = &BuildingFurniture>;
+    fn building_installations(&self) -> impl Iterator<Item = &BuildingInstallation>;
+    fn building_parts(&self) -> impl Iterator<Item = &BuildingPart>;
+    fn building_rooms(&self) -> impl Iterator<Item = &BuildingRoom>;
+    fn building_units(&self) -> impl Iterator<Item = &BuildingUnit>;
+    fn storeys(&self) -> impl Iterator<Item = &Storey>;
+    fn city_furnitures(&self) -> impl Iterator<Item = &CityFurniture>;
+    fn city_object_groups(&self) -> impl Iterator<Item = &CityObjectGroup>;
+    fn city_models(&self) -> impl Iterator<Item = &CityModel>;
+    fn closure_surfaces(&self) -> impl Iterator<Item = &ClosureSurface>;
+    fn generic_logical_spaces(&self) -> impl Iterator<Item = &GenericLogicalSpace>;
+    fn generic_occupied_spaces(&self) -> impl Iterator<Item = &GenericOccupiedSpace>;
+    fn generic_thematic_surfaces(&self) -> impl Iterator<Item = &GenericThematicSurface>;
+    fn generic_unoccupied_spaces(&self) -> impl Iterator<Item = &GenericUnoccupiedSpace>;
+    fn land_uses(&self) -> impl Iterator<Item = &LandUse>;
+    fn breakline_reliefs(&self) -> impl Iterator<Item = &BreaklineRelief>;
+    fn mass_point_reliefs(&self) -> impl Iterator<Item = &MassPointRelief>;
+    fn raster_reliefs(&self) -> impl Iterator<Item = &RasterRelief>;
+    fn relief_features(&self) -> impl Iterator<Item = &ReliefFeature>;
+    fn tin_reliefs(&self) -> impl Iterator<Item = &TINRelief>;
+    fn auxiliary_traffic_areas(&self) -> impl Iterator<Item = &AuxiliaryTrafficArea>;
+    fn auxiliary_traffic_spaces(&self) -> impl Iterator<Item = &AuxiliaryTrafficSpace>;
+    fn clearance_spaces(&self) -> impl Iterator<Item = &ClearanceSpace>;
+    fn holes(&self) -> impl Iterator<Item = &Hole>;
+    fn hole_surfaces(&self) -> impl Iterator<Item = &HoleSurface>;
+    fn intersections(&self) -> impl Iterator<Item = &Intersection>;
+    fn markings(&self) -> impl Iterator<Item = &Marking>;
+    fn railways(&self) -> impl Iterator<Item = &Railway>;
+    fn roads(&self) -> impl Iterator<Item = &Road>;
+    fn sections(&self) -> impl Iterator<Item = &Section>;
+    fn squares(&self) -> impl Iterator<Item = &Square>;
+    fn tracks(&self) -> impl Iterator<Item = &Track>;
+    fn traffic_areas(&self) -> impl Iterator<Item = &TrafficArea>;
+    fn traffic_spaces(&self) -> impl Iterator<Item = &TrafficSpace>;
+    fn waterways(&self) -> impl Iterator<Item = &Waterway>;
+    fn hollow_spaces(&self) -> impl Iterator<Item = &HollowSpace>;
+    fn tunnels(&self) -> impl Iterator<Item = &Tunnel>;
+    fn tunnel_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &TunnelConstructiveElement>;
+    fn tunnel_furnitures(&self) -> impl Iterator<Item = &TunnelFurniture>;
+    fn tunnel_installations(&self) -> impl Iterator<Item = &TunnelInstallation>;
+    fn tunnel_parts(&self) -> impl Iterator<Item = &TunnelPart>;
+    fn plant_covers(&self) -> impl Iterator<Item = &PlantCover>;
+    fn solitary_vegetation_objects(
+        &self,
+    ) -> impl Iterator<Item = &SolitaryVegetationObject>;
+    fn water_bodys(&self) -> impl Iterator<Item = &WaterBody>;
+    fn water_ground_surfaces(&self) -> impl Iterator<Item = &WaterGroundSurface>;
+    fn water_surfaces(&self) -> impl Iterator<Item = &WaterSurface>;
+}
+impl AbstractFeatureWithLifespanAccessors for [AbstractFeatureWithLifespan] {
+    fn ceiling_surfaces(&self) -> impl Iterator<Item = &CeilingSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::CeilingSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn doors(&self) -> impl Iterator<Item = &Door> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::Door(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn door_surfaces(&self) -> impl Iterator<Item = &DoorSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::DoorSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn floor_surfaces(&self) -> impl Iterator<Item = &FloorSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::FloorSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn ground_surfaces(&self) -> impl Iterator<Item = &GroundSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::GroundSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn interior_wall_surfaces(&self) -> impl Iterator<Item = &InteriorWallSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::InteriorWallSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn other_constructions(&self) -> impl Iterator<Item = &OtherConstruction> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::OtherConstruction(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn outer_ceiling_surfaces(&self) -> impl Iterator<Item = &OuterCeilingSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::OuterCeilingSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn outer_floor_surfaces(&self) -> impl Iterator<Item = &OuterFloorSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::OuterFloorSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn roof_surfaces(&self) -> impl Iterator<Item = &RoofSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::RoofSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn wall_surfaces(&self) -> impl Iterator<Item = &WallSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::WallSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn windows(&self) -> impl Iterator<Item = &Window> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::Window(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn window_surfaces(&self) -> impl Iterator<Item = &WindowSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::WindowSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn dynamizers(&self) -> impl Iterator<Item = &Dynamizer> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::Dynamizer(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn versions(&self) -> impl Iterator<Item = &Version> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::Version(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn version_transitions(&self) -> impl Iterator<Item = &VersionTransition> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::VersionTransition(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn appearances(&self) -> impl Iterator<Item = &Appearance> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::Appearance(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridges(&self) -> impl Iterator<Item = &Bridge> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::Bridge(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridge_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &BridgeConstructiveElement> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::BridgeConstructiveElement(v) => {
+                    Some(v.as_ref())
+                }
+                _ => None,
+            })
+    }
+    fn bridge_furnitures(&self) -> impl Iterator<Item = &BridgeFurniture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::BridgeFurniture(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridge_installations(&self) -> impl Iterator<Item = &BridgeInstallation> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::BridgeInstallation(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridge_parts(&self) -> impl Iterator<Item = &BridgePart> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::BridgePart(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridge_rooms(&self) -> impl Iterator<Item = &BridgeRoom> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::BridgeRoom(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn buildings(&self) -> impl Iterator<Item = &Building> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::Building(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &BuildingConstructiveElement> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::BuildingConstructiveElement(v) => {
+                    Some(v.as_ref())
+                }
+                _ => None,
+            })
+    }
+    fn building_furnitures(&self) -> impl Iterator<Item = &BuildingFurniture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::BuildingFurniture(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_installations(&self) -> impl Iterator<Item = &BuildingInstallation> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::BuildingInstallation(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_parts(&self) -> impl Iterator<Item = &BuildingPart> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::BuildingPart(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_rooms(&self) -> impl Iterator<Item = &BuildingRoom> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::BuildingRoom(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_units(&self) -> impl Iterator<Item = &BuildingUnit> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::BuildingUnit(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn storeys(&self) -> impl Iterator<Item = &Storey> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::Storey(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn city_furnitures(&self) -> impl Iterator<Item = &CityFurniture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::CityFurniture(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn city_object_groups(&self) -> impl Iterator<Item = &CityObjectGroup> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::CityObjectGroup(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn city_models(&self) -> impl Iterator<Item = &CityModel> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::CityModel(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn closure_surfaces(&self) -> impl Iterator<Item = &ClosureSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::ClosureSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn generic_logical_spaces(&self) -> impl Iterator<Item = &GenericLogicalSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::GenericLogicalSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn generic_occupied_spaces(&self) -> impl Iterator<Item = &GenericOccupiedSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::GenericOccupiedSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn generic_thematic_surfaces(
+        &self,
+    ) -> impl Iterator<Item = &GenericThematicSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::GenericThematicSurface(v) => {
+                    Some(v.as_ref())
+                }
+                _ => None,
+            })
+    }
+    fn generic_unoccupied_spaces(
+        &self,
+    ) -> impl Iterator<Item = &GenericUnoccupiedSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::GenericUnoccupiedSpace(v) => {
+                    Some(v.as_ref())
+                }
+                _ => None,
+            })
+    }
+    fn land_uses(&self) -> impl Iterator<Item = &LandUse> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::LandUse(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn breakline_reliefs(&self) -> impl Iterator<Item = &BreaklineRelief> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::BreaklineRelief(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn mass_point_reliefs(&self) -> impl Iterator<Item = &MassPointRelief> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::MassPointRelief(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn raster_reliefs(&self) -> impl Iterator<Item = &RasterRelief> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::RasterRelief(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn relief_features(&self) -> impl Iterator<Item = &ReliefFeature> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::ReliefFeature(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tin_reliefs(&self) -> impl Iterator<Item = &TINRelief> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::TINRelief(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn auxiliary_traffic_areas(&self) -> impl Iterator<Item = &AuxiliaryTrafficArea> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::AuxiliaryTrafficArea(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn auxiliary_traffic_spaces(&self) -> impl Iterator<Item = &AuxiliaryTrafficSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::AuxiliaryTrafficSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn clearance_spaces(&self) -> impl Iterator<Item = &ClearanceSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::ClearanceSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn holes(&self) -> impl Iterator<Item = &Hole> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::Hole(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn hole_surfaces(&self) -> impl Iterator<Item = &HoleSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::HoleSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn intersections(&self) -> impl Iterator<Item = &Intersection> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::Intersection(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn markings(&self) -> impl Iterator<Item = &Marking> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::Marking(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn railways(&self) -> impl Iterator<Item = &Railway> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::Railway(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn roads(&self) -> impl Iterator<Item = &Road> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::Road(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn sections(&self) -> impl Iterator<Item = &Section> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::Section(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn squares(&self) -> impl Iterator<Item = &Square> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::Square(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tracks(&self) -> impl Iterator<Item = &Track> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::Track(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn traffic_areas(&self) -> impl Iterator<Item = &TrafficArea> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::TrafficArea(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn traffic_spaces(&self) -> impl Iterator<Item = &TrafficSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::TrafficSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn waterways(&self) -> impl Iterator<Item = &Waterway> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::Waterway(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn hollow_spaces(&self) -> impl Iterator<Item = &HollowSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::HollowSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tunnels(&self) -> impl Iterator<Item = &Tunnel> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::Tunnel(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tunnel_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &TunnelConstructiveElement> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::TunnelConstructiveElement(v) => {
+                    Some(v.as_ref())
+                }
+                _ => None,
+            })
+    }
+    fn tunnel_furnitures(&self) -> impl Iterator<Item = &TunnelFurniture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::TunnelFurniture(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tunnel_installations(&self) -> impl Iterator<Item = &TunnelInstallation> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::TunnelInstallation(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tunnel_parts(&self) -> impl Iterator<Item = &TunnelPart> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::TunnelPart(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn plant_covers(&self) -> impl Iterator<Item = &PlantCover> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::PlantCover(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn solitary_vegetation_objects(
+        &self,
+    ) -> impl Iterator<Item = &SolitaryVegetationObject> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::SolitaryVegetationObject(v) => {
+                    Some(v.as_ref())
+                }
+                _ => None,
+            })
+    }
+    fn water_bodys(&self) -> impl Iterator<Item = &WaterBody> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::WaterBody(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn water_ground_surfaces(&self) -> impl Iterator<Item = &WaterGroundSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::WaterGroundSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn water_surfaces(&self) -> impl Iterator<Item = &WaterSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractFeatureWithLifespan::WaterSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+}
 pub trait AbstractPointCloudTrait: AbstractFeatureTrait {}
 #[derive(Debug, Clone)]
 pub enum AbstractPointCloud {
@@ -2658,6 +3932,17 @@ impl AbstractPointCloudTrait for AbstractPointCloud {}
 impl From<PointCloud> for AbstractPointCloud {
     fn from(v: PointCloud) -> Self {
         Self::PointCloud(v)
+    }
+}
+pub trait AbstractPointCloudAccessors {
+    fn point_clouds(&self) -> impl Iterator<Item = &PointCloud>;
+}
+impl AbstractPointCloudAccessors for [AbstractPointCloud] {
+    fn point_clouds(&self) -> impl Iterator<Item = &PointCloud> {
+        self.iter()
+            .map(|item| match item {
+                AbstractPointCloud::PointCloud(v) => v,
+            })
     }
 }
 #[derive(Debug, Clone, Default)]
@@ -3058,6 +4343,17 @@ impl AbstractAppearanceTrait for AbstractAppearance {}
 impl From<Appearance> for AbstractAppearance {
     fn from(v: Appearance) -> Self {
         Self::Appearance(v)
+    }
+}
+pub trait AbstractAppearanceAccessors {
+    fn appearances(&self) -> impl Iterator<Item = &Appearance>;
+}
+impl AbstractAppearanceAccessors for [AbstractAppearance] {
+    fn appearances(&self) -> impl Iterator<Item = &Appearance> {
+        self.iter()
+            .map(|item| match item {
+                AbstractAppearance::Appearance(v) => v,
+            })
     }
 }
 pub trait AbstractCityObjectTrait: AbstractFeatureWithLifespanTrait {
@@ -4529,6 +5825,558 @@ impl From<WaterSurface> for AbstractCityObject {
         Self::WaterSurface(Box::new(v))
     }
 }
+pub trait AbstractCityObjectAccessors {
+    fn ceiling_surfaces(&self) -> impl Iterator<Item = &CeilingSurface>;
+    fn doors(&self) -> impl Iterator<Item = &Door>;
+    fn door_surfaces(&self) -> impl Iterator<Item = &DoorSurface>;
+    fn floor_surfaces(&self) -> impl Iterator<Item = &FloorSurface>;
+    fn ground_surfaces(&self) -> impl Iterator<Item = &GroundSurface>;
+    fn interior_wall_surfaces(&self) -> impl Iterator<Item = &InteriorWallSurface>;
+    fn other_constructions(&self) -> impl Iterator<Item = &OtherConstruction>;
+    fn outer_ceiling_surfaces(&self) -> impl Iterator<Item = &OuterCeilingSurface>;
+    fn outer_floor_surfaces(&self) -> impl Iterator<Item = &OuterFloorSurface>;
+    fn roof_surfaces(&self) -> impl Iterator<Item = &RoofSurface>;
+    fn wall_surfaces(&self) -> impl Iterator<Item = &WallSurface>;
+    fn windows(&self) -> impl Iterator<Item = &Window>;
+    fn window_surfaces(&self) -> impl Iterator<Item = &WindowSurface>;
+    fn bridges(&self) -> impl Iterator<Item = &Bridge>;
+    fn bridge_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &BridgeConstructiveElement>;
+    fn bridge_furnitures(&self) -> impl Iterator<Item = &BridgeFurniture>;
+    fn bridge_installations(&self) -> impl Iterator<Item = &BridgeInstallation>;
+    fn bridge_parts(&self) -> impl Iterator<Item = &BridgePart>;
+    fn bridge_rooms(&self) -> impl Iterator<Item = &BridgeRoom>;
+    fn buildings(&self) -> impl Iterator<Item = &Building>;
+    fn building_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &BuildingConstructiveElement>;
+    fn building_furnitures(&self) -> impl Iterator<Item = &BuildingFurniture>;
+    fn building_installations(&self) -> impl Iterator<Item = &BuildingInstallation>;
+    fn building_parts(&self) -> impl Iterator<Item = &BuildingPart>;
+    fn building_rooms(&self) -> impl Iterator<Item = &BuildingRoom>;
+    fn building_units(&self) -> impl Iterator<Item = &BuildingUnit>;
+    fn storeys(&self) -> impl Iterator<Item = &Storey>;
+    fn city_furnitures(&self) -> impl Iterator<Item = &CityFurniture>;
+    fn city_object_groups(&self) -> impl Iterator<Item = &CityObjectGroup>;
+    fn closure_surfaces(&self) -> impl Iterator<Item = &ClosureSurface>;
+    fn generic_logical_spaces(&self) -> impl Iterator<Item = &GenericLogicalSpace>;
+    fn generic_occupied_spaces(&self) -> impl Iterator<Item = &GenericOccupiedSpace>;
+    fn generic_thematic_surfaces(&self) -> impl Iterator<Item = &GenericThematicSurface>;
+    fn generic_unoccupied_spaces(&self) -> impl Iterator<Item = &GenericUnoccupiedSpace>;
+    fn land_uses(&self) -> impl Iterator<Item = &LandUse>;
+    fn breakline_reliefs(&self) -> impl Iterator<Item = &BreaklineRelief>;
+    fn mass_point_reliefs(&self) -> impl Iterator<Item = &MassPointRelief>;
+    fn raster_reliefs(&self) -> impl Iterator<Item = &RasterRelief>;
+    fn relief_features(&self) -> impl Iterator<Item = &ReliefFeature>;
+    fn tin_reliefs(&self) -> impl Iterator<Item = &TINRelief>;
+    fn auxiliary_traffic_areas(&self) -> impl Iterator<Item = &AuxiliaryTrafficArea>;
+    fn auxiliary_traffic_spaces(&self) -> impl Iterator<Item = &AuxiliaryTrafficSpace>;
+    fn clearance_spaces(&self) -> impl Iterator<Item = &ClearanceSpace>;
+    fn holes(&self) -> impl Iterator<Item = &Hole>;
+    fn hole_surfaces(&self) -> impl Iterator<Item = &HoleSurface>;
+    fn intersections(&self) -> impl Iterator<Item = &Intersection>;
+    fn markings(&self) -> impl Iterator<Item = &Marking>;
+    fn railways(&self) -> impl Iterator<Item = &Railway>;
+    fn roads(&self) -> impl Iterator<Item = &Road>;
+    fn sections(&self) -> impl Iterator<Item = &Section>;
+    fn squares(&self) -> impl Iterator<Item = &Square>;
+    fn tracks(&self) -> impl Iterator<Item = &Track>;
+    fn traffic_areas(&self) -> impl Iterator<Item = &TrafficArea>;
+    fn traffic_spaces(&self) -> impl Iterator<Item = &TrafficSpace>;
+    fn waterways(&self) -> impl Iterator<Item = &Waterway>;
+    fn hollow_spaces(&self) -> impl Iterator<Item = &HollowSpace>;
+    fn tunnels(&self) -> impl Iterator<Item = &Tunnel>;
+    fn tunnel_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &TunnelConstructiveElement>;
+    fn tunnel_furnitures(&self) -> impl Iterator<Item = &TunnelFurniture>;
+    fn tunnel_installations(&self) -> impl Iterator<Item = &TunnelInstallation>;
+    fn tunnel_parts(&self) -> impl Iterator<Item = &TunnelPart>;
+    fn plant_covers(&self) -> impl Iterator<Item = &PlantCover>;
+    fn solitary_vegetation_objects(
+        &self,
+    ) -> impl Iterator<Item = &SolitaryVegetationObject>;
+    fn water_bodys(&self) -> impl Iterator<Item = &WaterBody>;
+    fn water_ground_surfaces(&self) -> impl Iterator<Item = &WaterGroundSurface>;
+    fn water_surfaces(&self) -> impl Iterator<Item = &WaterSurface>;
+}
+impl AbstractCityObjectAccessors for [AbstractCityObject] {
+    fn ceiling_surfaces(&self) -> impl Iterator<Item = &CeilingSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::CeilingSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn doors(&self) -> impl Iterator<Item = &Door> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::Door(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn door_surfaces(&self) -> impl Iterator<Item = &DoorSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::DoorSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn floor_surfaces(&self) -> impl Iterator<Item = &FloorSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::FloorSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn ground_surfaces(&self) -> impl Iterator<Item = &GroundSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::GroundSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn interior_wall_surfaces(&self) -> impl Iterator<Item = &InteriorWallSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::InteriorWallSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn other_constructions(&self) -> impl Iterator<Item = &OtherConstruction> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::OtherConstruction(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn outer_ceiling_surfaces(&self) -> impl Iterator<Item = &OuterCeilingSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::OuterCeilingSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn outer_floor_surfaces(&self) -> impl Iterator<Item = &OuterFloorSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::OuterFloorSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn roof_surfaces(&self) -> impl Iterator<Item = &RoofSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::RoofSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn wall_surfaces(&self) -> impl Iterator<Item = &WallSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::WallSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn windows(&self) -> impl Iterator<Item = &Window> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::Window(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn window_surfaces(&self) -> impl Iterator<Item = &WindowSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::WindowSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridges(&self) -> impl Iterator<Item = &Bridge> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::Bridge(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridge_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &BridgeConstructiveElement> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::BridgeConstructiveElement(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridge_furnitures(&self) -> impl Iterator<Item = &BridgeFurniture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::BridgeFurniture(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridge_installations(&self) -> impl Iterator<Item = &BridgeInstallation> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::BridgeInstallation(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridge_parts(&self) -> impl Iterator<Item = &BridgePart> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::BridgePart(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridge_rooms(&self) -> impl Iterator<Item = &BridgeRoom> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::BridgeRoom(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn buildings(&self) -> impl Iterator<Item = &Building> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::Building(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &BuildingConstructiveElement> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::BuildingConstructiveElement(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_furnitures(&self) -> impl Iterator<Item = &BuildingFurniture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::BuildingFurniture(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_installations(&self) -> impl Iterator<Item = &BuildingInstallation> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::BuildingInstallation(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_parts(&self) -> impl Iterator<Item = &BuildingPart> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::BuildingPart(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_rooms(&self) -> impl Iterator<Item = &BuildingRoom> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::BuildingRoom(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_units(&self) -> impl Iterator<Item = &BuildingUnit> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::BuildingUnit(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn storeys(&self) -> impl Iterator<Item = &Storey> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::Storey(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn city_furnitures(&self) -> impl Iterator<Item = &CityFurniture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::CityFurniture(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn city_object_groups(&self) -> impl Iterator<Item = &CityObjectGroup> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::CityObjectGroup(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn closure_surfaces(&self) -> impl Iterator<Item = &ClosureSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::ClosureSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn generic_logical_spaces(&self) -> impl Iterator<Item = &GenericLogicalSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::GenericLogicalSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn generic_occupied_spaces(&self) -> impl Iterator<Item = &GenericOccupiedSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::GenericOccupiedSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn generic_thematic_surfaces(
+        &self,
+    ) -> impl Iterator<Item = &GenericThematicSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::GenericThematicSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn generic_unoccupied_spaces(
+        &self,
+    ) -> impl Iterator<Item = &GenericUnoccupiedSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::GenericUnoccupiedSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn land_uses(&self) -> impl Iterator<Item = &LandUse> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::LandUse(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn breakline_reliefs(&self) -> impl Iterator<Item = &BreaklineRelief> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::BreaklineRelief(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn mass_point_reliefs(&self) -> impl Iterator<Item = &MassPointRelief> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::MassPointRelief(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn raster_reliefs(&self) -> impl Iterator<Item = &RasterRelief> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::RasterRelief(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn relief_features(&self) -> impl Iterator<Item = &ReliefFeature> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::ReliefFeature(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tin_reliefs(&self) -> impl Iterator<Item = &TINRelief> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::TINRelief(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn auxiliary_traffic_areas(&self) -> impl Iterator<Item = &AuxiliaryTrafficArea> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::AuxiliaryTrafficArea(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn auxiliary_traffic_spaces(&self) -> impl Iterator<Item = &AuxiliaryTrafficSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::AuxiliaryTrafficSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn clearance_spaces(&self) -> impl Iterator<Item = &ClearanceSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::ClearanceSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn holes(&self) -> impl Iterator<Item = &Hole> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::Hole(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn hole_surfaces(&self) -> impl Iterator<Item = &HoleSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::HoleSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn intersections(&self) -> impl Iterator<Item = &Intersection> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::Intersection(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn markings(&self) -> impl Iterator<Item = &Marking> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::Marking(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn railways(&self) -> impl Iterator<Item = &Railway> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::Railway(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn roads(&self) -> impl Iterator<Item = &Road> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::Road(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn sections(&self) -> impl Iterator<Item = &Section> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::Section(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn squares(&self) -> impl Iterator<Item = &Square> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::Square(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tracks(&self) -> impl Iterator<Item = &Track> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::Track(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn traffic_areas(&self) -> impl Iterator<Item = &TrafficArea> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::TrafficArea(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn traffic_spaces(&self) -> impl Iterator<Item = &TrafficSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::TrafficSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn waterways(&self) -> impl Iterator<Item = &Waterway> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::Waterway(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn hollow_spaces(&self) -> impl Iterator<Item = &HollowSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::HollowSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tunnels(&self) -> impl Iterator<Item = &Tunnel> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::Tunnel(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tunnel_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &TunnelConstructiveElement> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::TunnelConstructiveElement(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tunnel_furnitures(&self) -> impl Iterator<Item = &TunnelFurniture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::TunnelFurniture(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tunnel_installations(&self) -> impl Iterator<Item = &TunnelInstallation> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::TunnelInstallation(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tunnel_parts(&self) -> impl Iterator<Item = &TunnelPart> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::TunnelPart(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn plant_covers(&self) -> impl Iterator<Item = &PlantCover> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::PlantCover(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn solitary_vegetation_objects(
+        &self,
+    ) -> impl Iterator<Item = &SolitaryVegetationObject> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::SolitaryVegetationObject(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn water_bodys(&self) -> impl Iterator<Item = &WaterBody> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::WaterBody(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn water_ground_surfaces(&self) -> impl Iterator<Item = &WaterGroundSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::WaterGroundSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn water_surfaces(&self) -> impl Iterator<Item = &WaterSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractCityObject::WaterSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+}
 pub trait AbstractDynamizerTrait: AbstractFeatureWithLifespanTrait {}
 #[derive(Debug, Clone)]
 pub enum AbstractDynamizer {
@@ -4587,6 +6435,17 @@ impl AbstractDynamizerTrait for AbstractDynamizer {}
 impl From<Dynamizer> for AbstractDynamizer {
     fn from(v: Dynamizer) -> Self {
         Self::Dynamizer(v)
+    }
+}
+pub trait AbstractDynamizerAccessors {
+    fn dynamizers(&self) -> impl Iterator<Item = &Dynamizer>;
+}
+impl AbstractDynamizerAccessors for [AbstractDynamizer] {
+    fn dynamizers(&self) -> impl Iterator<Item = &Dynamizer> {
+        self.iter()
+            .map(|item| match item {
+                AbstractDynamizer::Dynamizer(v) => v,
+            })
     }
 }
 pub trait AbstractVersionTrait: AbstractFeatureWithLifespanTrait {}
@@ -4649,6 +6508,17 @@ impl From<Version> for AbstractVersion {
         Self::Version(v)
     }
 }
+pub trait AbstractVersionAccessors {
+    fn versions(&self) -> impl Iterator<Item = &Version>;
+}
+impl AbstractVersionAccessors for [AbstractVersion] {
+    fn versions(&self) -> impl Iterator<Item = &Version> {
+        self.iter()
+            .map(|item| match item {
+                AbstractVersion::Version(v) => v,
+            })
+    }
+}
 pub trait AbstractVersionTransitionTrait: AbstractFeatureWithLifespanTrait {}
 #[derive(Debug, Clone)]
 pub enum AbstractVersionTransition {
@@ -4707,6 +6577,17 @@ impl AbstractVersionTransitionTrait for AbstractVersionTransition {}
 impl From<VersionTransition> for AbstractVersionTransition {
     fn from(v: VersionTransition) -> Self {
         Self::VersionTransition(v)
+    }
+}
+pub trait AbstractVersionTransitionAccessors {
+    fn version_transitions(&self) -> impl Iterator<Item = &VersionTransition>;
+}
+impl AbstractVersionTransitionAccessors for [AbstractVersionTransition] {
+    fn version_transitions(&self) -> impl Iterator<Item = &VersionTransition> {
+        self.iter()
+            .map(|item| match item {
+                AbstractVersionTransition::VersionTransition(v) => v,
+            })
     }
 }
 #[derive(Debug, Clone, Default)]
@@ -6453,6 +8334,364 @@ impl From<WaterBody> for AbstractSpace {
         Self::WaterBody(Box::new(v))
     }
 }
+pub trait AbstractSpaceAccessors {
+    fn doors(&self) -> impl Iterator<Item = &Door>;
+    fn other_constructions(&self) -> impl Iterator<Item = &OtherConstruction>;
+    fn windows(&self) -> impl Iterator<Item = &Window>;
+    fn bridges(&self) -> impl Iterator<Item = &Bridge>;
+    fn bridge_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &BridgeConstructiveElement>;
+    fn bridge_furnitures(&self) -> impl Iterator<Item = &BridgeFurniture>;
+    fn bridge_installations(&self) -> impl Iterator<Item = &BridgeInstallation>;
+    fn bridge_parts(&self) -> impl Iterator<Item = &BridgePart>;
+    fn bridge_rooms(&self) -> impl Iterator<Item = &BridgeRoom>;
+    fn buildings(&self) -> impl Iterator<Item = &Building>;
+    fn building_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &BuildingConstructiveElement>;
+    fn building_furnitures(&self) -> impl Iterator<Item = &BuildingFurniture>;
+    fn building_installations(&self) -> impl Iterator<Item = &BuildingInstallation>;
+    fn building_parts(&self) -> impl Iterator<Item = &BuildingPart>;
+    fn building_rooms(&self) -> impl Iterator<Item = &BuildingRoom>;
+    fn building_units(&self) -> impl Iterator<Item = &BuildingUnit>;
+    fn storeys(&self) -> impl Iterator<Item = &Storey>;
+    fn city_furnitures(&self) -> impl Iterator<Item = &CityFurniture>;
+    fn city_object_groups(&self) -> impl Iterator<Item = &CityObjectGroup>;
+    fn generic_logical_spaces(&self) -> impl Iterator<Item = &GenericLogicalSpace>;
+    fn generic_occupied_spaces(&self) -> impl Iterator<Item = &GenericOccupiedSpace>;
+    fn generic_unoccupied_spaces(&self) -> impl Iterator<Item = &GenericUnoccupiedSpace>;
+    fn auxiliary_traffic_spaces(&self) -> impl Iterator<Item = &AuxiliaryTrafficSpace>;
+    fn clearance_spaces(&self) -> impl Iterator<Item = &ClearanceSpace>;
+    fn holes(&self) -> impl Iterator<Item = &Hole>;
+    fn intersections(&self) -> impl Iterator<Item = &Intersection>;
+    fn railways(&self) -> impl Iterator<Item = &Railway>;
+    fn roads(&self) -> impl Iterator<Item = &Road>;
+    fn sections(&self) -> impl Iterator<Item = &Section>;
+    fn squares(&self) -> impl Iterator<Item = &Square>;
+    fn tracks(&self) -> impl Iterator<Item = &Track>;
+    fn traffic_spaces(&self) -> impl Iterator<Item = &TrafficSpace>;
+    fn waterways(&self) -> impl Iterator<Item = &Waterway>;
+    fn hollow_spaces(&self) -> impl Iterator<Item = &HollowSpace>;
+    fn tunnels(&self) -> impl Iterator<Item = &Tunnel>;
+    fn tunnel_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &TunnelConstructiveElement>;
+    fn tunnel_furnitures(&self) -> impl Iterator<Item = &TunnelFurniture>;
+    fn tunnel_installations(&self) -> impl Iterator<Item = &TunnelInstallation>;
+    fn tunnel_parts(&self) -> impl Iterator<Item = &TunnelPart>;
+    fn plant_covers(&self) -> impl Iterator<Item = &PlantCover>;
+    fn solitary_vegetation_objects(
+        &self,
+    ) -> impl Iterator<Item = &SolitaryVegetationObject>;
+    fn water_bodys(&self) -> impl Iterator<Item = &WaterBody>;
+}
+impl AbstractSpaceAccessors for [AbstractSpace] {
+    fn doors(&self) -> impl Iterator<Item = &Door> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::Door(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn other_constructions(&self) -> impl Iterator<Item = &OtherConstruction> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::OtherConstruction(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn windows(&self) -> impl Iterator<Item = &Window> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::Window(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridges(&self) -> impl Iterator<Item = &Bridge> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::Bridge(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridge_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &BridgeConstructiveElement> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::BridgeConstructiveElement(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridge_furnitures(&self) -> impl Iterator<Item = &BridgeFurniture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::BridgeFurniture(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridge_installations(&self) -> impl Iterator<Item = &BridgeInstallation> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::BridgeInstallation(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridge_parts(&self) -> impl Iterator<Item = &BridgePart> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::BridgePart(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridge_rooms(&self) -> impl Iterator<Item = &BridgeRoom> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::BridgeRoom(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn buildings(&self) -> impl Iterator<Item = &Building> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::Building(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &BuildingConstructiveElement> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::BuildingConstructiveElement(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_furnitures(&self) -> impl Iterator<Item = &BuildingFurniture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::BuildingFurniture(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_installations(&self) -> impl Iterator<Item = &BuildingInstallation> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::BuildingInstallation(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_parts(&self) -> impl Iterator<Item = &BuildingPart> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::BuildingPart(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_rooms(&self) -> impl Iterator<Item = &BuildingRoom> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::BuildingRoom(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_units(&self) -> impl Iterator<Item = &BuildingUnit> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::BuildingUnit(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn storeys(&self) -> impl Iterator<Item = &Storey> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::Storey(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn city_furnitures(&self) -> impl Iterator<Item = &CityFurniture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::CityFurniture(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn city_object_groups(&self) -> impl Iterator<Item = &CityObjectGroup> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::CityObjectGroup(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn generic_logical_spaces(&self) -> impl Iterator<Item = &GenericLogicalSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::GenericLogicalSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn generic_occupied_spaces(&self) -> impl Iterator<Item = &GenericOccupiedSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::GenericOccupiedSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn generic_unoccupied_spaces(
+        &self,
+    ) -> impl Iterator<Item = &GenericUnoccupiedSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::GenericUnoccupiedSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn auxiliary_traffic_spaces(&self) -> impl Iterator<Item = &AuxiliaryTrafficSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::AuxiliaryTrafficSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn clearance_spaces(&self) -> impl Iterator<Item = &ClearanceSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::ClearanceSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn holes(&self) -> impl Iterator<Item = &Hole> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::Hole(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn intersections(&self) -> impl Iterator<Item = &Intersection> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::Intersection(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn railways(&self) -> impl Iterator<Item = &Railway> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::Railway(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn roads(&self) -> impl Iterator<Item = &Road> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::Road(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn sections(&self) -> impl Iterator<Item = &Section> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::Section(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn squares(&self) -> impl Iterator<Item = &Square> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::Square(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tracks(&self) -> impl Iterator<Item = &Track> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::Track(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn traffic_spaces(&self) -> impl Iterator<Item = &TrafficSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::TrafficSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn waterways(&self) -> impl Iterator<Item = &Waterway> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::Waterway(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn hollow_spaces(&self) -> impl Iterator<Item = &HollowSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::HollowSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tunnels(&self) -> impl Iterator<Item = &Tunnel> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::Tunnel(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tunnel_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &TunnelConstructiveElement> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::TunnelConstructiveElement(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tunnel_furnitures(&self) -> impl Iterator<Item = &TunnelFurniture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::TunnelFurniture(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tunnel_installations(&self) -> impl Iterator<Item = &TunnelInstallation> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::TunnelInstallation(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tunnel_parts(&self) -> impl Iterator<Item = &TunnelPart> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::TunnelPart(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn plant_covers(&self) -> impl Iterator<Item = &PlantCover> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::PlantCover(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn solitary_vegetation_objects(
+        &self,
+    ) -> impl Iterator<Item = &SolitaryVegetationObject> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::SolitaryVegetationObject(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn water_bodys(&self) -> impl Iterator<Item = &WaterBody> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpace::WaterBody(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+}
 pub trait AbstractSpaceBoundaryTrait: AbstractCityObjectTrait {}
 #[derive(Debug, Clone)]
 pub enum AbstractSpaceBoundary {
@@ -7033,6 +9272,204 @@ impl From<WaterSurface> for AbstractSpaceBoundary {
         Self::WaterSurface(Box::new(v))
     }
 }
+pub trait AbstractSpaceBoundaryAccessors {
+    fn ceiling_surfaces(&self) -> impl Iterator<Item = &CeilingSurface>;
+    fn door_surfaces(&self) -> impl Iterator<Item = &DoorSurface>;
+    fn floor_surfaces(&self) -> impl Iterator<Item = &FloorSurface>;
+    fn ground_surfaces(&self) -> impl Iterator<Item = &GroundSurface>;
+    fn interior_wall_surfaces(&self) -> impl Iterator<Item = &InteriorWallSurface>;
+    fn outer_ceiling_surfaces(&self) -> impl Iterator<Item = &OuterCeilingSurface>;
+    fn outer_floor_surfaces(&self) -> impl Iterator<Item = &OuterFloorSurface>;
+    fn roof_surfaces(&self) -> impl Iterator<Item = &RoofSurface>;
+    fn wall_surfaces(&self) -> impl Iterator<Item = &WallSurface>;
+    fn window_surfaces(&self) -> impl Iterator<Item = &WindowSurface>;
+    fn closure_surfaces(&self) -> impl Iterator<Item = &ClosureSurface>;
+    fn generic_thematic_surfaces(&self) -> impl Iterator<Item = &GenericThematicSurface>;
+    fn land_uses(&self) -> impl Iterator<Item = &LandUse>;
+    fn breakline_reliefs(&self) -> impl Iterator<Item = &BreaklineRelief>;
+    fn mass_point_reliefs(&self) -> impl Iterator<Item = &MassPointRelief>;
+    fn raster_reliefs(&self) -> impl Iterator<Item = &RasterRelief>;
+    fn relief_features(&self) -> impl Iterator<Item = &ReliefFeature>;
+    fn tin_reliefs(&self) -> impl Iterator<Item = &TINRelief>;
+    fn auxiliary_traffic_areas(&self) -> impl Iterator<Item = &AuxiliaryTrafficArea>;
+    fn hole_surfaces(&self) -> impl Iterator<Item = &HoleSurface>;
+    fn markings(&self) -> impl Iterator<Item = &Marking>;
+    fn traffic_areas(&self) -> impl Iterator<Item = &TrafficArea>;
+    fn water_ground_surfaces(&self) -> impl Iterator<Item = &WaterGroundSurface>;
+    fn water_surfaces(&self) -> impl Iterator<Item = &WaterSurface>;
+}
+impl AbstractSpaceBoundaryAccessors for [AbstractSpaceBoundary] {
+    fn ceiling_surfaces(&self) -> impl Iterator<Item = &CeilingSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpaceBoundary::CeilingSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn door_surfaces(&self) -> impl Iterator<Item = &DoorSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpaceBoundary::DoorSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn floor_surfaces(&self) -> impl Iterator<Item = &FloorSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpaceBoundary::FloorSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn ground_surfaces(&self) -> impl Iterator<Item = &GroundSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpaceBoundary::GroundSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn interior_wall_surfaces(&self) -> impl Iterator<Item = &InteriorWallSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpaceBoundary::InteriorWallSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn outer_ceiling_surfaces(&self) -> impl Iterator<Item = &OuterCeilingSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpaceBoundary::OuterCeilingSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn outer_floor_surfaces(&self) -> impl Iterator<Item = &OuterFloorSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpaceBoundary::OuterFloorSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn roof_surfaces(&self) -> impl Iterator<Item = &RoofSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpaceBoundary::RoofSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn wall_surfaces(&self) -> impl Iterator<Item = &WallSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpaceBoundary::WallSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn window_surfaces(&self) -> impl Iterator<Item = &WindowSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpaceBoundary::WindowSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn closure_surfaces(&self) -> impl Iterator<Item = &ClosureSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpaceBoundary::ClosureSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn generic_thematic_surfaces(
+        &self,
+    ) -> impl Iterator<Item = &GenericThematicSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpaceBoundary::GenericThematicSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn land_uses(&self) -> impl Iterator<Item = &LandUse> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpaceBoundary::LandUse(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn breakline_reliefs(&self) -> impl Iterator<Item = &BreaklineRelief> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpaceBoundary::BreaklineRelief(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn mass_point_reliefs(&self) -> impl Iterator<Item = &MassPointRelief> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpaceBoundary::MassPointRelief(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn raster_reliefs(&self) -> impl Iterator<Item = &RasterRelief> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpaceBoundary::RasterRelief(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn relief_features(&self) -> impl Iterator<Item = &ReliefFeature> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpaceBoundary::ReliefFeature(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tin_reliefs(&self) -> impl Iterator<Item = &TINRelief> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpaceBoundary::TINRelief(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn auxiliary_traffic_areas(&self) -> impl Iterator<Item = &AuxiliaryTrafficArea> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpaceBoundary::AuxiliaryTrafficArea(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn hole_surfaces(&self) -> impl Iterator<Item = &HoleSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpaceBoundary::HoleSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn markings(&self) -> impl Iterator<Item = &Marking> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpaceBoundary::Marking(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn traffic_areas(&self) -> impl Iterator<Item = &TrafficArea> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpaceBoundary::TrafficArea(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn water_ground_surfaces(&self) -> impl Iterator<Item = &WaterGroundSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpaceBoundary::WaterGroundSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn water_surfaces(&self) -> impl Iterator<Item = &WaterSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSpaceBoundary::WaterSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+}
 pub trait AbstractLogicalSpaceTrait: AbstractSpaceTrait {}
 #[derive(Debug, Clone)]
 pub enum AbstractLogicalSpace {
@@ -7305,6 +9742,42 @@ impl From<CityObjectGroup> for AbstractLogicalSpace {
 impl From<GenericLogicalSpace> for AbstractLogicalSpace {
     fn from(v: GenericLogicalSpace) -> Self {
         Self::GenericLogicalSpace(v)
+    }
+}
+pub trait AbstractLogicalSpaceAccessors {
+    fn building_units(&self) -> impl Iterator<Item = &BuildingUnit>;
+    fn storeys(&self) -> impl Iterator<Item = &Storey>;
+    fn city_object_groups(&self) -> impl Iterator<Item = &CityObjectGroup>;
+    fn generic_logical_spaces(&self) -> impl Iterator<Item = &GenericLogicalSpace>;
+}
+impl AbstractLogicalSpaceAccessors for [AbstractLogicalSpace] {
+    fn building_units(&self) -> impl Iterator<Item = &BuildingUnit> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractLogicalSpace::BuildingUnit(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn storeys(&self) -> impl Iterator<Item = &Storey> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractLogicalSpace::Storey(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn city_object_groups(&self) -> impl Iterator<Item = &CityObjectGroup> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractLogicalSpace::CityObjectGroup(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn generic_logical_spaces(&self) -> impl Iterator<Item = &GenericLogicalSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractLogicalSpace::GenericLogicalSpace(v) => Some(v),
+                _ => None,
+            })
     }
 }
 pub trait AbstractPhysicalSpaceTrait: AbstractSpaceTrait {
@@ -8945,6 +11418,332 @@ impl From<WaterBody> for AbstractPhysicalSpace {
         Self::WaterBody(Box::new(v))
     }
 }
+pub trait AbstractPhysicalSpaceAccessors {
+    fn doors(&self) -> impl Iterator<Item = &Door>;
+    fn other_constructions(&self) -> impl Iterator<Item = &OtherConstruction>;
+    fn windows(&self) -> impl Iterator<Item = &Window>;
+    fn bridges(&self) -> impl Iterator<Item = &Bridge>;
+    fn bridge_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &BridgeConstructiveElement>;
+    fn bridge_furnitures(&self) -> impl Iterator<Item = &BridgeFurniture>;
+    fn bridge_installations(&self) -> impl Iterator<Item = &BridgeInstallation>;
+    fn bridge_parts(&self) -> impl Iterator<Item = &BridgePart>;
+    fn bridge_rooms(&self) -> impl Iterator<Item = &BridgeRoom>;
+    fn buildings(&self) -> impl Iterator<Item = &Building>;
+    fn building_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &BuildingConstructiveElement>;
+    fn building_furnitures(&self) -> impl Iterator<Item = &BuildingFurniture>;
+    fn building_installations(&self) -> impl Iterator<Item = &BuildingInstallation>;
+    fn building_parts(&self) -> impl Iterator<Item = &BuildingPart>;
+    fn building_rooms(&self) -> impl Iterator<Item = &BuildingRoom>;
+    fn city_furnitures(&self) -> impl Iterator<Item = &CityFurniture>;
+    fn generic_occupied_spaces(&self) -> impl Iterator<Item = &GenericOccupiedSpace>;
+    fn generic_unoccupied_spaces(&self) -> impl Iterator<Item = &GenericUnoccupiedSpace>;
+    fn auxiliary_traffic_spaces(&self) -> impl Iterator<Item = &AuxiliaryTrafficSpace>;
+    fn clearance_spaces(&self) -> impl Iterator<Item = &ClearanceSpace>;
+    fn holes(&self) -> impl Iterator<Item = &Hole>;
+    fn intersections(&self) -> impl Iterator<Item = &Intersection>;
+    fn railways(&self) -> impl Iterator<Item = &Railway>;
+    fn roads(&self) -> impl Iterator<Item = &Road>;
+    fn sections(&self) -> impl Iterator<Item = &Section>;
+    fn squares(&self) -> impl Iterator<Item = &Square>;
+    fn tracks(&self) -> impl Iterator<Item = &Track>;
+    fn traffic_spaces(&self) -> impl Iterator<Item = &TrafficSpace>;
+    fn waterways(&self) -> impl Iterator<Item = &Waterway>;
+    fn hollow_spaces(&self) -> impl Iterator<Item = &HollowSpace>;
+    fn tunnels(&self) -> impl Iterator<Item = &Tunnel>;
+    fn tunnel_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &TunnelConstructiveElement>;
+    fn tunnel_furnitures(&self) -> impl Iterator<Item = &TunnelFurniture>;
+    fn tunnel_installations(&self) -> impl Iterator<Item = &TunnelInstallation>;
+    fn tunnel_parts(&self) -> impl Iterator<Item = &TunnelPart>;
+    fn plant_covers(&self) -> impl Iterator<Item = &PlantCover>;
+    fn solitary_vegetation_objects(
+        &self,
+    ) -> impl Iterator<Item = &SolitaryVegetationObject>;
+    fn water_bodys(&self) -> impl Iterator<Item = &WaterBody>;
+}
+impl AbstractPhysicalSpaceAccessors for [AbstractPhysicalSpace] {
+    fn doors(&self) -> impl Iterator<Item = &Door> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::Door(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn other_constructions(&self) -> impl Iterator<Item = &OtherConstruction> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::OtherConstruction(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn windows(&self) -> impl Iterator<Item = &Window> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::Window(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridges(&self) -> impl Iterator<Item = &Bridge> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::Bridge(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridge_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &BridgeConstructiveElement> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::BridgeConstructiveElement(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridge_furnitures(&self) -> impl Iterator<Item = &BridgeFurniture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::BridgeFurniture(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridge_installations(&self) -> impl Iterator<Item = &BridgeInstallation> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::BridgeInstallation(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridge_parts(&self) -> impl Iterator<Item = &BridgePart> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::BridgePart(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridge_rooms(&self) -> impl Iterator<Item = &BridgeRoom> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::BridgeRoom(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn buildings(&self) -> impl Iterator<Item = &Building> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::Building(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &BuildingConstructiveElement> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::BuildingConstructiveElement(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_furnitures(&self) -> impl Iterator<Item = &BuildingFurniture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::BuildingFurniture(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_installations(&self) -> impl Iterator<Item = &BuildingInstallation> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::BuildingInstallation(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_parts(&self) -> impl Iterator<Item = &BuildingPart> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::BuildingPart(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_rooms(&self) -> impl Iterator<Item = &BuildingRoom> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::BuildingRoom(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn city_furnitures(&self) -> impl Iterator<Item = &CityFurniture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::CityFurniture(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn generic_occupied_spaces(&self) -> impl Iterator<Item = &GenericOccupiedSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::GenericOccupiedSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn generic_unoccupied_spaces(
+        &self,
+    ) -> impl Iterator<Item = &GenericUnoccupiedSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::GenericUnoccupiedSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn auxiliary_traffic_spaces(&self) -> impl Iterator<Item = &AuxiliaryTrafficSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::AuxiliaryTrafficSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn clearance_spaces(&self) -> impl Iterator<Item = &ClearanceSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::ClearanceSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn holes(&self) -> impl Iterator<Item = &Hole> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::Hole(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn intersections(&self) -> impl Iterator<Item = &Intersection> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::Intersection(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn railways(&self) -> impl Iterator<Item = &Railway> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::Railway(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn roads(&self) -> impl Iterator<Item = &Road> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::Road(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn sections(&self) -> impl Iterator<Item = &Section> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::Section(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn squares(&self) -> impl Iterator<Item = &Square> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::Square(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tracks(&self) -> impl Iterator<Item = &Track> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::Track(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn traffic_spaces(&self) -> impl Iterator<Item = &TrafficSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::TrafficSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn waterways(&self) -> impl Iterator<Item = &Waterway> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::Waterway(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn hollow_spaces(&self) -> impl Iterator<Item = &HollowSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::HollowSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tunnels(&self) -> impl Iterator<Item = &Tunnel> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::Tunnel(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tunnel_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &TunnelConstructiveElement> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::TunnelConstructiveElement(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tunnel_furnitures(&self) -> impl Iterator<Item = &TunnelFurniture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::TunnelFurniture(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tunnel_installations(&self) -> impl Iterator<Item = &TunnelInstallation> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::TunnelInstallation(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tunnel_parts(&self) -> impl Iterator<Item = &TunnelPart> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::TunnelPart(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn plant_covers(&self) -> impl Iterator<Item = &PlantCover> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::PlantCover(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn solitary_vegetation_objects(
+        &self,
+    ) -> impl Iterator<Item = &SolitaryVegetationObject> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::SolitaryVegetationObject(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn water_bodys(&self) -> impl Iterator<Item = &WaterBody> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractPhysicalSpace::WaterBody(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+}
 pub trait AbstractThematicSurfaceTrait: AbstractSpaceBoundaryTrait {
     fn area(&self) -> &[QualifiedArea];
     fn lod3_multi_surface(&self) -> Option<&crate::geometry::MultiSurface>;
@@ -9589,6 +12388,164 @@ impl From<WaterGroundSurface> for AbstractThematicSurface {
 impl From<WaterSurface> for AbstractThematicSurface {
     fn from(v: WaterSurface) -> Self {
         Self::WaterSurface(Box::new(v))
+    }
+}
+pub trait AbstractThematicSurfaceAccessors {
+    fn ceiling_surfaces(&self) -> impl Iterator<Item = &CeilingSurface>;
+    fn door_surfaces(&self) -> impl Iterator<Item = &DoorSurface>;
+    fn floor_surfaces(&self) -> impl Iterator<Item = &FloorSurface>;
+    fn ground_surfaces(&self) -> impl Iterator<Item = &GroundSurface>;
+    fn interior_wall_surfaces(&self) -> impl Iterator<Item = &InteriorWallSurface>;
+    fn outer_ceiling_surfaces(&self) -> impl Iterator<Item = &OuterCeilingSurface>;
+    fn outer_floor_surfaces(&self) -> impl Iterator<Item = &OuterFloorSurface>;
+    fn roof_surfaces(&self) -> impl Iterator<Item = &RoofSurface>;
+    fn wall_surfaces(&self) -> impl Iterator<Item = &WallSurface>;
+    fn window_surfaces(&self) -> impl Iterator<Item = &WindowSurface>;
+    fn closure_surfaces(&self) -> impl Iterator<Item = &ClosureSurface>;
+    fn generic_thematic_surfaces(&self) -> impl Iterator<Item = &GenericThematicSurface>;
+    fn land_uses(&self) -> impl Iterator<Item = &LandUse>;
+    fn auxiliary_traffic_areas(&self) -> impl Iterator<Item = &AuxiliaryTrafficArea>;
+    fn hole_surfaces(&self) -> impl Iterator<Item = &HoleSurface>;
+    fn markings(&self) -> impl Iterator<Item = &Marking>;
+    fn traffic_areas(&self) -> impl Iterator<Item = &TrafficArea>;
+    fn water_ground_surfaces(&self) -> impl Iterator<Item = &WaterGroundSurface>;
+    fn water_surfaces(&self) -> impl Iterator<Item = &WaterSurface>;
+}
+impl AbstractThematicSurfaceAccessors for [AbstractThematicSurface] {
+    fn ceiling_surfaces(&self) -> impl Iterator<Item = &CeilingSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractThematicSurface::CeilingSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn door_surfaces(&self) -> impl Iterator<Item = &DoorSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractThematicSurface::DoorSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn floor_surfaces(&self) -> impl Iterator<Item = &FloorSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractThematicSurface::FloorSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn ground_surfaces(&self) -> impl Iterator<Item = &GroundSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractThematicSurface::GroundSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn interior_wall_surfaces(&self) -> impl Iterator<Item = &InteriorWallSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractThematicSurface::InteriorWallSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn outer_ceiling_surfaces(&self) -> impl Iterator<Item = &OuterCeilingSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractThematicSurface::OuterCeilingSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn outer_floor_surfaces(&self) -> impl Iterator<Item = &OuterFloorSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractThematicSurface::OuterFloorSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn roof_surfaces(&self) -> impl Iterator<Item = &RoofSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractThematicSurface::RoofSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn wall_surfaces(&self) -> impl Iterator<Item = &WallSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractThematicSurface::WallSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn window_surfaces(&self) -> impl Iterator<Item = &WindowSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractThematicSurface::WindowSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn closure_surfaces(&self) -> impl Iterator<Item = &ClosureSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractThematicSurface::ClosureSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn generic_thematic_surfaces(
+        &self,
+    ) -> impl Iterator<Item = &GenericThematicSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractThematicSurface::GenericThematicSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn land_uses(&self) -> impl Iterator<Item = &LandUse> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractThematicSurface::LandUse(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn auxiliary_traffic_areas(&self) -> impl Iterator<Item = &AuxiliaryTrafficArea> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractThematicSurface::AuxiliaryTrafficArea(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn hole_surfaces(&self) -> impl Iterator<Item = &HoleSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractThematicSurface::HoleSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn markings(&self) -> impl Iterator<Item = &Marking> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractThematicSurface::Marking(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn traffic_areas(&self) -> impl Iterator<Item = &TrafficArea> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractThematicSurface::TrafficArea(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn water_ground_surfaces(&self) -> impl Iterator<Item = &WaterGroundSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractThematicSurface::WaterGroundSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn water_surfaces(&self) -> impl Iterator<Item = &WaterSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractThematicSurface::WaterSurface(v) => Some(v.as_ref()),
+                _ => None,
+            })
     }
 }
 pub trait AbstractOccupiedSpaceTrait: AbstractPhysicalSpaceTrait {
@@ -10726,6 +13683,210 @@ impl From<WaterBody> for AbstractOccupiedSpace {
         Self::WaterBody(Box::new(v))
     }
 }
+pub trait AbstractOccupiedSpaceAccessors {
+    fn doors(&self) -> impl Iterator<Item = &Door>;
+    fn other_constructions(&self) -> impl Iterator<Item = &OtherConstruction>;
+    fn windows(&self) -> impl Iterator<Item = &Window>;
+    fn bridges(&self) -> impl Iterator<Item = &Bridge>;
+    fn bridge_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &BridgeConstructiveElement>;
+    fn bridge_furnitures(&self) -> impl Iterator<Item = &BridgeFurniture>;
+    fn bridge_installations(&self) -> impl Iterator<Item = &BridgeInstallation>;
+    fn bridge_parts(&self) -> impl Iterator<Item = &BridgePart>;
+    fn buildings(&self) -> impl Iterator<Item = &Building>;
+    fn building_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &BuildingConstructiveElement>;
+    fn building_furnitures(&self) -> impl Iterator<Item = &BuildingFurniture>;
+    fn building_installations(&self) -> impl Iterator<Item = &BuildingInstallation>;
+    fn building_parts(&self) -> impl Iterator<Item = &BuildingPart>;
+    fn city_furnitures(&self) -> impl Iterator<Item = &CityFurniture>;
+    fn generic_occupied_spaces(&self) -> impl Iterator<Item = &GenericOccupiedSpace>;
+    fn tunnels(&self) -> impl Iterator<Item = &Tunnel>;
+    fn tunnel_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &TunnelConstructiveElement>;
+    fn tunnel_furnitures(&self) -> impl Iterator<Item = &TunnelFurniture>;
+    fn tunnel_installations(&self) -> impl Iterator<Item = &TunnelInstallation>;
+    fn tunnel_parts(&self) -> impl Iterator<Item = &TunnelPart>;
+    fn plant_covers(&self) -> impl Iterator<Item = &PlantCover>;
+    fn solitary_vegetation_objects(
+        &self,
+    ) -> impl Iterator<Item = &SolitaryVegetationObject>;
+    fn water_bodys(&self) -> impl Iterator<Item = &WaterBody>;
+}
+impl AbstractOccupiedSpaceAccessors for [AbstractOccupiedSpace] {
+    fn doors(&self) -> impl Iterator<Item = &Door> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractOccupiedSpace::Door(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn other_constructions(&self) -> impl Iterator<Item = &OtherConstruction> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractOccupiedSpace::OtherConstruction(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn windows(&self) -> impl Iterator<Item = &Window> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractOccupiedSpace::Window(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridges(&self) -> impl Iterator<Item = &Bridge> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractOccupiedSpace::Bridge(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridge_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &BridgeConstructiveElement> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractOccupiedSpace::BridgeConstructiveElement(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridge_furnitures(&self) -> impl Iterator<Item = &BridgeFurniture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractOccupiedSpace::BridgeFurniture(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridge_installations(&self) -> impl Iterator<Item = &BridgeInstallation> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractOccupiedSpace::BridgeInstallation(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn bridge_parts(&self) -> impl Iterator<Item = &BridgePart> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractOccupiedSpace::BridgePart(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn buildings(&self) -> impl Iterator<Item = &Building> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractOccupiedSpace::Building(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &BuildingConstructiveElement> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractOccupiedSpace::BuildingConstructiveElement(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_furnitures(&self) -> impl Iterator<Item = &BuildingFurniture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractOccupiedSpace::BuildingFurniture(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_installations(&self) -> impl Iterator<Item = &BuildingInstallation> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractOccupiedSpace::BuildingInstallation(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_parts(&self) -> impl Iterator<Item = &BuildingPart> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractOccupiedSpace::BuildingPart(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn city_furnitures(&self) -> impl Iterator<Item = &CityFurniture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractOccupiedSpace::CityFurniture(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn generic_occupied_spaces(&self) -> impl Iterator<Item = &GenericOccupiedSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractOccupiedSpace::GenericOccupiedSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tunnels(&self) -> impl Iterator<Item = &Tunnel> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractOccupiedSpace::Tunnel(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tunnel_constructive_elements(
+        &self,
+    ) -> impl Iterator<Item = &TunnelConstructiveElement> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractOccupiedSpace::TunnelConstructiveElement(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tunnel_furnitures(&self) -> impl Iterator<Item = &TunnelFurniture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractOccupiedSpace::TunnelFurniture(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tunnel_installations(&self) -> impl Iterator<Item = &TunnelInstallation> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractOccupiedSpace::TunnelInstallation(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tunnel_parts(&self) -> impl Iterator<Item = &TunnelPart> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractOccupiedSpace::TunnelPart(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn plant_covers(&self) -> impl Iterator<Item = &PlantCover> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractOccupiedSpace::PlantCover(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn solitary_vegetation_objects(
+        &self,
+    ) -> impl Iterator<Item = &SolitaryVegetationObject> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractOccupiedSpace::SolitaryVegetationObject(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn water_bodys(&self) -> impl Iterator<Item = &WaterBody> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractOccupiedSpace::WaterBody(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+}
 pub trait AbstractUnoccupiedSpaceTrait: AbstractPhysicalSpaceTrait {}
 #[derive(Debug, Clone)]
 pub enum AbstractUnoccupiedSpace {
@@ -11461,6 +14622,132 @@ impl From<Waterway> for AbstractUnoccupiedSpace {
 impl From<HollowSpace> for AbstractUnoccupiedSpace {
     fn from(v: HollowSpace) -> Self {
         Self::HollowSpace(Box::new(v))
+    }
+}
+pub trait AbstractUnoccupiedSpaceAccessors {
+    fn bridge_rooms(&self) -> impl Iterator<Item = &BridgeRoom>;
+    fn building_rooms(&self) -> impl Iterator<Item = &BuildingRoom>;
+    fn generic_unoccupied_spaces(&self) -> impl Iterator<Item = &GenericUnoccupiedSpace>;
+    fn auxiliary_traffic_spaces(&self) -> impl Iterator<Item = &AuxiliaryTrafficSpace>;
+    fn clearance_spaces(&self) -> impl Iterator<Item = &ClearanceSpace>;
+    fn holes(&self) -> impl Iterator<Item = &Hole>;
+    fn intersections(&self) -> impl Iterator<Item = &Intersection>;
+    fn railways(&self) -> impl Iterator<Item = &Railway>;
+    fn roads(&self) -> impl Iterator<Item = &Road>;
+    fn sections(&self) -> impl Iterator<Item = &Section>;
+    fn squares(&self) -> impl Iterator<Item = &Square>;
+    fn tracks(&self) -> impl Iterator<Item = &Track>;
+    fn traffic_spaces(&self) -> impl Iterator<Item = &TrafficSpace>;
+    fn waterways(&self) -> impl Iterator<Item = &Waterway>;
+    fn hollow_spaces(&self) -> impl Iterator<Item = &HollowSpace>;
+}
+impl AbstractUnoccupiedSpaceAccessors for [AbstractUnoccupiedSpace] {
+    fn bridge_rooms(&self) -> impl Iterator<Item = &BridgeRoom> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractUnoccupiedSpace::BridgeRoom(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn building_rooms(&self) -> impl Iterator<Item = &BuildingRoom> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractUnoccupiedSpace::BuildingRoom(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn generic_unoccupied_spaces(
+        &self,
+    ) -> impl Iterator<Item = &GenericUnoccupiedSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractUnoccupiedSpace::GenericUnoccupiedSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn auxiliary_traffic_spaces(&self) -> impl Iterator<Item = &AuxiliaryTrafficSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractUnoccupiedSpace::AuxiliaryTrafficSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn clearance_spaces(&self) -> impl Iterator<Item = &ClearanceSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractUnoccupiedSpace::ClearanceSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn holes(&self) -> impl Iterator<Item = &Hole> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractUnoccupiedSpace::Hole(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn intersections(&self) -> impl Iterator<Item = &Intersection> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractUnoccupiedSpace::Intersection(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn railways(&self) -> impl Iterator<Item = &Railway> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractUnoccupiedSpace::Railway(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn roads(&self) -> impl Iterator<Item = &Road> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractUnoccupiedSpace::Road(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn sections(&self) -> impl Iterator<Item = &Section> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractUnoccupiedSpace::Section(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn squares(&self) -> impl Iterator<Item = &Square> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractUnoccupiedSpace::Square(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn tracks(&self) -> impl Iterator<Item = &Track> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractUnoccupiedSpace::Track(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn traffic_spaces(&self) -> impl Iterator<Item = &TrafficSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractUnoccupiedSpace::TrafficSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn waterways(&self) -> impl Iterator<Item = &Waterway> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractUnoccupiedSpace::Waterway(v) => Some(v.as_ref()),
+                _ => None,
+            })
+    }
+    fn hollow_spaces(&self) -> impl Iterator<Item = &HollowSpace> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractUnoccupiedSpace::HollowSpace(v) => Some(v.as_ref()),
+                _ => None,
+            })
     }
 }
 #[derive(Debug, Clone, Default)]

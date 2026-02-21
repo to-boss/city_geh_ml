@@ -9,7 +9,7 @@ A Rust workspace for working with [OGC CityGML 3.0](https://www.ogc.org/standard
 | `citygml-gen` | Binary | Code generator: XMI &rarr; complete `citygml-types` crate |
 | `citygml-core` | Library | Hand-written framework: GML reader, geometry types, `FromGml` trait, namespaces, errors |
 | `citygml-types` | Library | Auto-generated types + `FromGml` reader impls (re-exports `citygml-core`) |
-| `citygml-io` | Library | High-level API: `CitygmlReader`, `BoundaryAccessors` (re-exports core + types) |
+| `citygml-io` | Library | High-level API: `CitygmlReader` (re-exports core + types) |
 
 ## Usage
 
@@ -17,7 +17,7 @@ A Rust workspace for working with [OGC CityGML 3.0](https://www.ogc.org/standard
 
 ```rust
 use citygml_io::city_model::CitygmlReader;
-use citygml_io::BoundaryAccessors;
+use citygml_io::AbstractSpaceBoundaryAccessors;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let model = CitygmlReader::from_path("city.gml")?;
@@ -141,8 +141,8 @@ pub struct Building {
                          |
         citygml-core     |     citygml-io
      (hand-written)      |    (high-level API)
-     ├── gml_reader   <──┘──> ├── CitygmlReader
-     ├── gml_geometry         └── BoundaryAccessors
+     ├── gml_reader   <──┘──> └── CitygmlReader
+     ├── gml_geometry
      ├── from_gml
      ├── geometry
      ├── namespace

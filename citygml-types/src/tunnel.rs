@@ -1086,6 +1086,26 @@ impl From<TunnelPart> for AbstractTunnel {
         Self::TunnelPart(v)
     }
 }
+pub trait AbstractTunnelAccessors {
+    fn tunnels(&self) -> impl Iterator<Item = &Tunnel>;
+    fn tunnel_parts(&self) -> impl Iterator<Item = &TunnelPart>;
+}
+impl AbstractTunnelAccessors for [AbstractTunnel] {
+    fn tunnels(&self) -> impl Iterator<Item = &Tunnel> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractTunnel::Tunnel(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn tunnel_parts(&self) -> impl Iterator<Item = &TunnelPart> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractTunnel::TunnelPart(v) => Some(v),
+                _ => None,
+            })
+    }
+}
 #[derive(Debug, Clone, Default)]
 pub struct TunnelConstructiveElement {
     pub feature_id: ID,

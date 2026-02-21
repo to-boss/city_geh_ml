@@ -197,6 +197,34 @@ impl From<X3DMaterial> for AbstractSurfaceData {
         Self::X3DMaterial(v)
     }
 }
+pub trait AbstractSurfaceDataAccessors {
+    fn georeferenced_textures(&self) -> impl Iterator<Item = &GeoreferencedTexture>;
+    fn parameterized_textures(&self) -> impl Iterator<Item = &ParameterizedTexture>;
+    fn x3_d_materials(&self) -> impl Iterator<Item = &X3DMaterial>;
+}
+impl AbstractSurfaceDataAccessors for [AbstractSurfaceData] {
+    fn georeferenced_textures(&self) -> impl Iterator<Item = &GeoreferencedTexture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSurfaceData::GeoreferencedTexture(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn parameterized_textures(&self) -> impl Iterator<Item = &ParameterizedTexture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSurfaceData::ParameterizedTexture(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn x3_d_materials(&self) -> impl Iterator<Item = &X3DMaterial> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractSurfaceData::X3DMaterial(v) => Some(v),
+                _ => None,
+            })
+    }
+}
 #[derive(Debug, Clone, Default)]
 pub struct Color {
     pub list: DoubleBetween0and1,
@@ -364,6 +392,26 @@ impl From<GeoreferencedTexture> for AbstractTexture {
 impl From<ParameterizedTexture> for AbstractTexture {
     fn from(v: ParameterizedTexture) -> Self {
         Self::ParameterizedTexture(v)
+    }
+}
+pub trait AbstractTextureAccessors {
+    fn georeferenced_textures(&self) -> impl Iterator<Item = &GeoreferencedTexture>;
+    fn parameterized_textures(&self) -> impl Iterator<Item = &ParameterizedTexture>;
+}
+impl AbstractTextureAccessors for [AbstractTexture] {
+    fn georeferenced_textures(&self) -> impl Iterator<Item = &GeoreferencedTexture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractTexture::GeoreferencedTexture(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn parameterized_textures(&self) -> impl Iterator<Item = &ParameterizedTexture> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractTexture::ParameterizedTexture(v) => Some(v),
+                _ => None,
+            })
     }
 }
 #[derive(Debug, Clone, Default)]

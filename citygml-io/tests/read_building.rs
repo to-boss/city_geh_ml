@@ -1,5 +1,5 @@
 use citygml_io::city_model::CitygmlReader;
-use citygml_io::BoundaryAccessors;
+use citygml_io::AbstractSpaceBoundaryAccessors;
 
 #[test]
 fn test_read_building_lod2() {

@@ -1100,6 +1100,26 @@ impl From<BridgePart> for AbstractBridge {
         Self::BridgePart(v)
     }
 }
+pub trait AbstractBridgeAccessors {
+    fn bridges(&self) -> impl Iterator<Item = &Bridge>;
+    fn bridge_parts(&self) -> impl Iterator<Item = &BridgePart>;
+}
+impl AbstractBridgeAccessors for [AbstractBridge] {
+    fn bridges(&self) -> impl Iterator<Item = &Bridge> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractBridge::Bridge(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn bridge_parts(&self) -> impl Iterator<Item = &BridgePart> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractBridge::BridgePart(v) => Some(v),
+                _ => None,
+            })
+    }
+}
 #[derive(Debug, Clone, Default)]
 pub struct BridgeConstructiveElement {
     pub feature_id: ID,

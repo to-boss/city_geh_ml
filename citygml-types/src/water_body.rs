@@ -200,6 +200,26 @@ impl From<WaterSurface> for AbstractWaterBoundarySurface {
         Self::WaterSurface(v)
     }
 }
+pub trait AbstractWaterBoundarySurfaceAccessors {
+    fn water_ground_surfaces(&self) -> impl Iterator<Item = &WaterGroundSurface>;
+    fn water_surfaces(&self) -> impl Iterator<Item = &WaterSurface>;
+}
+impl AbstractWaterBoundarySurfaceAccessors for [AbstractWaterBoundarySurface] {
+    fn water_ground_surfaces(&self) -> impl Iterator<Item = &WaterGroundSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractWaterBoundarySurface::WaterGroundSurface(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn water_surfaces(&self) -> impl Iterator<Item = &WaterSurface> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractWaterBoundarySurface::WaterSurface(v) => Some(v),
+                _ => None,
+            })
+    }
+}
 #[derive(Debug, Clone, Default)]
 pub struct WaterBody {
     pub feature_id: ID,

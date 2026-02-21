@@ -414,6 +414,48 @@ impl From<TabulatedFileTimeseries> for AbstractTimeseries {
         Self::TabulatedFileTimeseries(v)
     }
 }
+pub trait AbstractTimeseriesAccessors {
+    fn composite_timeseriess(&self) -> impl Iterator<Item = &CompositeTimeseries>;
+    fn generic_timeseriess(&self) -> impl Iterator<Item = &GenericTimeseries>;
+    fn standard_file_timeseriess(&self) -> impl Iterator<Item = &StandardFileTimeseries>;
+    fn tabulated_file_timeseriess(
+        &self,
+    ) -> impl Iterator<Item = &TabulatedFileTimeseries>;
+}
+impl AbstractTimeseriesAccessors for [AbstractTimeseries] {
+    fn composite_timeseriess(&self) -> impl Iterator<Item = &CompositeTimeseries> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractTimeseries::CompositeTimeseries(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn generic_timeseriess(&self) -> impl Iterator<Item = &GenericTimeseries> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractTimeseries::GenericTimeseries(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn standard_file_timeseriess(
+        &self,
+    ) -> impl Iterator<Item = &StandardFileTimeseries> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractTimeseries::StandardFileTimeseries(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn tabulated_file_timeseriess(
+        &self,
+    ) -> impl Iterator<Item = &TabulatedFileTimeseries> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractTimeseries::TabulatedFileTimeseries(v) => Some(v),
+                _ => None,
+            })
+    }
+}
 pub trait AbstractAtomicTimeseriesTrait: AbstractTimeseriesTrait {
     fn observation_property(&self) -> &String;
     fn uom(&self) -> Option<&String>;
@@ -504,6 +546,40 @@ impl From<StandardFileTimeseries> for AbstractAtomicTimeseries {
 impl From<TabulatedFileTimeseries> for AbstractAtomicTimeseries {
     fn from(v: TabulatedFileTimeseries) -> Self {
         Self::TabulatedFileTimeseries(v)
+    }
+}
+pub trait AbstractAtomicTimeseriesAccessors {
+    fn generic_timeseriess(&self) -> impl Iterator<Item = &GenericTimeseries>;
+    fn standard_file_timeseriess(&self) -> impl Iterator<Item = &StandardFileTimeseries>;
+    fn tabulated_file_timeseriess(
+        &self,
+    ) -> impl Iterator<Item = &TabulatedFileTimeseries>;
+}
+impl AbstractAtomicTimeseriesAccessors for [AbstractAtomicTimeseries] {
+    fn generic_timeseriess(&self) -> impl Iterator<Item = &GenericTimeseries> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractAtomicTimeseries::GenericTimeseries(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn standard_file_timeseriess(
+        &self,
+    ) -> impl Iterator<Item = &StandardFileTimeseries> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractAtomicTimeseries::StandardFileTimeseries(v) => Some(v),
+                _ => None,
+            })
+    }
+    fn tabulated_file_timeseriess(
+        &self,
+    ) -> impl Iterator<Item = &TabulatedFileTimeseries> {
+        self.iter()
+            .filter_map(|item| match item {
+                AbstractAtomicTimeseries::TabulatedFileTimeseries(v) => Some(v),
+                _ => None,
+            })
     }
 }
 #[derive(Debug, Clone, Default)]
