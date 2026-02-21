@@ -1,6 +1,6 @@
 use indexmap::IndexMap;
 
-use crate::ir::model::UmlModel;
+use crate::ir::model::{self, UmlModel};
 use crate::ir::types::*;
 use crate::resolve::topology::topological_sort;
 use crate::xmi::raw::RawModel;
@@ -114,13 +114,15 @@ pub fn build_model(raw: &RawModel, verbose: bool) -> UmlModel {
     // 8. Topological sort
     let sorted_class_ids = topological_sort(&classes);
 
-    UmlModel {
+    let mut model = model::new_uml_model(
         packages,
         classes,
         enumerations,
         data_types,
         sorted_class_ids,
-    }
+    );
+    model.compute_caches();
+    model
 }
 
 #[derive(Debug, Clone, Copy)]

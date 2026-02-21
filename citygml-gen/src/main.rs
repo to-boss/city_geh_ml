@@ -8,6 +8,8 @@ mod resolve;
 mod util;
 mod xmi;
 
+use std::time::Instant;
+
 use anyhow::{Context, Result};
 use clap::Parser;
 
@@ -15,6 +17,7 @@ use cli::Args;
 
 fn main() -> Result<()> {
     let args = Args::parse();
+    let total_start = Instant::now();
 
     if args.verbose {
         eprintln!("citygml-gen — CityGML 3.0 Rust code generator");
@@ -30,6 +33,7 @@ fn main() -> Result<()> {
     if args.verbose {
         eprintln!("\nPhase 1: Parsing XMI...");
     }
+    let phase1_start = Instant::now();
     let raw_model = xmi::parser::parse_xmi(&args.input)
         .with_context(|| format!("Failed to parse XMI file: {}", args.input.display()))?;
 
@@ -40,12 +44,14 @@ fn main() -> Result<()> {
         eprintln!("  DataTypes:   {}", raw_model.data_types.len());
         eprintln!("  EAStubs:     {}", raw_model.ea_stubs.len());
         eprintln!("  GeometryRefs:{}", raw_model.geometry_refs.len());
+        eprintln!("  Phase 1 completed in {:.2?}", phase1_start.elapsed());
     }
 
     // Phase 2: Resolve to IR
     if args.verbose {
         eprintln!("\nPhase 2: Resolving types...");
     }
+    let phase2_start = Instant::now();
     let model = resolve::resolver::build_model(&raw_model, args.verbose);
 
     if args.verbose {
@@ -61,6 +67,7 @@ fn main() -> Result<()> {
         let concrete_count = model.classes.values().filter(|c| !c.is_abstract).count();
         eprintln!("  Abstract classes:     {abstract_count}");
         eprintln!("  Concrete classes:     {concrete_count}");
+        eprintln!("  Phase 2 completed in {:.2?}", phase2_start.elapsed());
     }
 
     // Emit IR dump and exit early if requested
@@ -74,6 +81,7 @@ fn main() -> Result<()> {
     if args.verbose {
         eprintln!("\nPhase 3: Generating code + reader impls...");
     }
+    let phase3_start = Instant::now();
 
     let src_dir = args.output.join("src");
 
@@ -113,7 +121,8 @@ fn main() -> Result<()> {
     }
 
     if args.verbose {
-        eprintln!("\nDone. Generated {} modules.", module_names.len());
+        eprintln!("  Phase 3 completed in {:.2?}", phase3_start.elapsed());
+        eprintln!("\nDone. Generated {} modules in {:.2?}.", module_names.len(), total_start.elapsed());
     } else if !args.dry_run {
         println!(
             "Generated {} modules in {}",

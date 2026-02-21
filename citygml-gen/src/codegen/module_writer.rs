@@ -121,69 +121,90 @@ pub fn generate_all(
         }
     }
 
-    // Write files
-    let mut module_names = Vec::new();
+    // Collect files to format: (module_name, token_string)
+    // Convert TokenStream → String on the main thread (cheap),
+    // then parse + format from String in parallel threads (expensive).
+    // This is needed because proc_macro2::TokenStream is !Send.
+    let mut files_to_format: Vec<(String, String)> = Vec::new();
 
     for (_pkg_id, pt) in &pkg_tokens {
         if pt.tokens.is_empty() {
             continue;
         }
-
         let combined: TokenStream = pt.tokens.iter().cloned().collect();
-
-        // Format with prettyplease
-        let mut file_content = format_tokens(combined)?;
-
-        // Prepend cross-module imports
-        file_content = format!(
-            "#![allow(unused_imports, unused_mut, unused_variables)]\nuse super::*;\n\n{file_content}"
-        );
-
-        let filename = format!("{}.rs", pt.module_name);
-        module_names.push(pt.module_name.clone());
-
-        if dry_run {
-            if verbose {
-                eprintln!("  [dry-run] Would write {filename} ({} bytes)", file_content.len());
-            }
-        } else {
-            let file_path = output_dir.join(&filename);
-            if verbose {
-                eprintln!("  Writing {filename}...");
-            }
-            std::fs::write(&file_path, &file_content)?;
-        }
+        files_to_format.push((pt.module_name.clone(), combined.to_string()));
     }
 
     // Generate dispatchers module if with_reader
     if with_reader {
         let dispatcher_tokens = from_gml_gen::generate_dispatchers(model);
         if !dispatcher_tokens.is_empty() {
-            let mut file_content = format_tokens(dispatcher_tokens)?;
-            file_content = format!(
-                "#![allow(unused_imports, unused_mut, unused_variables)]\nuse super::*;\n\n{file_content}"
-            );
-            module_names.push("dispatchers".to_string());
-
-            if dry_run {
-                if verbose {
-                    eprintln!("  [dry-run] Would write dispatchers.rs ({} bytes)", file_content.len());
-                }
-            } else {
-                let file_path = output_dir.join("dispatchers.rs");
-                if verbose {
-                    eprintln!("  Writing dispatchers.rs...");
-                }
-                std::fs::write(&file_path, &file_content)?;
-            }
+            files_to_format.push(("dispatchers".to_string(), dispatcher_tokens.to_string()));
         }
+    }
+
+    // Format + write files in parallel using scoped threads
+    let results: Vec<Result<String, GenError>> = if dry_run {
+        std::thread::scope(|s| {
+            let handles: Vec<_> = files_to_format
+                .into_iter()
+                .map(|(module_name, token_str)| {
+                    s.spawn(move || {
+                        let file_content = format_str_with_header(&token_str)?;
+                        if verbose {
+                            eprintln!(
+                                "  [dry-run] Would write {}.rs ({} bytes)",
+                                module_name,
+                                file_content.len()
+                            );
+                        }
+                        Ok(module_name)
+                    })
+                })
+                .collect();
+            handles.into_iter().map(|h| h.join().unwrap()).collect()
+        })
+    } else {
+        let output_dir = output_dir.to_path_buf();
+        std::thread::scope(|s| {
+            let handles: Vec<_> = files_to_format
+                .into_iter()
+                .map(|(module_name, token_str)| {
+                    let output_dir = &output_dir;
+                    s.spawn(move || {
+                        let file_content = format_str_with_header(&token_str)?;
+                        let filename = format!("{module_name}.rs");
+                        let file_path = output_dir.join(&filename);
+                        if verbose {
+                            eprintln!("  Writing {filename}...");
+                        }
+                        std::fs::write(&file_path, &file_content)?;
+                        Ok(module_name)
+                    })
+                })
+                .collect();
+            handles.into_iter().map(|h| h.join().unwrap()).collect()
+        })
+    };
+
+    // Collect results, propagating any errors
+    let mut module_names = Vec::new();
+    for result in results {
+        module_names.push(result?);
     }
 
     Ok(module_names)
 }
 
-fn format_tokens(tokens: TokenStream) -> Result<String, GenError> {
-    let file = syn::parse2::<syn::File>(tokens)
+fn format_str_with_header(token_str: &str) -> Result<String, GenError> {
+    let file_content = format_str(token_str)?;
+    Ok(format!(
+        "#![allow(unused_imports, unused_mut, unused_variables)]\nuse super::*;\n\n{file_content}"
+    ))
+}
+
+fn format_str(token_str: &str) -> Result<String, GenError> {
+    let file = syn::parse_str::<syn::File>(token_str)
         .map_err(|e| GenError::Codegen(format!("Failed to parse generated tokens: {e}")))?;
     let formatted = prettyplease::unparse(&file);
     Ok(add_blank_lines_between_items(&formatted))

@@ -1,3 +1,11 @@
 [workspace]
 members = ["citygml-gen", "citygml-io", "citygml-core", "citygml-types"]
 resolver = "3"
+
+# syn + prettyplease are the bottleneck in debug-mode code generation;
+# compiling them with optimizations drops citygml-gen from ~1m30s to ~15s.
+[profile.dev.package.syn]
+opt-level = 2
+
+[profile.dev.package.prettyplease]
+opt-level = 2
