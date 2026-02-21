@@ -144,6 +144,18 @@ pub struct Building {
                   ::from_path()
 ```
 
+### Why an Intermediate Representation?
+
+The generator doesn't go straight from XMI to Rust. Enterprise Architect's XMI export is a flat soup of elements linked by opaque `xmi:id` strings &mdash; a raw class just has `generalizations: ["EAID_ABC123"]` and attribute types like `type_idref: "EAID_DEF456"`. You can't generate code from this because you don't know what anything refers to.
+
+The **resolve** step (`Raw` &rarr; `UmlModel` IR) does three things:
+
+1. **Type resolution** &mdash; Converts opaque ID strings into a typed `UmlTypeRef` enum (`Known(id)`, `External(GmPoint)`, `Unresolved(...)`) by cross-referencing classes, enums, data types, EA stubs, and geometry connector metadata.
+2. **Topological sorting** &mdash; Parents must be defined before children in the output. The raw XMI gives them in arbitrary document order. The resolve stage does a DAG sort on the inheritance graph.
+3. **Semantic queries** &mdash; The `UmlModel` provides computed queries the raw data can't answer: `ancestor_chain()`, `all_properties()` (inherited + own, deduplicated), `concrete_descendants()` (for enum dispatch), `should_skip_prop()` (filters ADEOf\* dead ends), and `non_cloneable_ids()` (transitive Clone analysis).
+
+The raw XMI knows what's *in the file*. The IR knows what it *means*. The codegen only needs to care about *how to emit Rust*.
+
 ### GML Reader Design
 
 The reader uses a namespace-aware XML cursor (`GmlReader` / `SubtreeReader`) built on top of `quick-xml`. Parsing follows a recursive descent pattern:
