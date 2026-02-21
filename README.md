@@ -15,6 +15,7 @@ A Rust workspace for working with [OGC CityGML 3.0](https://www.ogc.org/standard
 
 ```rust
 use citygml_io::city_model::CitygmlReader;
+use citygml_io::BoundaryAccessors;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let model = CitygmlReader::from_path("city.gml")?;
@@ -24,6 +25,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         println!("Name: {:?}", building.name);
         println!("Function: {:?}", building.function);
         println!("Boundaries: {}", building.boundary.len());
+
+        for wall in building.boundary.wall_surfaces() {
+            println!("  Wall lod2MultiSurface: {:?}", wall.lod2_multi_surface);
+        }
 
         if let Some(solid) = &building.lod2_solid {
             println!("LOD2 Solid shells: {}", solid.exterior_shell.len());

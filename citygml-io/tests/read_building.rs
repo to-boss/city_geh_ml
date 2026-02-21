@@ -1,4 +1,5 @@
 use citygml_io::city_model::CitygmlReader;
+use citygml_io::BoundaryAccessors;
 
 #[test]
 fn test_read_building_lod2() {
@@ -49,6 +50,19 @@ fn test_read_building_lod2() {
 
     // Check height (from con:height)
     assert!(!b.height.is_empty(), "Building should have height data");
+
+    // Check typed boundary accessors
+    let wall_count = b.boundary.wall_surfaces().count();
+    let roof_count = b.boundary.roof_surfaces().count();
+    let ground_count = b.boundary.ground_surfaces().count();
+    assert!(wall_count >= 1, "Building should have at least 1 WallSurface, got {wall_count}");
+    assert!(roof_count >= 1, "Building should have at least 1 RoofSurface, got {roof_count}");
+    assert!(ground_count >= 1, "Building should have at least 1 GroundSurface, got {ground_count}");
+    assert_eq!(
+        wall_count + roof_count + ground_count,
+        b.boundary.len(),
+        "All boundaries should be wall, roof, or ground surfaces"
+    );
 }
 
 #[test]

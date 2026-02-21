@@ -7,3 +7,5 @@ pub mod gml_reader;
 pub mod gml_geometry;
 pub mod city_model;
 pub mod generated;
+pub mod boundary_accessors;
+pub use boundary_accessors::BoundaryAccessors;
