@@ -1,3 +1,3 @@
 [workspace]
-members = ["citygml-gen", "citygml-io"]
+members = ["citygml-gen", "citygml-io", "citygml-core", "citygml-types"]
 resolver = "3"

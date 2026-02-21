@@ -1,8 +1,8 @@
-use crate::generated::construction::{
+use citygml_types::construction::{
     CeilingSurface, DoorSurface, FloorSurface, GroundSurface, InteriorWallSurface,
     OuterCeilingSurface, OuterFloorSurface, RoofSurface, WallSurface, WindowSurface,
 };
-use crate::generated::core::{AbstractSpaceBoundary, ClosureSurface};
+use citygml_types::core::{AbstractSpaceBoundary, ClosureSurface};
 
 /// Typed accessor methods for filtering `AbstractSpaceBoundary` slices by surface type.
 ///

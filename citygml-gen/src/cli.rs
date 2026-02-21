@@ -13,9 +13,13 @@ pub struct Args {
     #[arg(short, long)]
     pub input: PathBuf,
 
-    /// Output directory for generated .rs files.
-    #[arg(short, long, default_value = "src/generated")]
+    /// Output directory for the generated crate.
+    #[arg(short, long, default_value = "citygml-types")]
     pub output: PathBuf,
+
+    /// Name for the generated crate (used in Cargo.toml).
+    #[arg(long, default_value = "citygml-types")]
+    pub crate_name: String,
 
     /// Print detailed progress information.
     #[arg(short, long)]
@@ -28,11 +32,6 @@ pub struct Args {
     /// Only generate for the specified packages (comma-separated).
     #[arg(long, value_delimiter = ',')]
     pub packages: Option<Vec<String>>,
-
-    /// Also generate FromGml reader impls to this directory.
-    /// Defaults to `<output>/` (same as type output) if flag is present without value.
-    #[arg(long)]
-    pub with_reader: Option<Option<PathBuf>>,
 
     /// Dump the resolved IR (UmlModel) to a text file and skip code generation.
     #[arg(long, default_missing_value = "ir_dump.txt", num_args = 0..=1)]

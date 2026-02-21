@@ -1,8 +1,7 @@
 [package]
-name = "citygml-io"
+name = "citygml-types"
 version = "0.1.0"
 edition = "2024"
 
 [dependencies]
 citygml-core = { path = "../citygml-core" }
-citygml-types = { path = "../citygml-types" }

@@ -2,19 +2,20 @@
 
 ## Project Overview
 
-Cargo workspace with two crates that parse the CityGML 3.0 UML model (XMI) and generate Rust types + a GML reader:
+Cargo workspace with four crates that parse the CityGML 3.0 UML model (XMI) and generate Rust types + a GML reader:
 
-- **`citygml-gen`** — Binary. Parses CityGML 3.0 XMI from Enterprise Architect, generates Rust code.
-- **`citygml-io`** — Library. Contains generated types, geometry stubs, and a GML 3.0 file reader.
+- **`citygml-gen`** — Binary. Parses CityGML 3.0 XMI from Enterprise Architect, generates the `citygml-types` crate.
+- **`citygml-core`** — Library. Hand-written framework: GML reader, geometry types, `FromGml` trait, namespace constants, error types.
+- **`citygml-types`** — Library. Auto-generated types + reader impls. Re-exports `citygml-core` modules so `crate::` paths resolve. **Do not edit by hand — overwritten by the generator.**
+- **`citygml-io`** — Library. High-level API (`CitygmlReader::from_path()`), `BoundaryAccessors` trait. Re-exports both `citygml-core` and `citygml-types`.
 
 ## Quick Commands
 
 ```bash
-# Generate types + reader from XMI
+# Generate citygml-types crate from XMI
 cargo run -p citygml-gen -- \
   --input "path/to/CityGML_3.0.xml" \
-  --output citygml-io/src/generated/ \
-  --with-reader
+  --output citygml-types
 
 # Build everything
 cargo build
@@ -32,15 +33,27 @@ cargo test -p citygml-io --test read_building -- --nocapture
 
 1. **XMI Parsing** (`src/xmi/`) — State-machine parser using quick-xml. Handles windows-1252 encoding and self-closing elements (`Event::Empty`).
 2. **Type Resolution** (`src/resolve/`) — Converts raw XMI data into `UmlModel` with resolved type references, ancestor chains, and topological sort.
-3. **Code Generation** (`src/codegen/`) — Uses proc-macro2/quote to emit Rust code, formatted with prettyplease. One `.rs` file per CityGML package.
+3. **Code Generation** (`src/codegen/`) — Uses proc-macro2/quote to emit Rust code, formatted with prettyplease. One `.rs` file per CityGML package. Outputs a complete crate (Cargo.toml + src/lib.rs + modules).
 
-### citygml-io Structure
+### citygml-core (hand-written framework)
 
 - `gml_reader.rs` — Namespace-aware XML cursor wrapping quick-xml. `SubtreeReader` scopes parsing to element children.
-- `gml_geometry.rs` — Hand-written parsers for GML 3.2 geometry (Polygon, MultiSurface, Solid, etc.).
+- `gml_geometry.rs` — Parsers for GML 3.2 geometry (Polygon, MultiSurface, Solid, etc.).
 - `from_gml.rs` + `primitives.rs` — `FromGml` trait + impls for primitives and geometry types.
+- `geometry.rs` — Geometry type definitions (Polygon, MultiSurface, Solid, etc.).
+- `namespace.rs` — CityGML 3.0 namespace constants and package-to-namespace mapping.
+- `error.rs` — `ReaderError` type.
+
+### citygml-types (auto-generated)
+
+- 17 modules (one per CityGML package) + `dispatchers.rs`
+- `lib.rs` re-exports `citygml-core` modules so generated `crate::geometry::*` etc. resolve
+- Re-running the generator overwrites the entire `citygml-types/` directory
+
+### citygml-io (high-level API)
+
 - `city_model.rs` — Top-level `CitygmlReader::from_path()` API.
-- `generated/` — 17 modules + `dispatchers.rs`, all auto-generated. **Do not edit by hand.**
+- `boundary_accessors.rs` — Typed accessor methods for filtering `AbstractSpaceBoundary` slices.
 
 ## Key Conventions
 
@@ -56,8 +69,8 @@ cargo test -p citygml-io --test read_building -- --nocapture
 ## Code Generation Notes
 
 - Generated files have `#![allow(unused_imports, unused_mut, unused_variables)]` — this is intentional.
-- Re-running the generator overwrites `citygml-io/src/generated/`. The hand-written framework files in `citygml-io/src/` are not affected.
-- CLI flags: `--verbose` for progress, `--dry-run` to skip writing, `--packages core,building` to filter.
+- Re-running the generator overwrites the entire `citygml-types/` crate. Hand-written code lives in `citygml-core` and `citygml-io`.
+- CLI flags: `--verbose` for progress, `--dry-run` to skip writing, `--packages core,building` to filter, `--crate-name` to change the generated crate name.
 
 ## Test Fixtures
 

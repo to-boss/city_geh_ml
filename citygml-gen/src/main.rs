@@ -16,15 +16,11 @@ use cli::Args;
 fn main() -> Result<()> {
     let args = Args::parse();
 
-    let with_reader = args.with_reader.is_some();
-
     if args.verbose {
         eprintln!("citygml-gen — CityGML 3.0 Rust code generator");
         eprintln!("  Input:  {}", args.input.display());
         eprintln!("  Output: {}", args.output.display());
-        if with_reader {
-            eprintln!("  Reader: enabled");
-        }
+        eprintln!("  Crate:  {}", args.crate_name);
         if args.dry_run {
             eprintln!("  Mode:   dry-run");
         }
@@ -76,24 +72,45 @@ fn main() -> Result<()> {
 
     // Phase 3: Code generation
     if args.verbose {
-        eprintln!("\nPhase 3: Generating code{}...", if with_reader { " + reader impls" } else { "" });
+        eprintln!("\nPhase 3: Generating code + reader impls...");
     }
 
+    let src_dir = args.output.join("src");
+
     if !args.dry_run {
-        std::fs::create_dir_all(&args.output)
-            .with_context(|| format!("Failed to create output directory: {}", args.output.display()))?;
+        std::fs::create_dir_all(&src_dir)
+            .with_context(|| format!("Failed to create output directory: {}", src_dir.display()))?;
     }
 
     let module_names = codegen::module_writer::generate_all(
         &model,
-        &args.output,
-        with_reader,
+        &src_dir,
+        true, // always generate reader impls
         args.dry_run,
         args.verbose,
     )?;
 
-    // Write mod.rs
-    codegen::prelude::write_mod_file(&args.output, &module_names, args.dry_run, args.verbose)?;
+    // Write lib.rs
+    codegen::prelude::write_lib_file(&src_dir, &module_names, args.dry_run, args.verbose)?;
+
+    // Write Cargo.toml for the generated crate
+    if !args.dry_run {
+        let cargo_toml = format!(
+            "[package]\n\
+             name = \"{}\"\n\
+             version = \"0.1.0\"\n\
+             edition = \"2024\"\n\
+             \n\
+             [dependencies]\n\
+             citygml-core = {{ path = \"../citygml-core\" }}\n",
+            args.crate_name
+        );
+        let cargo_path = args.output.join("Cargo.toml");
+        std::fs::write(&cargo_path, cargo_toml)?;
+        if args.verbose {
+            eprintln!("  Writing Cargo.toml...");
+        }
+    }
 
     if args.verbose {
         eprintln!("\nDone. Generated {} modules.", module_names.len());

@@ -1,11 +1,6 @@
-pub mod error;
-pub mod geometry;
-pub mod namespace;
-pub mod from_gml;
-pub mod primitives;
-pub mod gml_reader;
-pub mod gml_geometry;
+pub use citygml_core::*;
+pub use citygml_types::*;
+
 pub mod city_model;
-pub mod generated;
 pub mod boundary_accessors;
 pub use boundary_accessors::BoundaryAccessors;

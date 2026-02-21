@@ -1,17 +1,17 @@
 use std::path::Path;
 
-use crate::error::ReaderError;
-use crate::gml_reader::{reader_from_path, SubtreeReader, GmlReader, ElementInfo};
-use crate::namespace::*;
+use citygml_core::error::ReaderError;
+use citygml_core::gml_reader::{reader_from_path, SubtreeReader, GmlReader, ElementInfo};
+use citygml_core::namespace::*;
 
 /// The top-level parsed CityGML model.
 ///
 /// Contains vectors of concrete feature types found in the document.
 #[derive(Debug, Default)]
 pub struct ParsedCityModel {
-    pub buildings: Vec<crate::generated::building::Building>,
-    pub building_parts: Vec<crate::generated::building::BuildingPart>,
-    pub relief_features: Vec<crate::generated::relief::ReliefFeature>,
+    pub buildings: Vec<citygml_types::building::Building>,
+    pub building_parts: Vec<citygml_types::building::BuildingPart>,
+    pub relief_features: Vec<citygml_types::relief::ReliefFeature>,
 }
 
 pub struct CitygmlReader;
@@ -71,15 +71,15 @@ impl CitygmlReader {
     ) -> Result<(), ReaderError> {
         match (info.namespace.as_str(), info.local_name.as_str()) {
             (NS_BUILDING, "Building") => {
-                let b = crate::generated::building::Building::from_gml_with_info(reader, info)?;
+                let b = citygml_types::building::Building::from_gml_with_info(reader, info)?;
                 model.buildings.push(b);
             }
             (NS_BUILDING, "BuildingPart") => {
-                let bp = crate::generated::building::BuildingPart::from_gml_with_info(reader, info)?;
+                let bp = citygml_types::building::BuildingPart::from_gml_with_info(reader, info)?;
                 model.building_parts.push(bp);
             }
             (NS_RELIEF, "ReliefFeature") => {
-                let r = crate::generated::relief::ReliefFeature::from_gml_with_info(reader, info)?;
+                let r = citygml_types::relief::ReliefFeature::from_gml_with_info(reader, info)?;
                 model.relief_features.push(r);
             }
             _ => {

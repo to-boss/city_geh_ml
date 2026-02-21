@@ -6,8 +6,10 @@ A Rust workspace for working with [OGC CityGML 3.0](https://www.ogc.org/standard
 
 | Crate | Type | Description |
 |-------|------|-------------|
-| `citygml-gen` | Binary | Code generator: XMI &rarr; Rust types + FromGml reader impls |
-| `citygml-io` | Library | Generated types, geometry types, and GML file reader |
+| `citygml-gen` | Binary | Code generator: XMI &rarr; complete `citygml-types` crate |
+| `citygml-core` | Library | Hand-written framework: GML reader, geometry types, `FromGml` trait, namespaces, errors |
+| `citygml-types` | Library | Auto-generated types + `FromGml` reader impls (re-exports `citygml-core`) |
+| `citygml-io` | Library | High-level API: `CitygmlReader`, `BoundaryAccessors` (re-exports core + types) |
 
 ## Usage
 
@@ -41,13 +43,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ### Regenerating types from XMI
 
-The generated code lives in `citygml-io/src/generated/`. To regenerate from the CityGML 3.0 UML model:
+The generator produces a complete `citygml-types` crate (Cargo.toml + src/). To regenerate from the CityGML 3.0 UML model:
 
 ```bash
 cargo run -p citygml-gen -- \
   --input path/to/CityGML_3.0.xml \
-  --output citygml-io/src/generated/ \
-  --with-reader
+  --output citygml-types
 ```
 
 The XMI file is the CityGML 3.0 UML model exported from Enterprise Architect. It can be obtained from the [OGC CityGML 3.0 Conceptual Model](https://github.com/opengeospatial/CityGML-3.0CM).
@@ -57,8 +58,8 @@ The XMI file is the CityGML 3.0 UML model exported from Enterprise Architect. It
 | Flag | Description |
 |------|-------------|
 | `--input <PATH>` | Path to the CityGML 3.0 XMI file (required) |
-| `--output <DIR>` | Output directory for generated `.rs` files (default: `src/generated`) |
-| `--with-reader [DIR]` | Also generate `FromGml` deserialization impls (optionally into a separate directory) |
+| `--output <DIR>` | Output directory for the generated crate (default: `citygml-types`) |
+| `--crate-name <NAME>` | Name for the generated crate's Cargo.toml (default: `citygml-types`) |
 | `--packages core,building` | Only generate specific packages (comma-separated) |
 | `--emit-ir [FILE]` | Dump the resolved IR (`UmlModel`) to a text file and skip code generation (default: `ir_dump.txt`) |
 | `--verbose` | Print detailed progress |
@@ -131,17 +132,23 @@ pub struct Building {
             (quick-xml) (topo-  (proc-macro2
              + encoding  sort)   + quote)
                          |
-              citygml-io/src/generated/
-              (17 modules + dispatchers)
+                   citygml-types/        (auto-generated crate)
+                   ├── Cargo.toml
+                   └── src/
+                       ├── lib.rs        (re-exports citygml-core)
+                       ├── building.rs
+                       ├── core.rs
+                       ├── dispatchers.rs
+                       └── ... (17 modules)
                          |
-                    citygml-io
-                    /    |    \
-            GmlReader  FromGml  Geometry
-            (ns-aware   trait   (Polygon,
-             XML cursor)        Solid, ...)
-                         |
-                  CitygmlReader
-                  ::from_path()
+        citygml-core     |     citygml-io
+     (hand-written)      |    (high-level API)
+     ├── gml_reader   <──┘──> ├── CitygmlReader
+     ├── gml_geometry         └── BoundaryAccessors
+     ├── from_gml
+     ├── geometry
+     ├── namespace
+     └── error
 ```
 
 ### Why an Intermediate Representation?
@@ -155,6 +162,19 @@ The **resolve** step (`Raw` &rarr; `UmlModel` IR) does three things:
 3. **Semantic queries** &mdash; The `UmlModel` provides computed queries the raw data can't answer: `ancestor_chain()`, `all_properties()` (inherited + own, deduplicated), `concrete_descendants()` (for enum dispatch), `should_skip_prop()` (filters ADEOf\* dead ends), and `non_cloneable_ids()` (transitive Clone analysis).
 
 The raw XMI knows what's *in the file*. The IR knows what it *means*. The codegen only needs to care about *how to emit Rust*.
+
+### Crate Separation Design
+
+The generated `citygml-types` crate re-exports all `citygml-core` modules in its `lib.rs`:
+
+```rust
+pub use citygml_core::error;
+pub use citygml_core::geometry;
+pub use citygml_core::gml_reader;
+// ...
+```
+
+This means generated code using `crate::geometry::MultiSurface` resolves through the re-export &mdash; zero changes needed in the code generator's `quote!` macros. The generator simply emits `crate::` paths and the re-exports make them work.
 
 ### GML Reader Design
 
@@ -194,7 +214,6 @@ Integration tests use CityGML 3.0 example files from the [OGC CityGML-3.0Encodin
 
 ## Future Plans
 
-- [**Standalone generated crate**](docs/standalone-crate-plan.md) — Restructure the workspace so the code generator produces a complete, self-contained `citygml-types` crate instead of generating into `citygml-io/src/generated/`. Splits the workspace into `citygml-core` (hand-written framework), `citygml-types` (fully generated), and a slimmed `citygml-io` wrapper.
 - [**XSD-based code generation**](docs/xsd-migration-plan.md) — Replace the XMI (Enterprise Architect UML export) parser with an XSD parser that reads the official OGC XML Schema files directly. This resolves the unresolved `grid` type, eliminates EA lock-in, and aligns generated element names exactly with GML encoding.
 
 ## License
