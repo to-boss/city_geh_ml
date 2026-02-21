@@ -30,11 +30,11 @@ impl UmlModel {
     ) {
         if let Some(cls) = self.classes.get(id) {
             for parent_id in &cls.parent_ids {
-                if visited.insert(parent_id.clone()) {
-                    if let Some(parent) = self.classes.get(parent_id.as_str()) {
-                        chain.push(parent);
-                        self.collect_ancestors(parent_id, chain, visited);
-                    }
+                if visited.insert(parent_id.clone())
+                    && let Some(parent) = self.classes.get(parent_id.as_str())
+                {
+                    chain.push(parent);
+                    self.collect_ancestors(parent_id, chain, visited);
                 }
             }
         }
@@ -108,16 +108,18 @@ impl UmlModel {
                     return true;
                 }
                 // Abstract data types with no properties and no concrete impls → skip
-                if let Some(dt) = self.data_types.get(id.as_str()) {
-                    if dt.is_abstract && dt.properties.is_empty() {
-                        return true;
-                    }
+                if let Some(dt) = self.data_types.get(id.as_str())
+                    && dt.is_abstract
+                    && dt.properties.is_empty()
+                {
+                    return true;
                 }
                 // Abstract classes with 0 concrete descendants → skip
-                if let Some(cls) = self.classes.get(id.as_str()) {
-                    if cls.is_abstract && self.concrete_descendants(id).is_empty() {
-                        return true;
-                    }
+                if let Some(cls) = self.classes.get(id.as_str())
+                    && cls.is_abstract
+                    && self.concrete_descendants(id).is_empty()
+                {
+                    return true;
                 }
                 false
             }

@@ -1093,7 +1093,7 @@ impl RasterRelief {
         let mut dynamizer = Vec::new();
         let mut lod = Default::default();
         let mut extent = None;
-        let mut grid = Default::default();
+        let grid = ();
         let mut feature_id = ID(_gml_id);
         let mut sub = reader.subtree();
         while let Some(info) = sub.next_element()? {

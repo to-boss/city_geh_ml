@@ -309,10 +309,10 @@ fn handle_start_or_empty(
 
     // ── Inside a class or datatype ───────────────────────────────
     if local == b"generalization" {
-        if let Some(cls) = current_class.as_mut() {
-            if let Some(general) = get_attr_value(e, b"general") {
-                cls.generalizations.push(general);
-            }
+        if let Some(cls) = current_class.as_mut()
+            && let Some(general) = get_attr_value(e, b"general")
+        {
+            cls.generalizations.push(general);
         }
         return Ok(());
     }
@@ -347,39 +347,39 @@ fn handle_start_or_empty(
     }
 
     if local == b"ownedLiteral" {
-        if let Some(en) = current_enum.as_mut() {
-            if let Some(name) = get_attr_value(e, b"name") {
-                en.literals.push(name);
-            }
+        if let Some(en) = current_enum.as_mut()
+            && let Some(name) = get_attr_value(e, b"name")
+        {
+            en.literals.push(name);
         }
         return Ok(());
     }
 
     // Type reference inside an attribute
     if local == b"type" {
-        if let Some(attr) = current_attr.as_mut() {
-            if let Some(idref) = get_xmi_attr(e, "idref") {
-                attr.type_idref = Some(idref);
-            }
+        if let Some(attr) = current_attr.as_mut()
+            && let Some(idref) = get_xmi_attr(e, "idref")
+        {
+            attr.type_idref = Some(idref);
         }
         return Ok(());
     }
 
     // Multiplicity values
     if local == b"lowerValue" {
-        if let Some(attr) = current_attr.as_mut() {
-            if let Some(val) = get_attr_value(e, b"value") {
-                attr.lower = val.parse::<i32>().unwrap_or(0);
-            }
+        if let Some(attr) = current_attr.as_mut()
+            && let Some(val) = get_attr_value(e, b"value")
+        {
+            attr.lower = val.parse::<i32>().unwrap_or(0);
         }
         return Ok(());
     }
 
     if local == b"upperValue" {
-        if let Some(attr) = current_attr.as_mut() {
-            if let Some(val) = get_attr_value(e, b"value") {
-                attr.upper = val.parse::<i32>().unwrap_or(1);
-            }
+        if let Some(attr) = current_attr.as_mut()
+            && let Some(val) = get_attr_value(e, b"value")
+        {
+            attr.upper = val.parse::<i32>().unwrap_or(1);
         }
         return Ok(());
     }
@@ -413,15 +413,13 @@ fn handle_end(
             *in_connector = false;
             if let (Some(idref), Some(name)) =
                 (connector_target_idref.take(), connector_target_name.take())
-            {
-                if name.starts_with("GM_")
+                && (name.starts_with("GM_")
                     || name == "SC_CRS"
                     || name == "AnyFeature"
                     || name == "EngineeringCRS"
-                    || name == "DirectPosition"
-                {
-                    model.geometry_refs.push((idref, name));
-                }
+                    || name == "DirectPosition")
+            {
+                model.geometry_refs.push((idref, name));
             }
         }
         return;
@@ -464,48 +462,48 @@ fn handle_end(
         return;
     }
 
-    if local == b"packagedElement" || local == b"nestedPackage" {
-        if let Some(entry) = element_stack.pop() {
-            match entry {
-                StackEntry::Package(_) => {
-                    package_stack.pop();
-                }
-                StackEntry::Class => {
-                    if let Some(cls) = current_class.take() {
-                        model.classes.push(RawClass {
-                            xmi_id: cls.xmi_id,
-                            name: cls.name,
-                            is_abstract: cls.is_abstract,
-                            package_id: cls.package_id,
-                            generalizations: cls.generalizations,
-                            attributes: cls.attributes,
-                        });
-                    }
-                }
-                StackEntry::Enum => {
-                    if let Some(en) = current_enum.take() {
-                        model.enumerations.push(RawEnum {
-                            xmi_id: en.xmi_id,
-                            name: en.name,
-                            package_id: en.package_id,
-                            literals: en.literals,
-                        });
-                    }
-                }
-                StackEntry::DataType => {
-                    if let Some(dt) = current_datatype.take() {
-                        model.data_types.push(RawDataType {
-                            xmi_id: dt.xmi_id,
-                            name: dt.name,
-                            package_id: dt.package_id,
-                            is_abstract: dt.is_abstract,
-                            attributes: dt.attributes,
-                        });
-                    }
-                }
-                StackEntry::Association | StackEntry::Other => {}
-                _ => {}
+    if (local == b"packagedElement" || local == b"nestedPackage")
+        && let Some(entry) = element_stack.pop()
+    {
+        match entry {
+            StackEntry::Package(_) => {
+                package_stack.pop();
             }
+            StackEntry::Class => {
+                if let Some(cls) = current_class.take() {
+                    model.classes.push(RawClass {
+                        xmi_id: cls.xmi_id,
+                        name: cls.name,
+                        is_abstract: cls.is_abstract,
+                        package_id: cls.package_id,
+                        generalizations: cls.generalizations,
+                        attributes: cls.attributes,
+                    });
+                }
+            }
+            StackEntry::Enum => {
+                if let Some(en) = current_enum.take() {
+                    model.enumerations.push(RawEnum {
+                        xmi_id: en.xmi_id,
+                        name: en.name,
+                        package_id: en.package_id,
+                        literals: en.literals,
+                    });
+                }
+            }
+            StackEntry::DataType => {
+                if let Some(dt) = current_datatype.take() {
+                    model.data_types.push(RawDataType {
+                        xmi_id: dt.xmi_id,
+                        name: dt.name,
+                        package_id: dt.package_id,
+                        is_abstract: dt.is_abstract,
+                        attributes: dt.attributes,
+                    });
+                }
+            }
+            StackEntry::Association | StackEntry::Other => {}
+            _ => {}
         }
     }
 }
@@ -542,17 +540,16 @@ fn handle_extension_element(
             return;
         }
 
-        if local == b"model" && connector_target_idref.is_some() {
-            if let Some(name) = get_attr_value(e, b"name") {
-                if name.starts_with("GM_")
-                    || name == "SC_CRS"
-                    || name == "AnyFeature"
-                    || name == "EngineeringCRS"
-                    || name == "DirectPosition"
-                {
-                    *connector_target_name = Some(name);
-                }
-            }
+        if local == b"model"
+            && connector_target_idref.is_some()
+            && let Some(name) = get_attr_value(e, b"name")
+            && (name.starts_with("GM_")
+                || name == "SC_CRS"
+                || name == "AnyFeature"
+                || name == "EngineeringCRS"
+                || name == "DirectPosition")
+        {
+            *connector_target_name = Some(name);
         }
     }
 }

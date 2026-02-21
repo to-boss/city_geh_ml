@@ -104,7 +104,7 @@ impl Multiplicity {
     pub fn from_bounds(lower: i32, upper: i32) -> Multiplicity {
         // EA quirk: treat -1 lower as 0
         let lo = if lower < 0 { 0 } else { lower };
-        let is_unbounded = upper < 0 || upper > 1;
+        let is_unbounded = !(0..=1).contains(&upper);
         match (lo, is_unbounded) {
             (0, false) => Multiplicity::Optional,
             (1, false) => Multiplicity::Required,

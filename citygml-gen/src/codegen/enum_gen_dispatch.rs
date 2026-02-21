@@ -61,7 +61,7 @@ pub fn generate_enum_dispatch(
         quote! {
             impl Default for #enum_name {
                 fn default() -> Self {
-                    Self::#first_descendant(Box::new(Default::default()))
+                    Self::#first_descendant(Box::default())
                 }
             }
         }

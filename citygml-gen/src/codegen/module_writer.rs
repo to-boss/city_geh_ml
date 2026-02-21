@@ -66,10 +66,10 @@ pub fn generate_all(
         // Also generate FromGml
         if with_reader {
             let reader_ts = from_gml_gen::generate_from_gml_datatype(dt, model);
-            if !reader_ts.is_empty() {
-                if let Some(pt) = pkg_tokens.get_mut(&dt.package_id) {
-                    pt.tokens.push(reader_ts);
-                }
+            if !reader_ts.is_empty()
+                && let Some(pt) = pkg_tokens.get_mut(&dt.package_id)
+            {
+                pt.tokens.push(reader_ts);
             }
         }
     }

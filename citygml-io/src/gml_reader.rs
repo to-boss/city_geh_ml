@@ -15,10 +15,13 @@ pub struct ElementInfo {
     pub attributes: Vec<(String, String)>,
 }
 
+/// Namespace declarations and regular attributes extracted from an XML element.
+type AttrsAndNamespaces = (HashMap<String, String>, Vec<(String, String)>);
+
 /// Extract namespace declarations and regular attributes from a BytesStart event.
 fn extract_attrs_and_ns(
     event: &quick_xml::events::BytesStart<'_>,
-) -> Result<(HashMap<String, String>, Vec<(String, String)>), ReaderError> {
+) -> Result<AttrsAndNamespaces, ReaderError> {
     let mut ns_decls = HashMap::new();
     let mut attrs = Vec::new();
 

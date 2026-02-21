@@ -120,47 +120,46 @@ fn gen_field_parse(
         return quote! { sub.skip_element()?; };
     }
 
-    if is_abstract_class {
+    if is_abstract_class
+        && let UmlTypeRef::Known(id) = &prop.type_ref
+        && let Some(cls) = model.classes.get(id.as_str())
+    {
         // For abstract class references, dispatch to the parser fn
-        if let UmlTypeRef::Known(id) = &prop.type_ref {
-            if let Some(cls) = model.classes.get(id.as_str()) {
-                let dispatcher_fn = Ident::new(
-                    &format!("parse_{}", to_snake_case(&cls.name)),
-                    Span::call_site(),
-                );
-                match prop.multiplicity {
-                    Multiplicity::Required => {
-                        return quote! {
-                            // Read the wrapper element's child to find the concrete type
-                            let mut wrapper = sub.subtree();
-                            if let Some(child_info) = wrapper.next_element()? {
-                                #field_ident = super::dispatchers::#dispatcher_fn(
-                                    &mut wrapper, &child_info,
-                                )?;
-                            }
-                        };
+        let dispatcher_fn = Ident::new(
+            &format!("parse_{}", to_snake_case(&cls.name)),
+            Span::call_site(),
+        );
+        match prop.multiplicity {
+            Multiplicity::Required => {
+                return quote! {
+                    // Read the wrapper element's child to find the concrete type
+                    let mut wrapper = sub.subtree();
+                    if let Some(child_info) = wrapper.next_element()? {
+                        #field_ident = super::dispatchers::#dispatcher_fn(
+                            &mut wrapper, &child_info,
+                        )?;
                     }
-                    Multiplicity::Optional => {
-                        return quote! {
-                            let mut wrapper = sub.subtree();
-                            if let Some(child_info) = wrapper.next_element()? {
-                                #field_ident = Some(super::dispatchers::#dispatcher_fn(
-                                    &mut wrapper, &child_info,
-                                )?);
-                            }
-                        };
+                };
+            }
+            Multiplicity::Optional => {
+                return quote! {
+                    let mut wrapper = sub.subtree();
+                    if let Some(child_info) = wrapper.next_element()? {
+                        #field_ident = Some(super::dispatchers::#dispatcher_fn(
+                            &mut wrapper, &child_info,
+                        )?);
                     }
-                    Multiplicity::Many | Multiplicity::RequiredMany => {
-                        return quote! {
-                            let mut wrapper = sub.subtree();
-                            if let Some(child_info) = wrapper.next_element()? {
-                                #field_ident.push(super::dispatchers::#dispatcher_fn(
-                                    &mut wrapper, &child_info,
-                                )?);
-                            }
-                        };
+                };
+            }
+            Multiplicity::Many | Multiplicity::RequiredMany => {
+                return quote! {
+                    let mut wrapper = sub.subtree();
+                    if let Some(child_info) = wrapper.next_element()? {
+                        #field_ident.push(super::dispatchers::#dispatcher_fn(
+                            &mut wrapper, &child_info,
+                        )?);
                     }
-                }
+                };
             }
         }
     }
@@ -290,149 +289,145 @@ fn gen_field_parse(
     }
 
     // Simple types (String, i64, f64, bool, char, enums, codelists, concrete classes, data types)
-    if is_enum {
+    if is_enum
+        && let UmlTypeRef::Known(id) = &prop.type_ref
+        && let Some(en) = model.enumerations.get(id.as_str())
+    {
         // Enum: read text and parse
-        if let UmlTypeRef::Known(id) = &prop.type_ref {
-            if let Some(en) = model.enumerations.get(id.as_str()) {
-                let enum_name = type_ident(&en.name);
-                match prop.multiplicity {
-                    Multiplicity::Required => {
-                        return quote! {
-                            #field_ident = #enum_name::from_gml_text(&sub.read_text()?)?;
-                        };
-                    }
-                    Multiplicity::Optional => {
-                        return quote! {
-                            #field_ident = Some(#enum_name::from_gml_text(&sub.read_text()?)?);
-                        };
-                    }
-                    Multiplicity::Many | Multiplicity::RequiredMany => {
-                        return quote! {
-                            #field_ident.push(#enum_name::from_gml_text(&sub.read_text()?)?);
-                        };
-                    }
-                }
+        let enum_name = type_ident(&en.name);
+        match prop.multiplicity {
+            Multiplicity::Required => {
+                return quote! {
+                    #field_ident = #enum_name::from_gml_text(&sub.read_text()?)?;
+                };
+            }
+            Multiplicity::Optional => {
+                return quote! {
+                    #field_ident = Some(#enum_name::from_gml_text(&sub.read_text()?)?);
+                };
+            }
+            Multiplicity::Many | Multiplicity::RequiredMany => {
+                return quote! {
+                    #field_ident.push(#enum_name::from_gml_text(&sub.read_text()?)?);
+                };
             }
         }
     }
 
     // Check if it's a codelist (string newtype) or datatype struct
-    if is_datatype {
-        if let UmlTypeRef::Known(id) = &prop.type_ref {
-            if let Some(dt) = model.data_types.get(id.as_str()) {
-                if dt.properties.is_empty() && !dt.is_abstract {
-                    // Codelist / string newtype: just read text
-                    let dt_name = type_ident(&dt.name);
-                    match prop.multiplicity {
-                        Multiplicity::Required => {
-                            return quote! {
-                                #field_ident = #dt_name(sub.read_text()?);
-                            };
-                        }
-                        Multiplicity::Optional => {
-                            return quote! {
-                                #field_ident = Some(#dt_name(sub.read_text()?));
-                            };
-                        }
-                        Multiplicity::Many | Multiplicity::RequiredMany => {
-                            return quote! {
-                                #field_ident.push(#dt_name(sub.read_text()?));
-                            };
-                        }
-                    }
-                } else if !dt.properties.is_empty() {
-                    // DataType struct with properties → use FromGml
-                    let dt_name = type_ident(&dt.name);
-                    match prop.multiplicity {
-                        Multiplicity::Required => {
-                            return quote! {
-                                #field_ident = #dt_name::from_gml(&mut sub)?;
-                            };
-                        }
-                        Multiplicity::Optional => {
-                            return quote! {
-                                #field_ident = Some(#dt_name::from_gml(&mut sub)?);
-                            };
-                        }
-                        Multiplicity::Many | Multiplicity::RequiredMany => {
-                            return quote! {
-                                #field_ident.push(#dt_name::from_gml(&mut sub)?);
-                            };
-                        }
-                    }
-                } else {
-                    // Abstract datatype (ADEOf*) → skip
-                    return quote! { sub.skip_element()?; };
+    if is_datatype
+        && let UmlTypeRef::Known(id) = &prop.type_ref
+        && let Some(dt) = model.data_types.get(id.as_str())
+    {
+        if dt.properties.is_empty() && !dt.is_abstract {
+            // Codelist / string newtype: just read text
+            let dt_name = type_ident(&dt.name);
+            match prop.multiplicity {
+                Multiplicity::Required => {
+                    return quote! {
+                        #field_ident = #dt_name(sub.read_text()?);
+                    };
+                }
+                Multiplicity::Optional => {
+                    return quote! {
+                        #field_ident = Some(#dt_name(sub.read_text()?));
+                    };
+                }
+                Multiplicity::Many | Multiplicity::RequiredMany => {
+                    return quote! {
+                        #field_ident.push(#dt_name(sub.read_text()?));
+                    };
                 }
             }
+        } else if !dt.properties.is_empty() {
+            // DataType struct with properties → use FromGml
+            let dt_name = type_ident(&dt.name);
+            match prop.multiplicity {
+                Multiplicity::Required => {
+                    return quote! {
+                        #field_ident = #dt_name::from_gml(&mut sub)?;
+                    };
+                }
+                Multiplicity::Optional => {
+                    return quote! {
+                        #field_ident = Some(#dt_name::from_gml(&mut sub)?);
+                    };
+                }
+                Multiplicity::Many | Multiplicity::RequiredMany => {
+                    return quote! {
+                        #field_ident.push(#dt_name::from_gml(&mut sub)?);
+                    };
+                }
+            }
+        } else {
+            // Abstract datatype (ADEOf*) → skip
+            return quote! { sub.skip_element()?; };
         }
     }
 
-    if is_codelist_class {
+    if is_codelist_class
+        && let UmlTypeRef::Known(id) = &prop.type_ref
+        && let Some(cls) = model.classes.get(id.as_str())
+    {
         // Codelist class (string newtype) → just read text
-        if let UmlTypeRef::Known(id) = &prop.type_ref {
-            if let Some(cls) = model.classes.get(id.as_str()) {
-                let cls_name = type_ident(&cls.name);
-                match prop.multiplicity {
-                    Multiplicity::Required => {
-                        return quote! {
-                            #field_ident = #cls_name(sub.read_text()?);
-                        };
-                    }
-                    Multiplicity::Optional => {
-                        return quote! {
-                            #field_ident = Some(#cls_name(sub.read_text()?));
-                        };
-                    }
-                    Multiplicity::Many | Multiplicity::RequiredMany => {
-                        return quote! {
-                            #field_ident.push(#cls_name(sub.read_text()?));
-                        };
-                    }
-                }
+        let cls_name = type_ident(&cls.name);
+        match prop.multiplicity {
+            Multiplicity::Required => {
+                return quote! {
+                    #field_ident = #cls_name(sub.read_text()?);
+                };
+            }
+            Multiplicity::Optional => {
+                return quote! {
+                    #field_ident = Some(#cls_name(sub.read_text()?));
+                };
+            }
+            Multiplicity::Many | Multiplicity::RequiredMany => {
+                return quote! {
+                    #field_ident.push(#cls_name(sub.read_text()?));
+                };
             }
         }
     }
 
-    if is_concrete_class {
+    if is_concrete_class
+        && let UmlTypeRef::Known(id) = &prop.type_ref
+        && let Some(cls) = model.classes.get(id.as_str())
+    {
         // Concrete class with properties → use from_gml_with_info
-        if let UmlTypeRef::Known(id) = &prop.type_ref {
-            if let Some(cls) = model.classes.get(id.as_str()) {
-                let cls_name = type_ident(&cls.name);
-                match prop.multiplicity {
-                    Multiplicity::Required => {
-                        return quote! {
-                            // The wrapper element may directly contain properties,
-                            // or may contain a typed child element.
-                            // For concrete class references embedded directly:
-                            let child_info = crate::gml_reader::ElementInfo {
-                                namespace: info.namespace.clone(),
-                                local_name: info.local_name.clone(),
-                                attributes: info.attributes.clone(),
-                            };
-                            #field_ident = #cls_name::from_gml_with_info(&mut sub, &child_info)?;
-                        };
+        let cls_name = type_ident(&cls.name);
+        match prop.multiplicity {
+            Multiplicity::Required => {
+                return quote! {
+                    // The wrapper element may directly contain properties,
+                    // or may contain a typed child element.
+                    // For concrete class references embedded directly:
+                    let child_info = crate::gml_reader::ElementInfo {
+                        namespace: info.namespace.clone(),
+                        local_name: info.local_name.clone(),
+                        attributes: info.attributes.clone(),
+                    };
+                    #field_ident = #cls_name::from_gml_with_info(&mut sub, &child_info)?;
+                };
+            }
+            Multiplicity::Optional => {
+                return quote! {
+                    let mut wrapper = sub.subtree();
+                    if let Some(child_info) = wrapper.next_element()? {
+                        #field_ident = Some(#cls_name::from_gml_with_info(&mut wrapper, &child_info)?);
+                    } else {
+                        // Inline properties under the wrapper
+                        #field_ident = Some(#cls_name::from_gml(&mut sub)?);
                     }
-                    Multiplicity::Optional => {
-                        return quote! {
-                            let mut wrapper = sub.subtree();
-                            if let Some(child_info) = wrapper.next_element()? {
-                                #field_ident = Some(#cls_name::from_gml_with_info(&mut wrapper, &child_info)?);
-                            } else {
-                                // Inline properties under the wrapper
-                                #field_ident = Some(#cls_name::from_gml(&mut sub)?);
-                            }
-                        };
+                };
+            }
+            Multiplicity::Many | Multiplicity::RequiredMany => {
+                return quote! {
+                    let mut wrapper = sub.subtree();
+                    if let Some(child_info) = wrapper.next_element()? {
+                        #field_ident.push(#cls_name::from_gml_with_info(&mut wrapper, &child_info)?);
                     }
-                    Multiplicity::Many | Multiplicity::RequiredMany => {
-                        return quote! {
-                            let mut wrapper = sub.subtree();
-                            if let Some(child_info) = wrapper.next_element()? {
-                                #field_ident.push(#cls_name::from_gml_with_info(&mut wrapper, &child_info)?);
-                            }
-                        };
-                    }
-                }
+                };
             }
         }
     }
@@ -513,6 +508,11 @@ fn dedup_props<'a>(props: &[&'a UmlProperty]) -> Vec<&'a UmlProperty> {
 fn gen_field_init(prop: &UmlProperty, model: &UmlModel) -> TokenStream {
     let field_name = prop_field_ident(&prop.name);
     let is_abstract = is_abstract_prop(prop, model);
+
+    // Unresolved external types map to () — avoid `let mut x = Default::default()` for unit
+    if matches!(&prop.type_ref, UmlTypeRef::Unresolved(_)) {
+        return quote! { let #field_name = (); };
+    }
 
     // Required abstract types are promoted to Optional in the struct
     if is_abstract && prop.multiplicity == Multiplicity::Required {
@@ -625,6 +625,28 @@ pub fn generate_from_gml_class(cls: &UmlClass, model: &UmlModel) -> TokenStream 
         quote! {}
     };
 
+    // When there are no property arms, skip the match entirely to avoid match_single_binding
+    let parse_loop = if deduped_arms.is_empty() {
+        quote! {
+            let mut sub = reader.subtree();
+            while let Some(_info) = sub.next_element()? {
+                sub.skip_element()?;
+            }
+        }
+    } else {
+        quote! {
+            let mut sub = reader.subtree();
+            while let Some(info) = sub.next_element()? {
+                match (info.namespace.as_str(), info.local_name.as_str()) {
+                    #(#deduped_arms)*
+                    _ => {
+                        sub.skip_element()?;
+                    }
+                }
+            }
+        }
+    };
+
     quote! {
         impl #struct_name {
             pub fn from_gml_with_info(
@@ -643,15 +665,7 @@ pub fn generate_from_gml_class(cls: &UmlClass, model: &UmlModel) -> TokenStream 
                 #feature_id_init
 
                 // Parse children
-                let mut sub = reader.subtree();
-                while let Some(info) = sub.next_element()? {
-                    match (info.namespace.as_str(), info.local_name.as_str()) {
-                        #(#deduped_arms)*
-                        _ => {
-                            sub.skip_element()?;
-                        }
-                    }
-                }
+                #parse_loop
 
                 Ok(#struct_name {
                     #(#field_names,)*
@@ -788,6 +802,28 @@ pub fn generate_from_gml_datatype(dt: &UmlDataType, model: &UmlModel) -> TokenSt
         .map(|prop| prop_field_ident(&prop.name))
         .collect();
 
+    // When there are no property arms, skip the match entirely to avoid match_single_binding
+    let parse_loop = if match_arms.is_empty() {
+        quote! {
+            let mut sub = reader.subtree();
+            while let Some(_info) = sub.next_element()? {
+                sub.skip_element()?;
+            }
+        }
+    } else {
+        quote! {
+            let mut sub = reader.subtree();
+            while let Some(info) = sub.next_element()? {
+                match (info.namespace.as_str(), info.local_name.as_str()) {
+                    #(#match_arms)*
+                    _ => {
+                        sub.skip_element()?;
+                    }
+                }
+            }
+        }
+    };
+
     quote! {
         impl crate::from_gml::FromGml for #name {
             fn from_gml(
@@ -796,15 +832,7 @@ pub fn generate_from_gml_datatype(dt: &UmlDataType, model: &UmlModel) -> TokenSt
                 use crate::from_gml::FromGml;
                 #(#field_inits)*
 
-                let mut sub = reader.subtree();
-                while let Some(info) = sub.next_element()? {
-                    match (info.namespace.as_str(), info.local_name.as_str()) {
-                        #(#match_arms)*
-                        _ => {
-                            sub.skip_element()?;
-                        }
-                    }
-                }
+                #parse_loop
 
                 Ok(#name {
                     #(#field_names,)*

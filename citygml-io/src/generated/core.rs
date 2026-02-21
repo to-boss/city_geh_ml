@@ -490,7 +490,7 @@ pub enum AbstractFeature {
 }
 impl Default for AbstractFeature {
     fn default() -> Self {
-        Self::CeilingSurface(Box::new(Default::default()))
+        Self::CeilingSurface(Box::default())
     }
 }
 impl AbstractFeatureTrait for AbstractFeature {
@@ -1660,7 +1660,7 @@ pub enum AbstractFeatureWithLifespan {
 }
 impl Default for AbstractFeatureWithLifespan {
     fn default() -> Self {
-        Self::CeilingSurface(Box::new(Default::default()))
+        Self::CeilingSurface(Box::default())
     }
 }
 impl AbstractFeatureTrait for AbstractFeatureWithLifespan {
@@ -2926,12 +2926,8 @@ impl OtherRelationTypeValue {
         use crate::from_gml::FromGml;
         let _gml_id = crate::gml_reader::SubtreeReader::gml_id(info).unwrap_or_default();
         let mut sub = reader.subtree();
-        while let Some(info) = sub.next_element()? {
-            match (info.namespace.as_str(), info.local_name.as_str()) {
-                _ => {
-                    sub.skip_element()?;
-                }
-            }
+        while let Some(_info) = sub.next_element()? {
+            sub.skip_element()?;
         }
         Ok(OtherRelationTypeValue {})
     }
@@ -2958,12 +2954,8 @@ impl TemporalRelationTypeValue {
         use crate::from_gml::FromGml;
         let _gml_id = crate::gml_reader::SubtreeReader::gml_id(info).unwrap_or_default();
         let mut sub = reader.subtree();
-        while let Some(info) = sub.next_element()? {
-            match (info.namespace.as_str(), info.local_name.as_str()) {
-                _ => {
-                    sub.skip_element()?;
-                }
-            }
+        while let Some(_info) = sub.next_element()? {
+            sub.skip_element()?;
         }
         Ok(TemporalRelationTypeValue {})
     }
@@ -2990,12 +2982,8 @@ impl TopologicalRelationTypeValue {
         use crate::from_gml::FromGml;
         let _gml_id = crate::gml_reader::SubtreeReader::gml_id(info).unwrap_or_default();
         let mut sub = reader.subtree();
-        while let Some(info) = sub.next_element()? {
-            match (info.namespace.as_str(), info.local_name.as_str()) {
-                _ => {
-                    sub.skip_element()?;
-                }
-            }
+        while let Some(_info) = sub.next_element()? {
+            sub.skip_element()?;
         }
         Ok(TopologicalRelationTypeValue {})
     }
@@ -3152,7 +3140,7 @@ pub enum AbstractCityObject {
 }
 impl Default for AbstractCityObject {
     fn default() -> Self {
-        Self::CeilingSurface(Box::new(Default::default()))
+        Self::CeilingSurface(Box::default())
     }
 }
 impl AbstractFeatureTrait for AbstractCityObject {
@@ -4910,7 +4898,7 @@ pub enum AbstractSpace {
 }
 impl Default for AbstractSpace {
     fn default() -> Self {
-        Self::Door(Box::new(Default::default()))
+        Self::Door(Box::default())
     }
 }
 impl AbstractFeatureTrait for AbstractSpace {
@@ -6495,7 +6483,7 @@ pub enum AbstractSpaceBoundary {
 }
 impl Default for AbstractSpaceBoundary {
     fn default() -> Self {
-        Self::CeilingSurface(Box::new(Default::default()))
+        Self::CeilingSurface(Box::default())
     }
 }
 impl AbstractFeatureTrait for AbstractSpaceBoundary {
@@ -7368,7 +7356,7 @@ pub enum AbstractPhysicalSpace {
 }
 impl Default for AbstractPhysicalSpace {
     fn default() -> Self {
-        Self::Door(Box::new(Default::default()))
+        Self::Door(Box::default())
     }
 }
 impl AbstractFeatureTrait for AbstractPhysicalSpace {
@@ -8990,7 +8978,7 @@ pub enum AbstractThematicSurface {
 }
 impl Default for AbstractThematicSurface {
     fn default() -> Self {
-        Self::CeilingSurface(Box::new(Default::default()))
+        Self::CeilingSurface(Box::default())
     }
 }
 impl AbstractFeatureTrait for AbstractThematicSurface {
@@ -9636,7 +9624,7 @@ pub enum AbstractOccupiedSpace {
 }
 impl Default for AbstractOccupiedSpace {
     fn default() -> Self {
-        Self::Door(Box::new(Default::default()))
+        Self::Door(Box::default())
     }
 }
 impl AbstractFeatureTrait for AbstractOccupiedSpace {
@@ -10759,7 +10747,7 @@ pub enum AbstractUnoccupiedSpace {
 }
 impl Default for AbstractUnoccupiedSpace {
     fn default() -> Self {
-        Self::BridgeRoom(Box::new(Default::default()))
+        Self::BridgeRoom(Box::default())
     }
 }
 impl AbstractFeatureTrait for AbstractUnoccupiedSpace {
