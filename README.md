@@ -11,6 +11,38 @@ A Rust workspace for working with [OGC CityGML 3.0](https://www.ogc.org/standard
 | `citygml-types` | Library | Auto-generated types + `FromGml` reader impls (re-exports `citygml-core`) |
 | `citygml-io` | Library | High-level API: `CitygmlReader` (re-exports core + types) |
 
+## Getting Started
+
+### Prerequisites
+
+- **Rust 1.85+** (stable) — required for `edition = "2024"`
+
+### Clone & Build
+
+```bash
+git clone <repo-url>
+cd city_geh_ml
+cargo build
+```
+
+### Run Tests
+
+```bash
+cargo test -p citygml-io
+```
+
+### (Optional) Regenerate types from XMI
+
+The `citygml-types` crate ships pre-generated, so this step is only needed if you modify the code generator or update to a newer CityGML model. Obtain the XMI file from the [OGC CityGML-3.0CM](https://github.com/opengeospatial/CityGML-3.0CM) repo, then run:
+
+```bash
+cargo run -p citygml-gen -- --input path/to/CityGML_3.0.xml
+```
+
+### Try It
+
+See the [Usage](#usage) section below for reading GML files with the `CitygmlReader` API.
+
 ## Usage
 
 ### Reading a CityGML 3.0 file
