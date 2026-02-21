@@ -39,10 +39,6 @@ The `citygml-types` crate ships pre-generated, so this step is only needed if yo
 cargo run -p citygml-gen -- --input path/to/CityGML_3.0.xml
 ```
 
-### Try It
-
-See the [Usage](#usage) section below for reading GML files with the `CitygmlReader` API.
-
 ## Usage
 
 ### Reading a CityGML 3.0 file
