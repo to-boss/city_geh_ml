@@ -46,9 +46,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 The generator produces a complete `citygml-types` crate (Cargo.toml + src/). To regenerate from the CityGML 3.0 UML model:
 
 ```bash
-cargo run -p citygml-gen -- \
-  --input path/to/CityGML_3.0.xml \
-  --output citygml-types
+cargo run -p citygml-gen -- --input path/to/CityGML_3.0.xml
 ```
 
 The XMI file is the CityGML 3.0 UML model exported from Enterprise Architect. It can be obtained from the [OGC CityGML 3.0 Conceptual Model](https://github.com/opengeospatial/CityGML-3.0CM).
