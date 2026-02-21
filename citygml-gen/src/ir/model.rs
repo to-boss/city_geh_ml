@@ -79,7 +79,7 @@ impl UmlModel {
         for abs_id in &abstract_ids {
             self.descendant_cache
                 .entry(abs_id.clone())
-                .or_insert_with(Vec::new);
+                .or_default();
         }
 
         for cls in self.classes.values() {
@@ -130,22 +130,22 @@ impl UmlModel {
         // Now scan all properties across all classes and data types
         for cls in self.classes.values() {
             for prop in &cls.own_properties {
-                if let UmlTypeRef::Known(type_id) = &prop.type_ref {
-                    if skip_type_ids.contains(type_id) {
-                        self.skip_props
-                            .insert((cls.xmi_id.clone(), prop.name.clone()));
-                    }
+                if let UmlTypeRef::Known(type_id) = &prop.type_ref
+                    && skip_type_ids.contains(type_id)
+                {
+                    self.skip_props
+                        .insert((cls.xmi_id.clone(), prop.name.clone()));
                 }
             }
         }
 
         for dt in self.data_types.values() {
             for prop in &dt.properties {
-                if let UmlTypeRef::Known(type_id) = &prop.type_ref {
-                    if skip_type_ids.contains(type_id) {
-                        self.skip_props
-                            .insert((dt.xmi_id.clone(), prop.name.clone()));
-                    }
+                if let UmlTypeRef::Known(type_id) = &prop.type_ref
+                    && skip_type_ids.contains(type_id)
+                {
+                    self.skip_props
+                        .insert((dt.xmi_id.clone(), prop.name.clone()));
                 }
             }
         }
