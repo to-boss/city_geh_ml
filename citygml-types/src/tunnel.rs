@@ -10,6 +10,7 @@ impl crate::from_gml::FromGml for HollowSpaceClassValue {
         Ok(HollowSpaceClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct HollowSpaceFunctionValue(pub String);
 impl crate::from_gml::FromGml for HollowSpaceFunctionValue {
@@ -19,6 +20,7 @@ impl crate::from_gml::FromGml for HollowSpaceFunctionValue {
         Ok(HollowSpaceFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct HollowSpaceUsageValue(pub String);
 impl crate::from_gml::FromGml for HollowSpaceUsageValue {
@@ -28,6 +30,7 @@ impl crate::from_gml::FromGml for HollowSpaceUsageValue {
         Ok(HollowSpaceUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct TunnelClassValue(pub String);
 impl crate::from_gml::FromGml for TunnelClassValue {
@@ -37,6 +40,7 @@ impl crate::from_gml::FromGml for TunnelClassValue {
         Ok(TunnelClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct TunnelConstructiveElementClassValue(pub String);
 impl crate::from_gml::FromGml for TunnelConstructiveElementClassValue {
@@ -46,6 +50,7 @@ impl crate::from_gml::FromGml for TunnelConstructiveElementClassValue {
         Ok(TunnelConstructiveElementClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct TunnelConstructiveElementFunctionValue(pub String);
 impl crate::from_gml::FromGml for TunnelConstructiveElementFunctionValue {
@@ -55,6 +60,7 @@ impl crate::from_gml::FromGml for TunnelConstructiveElementFunctionValue {
         Ok(TunnelConstructiveElementFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct TunnelConstructiveElementUsageValue(pub String);
 impl crate::from_gml::FromGml for TunnelConstructiveElementUsageValue {
@@ -64,6 +70,7 @@ impl crate::from_gml::FromGml for TunnelConstructiveElementUsageValue {
         Ok(TunnelConstructiveElementUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct TunnelFunctionValue(pub String);
 impl crate::from_gml::FromGml for TunnelFunctionValue {
@@ -73,6 +80,7 @@ impl crate::from_gml::FromGml for TunnelFunctionValue {
         Ok(TunnelFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct TunnelFurnitureClassValue(pub String);
 impl crate::from_gml::FromGml for TunnelFurnitureClassValue {
@@ -82,6 +90,7 @@ impl crate::from_gml::FromGml for TunnelFurnitureClassValue {
         Ok(TunnelFurnitureClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct TunnelFurnitureFunctionValue(pub String);
 impl crate::from_gml::FromGml for TunnelFurnitureFunctionValue {
@@ -91,6 +100,7 @@ impl crate::from_gml::FromGml for TunnelFurnitureFunctionValue {
         Ok(TunnelFurnitureFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct TunnelFurnitureUsageValue(pub String);
 impl crate::from_gml::FromGml for TunnelFurnitureUsageValue {
@@ -100,6 +110,7 @@ impl crate::from_gml::FromGml for TunnelFurnitureUsageValue {
         Ok(TunnelFurnitureUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct TunnelInstallationClassValue(pub String);
 impl crate::from_gml::FromGml for TunnelInstallationClassValue {
@@ -109,6 +120,7 @@ impl crate::from_gml::FromGml for TunnelInstallationClassValue {
         Ok(TunnelInstallationClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct TunnelInstallationFunctionValue(pub String);
 impl crate::from_gml::FromGml for TunnelInstallationFunctionValue {
@@ -118,6 +130,7 @@ impl crate::from_gml::FromGml for TunnelInstallationFunctionValue {
         Ok(TunnelInstallationFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct TunnelInstallationUsageValue(pub String);
 impl crate::from_gml::FromGml for TunnelInstallationUsageValue {
@@ -127,6 +140,7 @@ impl crate::from_gml::FromGml for TunnelInstallationUsageValue {
         Ok(TunnelInstallationUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct TunnelUsageValue(pub String);
 impl crate::from_gml::FromGml for TunnelUsageValue {
@@ -136,6 +150,7 @@ impl crate::from_gml::FromGml for TunnelUsageValue {
         Ok(TunnelUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct HollowSpace {
     pub feature_id: ID,
@@ -177,6 +192,7 @@ pub struct HollowSpace {
     pub tunnel_installation: Vec<TunnelInstallation>,
     pub tunnel_furniture: Vec<TunnelFurniture>,
 }
+
 impl AbstractFeatureTrait for HollowSpace {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -191,6 +207,7 @@ impl AbstractFeatureTrait for HollowSpace {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for HollowSpace {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -205,6 +222,7 @@ impl AbstractFeatureWithLifespanTrait for HollowSpace {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for HollowSpace {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -228,6 +246,7 @@ impl AbstractCityObjectTrait for HollowSpace {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for HollowSpace {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -272,6 +291,7 @@ impl AbstractSpaceTrait for HollowSpace {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for HollowSpace {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -286,6 +306,7 @@ impl AbstractPhysicalSpaceTrait for HollowSpace {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractUnoccupiedSpaceTrait for HollowSpace {}
 impl HollowSpace {
     pub fn from_gml_with_info(
@@ -729,6 +750,7 @@ impl HollowSpace {
         })
     }
 }
+
 impl crate::from_gml::FromGml for HollowSpace {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -741,6 +763,7 @@ impl crate::from_gml::FromGml for HollowSpace {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 pub trait AbstractTunnelTrait: AbstractConstructionTrait {
     fn class_(&self) -> Option<&TunnelClassValue>;
     fn function(&self) -> &[TunnelFunctionValue];
@@ -750,16 +773,19 @@ pub trait AbstractTunnelTrait: AbstractConstructionTrait {
     fn tunnel_installation(&self) -> &[TunnelInstallation];
     fn hollow_space(&self) -> &[HollowSpace];
 }
+
 #[derive(Debug, Clone)]
 pub enum AbstractTunnel {
     Tunnel(Tunnel),
     TunnelPart(TunnelPart),
 }
+
 impl Default for AbstractTunnel {
     fn default() -> Self {
         Self::Tunnel(Default::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractTunnel {
     fn feature_id(&self) -> &ID {
         match self {
@@ -786,6 +812,7 @@ impl AbstractFeatureTrait for AbstractTunnel {
         }
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for AbstractTunnel {
     fn creation_date(&self) -> Option<&String> {
         match self {
@@ -812,6 +839,7 @@ impl AbstractFeatureWithLifespanTrait for AbstractTunnel {
         }
     }
 }
+
 impl AbstractCityObjectTrait for AbstractTunnel {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         match self {
@@ -856,6 +884,7 @@ impl AbstractCityObjectTrait for AbstractTunnel {
         }
     }
 }
+
 impl AbstractSpaceTrait for AbstractTunnel {
     fn space_type(&self) -> Option<SpaceType> {
         match self {
@@ -942,6 +971,7 @@ impl AbstractSpaceTrait for AbstractTunnel {
         }
     }
 }
+
 impl AbstractPhysicalSpaceTrait for AbstractTunnel {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         match self {
@@ -968,6 +998,7 @@ impl AbstractPhysicalSpaceTrait for AbstractTunnel {
         }
     }
 }
+
 impl AbstractOccupiedSpaceTrait for AbstractTunnel {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         match self {
@@ -988,6 +1019,7 @@ impl AbstractOccupiedSpaceTrait for AbstractTunnel {
         }
     }
 }
+
 impl AbstractConstructionTrait for AbstractTunnel {
     fn condition_of_construction(&self) -> Option<ConditionOfConstructionValue> {
         match self {
@@ -1032,6 +1064,7 @@ impl AbstractConstructionTrait for AbstractTunnel {
         }
     }
 }
+
 impl AbstractTunnelTrait for AbstractTunnel {
     fn class_(&self) -> Option<&TunnelClassValue> {
         match self {
@@ -1076,20 +1109,24 @@ impl AbstractTunnelTrait for AbstractTunnel {
         }
     }
 }
+
 impl From<Tunnel> for AbstractTunnel {
     fn from(v: Tunnel) -> Self {
         Self::Tunnel(v)
     }
 }
+
 impl From<TunnelPart> for AbstractTunnel {
     fn from(v: TunnelPart) -> Self {
         Self::TunnelPart(v)
     }
 }
+
 pub trait AbstractTunnelAccessors {
     fn tunnels(&self) -> impl Iterator<Item = &Tunnel>;
     fn tunnel_parts(&self) -> impl Iterator<Item = &TunnelPart>;
 }
+
 impl AbstractTunnelAccessors for [AbstractTunnel] {
     fn tunnels(&self) -> impl Iterator<Item = &Tunnel> {
         self.iter()
@@ -1106,6 +1143,7 @@ impl AbstractTunnelAccessors for [AbstractTunnel] {
             })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct TunnelConstructiveElement {
     pub feature_id: ID,
@@ -1150,6 +1188,7 @@ pub struct TunnelConstructiveElement {
     pub function: Vec<TunnelConstructiveElementFunctionValue>,
     pub usage: Vec<TunnelConstructiveElementUsageValue>,
 }
+
 impl AbstractFeatureTrait for TunnelConstructiveElement {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -1164,6 +1203,7 @@ impl AbstractFeatureTrait for TunnelConstructiveElement {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for TunnelConstructiveElement {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -1178,6 +1218,7 @@ impl AbstractFeatureWithLifespanTrait for TunnelConstructiveElement {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for TunnelConstructiveElement {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -1201,6 +1242,7 @@ impl AbstractCityObjectTrait for TunnelConstructiveElement {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for TunnelConstructiveElement {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -1245,6 +1287,7 @@ impl AbstractSpaceTrait for TunnelConstructiveElement {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for TunnelConstructiveElement {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -1259,6 +1302,7 @@ impl AbstractPhysicalSpaceTrait for TunnelConstructiveElement {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractOccupiedSpaceTrait for TunnelConstructiveElement {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
@@ -1270,6 +1314,7 @@ impl AbstractOccupiedSpaceTrait for TunnelConstructiveElement {
         self.lod1_implicit_representation.as_ref()
     }
 }
+
 impl AbstractConstructiveElementTrait for TunnelConstructiveElement {
     fn is_structural_element(&self) -> Option<bool> {
         self.is_structural_element
@@ -1278,6 +1323,7 @@ impl AbstractConstructiveElementTrait for TunnelConstructiveElement {
         &self.filling
     }
 }
+
 impl TunnelConstructiveElement {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1765,6 +1811,7 @@ impl TunnelConstructiveElement {
         })
     }
 }
+
 impl crate::from_gml::FromGml for TunnelConstructiveElement {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1777,6 +1824,7 @@ impl crate::from_gml::FromGml for TunnelConstructiveElement {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct TunnelFurniture {
     pub feature_id: ID,
@@ -1819,6 +1867,7 @@ pub struct TunnelFurniture {
     pub function: Vec<TunnelFurnitureFunctionValue>,
     pub usage: Vec<TunnelFurnitureUsageValue>,
 }
+
 impl AbstractFeatureTrait for TunnelFurniture {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -1833,6 +1882,7 @@ impl AbstractFeatureTrait for TunnelFurniture {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for TunnelFurniture {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -1847,6 +1897,7 @@ impl AbstractFeatureWithLifespanTrait for TunnelFurniture {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for TunnelFurniture {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -1870,6 +1921,7 @@ impl AbstractCityObjectTrait for TunnelFurniture {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for TunnelFurniture {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -1914,6 +1966,7 @@ impl AbstractSpaceTrait for TunnelFurniture {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for TunnelFurniture {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -1928,6 +1981,7 @@ impl AbstractPhysicalSpaceTrait for TunnelFurniture {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractOccupiedSpaceTrait for TunnelFurniture {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
@@ -1939,6 +1993,7 @@ impl AbstractOccupiedSpaceTrait for TunnelFurniture {
         self.lod1_implicit_representation.as_ref()
     }
 }
+
 impl AbstractFurnitureTrait for TunnelFurniture {}
 impl TunnelFurniture {
     pub fn from_gml_with_info(
@@ -2405,6 +2460,7 @@ impl TunnelFurniture {
         })
     }
 }
+
 impl crate::from_gml::FromGml for TunnelFurniture {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -2417,6 +2473,7 @@ impl crate::from_gml::FromGml for TunnelFurniture {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct TunnelInstallation {
     pub feature_id: ID,
@@ -2460,6 +2517,7 @@ pub struct TunnelInstallation {
     pub function: Vec<TunnelInstallationFunctionValue>,
     pub usage: Vec<TunnelInstallationUsageValue>,
 }
+
 impl AbstractFeatureTrait for TunnelInstallation {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -2474,6 +2532,7 @@ impl AbstractFeatureTrait for TunnelInstallation {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for TunnelInstallation {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -2488,6 +2547,7 @@ impl AbstractFeatureWithLifespanTrait for TunnelInstallation {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for TunnelInstallation {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -2511,6 +2571,7 @@ impl AbstractCityObjectTrait for TunnelInstallation {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for TunnelInstallation {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -2555,6 +2616,7 @@ impl AbstractSpaceTrait for TunnelInstallation {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for TunnelInstallation {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -2569,6 +2631,7 @@ impl AbstractPhysicalSpaceTrait for TunnelInstallation {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractOccupiedSpaceTrait for TunnelInstallation {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
@@ -2580,11 +2643,13 @@ impl AbstractOccupiedSpaceTrait for TunnelInstallation {
         self.lod1_implicit_representation.as_ref()
     }
 }
+
 impl AbstractInstallationTrait for TunnelInstallation {
     fn relation_to_construction(&self) -> Option<RelationToConstruction> {
         self.relation_to_construction
     }
 }
+
 impl TunnelInstallation {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -3057,6 +3122,7 @@ impl TunnelInstallation {
         })
     }
 }
+
 impl crate::from_gml::FromGml for TunnelInstallation {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -3069,6 +3135,7 @@ impl crate::from_gml::FromGml for TunnelInstallation {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct Tunnel {
     pub feature_id: ID,
@@ -3123,6 +3190,7 @@ pub struct Tunnel {
     pub hollow_space: Vec<HollowSpace>,
     pub tunnel_part: Vec<TunnelPart>,
 }
+
 impl AbstractFeatureTrait for Tunnel {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -3137,6 +3205,7 @@ impl AbstractFeatureTrait for Tunnel {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for Tunnel {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -3151,6 +3220,7 @@ impl AbstractFeatureWithLifespanTrait for Tunnel {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for Tunnel {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -3174,6 +3244,7 @@ impl AbstractCityObjectTrait for Tunnel {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for Tunnel {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -3218,6 +3289,7 @@ impl AbstractSpaceTrait for Tunnel {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for Tunnel {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -3232,6 +3304,7 @@ impl AbstractPhysicalSpaceTrait for Tunnel {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractOccupiedSpaceTrait for Tunnel {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
@@ -3243,6 +3316,7 @@ impl AbstractOccupiedSpaceTrait for Tunnel {
         self.lod1_implicit_representation.as_ref()
     }
 }
+
 impl AbstractConstructionTrait for Tunnel {
     fn condition_of_construction(&self) -> Option<ConditionOfConstructionValue> {
         self.condition_of_construction
@@ -3266,6 +3340,7 @@ impl AbstractConstructionTrait for Tunnel {
         &self.occupancy
     }
 }
+
 impl AbstractTunnelTrait for Tunnel {
     fn class_(&self) -> Option<&TunnelClassValue> {
         self.class_.as_ref()
@@ -3289,6 +3364,7 @@ impl AbstractTunnelTrait for Tunnel {
         &self.hollow_space
     }
 }
+
 impl Tunnel {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -3859,6 +3935,7 @@ impl Tunnel {
         })
     }
 }
+
 impl crate::from_gml::FromGml for Tunnel {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -3871,6 +3948,7 @@ impl crate::from_gml::FromGml for Tunnel {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct TunnelPart {
     pub feature_id: ID,
@@ -3924,6 +4002,7 @@ pub struct TunnelPart {
     pub tunnel_installation: Vec<TunnelInstallation>,
     pub hollow_space: Vec<HollowSpace>,
 }
+
 impl AbstractFeatureTrait for TunnelPart {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -3938,6 +4017,7 @@ impl AbstractFeatureTrait for TunnelPart {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for TunnelPart {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -3952,6 +4032,7 @@ impl AbstractFeatureWithLifespanTrait for TunnelPart {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for TunnelPart {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -3975,6 +4056,7 @@ impl AbstractCityObjectTrait for TunnelPart {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for TunnelPart {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -4019,6 +4101,7 @@ impl AbstractSpaceTrait for TunnelPart {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for TunnelPart {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -4033,6 +4116,7 @@ impl AbstractPhysicalSpaceTrait for TunnelPart {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractOccupiedSpaceTrait for TunnelPart {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
@@ -4044,6 +4128,7 @@ impl AbstractOccupiedSpaceTrait for TunnelPart {
         self.lod1_implicit_representation.as_ref()
     }
 }
+
 impl AbstractConstructionTrait for TunnelPart {
     fn condition_of_construction(&self) -> Option<ConditionOfConstructionValue> {
         self.condition_of_construction
@@ -4067,6 +4152,7 @@ impl AbstractConstructionTrait for TunnelPart {
         &self.occupancy
     }
 }
+
 impl AbstractTunnelTrait for TunnelPart {
     fn class_(&self) -> Option<&TunnelClassValue> {
         self.class_.as_ref()
@@ -4090,6 +4176,7 @@ impl AbstractTunnelTrait for TunnelPart {
         &self.hollow_space
     }
 }
+
 impl TunnelPart {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -4649,6 +4736,7 @@ impl TunnelPart {
         })
     }
 }
+
 impl crate::from_gml::FromGml for TunnelPart {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,

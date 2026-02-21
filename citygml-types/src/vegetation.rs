@@ -10,6 +10,7 @@ impl crate::from_gml::FromGml for PlantCoverClassValue {
         Ok(PlantCoverClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct PlantCoverFunctionValue(pub String);
 impl crate::from_gml::FromGml for PlantCoverFunctionValue {
@@ -19,6 +20,7 @@ impl crate::from_gml::FromGml for PlantCoverFunctionValue {
         Ok(PlantCoverFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct PlantCoverUsageValue(pub String);
 impl crate::from_gml::FromGml for PlantCoverUsageValue {
@@ -28,6 +30,7 @@ impl crate::from_gml::FromGml for PlantCoverUsageValue {
         Ok(PlantCoverUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct SolitaryVegetationObjectClassValue(pub String);
 impl crate::from_gml::FromGml for SolitaryVegetationObjectClassValue {
@@ -37,6 +40,7 @@ impl crate::from_gml::FromGml for SolitaryVegetationObjectClassValue {
         Ok(SolitaryVegetationObjectClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct SolitaryVegetationObjectFunctionValue(pub String);
 impl crate::from_gml::FromGml for SolitaryVegetationObjectFunctionValue {
@@ -46,6 +50,7 @@ impl crate::from_gml::FromGml for SolitaryVegetationObjectFunctionValue {
         Ok(SolitaryVegetationObjectFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct SolitaryVegetationObjectUsageValue(pub String);
 impl crate::from_gml::FromGml for SolitaryVegetationObjectUsageValue {
@@ -55,6 +60,7 @@ impl crate::from_gml::FromGml for SolitaryVegetationObjectUsageValue {
         Ok(SolitaryVegetationObjectUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct SpeciesValue(pub String);
 impl crate::from_gml::FromGml for SpeciesValue {
@@ -64,17 +70,20 @@ impl crate::from_gml::FromGml for SpeciesValue {
         Ok(SpeciesValue(reader.read_text()?))
     }
 }
+
 pub trait AbstractVegetationObjectTrait: AbstractOccupiedSpaceTrait {}
 #[derive(Debug, Clone)]
 pub enum AbstractVegetationObject {
     PlantCover(PlantCover),
     SolitaryVegetationObject(SolitaryVegetationObject),
 }
+
 impl Default for AbstractVegetationObject {
     fn default() -> Self {
         Self::PlantCover(Default::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractVegetationObject {
     fn feature_id(&self) -> &ID {
         match self {
@@ -101,6 +110,7 @@ impl AbstractFeatureTrait for AbstractVegetationObject {
         }
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for AbstractVegetationObject {
     fn creation_date(&self) -> Option<&String> {
         match self {
@@ -127,6 +137,7 @@ impl AbstractFeatureWithLifespanTrait for AbstractVegetationObject {
         }
     }
 }
+
 impl AbstractCityObjectTrait for AbstractVegetationObject {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         match self {
@@ -171,6 +182,7 @@ impl AbstractCityObjectTrait for AbstractVegetationObject {
         }
     }
 }
+
 impl AbstractSpaceTrait for AbstractVegetationObject {
     fn space_type(&self) -> Option<SpaceType> {
         match self {
@@ -257,6 +269,7 @@ impl AbstractSpaceTrait for AbstractVegetationObject {
         }
     }
 }
+
 impl AbstractPhysicalSpaceTrait for AbstractVegetationObject {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         match self {
@@ -283,6 +296,7 @@ impl AbstractPhysicalSpaceTrait for AbstractVegetationObject {
         }
     }
 }
+
 impl AbstractOccupiedSpaceTrait for AbstractVegetationObject {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         match self {
@@ -303,23 +317,27 @@ impl AbstractOccupiedSpaceTrait for AbstractVegetationObject {
         }
     }
 }
+
 impl AbstractVegetationObjectTrait for AbstractVegetationObject {}
 impl From<PlantCover> for AbstractVegetationObject {
     fn from(v: PlantCover) -> Self {
         Self::PlantCover(v)
     }
 }
+
 impl From<SolitaryVegetationObject> for AbstractVegetationObject {
     fn from(v: SolitaryVegetationObject) -> Self {
         Self::SolitaryVegetationObject(v)
     }
 }
+
 pub trait AbstractVegetationObjectAccessors {
     fn plant_covers(&self) -> impl Iterator<Item = &PlantCover>;
     fn solitary_vegetation_objects(
         &self,
     ) -> impl Iterator<Item = &SolitaryVegetationObject>;
 }
+
 impl AbstractVegetationObjectAccessors for [AbstractVegetationObject] {
     fn plant_covers(&self) -> impl Iterator<Item = &PlantCover> {
         self.iter()
@@ -338,6 +356,7 @@ impl AbstractVegetationObjectAccessors for [AbstractVegetationObject] {
             })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct PlantCover {
     pub feature_id: ID,
@@ -383,6 +402,7 @@ pub struct PlantCover {
     pub min_height: Option<f64>,
     pub max_height: Option<f64>,
 }
+
 impl AbstractFeatureTrait for PlantCover {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -397,6 +417,7 @@ impl AbstractFeatureTrait for PlantCover {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for PlantCover {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -411,6 +432,7 @@ impl AbstractFeatureWithLifespanTrait for PlantCover {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for PlantCover {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -434,6 +456,7 @@ impl AbstractCityObjectTrait for PlantCover {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for PlantCover {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -478,6 +501,7 @@ impl AbstractSpaceTrait for PlantCover {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for PlantCover {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -492,6 +516,7 @@ impl AbstractPhysicalSpaceTrait for PlantCover {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractOccupiedSpaceTrait for PlantCover {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
@@ -503,6 +528,7 @@ impl AbstractOccupiedSpaceTrait for PlantCover {
         self.lod1_implicit_representation.as_ref()
     }
 }
+
 impl AbstractVegetationObjectTrait for PlantCover {}
 impl PlantCover {
     pub fn from_gml_with_info(
@@ -984,6 +1010,7 @@ impl PlantCover {
         })
     }
 }
+
 impl crate::from_gml::FromGml for PlantCover {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -996,6 +1023,7 @@ impl crate::from_gml::FromGml for PlantCover {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct SolitaryVegetationObject {
     pub feature_id: ID,
@@ -1044,6 +1072,7 @@ pub struct SolitaryVegetationObject {
     pub root_ball_diameter: Option<f64>,
     pub max_root_ball_depth: Option<f64>,
 }
+
 impl AbstractFeatureTrait for SolitaryVegetationObject {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -1058,6 +1087,7 @@ impl AbstractFeatureTrait for SolitaryVegetationObject {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for SolitaryVegetationObject {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -1072,6 +1102,7 @@ impl AbstractFeatureWithLifespanTrait for SolitaryVegetationObject {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for SolitaryVegetationObject {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -1095,6 +1126,7 @@ impl AbstractCityObjectTrait for SolitaryVegetationObject {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for SolitaryVegetationObject {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -1139,6 +1171,7 @@ impl AbstractSpaceTrait for SolitaryVegetationObject {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for SolitaryVegetationObject {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -1153,6 +1186,7 @@ impl AbstractPhysicalSpaceTrait for SolitaryVegetationObject {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractOccupiedSpaceTrait for SolitaryVegetationObject {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
@@ -1164,6 +1198,7 @@ impl AbstractOccupiedSpaceTrait for SolitaryVegetationObject {
         self.lod1_implicit_representation.as_ref()
     }
 }
+
 impl AbstractVegetationObjectTrait for SolitaryVegetationObject {}
 impl SolitaryVegetationObject {
     pub fn from_gml_with_info(
@@ -1665,6 +1700,7 @@ impl SolitaryVegetationObject {
         })
     }
 }
+
 impl crate::from_gml::FromGml for SolitaryVegetationObject {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,

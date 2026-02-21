@@ -6,6 +6,7 @@ pub struct CodeAttribute {
     pub name: String,
     pub value: Code,
 }
+
 impl crate::from_gml::FromGml for CodeAttribute {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -35,11 +36,13 @@ impl crate::from_gml::FromGml for CodeAttribute {
         Ok(CodeAttribute { name, value })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct DateAttribute {
     pub name: String,
     pub value: String,
 }
+
 impl crate::from_gml::FromGml for DateAttribute {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -64,11 +67,13 @@ impl crate::from_gml::FromGml for DateAttribute {
         Ok(DateAttribute { name, value })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct DoubleAttribute {
     pub name: String,
     pub value: f64,
 }
+
 impl crate::from_gml::FromGml for DoubleAttribute {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -93,11 +98,13 @@ impl crate::from_gml::FromGml for DoubleAttribute {
         Ok(DoubleAttribute { name, value })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct GenericAttributeSet {
     pub name: String,
     pub code_space: Option<String>,
 }
+
 impl crate::from_gml::FromGml for GenericAttributeSet {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -125,11 +132,13 @@ impl crate::from_gml::FromGml for GenericAttributeSet {
         })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct IntAttribute {
     pub name: String,
     pub value: i64,
 }
+
 impl crate::from_gml::FromGml for IntAttribute {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -154,11 +163,13 @@ impl crate::from_gml::FromGml for IntAttribute {
         Ok(IntAttribute { name, value })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct MeasureAttribute {
     pub name: String,
     pub value: f64,
 }
+
 impl crate::from_gml::FromGml for MeasureAttribute {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -183,11 +194,13 @@ impl crate::from_gml::FromGml for MeasureAttribute {
         Ok(MeasureAttribute { name, value })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct StringAttribute {
     pub name: String,
     pub value: String,
 }
+
 impl crate::from_gml::FromGml for StringAttribute {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -212,11 +225,13 @@ impl crate::from_gml::FromGml for StringAttribute {
         Ok(StringAttribute { name, value })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct UriAttribute {
     pub name: String,
     pub value: String,
 }
+
 impl crate::from_gml::FromGml for UriAttribute {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -241,6 +256,7 @@ impl crate::from_gml::FromGml for UriAttribute {
         Ok(UriAttribute { name, value })
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct GenericLogicalSpaceClassValue(pub String);
 impl crate::from_gml::FromGml for GenericLogicalSpaceClassValue {
@@ -250,6 +266,7 @@ impl crate::from_gml::FromGml for GenericLogicalSpaceClassValue {
         Ok(GenericLogicalSpaceClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct GenericLogicalSpaceFunctionValue(pub String);
 impl crate::from_gml::FromGml for GenericLogicalSpaceFunctionValue {
@@ -259,6 +276,7 @@ impl crate::from_gml::FromGml for GenericLogicalSpaceFunctionValue {
         Ok(GenericLogicalSpaceFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct GenericLogicalSpaceUsageValue(pub String);
 impl crate::from_gml::FromGml for GenericLogicalSpaceUsageValue {
@@ -268,6 +286,7 @@ impl crate::from_gml::FromGml for GenericLogicalSpaceUsageValue {
         Ok(GenericLogicalSpaceUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct GenericOccupiedSpaceClassValue(pub String);
 impl crate::from_gml::FromGml for GenericOccupiedSpaceClassValue {
@@ -277,6 +296,7 @@ impl crate::from_gml::FromGml for GenericOccupiedSpaceClassValue {
         Ok(GenericOccupiedSpaceClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct GenericOccupiedSpaceFunctionValue(pub String);
 impl crate::from_gml::FromGml for GenericOccupiedSpaceFunctionValue {
@@ -286,6 +306,7 @@ impl crate::from_gml::FromGml for GenericOccupiedSpaceFunctionValue {
         Ok(GenericOccupiedSpaceFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct GenericOccupiedSpaceUsageValue(pub String);
 impl crate::from_gml::FromGml for GenericOccupiedSpaceUsageValue {
@@ -295,6 +316,7 @@ impl crate::from_gml::FromGml for GenericOccupiedSpaceUsageValue {
         Ok(GenericOccupiedSpaceUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct GenericThematicSurfaceClassValue(pub String);
 impl crate::from_gml::FromGml for GenericThematicSurfaceClassValue {
@@ -304,6 +326,7 @@ impl crate::from_gml::FromGml for GenericThematicSurfaceClassValue {
         Ok(GenericThematicSurfaceClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct GenericThematicSurfaceFunctionValue(pub String);
 impl crate::from_gml::FromGml for GenericThematicSurfaceFunctionValue {
@@ -313,6 +336,7 @@ impl crate::from_gml::FromGml for GenericThematicSurfaceFunctionValue {
         Ok(GenericThematicSurfaceFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct GenericThematicSurfaceUsageValue(pub String);
 impl crate::from_gml::FromGml for GenericThematicSurfaceUsageValue {
@@ -322,6 +346,7 @@ impl crate::from_gml::FromGml for GenericThematicSurfaceUsageValue {
         Ok(GenericThematicSurfaceUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct GenericUnoccupiedSpaceClassValue(pub String);
 impl crate::from_gml::FromGml for GenericUnoccupiedSpaceClassValue {
@@ -331,6 +356,7 @@ impl crate::from_gml::FromGml for GenericUnoccupiedSpaceClassValue {
         Ok(GenericUnoccupiedSpaceClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct GenericUnoccupiedSpaceFunctionValue(pub String);
 impl crate::from_gml::FromGml for GenericUnoccupiedSpaceFunctionValue {
@@ -340,6 +366,7 @@ impl crate::from_gml::FromGml for GenericUnoccupiedSpaceFunctionValue {
         Ok(GenericUnoccupiedSpaceFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct GenericUnoccupiedSpaceUsageValue(pub String);
 impl crate::from_gml::FromGml for GenericUnoccupiedSpaceUsageValue {
@@ -349,6 +376,7 @@ impl crate::from_gml::FromGml for GenericUnoccupiedSpaceUsageValue {
         Ok(GenericUnoccupiedSpaceUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct GenericLogicalSpace {
     pub feature_id: ID,
@@ -384,6 +412,7 @@ pub struct GenericLogicalSpace {
     pub function: Vec<GenericLogicalSpaceFunctionValue>,
     pub usage: Vec<GenericLogicalSpaceUsageValue>,
 }
+
 impl AbstractFeatureTrait for GenericLogicalSpace {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -398,6 +427,7 @@ impl AbstractFeatureTrait for GenericLogicalSpace {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for GenericLogicalSpace {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -412,6 +442,7 @@ impl AbstractFeatureWithLifespanTrait for GenericLogicalSpace {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for GenericLogicalSpace {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -435,6 +466,7 @@ impl AbstractCityObjectTrait for GenericLogicalSpace {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for GenericLogicalSpace {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -479,6 +511,7 @@ impl AbstractSpaceTrait for GenericLogicalSpace {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractLogicalSpaceTrait for GenericLogicalSpace {}
 impl GenericLogicalSpace {
     pub fn from_gml_with_info(
@@ -830,6 +863,7 @@ impl GenericLogicalSpace {
         })
     }
 }
+
 impl crate::from_gml::FromGml for GenericLogicalSpace {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -842,6 +876,7 @@ impl crate::from_gml::FromGml for GenericLogicalSpace {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct GenericThematicSurface {
     pub feature_id: ID,
@@ -870,6 +905,7 @@ pub struct GenericThematicSurface {
     pub function: Vec<GenericThematicSurfaceFunctionValue>,
     pub usage: Vec<GenericThematicSurfaceUsageValue>,
 }
+
 impl AbstractFeatureTrait for GenericThematicSurface {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -884,6 +920,7 @@ impl AbstractFeatureTrait for GenericThematicSurface {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for GenericThematicSurface {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -898,6 +935,7 @@ impl AbstractFeatureWithLifespanTrait for GenericThematicSurface {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for GenericThematicSurface {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -921,6 +959,7 @@ impl AbstractCityObjectTrait for GenericThematicSurface {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceBoundaryTrait for GenericThematicSurface {}
 impl AbstractThematicSurfaceTrait for GenericThematicSurface {
     fn area(&self) -> &[QualifiedArea] {
@@ -945,6 +984,7 @@ impl AbstractThematicSurfaceTrait for GenericThematicSurface {
         self.lod1_multi_surface.as_ref()
     }
 }
+
 impl GenericThematicSurface {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1199,6 +1239,7 @@ impl GenericThematicSurface {
         })
     }
 }
+
 impl crate::from_gml::FromGml for GenericThematicSurface {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1211,6 +1252,7 @@ impl crate::from_gml::FromGml for GenericThematicSurface {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct GenericOccupiedSpace {
     pub feature_id: ID,
@@ -1253,6 +1295,7 @@ pub struct GenericOccupiedSpace {
     pub function: Vec<GenericOccupiedSpaceFunctionValue>,
     pub usage: Vec<GenericOccupiedSpaceUsageValue>,
 }
+
 impl AbstractFeatureTrait for GenericOccupiedSpace {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -1267,6 +1310,7 @@ impl AbstractFeatureTrait for GenericOccupiedSpace {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for GenericOccupiedSpace {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -1281,6 +1325,7 @@ impl AbstractFeatureWithLifespanTrait for GenericOccupiedSpace {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for GenericOccupiedSpace {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -1304,6 +1349,7 @@ impl AbstractCityObjectTrait for GenericOccupiedSpace {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for GenericOccupiedSpace {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -1348,6 +1394,7 @@ impl AbstractSpaceTrait for GenericOccupiedSpace {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for GenericOccupiedSpace {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -1362,6 +1409,7 @@ impl AbstractPhysicalSpaceTrait for GenericOccupiedSpace {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractOccupiedSpaceTrait for GenericOccupiedSpace {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
@@ -1373,6 +1421,7 @@ impl AbstractOccupiedSpaceTrait for GenericOccupiedSpace {
         self.lod1_implicit_representation.as_ref()
     }
 }
+
 impl GenericOccupiedSpace {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1838,6 +1887,7 @@ impl GenericOccupiedSpace {
         })
     }
 }
+
 impl crate::from_gml::FromGml for GenericOccupiedSpace {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1850,6 +1900,7 @@ impl crate::from_gml::FromGml for GenericOccupiedSpace {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct GenericUnoccupiedSpace {
     pub feature_id: ID,
@@ -1889,6 +1940,7 @@ pub struct GenericUnoccupiedSpace {
     pub function: Vec<GenericUnoccupiedSpaceFunctionValue>,
     pub usage: Vec<GenericUnoccupiedSpaceUsageValue>,
 }
+
 impl AbstractFeatureTrait for GenericUnoccupiedSpace {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -1903,6 +1955,7 @@ impl AbstractFeatureTrait for GenericUnoccupiedSpace {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for GenericUnoccupiedSpace {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -1917,6 +1970,7 @@ impl AbstractFeatureWithLifespanTrait for GenericUnoccupiedSpace {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for GenericUnoccupiedSpace {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -1940,6 +1994,7 @@ impl AbstractCityObjectTrait for GenericUnoccupiedSpace {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for GenericUnoccupiedSpace {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -1984,6 +2039,7 @@ impl AbstractSpaceTrait for GenericUnoccupiedSpace {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for GenericUnoccupiedSpace {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -1998,6 +2054,7 @@ impl AbstractPhysicalSpaceTrait for GenericUnoccupiedSpace {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractUnoccupiedSpaceTrait for GenericUnoccupiedSpace {}
 impl GenericUnoccupiedSpace {
     pub fn from_gml_with_info(
@@ -2413,6 +2470,7 @@ impl GenericUnoccupiedSpace {
         })
     }
 }
+
 impl crate::from_gml::FromGml for GenericUnoccupiedSpace {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,

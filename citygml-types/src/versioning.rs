@@ -8,6 +8,7 @@ pub enum TransactionTypeValue {
     Delete,
     Replace,
 }
+
 impl TransactionTypeValue {
     pub fn from_gml_text(text: &str) -> Result<Self, crate::error::ReaderError> {
         match text.trim() {
@@ -25,6 +26,7 @@ impl TransactionTypeValue {
         }
     }
 }
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
 pub enum TransitionTypeValue {
     #[default]
@@ -34,6 +36,7 @@ pub enum TransitionTypeValue {
     Fork,
     Merge,
 }
+
 impl TransitionTypeValue {
     pub fn from_gml_text(text: &str) -> Result<Self, crate::error::ReaderError> {
         match text.trim() {
@@ -52,12 +55,14 @@ impl TransitionTypeValue {
         }
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct Transaction {
     pub type_: TransactionTypeValue,
     pub new_feature: Option<AbstractFeatureWithLifespan>,
     pub old_feature: Option<AbstractFeatureWithLifespan>,
 }
+
 impl crate::from_gml::FromGml for Transaction {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -106,6 +111,7 @@ impl crate::from_gml::FromGml for Transaction {
         })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct Version {
     pub feature_id: ID,
@@ -119,6 +125,7 @@ pub struct Version {
     pub tag: Vec<String>,
     pub version_member: Vec<AbstractFeatureWithLifespan>,
 }
+
 impl AbstractFeatureTrait for Version {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -133,6 +140,7 @@ impl AbstractFeatureTrait for Version {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for Version {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -147,6 +155,7 @@ impl AbstractFeatureWithLifespanTrait for Version {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractVersionTrait for Version {}
 impl Version {
     pub fn from_gml_with_info(
@@ -228,6 +237,7 @@ impl Version {
         })
     }
 }
+
 impl crate::from_gml::FromGml for Version {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -240,6 +250,7 @@ impl crate::from_gml::FromGml for Version {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct VersionTransition {
     pub feature_id: ID,
@@ -257,6 +268,7 @@ pub struct VersionTransition {
     pub to: Option<Version>,
     pub transaction: Vec<Transaction>,
 }
+
 impl AbstractFeatureTrait for VersionTransition {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -271,6 +283,7 @@ impl AbstractFeatureTrait for VersionTransition {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for VersionTransition {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -285,6 +298,7 @@ impl AbstractFeatureWithLifespanTrait for VersionTransition {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractVersionTransitionTrait for VersionTransition {}
 impl VersionTransition {
     pub fn from_gml_with_info(
@@ -391,6 +405,7 @@ impl VersionTransition {
         })
     }
 }
+
 impl crate::from_gml::FromGml for VersionTransition {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,

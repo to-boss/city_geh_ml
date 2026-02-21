@@ -12,6 +12,7 @@ pub struct PointCloud {
     pub point_file_srs_name: Option<String>,
     pub points: Option<Vec<crate::geometry::DirectPosition>>,
 }
+
 impl AbstractFeatureTrait for PointCloud {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -26,6 +27,7 @@ impl AbstractFeatureTrait for PointCloud {
         self.description.as_ref()
     }
 }
+
 impl AbstractPointCloudTrait for PointCloud {}
 impl PointCloud {
     pub fn from_gml_with_info(
@@ -100,6 +102,7 @@ impl PointCloud {
         })
     }
 }
+
 impl crate::from_gml::FromGml for PointCloud {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,

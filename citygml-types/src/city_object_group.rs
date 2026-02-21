@@ -10,6 +10,7 @@ impl crate::from_gml::FromGml for CityObjectGroupClassValue {
         Ok(CityObjectGroupClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct CityObjectGroupFunctionValue(pub String);
 impl crate::from_gml::FromGml for CityObjectGroupFunctionValue {
@@ -19,6 +20,7 @@ impl crate::from_gml::FromGml for CityObjectGroupFunctionValue {
         Ok(CityObjectGroupFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct CityObjectGroupUsageValue(pub String);
 impl crate::from_gml::FromGml for CityObjectGroupUsageValue {
@@ -28,6 +30,7 @@ impl crate::from_gml::FromGml for CityObjectGroupUsageValue {
         Ok(CityObjectGroupUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct CityObjectGroup {
     pub feature_id: ID,
@@ -65,6 +68,7 @@ pub struct CityObjectGroup {
     pub parent: Option<AbstractCityObject>,
     pub group_member: Vec<AbstractCityObject>,
 }
+
 impl AbstractFeatureTrait for CityObjectGroup {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -79,6 +83,7 @@ impl AbstractFeatureTrait for CityObjectGroup {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for CityObjectGroup {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -93,6 +98,7 @@ impl AbstractFeatureWithLifespanTrait for CityObjectGroup {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for CityObjectGroup {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -116,6 +122,7 @@ impl AbstractCityObjectTrait for CityObjectGroup {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for CityObjectGroup {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -160,6 +167,7 @@ impl AbstractSpaceTrait for CityObjectGroup {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractLogicalSpaceTrait for CityObjectGroup {}
 impl CityObjectGroup {
     pub fn from_gml_with_info(
@@ -538,6 +546,7 @@ impl CityObjectGroup {
         })
     }
 }
+
 impl crate::from_gml::FromGml for CityObjectGroup {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,

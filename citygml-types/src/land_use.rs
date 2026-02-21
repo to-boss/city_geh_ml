@@ -10,6 +10,7 @@ impl crate::from_gml::FromGml for LandUseClassValue {
         Ok(LandUseClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct LandUseFunctionValue(pub String);
 impl crate::from_gml::FromGml for LandUseFunctionValue {
@@ -19,6 +20,7 @@ impl crate::from_gml::FromGml for LandUseFunctionValue {
         Ok(LandUseFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct LandUseUsageValue(pub String);
 impl crate::from_gml::FromGml for LandUseUsageValue {
@@ -28,6 +30,7 @@ impl crate::from_gml::FromGml for LandUseUsageValue {
         Ok(LandUseUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct LandUse {
     pub feature_id: ID,
@@ -56,6 +59,7 @@ pub struct LandUse {
     pub function: Vec<LandUseFunctionValue>,
     pub usage: Vec<LandUseUsageValue>,
 }
+
 impl AbstractFeatureTrait for LandUse {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -70,6 +74,7 @@ impl AbstractFeatureTrait for LandUse {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for LandUse {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -84,6 +89,7 @@ impl AbstractFeatureWithLifespanTrait for LandUse {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for LandUse {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -107,6 +113,7 @@ impl AbstractCityObjectTrait for LandUse {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceBoundaryTrait for LandUse {}
 impl AbstractThematicSurfaceTrait for LandUse {
     fn area(&self) -> &[QualifiedArea] {
@@ -131,6 +138,7 @@ impl AbstractThematicSurfaceTrait for LandUse {
         self.lod1_multi_surface.as_ref()
     }
 }
+
 impl LandUse {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -385,6 +393,7 @@ impl LandUse {
         })
     }
 }
+
 impl crate::from_gml::FromGml for LandUse {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,

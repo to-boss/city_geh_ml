@@ -185,5 +185,22 @@ pub fn generate_all(
 fn format_tokens(tokens: TokenStream) -> Result<String, GenError> {
     let file = syn::parse2::<syn::File>(tokens)
         .map_err(|e| GenError::Codegen(format!("Failed to parse generated tokens: {e}")))?;
-    Ok(prettyplease::unparse(&file))
+    let formatted = prettyplease::unparse(&file);
+    Ok(add_blank_lines_between_items(&formatted))
+}
+
+/// Insert a blank line after every top-level closing brace (`}` at column 0)
+/// so that structs, impls, enums, and traits are visually separated.
+fn add_blank_lines_between_items(source: &str) -> String {
+    let mut result = String::with_capacity(source.len() + source.len() / 20);
+    let mut prev_was_closing_brace = false;
+    for line in source.lines() {
+        if prev_was_closing_brace && !line.is_empty() {
+            result.push('\n');
+        }
+        result.push_str(line);
+        result.push('\n');
+        prev_was_closing_brace = line == "}";
+    }
+    result
 }

@@ -10,6 +10,7 @@ impl crate::from_gml::FromGml for BridgeClassValue {
         Ok(BridgeClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct BridgeConstructiveElementClassValue(pub String);
 impl crate::from_gml::FromGml for BridgeConstructiveElementClassValue {
@@ -19,6 +20,7 @@ impl crate::from_gml::FromGml for BridgeConstructiveElementClassValue {
         Ok(BridgeConstructiveElementClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct BridgeConstructiveElementFunctionValue(pub String);
 impl crate::from_gml::FromGml for BridgeConstructiveElementFunctionValue {
@@ -28,6 +30,7 @@ impl crate::from_gml::FromGml for BridgeConstructiveElementFunctionValue {
         Ok(BridgeConstructiveElementFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct BridgeConstructiveElementUsageValue(pub String);
 impl crate::from_gml::FromGml for BridgeConstructiveElementUsageValue {
@@ -37,6 +40,7 @@ impl crate::from_gml::FromGml for BridgeConstructiveElementUsageValue {
         Ok(BridgeConstructiveElementUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct BridgeFunctionValue(pub String);
 impl crate::from_gml::FromGml for BridgeFunctionValue {
@@ -46,6 +50,7 @@ impl crate::from_gml::FromGml for BridgeFunctionValue {
         Ok(BridgeFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct BridgeFurnitureClassValue(pub String);
 impl crate::from_gml::FromGml for BridgeFurnitureClassValue {
@@ -55,6 +60,7 @@ impl crate::from_gml::FromGml for BridgeFurnitureClassValue {
         Ok(BridgeFurnitureClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct BridgeFurnitureFunctionValue(pub String);
 impl crate::from_gml::FromGml for BridgeFurnitureFunctionValue {
@@ -64,6 +70,7 @@ impl crate::from_gml::FromGml for BridgeFurnitureFunctionValue {
         Ok(BridgeFurnitureFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct BridgeFurnitureUsageValue(pub String);
 impl crate::from_gml::FromGml for BridgeFurnitureUsageValue {
@@ -73,6 +80,7 @@ impl crate::from_gml::FromGml for BridgeFurnitureUsageValue {
         Ok(BridgeFurnitureUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct BridgeInstallationClassValue(pub String);
 impl crate::from_gml::FromGml for BridgeInstallationClassValue {
@@ -82,6 +90,7 @@ impl crate::from_gml::FromGml for BridgeInstallationClassValue {
         Ok(BridgeInstallationClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct BridgeInstallationFunctionValue(pub String);
 impl crate::from_gml::FromGml for BridgeInstallationFunctionValue {
@@ -91,6 +100,7 @@ impl crate::from_gml::FromGml for BridgeInstallationFunctionValue {
         Ok(BridgeInstallationFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct BridgeInstallationUsageValue(pub String);
 impl crate::from_gml::FromGml for BridgeInstallationUsageValue {
@@ -100,6 +110,7 @@ impl crate::from_gml::FromGml for BridgeInstallationUsageValue {
         Ok(BridgeInstallationUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct BridgeRoomClassValue(pub String);
 impl crate::from_gml::FromGml for BridgeRoomClassValue {
@@ -109,6 +120,7 @@ impl crate::from_gml::FromGml for BridgeRoomClassValue {
         Ok(BridgeRoomClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct BridgeRoomFunctionValue(pub String);
 impl crate::from_gml::FromGml for BridgeRoomFunctionValue {
@@ -118,6 +130,7 @@ impl crate::from_gml::FromGml for BridgeRoomFunctionValue {
         Ok(BridgeRoomFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct BridgeRoomUsageValue(pub String);
 impl crate::from_gml::FromGml for BridgeRoomUsageValue {
@@ -127,6 +140,7 @@ impl crate::from_gml::FromGml for BridgeRoomUsageValue {
         Ok(BridgeRoomUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct BridgeUsageValue(pub String);
 impl crate::from_gml::FromGml for BridgeUsageValue {
@@ -136,6 +150,7 @@ impl crate::from_gml::FromGml for BridgeUsageValue {
         Ok(BridgeUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct BridgeRoom {
     pub feature_id: ID,
@@ -177,6 +192,7 @@ pub struct BridgeRoom {
     pub bridge_installation: Vec<BridgeInstallation>,
     pub bridge_furniture: Vec<BridgeFurniture>,
 }
+
 impl AbstractFeatureTrait for BridgeRoom {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -191,6 +207,7 @@ impl AbstractFeatureTrait for BridgeRoom {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for BridgeRoom {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -205,6 +222,7 @@ impl AbstractFeatureWithLifespanTrait for BridgeRoom {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for BridgeRoom {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -228,6 +246,7 @@ impl AbstractCityObjectTrait for BridgeRoom {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for BridgeRoom {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -272,6 +291,7 @@ impl AbstractSpaceTrait for BridgeRoom {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for BridgeRoom {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -286,6 +306,7 @@ impl AbstractPhysicalSpaceTrait for BridgeRoom {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractUnoccupiedSpaceTrait for BridgeRoom {}
 impl BridgeRoom {
     pub fn from_gml_with_info(
@@ -729,6 +750,7 @@ impl BridgeRoom {
         })
     }
 }
+
 impl crate::from_gml::FromGml for BridgeRoom {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -741,6 +763,7 @@ impl crate::from_gml::FromGml for BridgeRoom {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 pub trait AbstractBridgeTrait: AbstractConstructionTrait {
     fn class_(&self) -> Option<&BridgeClassValue>;
     fn function(&self) -> &[BridgeFunctionValue];
@@ -752,16 +775,19 @@ pub trait AbstractBridgeTrait: AbstractConstructionTrait {
     fn address(&self) -> &[Address];
     fn bridge_installation(&self) -> &[BridgeInstallation];
 }
+
 #[derive(Debug, Clone)]
 pub enum AbstractBridge {
     Bridge(Bridge),
     BridgePart(BridgePart),
 }
+
 impl Default for AbstractBridge {
     fn default() -> Self {
         Self::Bridge(Default::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractBridge {
     fn feature_id(&self) -> &ID {
         match self {
@@ -788,6 +814,7 @@ impl AbstractFeatureTrait for AbstractBridge {
         }
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for AbstractBridge {
     fn creation_date(&self) -> Option<&String> {
         match self {
@@ -814,6 +841,7 @@ impl AbstractFeatureWithLifespanTrait for AbstractBridge {
         }
     }
 }
+
 impl AbstractCityObjectTrait for AbstractBridge {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         match self {
@@ -858,6 +886,7 @@ impl AbstractCityObjectTrait for AbstractBridge {
         }
     }
 }
+
 impl AbstractSpaceTrait for AbstractBridge {
     fn space_type(&self) -> Option<SpaceType> {
         match self {
@@ -944,6 +973,7 @@ impl AbstractSpaceTrait for AbstractBridge {
         }
     }
 }
+
 impl AbstractPhysicalSpaceTrait for AbstractBridge {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         match self {
@@ -970,6 +1000,7 @@ impl AbstractPhysicalSpaceTrait for AbstractBridge {
         }
     }
 }
+
 impl AbstractOccupiedSpaceTrait for AbstractBridge {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         match self {
@@ -990,6 +1021,7 @@ impl AbstractOccupiedSpaceTrait for AbstractBridge {
         }
     }
 }
+
 impl AbstractConstructionTrait for AbstractBridge {
     fn condition_of_construction(&self) -> Option<ConditionOfConstructionValue> {
         match self {
@@ -1034,6 +1066,7 @@ impl AbstractConstructionTrait for AbstractBridge {
         }
     }
 }
+
 impl AbstractBridgeTrait for AbstractBridge {
     fn class_(&self) -> Option<&BridgeClassValue> {
         match self {
@@ -1090,20 +1123,24 @@ impl AbstractBridgeTrait for AbstractBridge {
         }
     }
 }
+
 impl From<Bridge> for AbstractBridge {
     fn from(v: Bridge) -> Self {
         Self::Bridge(v)
     }
 }
+
 impl From<BridgePart> for AbstractBridge {
     fn from(v: BridgePart) -> Self {
         Self::BridgePart(v)
     }
 }
+
 pub trait AbstractBridgeAccessors {
     fn bridges(&self) -> impl Iterator<Item = &Bridge>;
     fn bridge_parts(&self) -> impl Iterator<Item = &BridgePart>;
 }
+
 impl AbstractBridgeAccessors for [AbstractBridge] {
     fn bridges(&self) -> impl Iterator<Item = &Bridge> {
         self.iter()
@@ -1120,6 +1157,7 @@ impl AbstractBridgeAccessors for [AbstractBridge] {
             })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct BridgeConstructiveElement {
     pub feature_id: ID,
@@ -1164,6 +1202,7 @@ pub struct BridgeConstructiveElement {
     pub function: Vec<BridgeConstructiveElementFunctionValue>,
     pub usage: Vec<BridgeConstructiveElementUsageValue>,
 }
+
 impl AbstractFeatureTrait for BridgeConstructiveElement {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -1178,6 +1217,7 @@ impl AbstractFeatureTrait for BridgeConstructiveElement {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for BridgeConstructiveElement {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -1192,6 +1232,7 @@ impl AbstractFeatureWithLifespanTrait for BridgeConstructiveElement {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for BridgeConstructiveElement {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -1215,6 +1256,7 @@ impl AbstractCityObjectTrait for BridgeConstructiveElement {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for BridgeConstructiveElement {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -1259,6 +1301,7 @@ impl AbstractSpaceTrait for BridgeConstructiveElement {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for BridgeConstructiveElement {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -1273,6 +1316,7 @@ impl AbstractPhysicalSpaceTrait for BridgeConstructiveElement {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractOccupiedSpaceTrait for BridgeConstructiveElement {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
@@ -1284,6 +1328,7 @@ impl AbstractOccupiedSpaceTrait for BridgeConstructiveElement {
         self.lod1_implicit_representation.as_ref()
     }
 }
+
 impl AbstractConstructiveElementTrait for BridgeConstructiveElement {
     fn is_structural_element(&self) -> Option<bool> {
         self.is_structural_element
@@ -1292,6 +1337,7 @@ impl AbstractConstructiveElementTrait for BridgeConstructiveElement {
         &self.filling
     }
 }
+
 impl BridgeConstructiveElement {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1779,6 +1825,7 @@ impl BridgeConstructiveElement {
         })
     }
 }
+
 impl crate::from_gml::FromGml for BridgeConstructiveElement {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1791,6 +1838,7 @@ impl crate::from_gml::FromGml for BridgeConstructiveElement {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct BridgeFurniture {
     pub feature_id: ID,
@@ -1833,6 +1881,7 @@ pub struct BridgeFurniture {
     pub function: Vec<BridgeFurnitureFunctionValue>,
     pub usage: Vec<BridgeFurnitureUsageValue>,
 }
+
 impl AbstractFeatureTrait for BridgeFurniture {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -1847,6 +1896,7 @@ impl AbstractFeatureTrait for BridgeFurniture {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for BridgeFurniture {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -1861,6 +1911,7 @@ impl AbstractFeatureWithLifespanTrait for BridgeFurniture {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for BridgeFurniture {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -1884,6 +1935,7 @@ impl AbstractCityObjectTrait for BridgeFurniture {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for BridgeFurniture {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -1928,6 +1980,7 @@ impl AbstractSpaceTrait for BridgeFurniture {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for BridgeFurniture {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -1942,6 +1995,7 @@ impl AbstractPhysicalSpaceTrait for BridgeFurniture {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractOccupiedSpaceTrait for BridgeFurniture {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
@@ -1953,6 +2007,7 @@ impl AbstractOccupiedSpaceTrait for BridgeFurniture {
         self.lod1_implicit_representation.as_ref()
     }
 }
+
 impl AbstractFurnitureTrait for BridgeFurniture {}
 impl BridgeFurniture {
     pub fn from_gml_with_info(
@@ -2419,6 +2474,7 @@ impl BridgeFurniture {
         })
     }
 }
+
 impl crate::from_gml::FromGml for BridgeFurniture {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -2431,6 +2487,7 @@ impl crate::from_gml::FromGml for BridgeFurniture {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct BridgeInstallation {
     pub feature_id: ID,
@@ -2474,6 +2531,7 @@ pub struct BridgeInstallation {
     pub function: Vec<BridgeInstallationFunctionValue>,
     pub usage: Vec<BridgeInstallationUsageValue>,
 }
+
 impl AbstractFeatureTrait for BridgeInstallation {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -2488,6 +2546,7 @@ impl AbstractFeatureTrait for BridgeInstallation {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for BridgeInstallation {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -2502,6 +2561,7 @@ impl AbstractFeatureWithLifespanTrait for BridgeInstallation {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for BridgeInstallation {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -2525,6 +2585,7 @@ impl AbstractCityObjectTrait for BridgeInstallation {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for BridgeInstallation {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -2569,6 +2630,7 @@ impl AbstractSpaceTrait for BridgeInstallation {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for BridgeInstallation {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -2583,6 +2645,7 @@ impl AbstractPhysicalSpaceTrait for BridgeInstallation {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractOccupiedSpaceTrait for BridgeInstallation {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
@@ -2594,11 +2657,13 @@ impl AbstractOccupiedSpaceTrait for BridgeInstallation {
         self.lod1_implicit_representation.as_ref()
     }
 }
+
 impl AbstractInstallationTrait for BridgeInstallation {
     fn relation_to_construction(&self) -> Option<RelationToConstruction> {
         self.relation_to_construction
     }
 }
+
 impl BridgeInstallation {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -3071,6 +3136,7 @@ impl BridgeInstallation {
         })
     }
 }
+
 impl crate::from_gml::FromGml for BridgeInstallation {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -3083,6 +3149,7 @@ impl crate::from_gml::FromGml for BridgeInstallation {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct Bridge {
     pub feature_id: ID,
@@ -3139,6 +3206,7 @@ pub struct Bridge {
     pub bridge_installation: Vec<BridgeInstallation>,
     pub bridge_part: Vec<BridgePart>,
 }
+
 impl AbstractFeatureTrait for Bridge {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -3153,6 +3221,7 @@ impl AbstractFeatureTrait for Bridge {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for Bridge {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -3167,6 +3236,7 @@ impl AbstractFeatureWithLifespanTrait for Bridge {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for Bridge {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -3190,6 +3260,7 @@ impl AbstractCityObjectTrait for Bridge {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for Bridge {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -3234,6 +3305,7 @@ impl AbstractSpaceTrait for Bridge {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for Bridge {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -3248,6 +3320,7 @@ impl AbstractPhysicalSpaceTrait for Bridge {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractOccupiedSpaceTrait for Bridge {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
@@ -3259,6 +3332,7 @@ impl AbstractOccupiedSpaceTrait for Bridge {
         self.lod1_implicit_representation.as_ref()
     }
 }
+
 impl AbstractConstructionTrait for Bridge {
     fn condition_of_construction(&self) -> Option<ConditionOfConstructionValue> {
         self.condition_of_construction
@@ -3282,6 +3356,7 @@ impl AbstractConstructionTrait for Bridge {
         &self.occupancy
     }
 }
+
 impl AbstractBridgeTrait for Bridge {
     fn class_(&self) -> Option<&BridgeClassValue> {
         self.class_.as_ref()
@@ -3311,6 +3386,7 @@ impl AbstractBridgeTrait for Bridge {
         &self.bridge_installation
     }
 }
+
 impl Bridge {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -3897,6 +3973,7 @@ impl Bridge {
         })
     }
 }
+
 impl crate::from_gml::FromGml for Bridge {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -3909,6 +3986,7 @@ impl crate::from_gml::FromGml for Bridge {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct BridgePart {
     pub feature_id: ID,
@@ -3964,6 +4042,7 @@ pub struct BridgePart {
     pub address: Vec<Address>,
     pub bridge_installation: Vec<BridgeInstallation>,
 }
+
 impl AbstractFeatureTrait for BridgePart {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -3978,6 +4057,7 @@ impl AbstractFeatureTrait for BridgePart {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for BridgePart {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -3992,6 +4072,7 @@ impl AbstractFeatureWithLifespanTrait for BridgePart {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for BridgePart {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -4015,6 +4096,7 @@ impl AbstractCityObjectTrait for BridgePart {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for BridgePart {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -4059,6 +4141,7 @@ impl AbstractSpaceTrait for BridgePart {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for BridgePart {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -4073,6 +4156,7 @@ impl AbstractPhysicalSpaceTrait for BridgePart {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractOccupiedSpaceTrait for BridgePart {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
@@ -4084,6 +4168,7 @@ impl AbstractOccupiedSpaceTrait for BridgePart {
         self.lod1_implicit_representation.as_ref()
     }
 }
+
 impl AbstractConstructionTrait for BridgePart {
     fn condition_of_construction(&self) -> Option<ConditionOfConstructionValue> {
         self.condition_of_construction
@@ -4107,6 +4192,7 @@ impl AbstractConstructionTrait for BridgePart {
         &self.occupancy
     }
 }
+
 impl AbstractBridgeTrait for BridgePart {
     fn class_(&self) -> Option<&BridgeClassValue> {
         self.class_.as_ref()
@@ -4136,6 +4222,7 @@ impl AbstractBridgeTrait for BridgePart {
         &self.bridge_installation
     }
 }
+
 impl BridgePart {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -4711,6 +4798,7 @@ impl BridgePart {
         })
     }
 }
+
 impl crate::from_gml::FromGml for BridgePart {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,

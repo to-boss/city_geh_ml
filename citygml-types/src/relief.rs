@@ -5,6 +5,7 @@ pub trait AbstractReliefComponentTrait: AbstractSpaceBoundaryTrait {
     fn lod(&self) -> &IntegerBetween0and3;
     fn extent(&self) -> Option<&crate::geometry::Polygon>;
 }
+
 #[derive(Debug, Clone)]
 pub enum AbstractReliefComponent {
     BreaklineRelief(BreaklineRelief),
@@ -12,11 +13,13 @@ pub enum AbstractReliefComponent {
     RasterRelief(RasterRelief),
     TINRelief(TINRelief),
 }
+
 impl Default for AbstractReliefComponent {
     fn default() -> Self {
         Self::BreaklineRelief(Default::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractReliefComponent {
     fn feature_id(&self) -> &ID {
         match self {
@@ -51,6 +54,7 @@ impl AbstractFeatureTrait for AbstractReliefComponent {
         }
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for AbstractReliefComponent {
     fn creation_date(&self) -> Option<&String> {
         match self {
@@ -85,6 +89,7 @@ impl AbstractFeatureWithLifespanTrait for AbstractReliefComponent {
         }
     }
 }
+
 impl AbstractCityObjectTrait for AbstractReliefComponent {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         match self {
@@ -143,6 +148,7 @@ impl AbstractCityObjectTrait for AbstractReliefComponent {
         }
     }
 }
+
 impl AbstractSpaceBoundaryTrait for AbstractReliefComponent {}
 impl AbstractReliefComponentTrait for AbstractReliefComponent {
     fn lod(&self) -> &IntegerBetween0and3 {
@@ -162,32 +168,38 @@ impl AbstractReliefComponentTrait for AbstractReliefComponent {
         }
     }
 }
+
 impl From<BreaklineRelief> for AbstractReliefComponent {
     fn from(v: BreaklineRelief) -> Self {
         Self::BreaklineRelief(v)
     }
 }
+
 impl From<MassPointRelief> for AbstractReliefComponent {
     fn from(v: MassPointRelief) -> Self {
         Self::MassPointRelief(v)
     }
 }
+
 impl From<RasterRelief> for AbstractReliefComponent {
     fn from(v: RasterRelief) -> Self {
         Self::RasterRelief(v)
     }
 }
+
 impl From<TINRelief> for AbstractReliefComponent {
     fn from(v: TINRelief) -> Self {
         Self::TINRelief(v)
     }
 }
+
 pub trait AbstractReliefComponentAccessors {
     fn breakline_reliefs(&self) -> impl Iterator<Item = &BreaklineRelief>;
     fn mass_point_reliefs(&self) -> impl Iterator<Item = &MassPointRelief>;
     fn raster_reliefs(&self) -> impl Iterator<Item = &RasterRelief>;
     fn tin_reliefs(&self) -> impl Iterator<Item = &TINRelief>;
 }
+
 impl AbstractReliefComponentAccessors for [AbstractReliefComponent] {
     fn breakline_reliefs(&self) -> impl Iterator<Item = &BreaklineRelief> {
         self.iter()
@@ -218,6 +230,7 @@ impl AbstractReliefComponentAccessors for [AbstractReliefComponent] {
             })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct ReliefFeature {
     pub feature_id: ID,
@@ -238,6 +251,7 @@ pub struct ReliefFeature {
     pub lod: IntegerBetween0and3,
     pub relief_component: Vec<AbstractReliefComponent>,
 }
+
 impl AbstractFeatureTrait for ReliefFeature {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -252,6 +266,7 @@ impl AbstractFeatureTrait for ReliefFeature {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for ReliefFeature {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -266,6 +281,7 @@ impl AbstractFeatureWithLifespanTrait for ReliefFeature {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for ReliefFeature {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -289,6 +305,7 @@ impl AbstractCityObjectTrait for ReliefFeature {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceBoundaryTrait for ReliefFeature {}
 impl ReliefFeature {
     pub fn from_gml_with_info(
@@ -445,6 +462,7 @@ impl ReliefFeature {
         })
     }
 }
+
 impl crate::from_gml::FromGml for ReliefFeature {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -457,6 +475,7 @@ impl crate::from_gml::FromGml for ReliefFeature {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct BreaklineRelief {
     pub feature_id: ID,
@@ -479,6 +498,7 @@ pub struct BreaklineRelief {
     pub ridge_or_valley_lines: Option<crate::geometry::MultiCurve>,
     pub breaklines: Option<crate::geometry::MultiCurve>,
 }
+
 impl AbstractFeatureTrait for BreaklineRelief {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -493,6 +513,7 @@ impl AbstractFeatureTrait for BreaklineRelief {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for BreaklineRelief {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -507,6 +528,7 @@ impl AbstractFeatureWithLifespanTrait for BreaklineRelief {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for BreaklineRelief {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -530,6 +552,7 @@ impl AbstractCityObjectTrait for BreaklineRelief {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceBoundaryTrait for BreaklineRelief {}
 impl AbstractReliefComponentTrait for BreaklineRelief {
     fn lod(&self) -> &IntegerBetween0and3 {
@@ -539,6 +562,7 @@ impl AbstractReliefComponentTrait for BreaklineRelief {
         self.extent.as_ref()
     }
 }
+
 impl BreaklineRelief {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -731,6 +755,7 @@ impl BreaklineRelief {
         })
     }
 }
+
 impl crate::from_gml::FromGml for BreaklineRelief {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -743,6 +768,7 @@ impl crate::from_gml::FromGml for BreaklineRelief {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct MassPointRelief {
     pub feature_id: ID,
@@ -765,6 +791,7 @@ pub struct MassPointRelief {
     pub point_cloud: Option<AbstractPointCloud>,
     pub relief_points: Option<Vec<crate::geometry::DirectPosition>>,
 }
+
 impl AbstractFeatureTrait for MassPointRelief {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -779,6 +806,7 @@ impl AbstractFeatureTrait for MassPointRelief {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for MassPointRelief {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -793,6 +821,7 @@ impl AbstractFeatureWithLifespanTrait for MassPointRelief {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for MassPointRelief {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -816,6 +845,7 @@ impl AbstractCityObjectTrait for MassPointRelief {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceBoundaryTrait for MassPointRelief {}
 impl AbstractReliefComponentTrait for MassPointRelief {
     fn lod(&self) -> &IntegerBetween0and3 {
@@ -825,6 +855,7 @@ impl AbstractReliefComponentTrait for MassPointRelief {
         self.extent.as_ref()
     }
 }
+
 impl MassPointRelief {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1013,6 +1044,7 @@ impl MassPointRelief {
         })
     }
 }
+
 impl crate::from_gml::FromGml for MassPointRelief {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1025,6 +1057,7 @@ impl crate::from_gml::FromGml for MassPointRelief {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct RasterRelief {
     pub feature_id: ID,
@@ -1046,6 +1079,7 @@ pub struct RasterRelief {
     pub extent: Option<crate::geometry::Polygon>,
     pub grid: (),
 }
+
 impl AbstractFeatureTrait for RasterRelief {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -1060,6 +1094,7 @@ impl AbstractFeatureTrait for RasterRelief {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for RasterRelief {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -1074,6 +1109,7 @@ impl AbstractFeatureWithLifespanTrait for RasterRelief {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for RasterRelief {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -1097,6 +1133,7 @@ impl AbstractCityObjectTrait for RasterRelief {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceBoundaryTrait for RasterRelief {}
 impl AbstractReliefComponentTrait for RasterRelief {
     fn lod(&self) -> &IntegerBetween0and3 {
@@ -1106,6 +1143,7 @@ impl AbstractReliefComponentTrait for RasterRelief {
         self.extent.as_ref()
     }
 }
+
 impl RasterRelief {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1269,6 +1307,7 @@ impl RasterRelief {
         })
     }
 }
+
 impl crate::from_gml::FromGml for RasterRelief {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1281,6 +1320,7 @@ impl crate::from_gml::FromGml for RasterRelief {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct TINRelief {
     pub feature_id: ID,
@@ -1302,6 +1342,7 @@ pub struct TINRelief {
     pub extent: Option<crate::geometry::Polygon>,
     pub tin: crate::geometry::TriangulatedSurface,
 }
+
 impl AbstractFeatureTrait for TINRelief {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -1316,6 +1357,7 @@ impl AbstractFeatureTrait for TINRelief {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for TINRelief {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -1330,6 +1372,7 @@ impl AbstractFeatureWithLifespanTrait for TINRelief {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for TINRelief {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -1353,6 +1396,7 @@ impl AbstractCityObjectTrait for TINRelief {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceBoundaryTrait for TINRelief {}
 impl AbstractReliefComponentTrait for TINRelief {
     fn lod(&self) -> &IntegerBetween0and3 {
@@ -1362,6 +1406,7 @@ impl AbstractReliefComponentTrait for TINRelief {
         self.extent.as_ref()
     }
 }
+
 impl TINRelief {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1541,6 +1586,7 @@ impl TINRelief {
         })
     }
 }
+
 impl crate::from_gml::FromGml for TINRelief {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,

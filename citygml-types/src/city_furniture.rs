@@ -10,6 +10,7 @@ impl crate::from_gml::FromGml for CityFurnitureClassValue {
         Ok(CityFurnitureClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct CityFurnitureFunctionValue(pub String);
 impl crate::from_gml::FromGml for CityFurnitureFunctionValue {
@@ -19,6 +20,7 @@ impl crate::from_gml::FromGml for CityFurnitureFunctionValue {
         Ok(CityFurnitureFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct CityFurnitureUsageValue(pub String);
 impl crate::from_gml::FromGml for CityFurnitureUsageValue {
@@ -28,6 +30,7 @@ impl crate::from_gml::FromGml for CityFurnitureUsageValue {
         Ok(CityFurnitureUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct CityFurniture {
     pub feature_id: ID,
@@ -70,6 +73,7 @@ pub struct CityFurniture {
     pub function: Vec<CityFurnitureFunctionValue>,
     pub usage: Vec<CityFurnitureUsageValue>,
 }
+
 impl AbstractFeatureTrait for CityFurniture {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -84,6 +88,7 @@ impl AbstractFeatureTrait for CityFurniture {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for CityFurniture {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -98,6 +103,7 @@ impl AbstractFeatureWithLifespanTrait for CityFurniture {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for CityFurniture {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -121,6 +127,7 @@ impl AbstractCityObjectTrait for CityFurniture {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for CityFurniture {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -165,6 +172,7 @@ impl AbstractSpaceTrait for CityFurniture {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for CityFurniture {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -179,6 +187,7 @@ impl AbstractPhysicalSpaceTrait for CityFurniture {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractOccupiedSpaceTrait for CityFurniture {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
@@ -190,6 +199,7 @@ impl AbstractOccupiedSpaceTrait for CityFurniture {
         self.lod1_implicit_representation.as_ref()
     }
 }
+
 impl CityFurniture {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -655,6 +665,7 @@ impl CityFurniture {
         })
     }
 }
+
 impl crate::from_gml::FromGml for CityFurniture {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,

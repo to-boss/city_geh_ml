@@ -10,6 +10,7 @@ pub enum RelativeToTerrain {
     SubstantiallyBelowTerrain,
     EntirelyBelowTerrain,
 }
+
 impl RelativeToTerrain {
     pub fn from_gml_text(text: &str) -> Result<Self, crate::error::ReaderError> {
         match text.trim() {
@@ -34,6 +35,7 @@ impl RelativeToTerrain {
         }
     }
 }
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
 pub enum RelativeToWater {
     #[default]
@@ -44,6 +46,7 @@ pub enum RelativeToWater {
     EntirelyBelowWaterSurface,
     TemporarilyAboveAndBelowWaterSurface,
 }
+
 impl RelativeToWater {
     pub fn from_gml_text(text: &str) -> Result<Self, crate::error::ReaderError> {
         match text.trim() {
@@ -71,6 +74,7 @@ impl RelativeToWater {
         }
     }
 }
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
 pub enum SpaceType {
     #[default]
@@ -78,6 +82,7 @@ pub enum SpaceType {
     Open,
     SemiOpen,
 }
+
 impl SpaceType {
     pub fn from_gml_text(text: &str) -> Result<Self, crate::error::ReaderError> {
         match text.trim() {
@@ -94,6 +99,7 @@ impl SpaceType {
         }
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct CityModelMember {
     pub city_object_member: Option<AbstractCityObject>,
@@ -102,6 +108,7 @@ pub struct CityModelMember {
     pub version_transition_member: Option<AbstractVersionTransition>,
     pub feature_member: Option<AbstractFeature>,
 }
+
 impl crate::from_gml::FromGml for CityModelMember {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -184,11 +191,13 @@ impl crate::from_gml::FromGml for CityModelMember {
         })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct DoubleOrNilReason {
     pub value: f64,
     pub nil_reason: NilReason,
 }
+
 impl crate::from_gml::FromGml for DoubleOrNilReason {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -216,12 +225,14 @@ impl crate::from_gml::FromGml for DoubleOrNilReason {
         })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct ExternalReference {
     pub target_resource: String,
     pub information_system: Option<String>,
     pub relation_type: Option<String>,
 }
+
 impl crate::from_gml::FromGml for ExternalReference {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -256,11 +267,13 @@ impl crate::from_gml::FromGml for ExternalReference {
         })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct NilReason {
     pub nil_reason_enumeration: NilReasonEnumeration,
     pub uri: String,
 }
+
 impl crate::from_gml::FromGml for NilReason {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -288,12 +301,14 @@ impl crate::from_gml::FromGml for NilReason {
         })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct Occupancy {
     pub number_of_occupants: i64,
     pub interval: Option<IntervalValue>,
     pub occupant_type: Option<OccupantTypeValue>,
 }
+
 impl crate::from_gml::FromGml for Occupancy {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -326,11 +341,13 @@ impl crate::from_gml::FromGml for Occupancy {
         })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct QualifiedArea {
     pub area: f64,
     pub type_of_area: QualifiedAreaTypeValue,
 }
+
 impl crate::from_gml::FromGml for QualifiedArea {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -358,11 +375,13 @@ impl crate::from_gml::FromGml for QualifiedArea {
         })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct QualifiedVolume {
     pub volume: f64,
     pub type_of_volume: QualifiedVolumeTypeValue,
 }
+
 impl crate::from_gml::FromGml for QualifiedVolume {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -390,6 +409,7 @@ impl crate::from_gml::FromGml for QualifiedVolume {
         })
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct XALAddress(pub String);
 impl crate::from_gml::FromGml for XALAddress {
@@ -399,12 +419,14 @@ impl crate::from_gml::FromGml for XALAddress {
         Ok(XALAddress(reader.read_text()?))
     }
 }
+
 pub trait AbstractFeatureTrait: std::fmt::Debug {
     fn feature_id(&self) -> &ID;
     fn identifier(&self) -> Option<&String>;
     fn name(&self) -> &[String];
     fn description(&self) -> Option<&String>;
 }
+
 #[derive(Debug, Clone)]
 pub enum AbstractFeature {
     CeilingSurface(Box<CeilingSurface>),
@@ -488,11 +510,13 @@ pub enum AbstractFeature {
     WaterGroundSurface(Box<WaterGroundSurface>),
     WaterSurface(Box<WaterSurface>),
 }
+
 impl Default for AbstractFeature {
     fn default() -> Self {
         Self::CeilingSurface(Box::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractFeature {
     fn feature_id(&self) -> &ID {
         match self {
@@ -831,406 +855,487 @@ impl AbstractFeatureTrait for AbstractFeature {
         }
     }
 }
+
 impl From<CeilingSurface> for AbstractFeature {
     fn from(v: CeilingSurface) -> Self {
         Self::CeilingSurface(Box::new(v))
     }
 }
+
 impl From<Door> for AbstractFeature {
     fn from(v: Door) -> Self {
         Self::Door(Box::new(v))
     }
 }
+
 impl From<DoorSurface> for AbstractFeature {
     fn from(v: DoorSurface) -> Self {
         Self::DoorSurface(Box::new(v))
     }
 }
+
 impl From<FloorSurface> for AbstractFeature {
     fn from(v: FloorSurface) -> Self {
         Self::FloorSurface(Box::new(v))
     }
 }
+
 impl From<GroundSurface> for AbstractFeature {
     fn from(v: GroundSurface) -> Self {
         Self::GroundSurface(Box::new(v))
     }
 }
+
 impl From<InteriorWallSurface> for AbstractFeature {
     fn from(v: InteriorWallSurface) -> Self {
         Self::InteriorWallSurface(Box::new(v))
     }
 }
+
 impl From<OtherConstruction> for AbstractFeature {
     fn from(v: OtherConstruction) -> Self {
         Self::OtherConstruction(Box::new(v))
     }
 }
+
 impl From<OuterCeilingSurface> for AbstractFeature {
     fn from(v: OuterCeilingSurface) -> Self {
         Self::OuterCeilingSurface(Box::new(v))
     }
 }
+
 impl From<OuterFloorSurface> for AbstractFeature {
     fn from(v: OuterFloorSurface) -> Self {
         Self::OuterFloorSurface(Box::new(v))
     }
 }
+
 impl From<RoofSurface> for AbstractFeature {
     fn from(v: RoofSurface) -> Self {
         Self::RoofSurface(Box::new(v))
     }
 }
+
 impl From<WallSurface> for AbstractFeature {
     fn from(v: WallSurface) -> Self {
         Self::WallSurface(Box::new(v))
     }
 }
+
 impl From<Window> for AbstractFeature {
     fn from(v: Window) -> Self {
         Self::Window(Box::new(v))
     }
 }
+
 impl From<WindowSurface> for AbstractFeature {
     fn from(v: WindowSurface) -> Self {
         Self::WindowSurface(Box::new(v))
     }
 }
+
 impl From<CompositeTimeseries> for AbstractFeature {
     fn from(v: CompositeTimeseries) -> Self {
         Self::CompositeTimeseries(Box::new(v))
     }
 }
+
 impl From<Dynamizer> for AbstractFeature {
     fn from(v: Dynamizer) -> Self {
         Self::Dynamizer(Box::new(v))
     }
 }
+
 impl From<GenericTimeseries> for AbstractFeature {
     fn from(v: GenericTimeseries) -> Self {
         Self::GenericTimeseries(Box::new(v))
     }
 }
+
 impl From<StandardFileTimeseries> for AbstractFeature {
     fn from(v: StandardFileTimeseries) -> Self {
         Self::StandardFileTimeseries(Box::new(v))
     }
 }
+
 impl From<TabulatedFileTimeseries> for AbstractFeature {
     fn from(v: TabulatedFileTimeseries) -> Self {
         Self::TabulatedFileTimeseries(Box::new(v))
     }
 }
+
 impl From<PointCloud> for AbstractFeature {
     fn from(v: PointCloud) -> Self {
         Self::PointCloud(Box::new(v))
     }
 }
+
 impl From<Version> for AbstractFeature {
     fn from(v: Version) -> Self {
         Self::Version(Box::new(v))
     }
 }
+
 impl From<VersionTransition> for AbstractFeature {
     fn from(v: VersionTransition) -> Self {
         Self::VersionTransition(Box::new(v))
     }
 }
+
 impl From<Appearance> for AbstractFeature {
     fn from(v: Appearance) -> Self {
         Self::Appearance(Box::new(v))
     }
 }
+
 impl From<GeoreferencedTexture> for AbstractFeature {
     fn from(v: GeoreferencedTexture) -> Self {
         Self::GeoreferencedTexture(Box::new(v))
     }
 }
+
 impl From<ParameterizedTexture> for AbstractFeature {
     fn from(v: ParameterizedTexture) -> Self {
         Self::ParameterizedTexture(Box::new(v))
     }
 }
+
 impl From<X3DMaterial> for AbstractFeature {
     fn from(v: X3DMaterial) -> Self {
         Self::X3DMaterial(Box::new(v))
     }
 }
+
 impl From<Bridge> for AbstractFeature {
     fn from(v: Bridge) -> Self {
         Self::Bridge(Box::new(v))
     }
 }
+
 impl From<BridgeConstructiveElement> for AbstractFeature {
     fn from(v: BridgeConstructiveElement) -> Self {
         Self::BridgeConstructiveElement(Box::new(v))
     }
 }
+
 impl From<BridgeFurniture> for AbstractFeature {
     fn from(v: BridgeFurniture) -> Self {
         Self::BridgeFurniture(Box::new(v))
     }
 }
+
 impl From<BridgeInstallation> for AbstractFeature {
     fn from(v: BridgeInstallation) -> Self {
         Self::BridgeInstallation(Box::new(v))
     }
 }
+
 impl From<BridgePart> for AbstractFeature {
     fn from(v: BridgePart) -> Self {
         Self::BridgePart(Box::new(v))
     }
 }
+
 impl From<BridgeRoom> for AbstractFeature {
     fn from(v: BridgeRoom) -> Self {
         Self::BridgeRoom(Box::new(v))
     }
 }
+
 impl From<Building> for AbstractFeature {
     fn from(v: Building) -> Self {
         Self::Building(Box::new(v))
     }
 }
+
 impl From<BuildingConstructiveElement> for AbstractFeature {
     fn from(v: BuildingConstructiveElement) -> Self {
         Self::BuildingConstructiveElement(Box::new(v))
     }
 }
+
 impl From<BuildingFurniture> for AbstractFeature {
     fn from(v: BuildingFurniture) -> Self {
         Self::BuildingFurniture(Box::new(v))
     }
 }
+
 impl From<BuildingInstallation> for AbstractFeature {
     fn from(v: BuildingInstallation) -> Self {
         Self::BuildingInstallation(Box::new(v))
     }
 }
+
 impl From<BuildingPart> for AbstractFeature {
     fn from(v: BuildingPart) -> Self {
         Self::BuildingPart(Box::new(v))
     }
 }
+
 impl From<BuildingRoom> for AbstractFeature {
     fn from(v: BuildingRoom) -> Self {
         Self::BuildingRoom(Box::new(v))
     }
 }
+
 impl From<BuildingUnit> for AbstractFeature {
     fn from(v: BuildingUnit) -> Self {
         Self::BuildingUnit(Box::new(v))
     }
 }
+
 impl From<Storey> for AbstractFeature {
     fn from(v: Storey) -> Self {
         Self::Storey(Box::new(v))
     }
 }
+
 impl From<CityFurniture> for AbstractFeature {
     fn from(v: CityFurniture) -> Self {
         Self::CityFurniture(Box::new(v))
     }
 }
+
 impl From<CityObjectGroup> for AbstractFeature {
     fn from(v: CityObjectGroup) -> Self {
         Self::CityObjectGroup(Box::new(v))
     }
 }
+
 impl From<Address> for AbstractFeature {
     fn from(v: Address) -> Self {
         Self::Address(Box::new(v))
     }
 }
+
 impl From<CityModel> for AbstractFeature {
     fn from(v: CityModel) -> Self {
         Self::CityModel(Box::new(v))
     }
 }
+
 impl From<ClosureSurface> for AbstractFeature {
     fn from(v: ClosureSurface) -> Self {
         Self::ClosureSurface(Box::new(v))
     }
 }
+
 impl From<GenericLogicalSpace> for AbstractFeature {
     fn from(v: GenericLogicalSpace) -> Self {
         Self::GenericLogicalSpace(Box::new(v))
     }
 }
+
 impl From<GenericOccupiedSpace> for AbstractFeature {
     fn from(v: GenericOccupiedSpace) -> Self {
         Self::GenericOccupiedSpace(Box::new(v))
     }
 }
+
 impl From<GenericThematicSurface> for AbstractFeature {
     fn from(v: GenericThematicSurface) -> Self {
         Self::GenericThematicSurface(Box::new(v))
     }
 }
+
 impl From<GenericUnoccupiedSpace> for AbstractFeature {
     fn from(v: GenericUnoccupiedSpace) -> Self {
         Self::GenericUnoccupiedSpace(Box::new(v))
     }
 }
+
 impl From<LandUse> for AbstractFeature {
     fn from(v: LandUse) -> Self {
         Self::LandUse(Box::new(v))
     }
 }
+
 impl From<BreaklineRelief> for AbstractFeature {
     fn from(v: BreaklineRelief) -> Self {
         Self::BreaklineRelief(Box::new(v))
     }
 }
+
 impl From<MassPointRelief> for AbstractFeature {
     fn from(v: MassPointRelief) -> Self {
         Self::MassPointRelief(Box::new(v))
     }
 }
+
 impl From<RasterRelief> for AbstractFeature {
     fn from(v: RasterRelief) -> Self {
         Self::RasterRelief(Box::new(v))
     }
 }
+
 impl From<ReliefFeature> for AbstractFeature {
     fn from(v: ReliefFeature) -> Self {
         Self::ReliefFeature(Box::new(v))
     }
 }
+
 impl From<TINRelief> for AbstractFeature {
     fn from(v: TINRelief) -> Self {
         Self::TINRelief(Box::new(v))
     }
 }
+
 impl From<AuxiliaryTrafficArea> for AbstractFeature {
     fn from(v: AuxiliaryTrafficArea) -> Self {
         Self::AuxiliaryTrafficArea(Box::new(v))
     }
 }
+
 impl From<AuxiliaryTrafficSpace> for AbstractFeature {
     fn from(v: AuxiliaryTrafficSpace) -> Self {
         Self::AuxiliaryTrafficSpace(Box::new(v))
     }
 }
+
 impl From<ClearanceSpace> for AbstractFeature {
     fn from(v: ClearanceSpace) -> Self {
         Self::ClearanceSpace(Box::new(v))
     }
 }
+
 impl From<Hole> for AbstractFeature {
     fn from(v: Hole) -> Self {
         Self::Hole(Box::new(v))
     }
 }
+
 impl From<HoleSurface> for AbstractFeature {
     fn from(v: HoleSurface) -> Self {
         Self::HoleSurface(Box::new(v))
     }
 }
+
 impl From<Intersection> for AbstractFeature {
     fn from(v: Intersection) -> Self {
         Self::Intersection(Box::new(v))
     }
 }
+
 impl From<Marking> for AbstractFeature {
     fn from(v: Marking) -> Self {
         Self::Marking(Box::new(v))
     }
 }
+
 impl From<Railway> for AbstractFeature {
     fn from(v: Railway) -> Self {
         Self::Railway(Box::new(v))
     }
 }
+
 impl From<Road> for AbstractFeature {
     fn from(v: Road) -> Self {
         Self::Road(Box::new(v))
     }
 }
+
 impl From<Section> for AbstractFeature {
     fn from(v: Section) -> Self {
         Self::Section(Box::new(v))
     }
 }
+
 impl From<Square> for AbstractFeature {
     fn from(v: Square) -> Self {
         Self::Square(Box::new(v))
     }
 }
+
 impl From<Track> for AbstractFeature {
     fn from(v: Track) -> Self {
         Self::Track(Box::new(v))
     }
 }
+
 impl From<TrafficArea> for AbstractFeature {
     fn from(v: TrafficArea) -> Self {
         Self::TrafficArea(Box::new(v))
     }
 }
+
 impl From<TrafficSpace> for AbstractFeature {
     fn from(v: TrafficSpace) -> Self {
         Self::TrafficSpace(Box::new(v))
     }
 }
+
 impl From<Waterway> for AbstractFeature {
     fn from(v: Waterway) -> Self {
         Self::Waterway(Box::new(v))
     }
 }
+
 impl From<HollowSpace> for AbstractFeature {
     fn from(v: HollowSpace) -> Self {
         Self::HollowSpace(Box::new(v))
     }
 }
+
 impl From<Tunnel> for AbstractFeature {
     fn from(v: Tunnel) -> Self {
         Self::Tunnel(Box::new(v))
     }
 }
+
 impl From<TunnelConstructiveElement> for AbstractFeature {
     fn from(v: TunnelConstructiveElement) -> Self {
         Self::TunnelConstructiveElement(Box::new(v))
     }
 }
+
 impl From<TunnelFurniture> for AbstractFeature {
     fn from(v: TunnelFurniture) -> Self {
         Self::TunnelFurniture(Box::new(v))
     }
 }
+
 impl From<TunnelInstallation> for AbstractFeature {
     fn from(v: TunnelInstallation) -> Self {
         Self::TunnelInstallation(Box::new(v))
     }
 }
+
 impl From<TunnelPart> for AbstractFeature {
     fn from(v: TunnelPart) -> Self {
         Self::TunnelPart(Box::new(v))
     }
 }
+
 impl From<PlantCover> for AbstractFeature {
     fn from(v: PlantCover) -> Self {
         Self::PlantCover(Box::new(v))
     }
 }
+
 impl From<SolitaryVegetationObject> for AbstractFeature {
     fn from(v: SolitaryVegetationObject) -> Self {
         Self::SolitaryVegetationObject(Box::new(v))
     }
 }
+
 impl From<WaterBody> for AbstractFeature {
     fn from(v: WaterBody) -> Self {
         Self::WaterBody(Box::new(v))
     }
 }
+
 impl From<WaterGroundSurface> for AbstractFeature {
     fn from(v: WaterGroundSurface) -> Self {
         Self::WaterGroundSurface(Box::new(v))
     }
 }
+
 impl From<WaterSurface> for AbstractFeature {
     fn from(v: WaterSurface) -> Self {
         Self::WaterSurface(Box::new(v))
     }
 }
+
 pub trait AbstractFeatureAccessors {
     fn ceiling_surfaces(&self) -> impl Iterator<Item = &CeilingSurface>;
     fn doors(&self) -> impl Iterator<Item = &Door>;
@@ -1323,6 +1428,7 @@ pub trait AbstractFeatureAccessors {
     fn water_ground_surfaces(&self) -> impl Iterator<Item = &WaterGroundSurface>;
     fn water_surfaces(&self) -> impl Iterator<Item = &WaterSurface>;
 }
+
 impl AbstractFeatureAccessors for [AbstractFeature] {
     fn ceiling_surfaces(&self) -> impl Iterator<Item = &CeilingSurface> {
         self.iter()
@@ -1901,10 +2007,12 @@ impl AbstractFeatureAccessors for [AbstractFeature] {
             })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct Code {
     pub code_space: Option<String>,
 }
+
 impl Code {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1927,6 +2035,7 @@ impl Code {
         Ok(Code { code_space })
     }
 }
+
 impl crate::from_gml::FromGml for Code {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1939,6 +2048,7 @@ impl crate::from_gml::FromGml for Code {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct DoubleBetween0and1(pub String);
 impl crate::from_gml::FromGml for DoubleBetween0and1 {
@@ -1948,10 +2058,12 @@ impl crate::from_gml::FromGml for DoubleBetween0and1 {
         Ok(DoubleBetween0and1(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct DoubleBetween0and1List {
     pub list: DoubleBetween0and1,
 }
+
 impl DoubleBetween0and1List {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1974,6 +2086,7 @@ impl DoubleBetween0and1List {
         Ok(DoubleBetween0and1List { list })
     }
 }
+
 impl crate::from_gml::FromGml for DoubleBetween0and1List {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1986,10 +2099,12 @@ impl crate::from_gml::FromGml for DoubleBetween0and1List {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct DoubleList {
     pub list: f64,
 }
+
 impl DoubleList {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -2012,6 +2127,7 @@ impl DoubleList {
         Ok(DoubleList { list })
     }
 }
+
 impl crate::from_gml::FromGml for DoubleList {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -2024,10 +2140,12 @@ impl crate::from_gml::FromGml for DoubleList {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct DoubleOrNilReasonList {
     pub list: DoubleOrNilReason,
 }
+
 impl DoubleOrNilReasonList {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -2050,6 +2168,7 @@ impl DoubleOrNilReasonList {
         Ok(DoubleOrNilReasonList { list })
     }
 }
+
 impl crate::from_gml::FromGml for DoubleOrNilReasonList {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -2062,6 +2181,7 @@ impl crate::from_gml::FromGml for DoubleOrNilReasonList {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct ID(pub String);
 impl crate::from_gml::FromGml for ID {
@@ -2071,6 +2191,7 @@ impl crate::from_gml::FromGml for ID {
         Ok(ID(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct ImplicitGeometry {
     pub object_id: ID,
@@ -2081,6 +2202,7 @@ pub struct ImplicitGeometry {
     pub reference_point: crate::geometry::DirectPosition,
     pub appearance: Vec<AbstractAppearance>,
 }
+
 impl ImplicitGeometry {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -2164,6 +2286,7 @@ impl ImplicitGeometry {
         })
     }
 }
+
 impl crate::from_gml::FromGml for ImplicitGeometry {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -2176,6 +2299,7 @@ impl crate::from_gml::FromGml for ImplicitGeometry {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct IntegerBetween0and3(pub String);
 impl crate::from_gml::FromGml for IntegerBetween0and3 {
@@ -2185,6 +2309,7 @@ impl crate::from_gml::FromGml for IntegerBetween0and3 {
         Ok(IntegerBetween0and3(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct IntervalValue(pub String);
 impl crate::from_gml::FromGml for IntervalValue {
@@ -2194,6 +2319,7 @@ impl crate::from_gml::FromGml for IntervalValue {
         Ok(IntervalValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct MimeTypeValue(pub String);
 impl crate::from_gml::FromGml for MimeTypeValue {
@@ -2203,6 +2329,7 @@ impl crate::from_gml::FromGml for MimeTypeValue {
         Ok(MimeTypeValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct NilReasonEnumeration(pub String);
 impl crate::from_gml::FromGml for NilReasonEnumeration {
@@ -2212,6 +2339,7 @@ impl crate::from_gml::FromGml for NilReasonEnumeration {
         Ok(NilReasonEnumeration(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct OccupantTypeValue(pub String);
 impl crate::from_gml::FromGml for OccupantTypeValue {
@@ -2221,6 +2349,7 @@ impl crate::from_gml::FromGml for OccupantTypeValue {
         Ok(OccupantTypeValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct QualifiedAreaTypeValue(pub String);
 impl crate::from_gml::FromGml for QualifiedAreaTypeValue {
@@ -2230,6 +2359,7 @@ impl crate::from_gml::FromGml for QualifiedAreaTypeValue {
         Ok(QualifiedAreaTypeValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct QualifiedVolumeTypeValue(pub String);
 impl crate::from_gml::FromGml for QualifiedVolumeTypeValue {
@@ -2239,6 +2369,7 @@ impl crate::from_gml::FromGml for QualifiedVolumeTypeValue {
         Ok(QualifiedVolumeTypeValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct RelationTypeValue(pub String);
 impl crate::from_gml::FromGml for RelationTypeValue {
@@ -2248,12 +2379,14 @@ impl crate::from_gml::FromGml for RelationTypeValue {
         Ok(RelationTypeValue(reader.read_text()?))
     }
 }
+
 pub trait AbstractFeatureWithLifespanTrait: AbstractFeatureTrait {
     fn creation_date(&self) -> Option<&String>;
     fn termination_date(&self) -> Option<&String>;
     fn valid_from(&self) -> Option<&String>;
     fn valid_to(&self) -> Option<&String>;
 }
+
 #[derive(Debug, Clone)]
 pub enum AbstractFeatureWithLifespan {
     CeilingSurface(Box<CeilingSurface>),
@@ -2328,11 +2461,13 @@ pub enum AbstractFeatureWithLifespan {
     WaterGroundSurface(Box<WaterGroundSurface>),
     WaterSurface(Box<WaterSurface>),
 }
+
 impl Default for AbstractFeatureWithLifespan {
     fn default() -> Self {
         Self::CeilingSurface(Box::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractFeatureWithLifespan {
     fn feature_id(&self) -> &ID {
         match self {
@@ -2635,6 +2770,7 @@ impl AbstractFeatureTrait for AbstractFeatureWithLifespan {
         }
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for AbstractFeatureWithLifespan {
     fn creation_date(&self) -> Option<&String> {
         match self {
@@ -2937,361 +3073,433 @@ impl AbstractFeatureWithLifespanTrait for AbstractFeatureWithLifespan {
         }
     }
 }
+
 impl From<CeilingSurface> for AbstractFeatureWithLifespan {
     fn from(v: CeilingSurface) -> Self {
         Self::CeilingSurface(Box::new(v))
     }
 }
+
 impl From<Door> for AbstractFeatureWithLifespan {
     fn from(v: Door) -> Self {
         Self::Door(Box::new(v))
     }
 }
+
 impl From<DoorSurface> for AbstractFeatureWithLifespan {
     fn from(v: DoorSurface) -> Self {
         Self::DoorSurface(Box::new(v))
     }
 }
+
 impl From<FloorSurface> for AbstractFeatureWithLifespan {
     fn from(v: FloorSurface) -> Self {
         Self::FloorSurface(Box::new(v))
     }
 }
+
 impl From<GroundSurface> for AbstractFeatureWithLifespan {
     fn from(v: GroundSurface) -> Self {
         Self::GroundSurface(Box::new(v))
     }
 }
+
 impl From<InteriorWallSurface> for AbstractFeatureWithLifespan {
     fn from(v: InteriorWallSurface) -> Self {
         Self::InteriorWallSurface(Box::new(v))
     }
 }
+
 impl From<OtherConstruction> for AbstractFeatureWithLifespan {
     fn from(v: OtherConstruction) -> Self {
         Self::OtherConstruction(Box::new(v))
     }
 }
+
 impl From<OuterCeilingSurface> for AbstractFeatureWithLifespan {
     fn from(v: OuterCeilingSurface) -> Self {
         Self::OuterCeilingSurface(Box::new(v))
     }
 }
+
 impl From<OuterFloorSurface> for AbstractFeatureWithLifespan {
     fn from(v: OuterFloorSurface) -> Self {
         Self::OuterFloorSurface(Box::new(v))
     }
 }
+
 impl From<RoofSurface> for AbstractFeatureWithLifespan {
     fn from(v: RoofSurface) -> Self {
         Self::RoofSurface(Box::new(v))
     }
 }
+
 impl From<WallSurface> for AbstractFeatureWithLifespan {
     fn from(v: WallSurface) -> Self {
         Self::WallSurface(Box::new(v))
     }
 }
+
 impl From<Window> for AbstractFeatureWithLifespan {
     fn from(v: Window) -> Self {
         Self::Window(Box::new(v))
     }
 }
+
 impl From<WindowSurface> for AbstractFeatureWithLifespan {
     fn from(v: WindowSurface) -> Self {
         Self::WindowSurface(Box::new(v))
     }
 }
+
 impl From<Dynamizer> for AbstractFeatureWithLifespan {
     fn from(v: Dynamizer) -> Self {
         Self::Dynamizer(Box::new(v))
     }
 }
+
 impl From<Version> for AbstractFeatureWithLifespan {
     fn from(v: Version) -> Self {
         Self::Version(Box::new(v))
     }
 }
+
 impl From<VersionTransition> for AbstractFeatureWithLifespan {
     fn from(v: VersionTransition) -> Self {
         Self::VersionTransition(Box::new(v))
     }
 }
+
 impl From<Appearance> for AbstractFeatureWithLifespan {
     fn from(v: Appearance) -> Self {
         Self::Appearance(Box::new(v))
     }
 }
+
 impl From<Bridge> for AbstractFeatureWithLifespan {
     fn from(v: Bridge) -> Self {
         Self::Bridge(Box::new(v))
     }
 }
+
 impl From<BridgeConstructiveElement> for AbstractFeatureWithLifespan {
     fn from(v: BridgeConstructiveElement) -> Self {
         Self::BridgeConstructiveElement(Box::new(v))
     }
 }
+
 impl From<BridgeFurniture> for AbstractFeatureWithLifespan {
     fn from(v: BridgeFurniture) -> Self {
         Self::BridgeFurniture(Box::new(v))
     }
 }
+
 impl From<BridgeInstallation> for AbstractFeatureWithLifespan {
     fn from(v: BridgeInstallation) -> Self {
         Self::BridgeInstallation(Box::new(v))
     }
 }
+
 impl From<BridgePart> for AbstractFeatureWithLifespan {
     fn from(v: BridgePart) -> Self {
         Self::BridgePart(Box::new(v))
     }
 }
+
 impl From<BridgeRoom> for AbstractFeatureWithLifespan {
     fn from(v: BridgeRoom) -> Self {
         Self::BridgeRoom(Box::new(v))
     }
 }
+
 impl From<Building> for AbstractFeatureWithLifespan {
     fn from(v: Building) -> Self {
         Self::Building(Box::new(v))
     }
 }
+
 impl From<BuildingConstructiveElement> for AbstractFeatureWithLifespan {
     fn from(v: BuildingConstructiveElement) -> Self {
         Self::BuildingConstructiveElement(Box::new(v))
     }
 }
+
 impl From<BuildingFurniture> for AbstractFeatureWithLifespan {
     fn from(v: BuildingFurniture) -> Self {
         Self::BuildingFurniture(Box::new(v))
     }
 }
+
 impl From<BuildingInstallation> for AbstractFeatureWithLifespan {
     fn from(v: BuildingInstallation) -> Self {
         Self::BuildingInstallation(Box::new(v))
     }
 }
+
 impl From<BuildingPart> for AbstractFeatureWithLifespan {
     fn from(v: BuildingPart) -> Self {
         Self::BuildingPart(Box::new(v))
     }
 }
+
 impl From<BuildingRoom> for AbstractFeatureWithLifespan {
     fn from(v: BuildingRoom) -> Self {
         Self::BuildingRoom(Box::new(v))
     }
 }
+
 impl From<BuildingUnit> for AbstractFeatureWithLifespan {
     fn from(v: BuildingUnit) -> Self {
         Self::BuildingUnit(Box::new(v))
     }
 }
+
 impl From<Storey> for AbstractFeatureWithLifespan {
     fn from(v: Storey) -> Self {
         Self::Storey(Box::new(v))
     }
 }
+
 impl From<CityFurniture> for AbstractFeatureWithLifespan {
     fn from(v: CityFurniture) -> Self {
         Self::CityFurniture(Box::new(v))
     }
 }
+
 impl From<CityObjectGroup> for AbstractFeatureWithLifespan {
     fn from(v: CityObjectGroup) -> Self {
         Self::CityObjectGroup(Box::new(v))
     }
 }
+
 impl From<CityModel> for AbstractFeatureWithLifespan {
     fn from(v: CityModel) -> Self {
         Self::CityModel(Box::new(v))
     }
 }
+
 impl From<ClosureSurface> for AbstractFeatureWithLifespan {
     fn from(v: ClosureSurface) -> Self {
         Self::ClosureSurface(Box::new(v))
     }
 }
+
 impl From<GenericLogicalSpace> for AbstractFeatureWithLifespan {
     fn from(v: GenericLogicalSpace) -> Self {
         Self::GenericLogicalSpace(Box::new(v))
     }
 }
+
 impl From<GenericOccupiedSpace> for AbstractFeatureWithLifespan {
     fn from(v: GenericOccupiedSpace) -> Self {
         Self::GenericOccupiedSpace(Box::new(v))
     }
 }
+
 impl From<GenericThematicSurface> for AbstractFeatureWithLifespan {
     fn from(v: GenericThematicSurface) -> Self {
         Self::GenericThematicSurface(Box::new(v))
     }
 }
+
 impl From<GenericUnoccupiedSpace> for AbstractFeatureWithLifespan {
     fn from(v: GenericUnoccupiedSpace) -> Self {
         Self::GenericUnoccupiedSpace(Box::new(v))
     }
 }
+
 impl From<LandUse> for AbstractFeatureWithLifespan {
     fn from(v: LandUse) -> Self {
         Self::LandUse(Box::new(v))
     }
 }
+
 impl From<BreaklineRelief> for AbstractFeatureWithLifespan {
     fn from(v: BreaklineRelief) -> Self {
         Self::BreaklineRelief(Box::new(v))
     }
 }
+
 impl From<MassPointRelief> for AbstractFeatureWithLifespan {
     fn from(v: MassPointRelief) -> Self {
         Self::MassPointRelief(Box::new(v))
     }
 }
+
 impl From<RasterRelief> for AbstractFeatureWithLifespan {
     fn from(v: RasterRelief) -> Self {
         Self::RasterRelief(Box::new(v))
     }
 }
+
 impl From<ReliefFeature> for AbstractFeatureWithLifespan {
     fn from(v: ReliefFeature) -> Self {
         Self::ReliefFeature(Box::new(v))
     }
 }
+
 impl From<TINRelief> for AbstractFeatureWithLifespan {
     fn from(v: TINRelief) -> Self {
         Self::TINRelief(Box::new(v))
     }
 }
+
 impl From<AuxiliaryTrafficArea> for AbstractFeatureWithLifespan {
     fn from(v: AuxiliaryTrafficArea) -> Self {
         Self::AuxiliaryTrafficArea(Box::new(v))
     }
 }
+
 impl From<AuxiliaryTrafficSpace> for AbstractFeatureWithLifespan {
     fn from(v: AuxiliaryTrafficSpace) -> Self {
         Self::AuxiliaryTrafficSpace(Box::new(v))
     }
 }
+
 impl From<ClearanceSpace> for AbstractFeatureWithLifespan {
     fn from(v: ClearanceSpace) -> Self {
         Self::ClearanceSpace(Box::new(v))
     }
 }
+
 impl From<Hole> for AbstractFeatureWithLifespan {
     fn from(v: Hole) -> Self {
         Self::Hole(Box::new(v))
     }
 }
+
 impl From<HoleSurface> for AbstractFeatureWithLifespan {
     fn from(v: HoleSurface) -> Self {
         Self::HoleSurface(Box::new(v))
     }
 }
+
 impl From<Intersection> for AbstractFeatureWithLifespan {
     fn from(v: Intersection) -> Self {
         Self::Intersection(Box::new(v))
     }
 }
+
 impl From<Marking> for AbstractFeatureWithLifespan {
     fn from(v: Marking) -> Self {
         Self::Marking(Box::new(v))
     }
 }
+
 impl From<Railway> for AbstractFeatureWithLifespan {
     fn from(v: Railway) -> Self {
         Self::Railway(Box::new(v))
     }
 }
+
 impl From<Road> for AbstractFeatureWithLifespan {
     fn from(v: Road) -> Self {
         Self::Road(Box::new(v))
     }
 }
+
 impl From<Section> for AbstractFeatureWithLifespan {
     fn from(v: Section) -> Self {
         Self::Section(Box::new(v))
     }
 }
+
 impl From<Square> for AbstractFeatureWithLifespan {
     fn from(v: Square) -> Self {
         Self::Square(Box::new(v))
     }
 }
+
 impl From<Track> for AbstractFeatureWithLifespan {
     fn from(v: Track) -> Self {
         Self::Track(Box::new(v))
     }
 }
+
 impl From<TrafficArea> for AbstractFeatureWithLifespan {
     fn from(v: TrafficArea) -> Self {
         Self::TrafficArea(Box::new(v))
     }
 }
+
 impl From<TrafficSpace> for AbstractFeatureWithLifespan {
     fn from(v: TrafficSpace) -> Self {
         Self::TrafficSpace(Box::new(v))
     }
 }
+
 impl From<Waterway> for AbstractFeatureWithLifespan {
     fn from(v: Waterway) -> Self {
         Self::Waterway(Box::new(v))
     }
 }
+
 impl From<HollowSpace> for AbstractFeatureWithLifespan {
     fn from(v: HollowSpace) -> Self {
         Self::HollowSpace(Box::new(v))
     }
 }
+
 impl From<Tunnel> for AbstractFeatureWithLifespan {
     fn from(v: Tunnel) -> Self {
         Self::Tunnel(Box::new(v))
     }
 }
+
 impl From<TunnelConstructiveElement> for AbstractFeatureWithLifespan {
     fn from(v: TunnelConstructiveElement) -> Self {
         Self::TunnelConstructiveElement(Box::new(v))
     }
 }
+
 impl From<TunnelFurniture> for AbstractFeatureWithLifespan {
     fn from(v: TunnelFurniture) -> Self {
         Self::TunnelFurniture(Box::new(v))
     }
 }
+
 impl From<TunnelInstallation> for AbstractFeatureWithLifespan {
     fn from(v: TunnelInstallation) -> Self {
         Self::TunnelInstallation(Box::new(v))
     }
 }
+
 impl From<TunnelPart> for AbstractFeatureWithLifespan {
     fn from(v: TunnelPart) -> Self {
         Self::TunnelPart(Box::new(v))
     }
 }
+
 impl From<PlantCover> for AbstractFeatureWithLifespan {
     fn from(v: PlantCover) -> Self {
         Self::PlantCover(Box::new(v))
     }
 }
+
 impl From<SolitaryVegetationObject> for AbstractFeatureWithLifespan {
     fn from(v: SolitaryVegetationObject) -> Self {
         Self::SolitaryVegetationObject(Box::new(v))
     }
 }
+
 impl From<WaterBody> for AbstractFeatureWithLifespan {
     fn from(v: WaterBody) -> Self {
         Self::WaterBody(Box::new(v))
     }
 }
+
 impl From<WaterGroundSurface> for AbstractFeatureWithLifespan {
     fn from(v: WaterGroundSurface) -> Self {
         Self::WaterGroundSurface(Box::new(v))
     }
 }
+
 impl From<WaterSurface> for AbstractFeatureWithLifespan {
     fn from(v: WaterSurface) -> Self {
         Self::WaterSurface(Box::new(v))
     }
 }
+
 pub trait AbstractFeatureWithLifespanAccessors {
     fn ceiling_surfaces(&self) -> impl Iterator<Item = &CeilingSurface>;
     fn doors(&self) -> impl Iterator<Item = &Door>;
@@ -3373,6 +3581,7 @@ pub trait AbstractFeatureWithLifespanAccessors {
     fn water_ground_surfaces(&self) -> impl Iterator<Item = &WaterGroundSurface>;
     fn water_surfaces(&self) -> impl Iterator<Item = &WaterSurface>;
 }
+
 impl AbstractFeatureWithLifespanAccessors for [AbstractFeatureWithLifespan] {
     fn ceiling_surfaces(&self) -> impl Iterator<Item = &CeilingSurface> {
         self.iter()
@@ -3896,16 +4105,19 @@ impl AbstractFeatureWithLifespanAccessors for [AbstractFeatureWithLifespan] {
             })
     }
 }
+
 pub trait AbstractPointCloudTrait: AbstractFeatureTrait {}
 #[derive(Debug, Clone)]
 pub enum AbstractPointCloud {
     PointCloud(PointCloud),
 }
+
 impl Default for AbstractPointCloud {
     fn default() -> Self {
         Self::PointCloud(Default::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractPointCloud {
     fn feature_id(&self) -> &ID {
         match self {
@@ -3928,15 +4140,18 @@ impl AbstractFeatureTrait for AbstractPointCloud {
         }
     }
 }
+
 impl AbstractPointCloudTrait for AbstractPointCloud {}
 impl From<PointCloud> for AbstractPointCloud {
     fn from(v: PointCloud) -> Self {
         Self::PointCloud(v)
     }
 }
+
 pub trait AbstractPointCloudAccessors {
     fn point_clouds(&self) -> impl Iterator<Item = &PointCloud>;
 }
+
 impl AbstractPointCloudAccessors for [AbstractPointCloud] {
     fn point_clouds(&self) -> impl Iterator<Item = &PointCloud> {
         self.iter()
@@ -3945,6 +4160,7 @@ impl AbstractPointCloudAccessors for [AbstractPointCloud] {
             })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct Address {
     pub feature_id: ID,
@@ -3954,6 +4170,7 @@ pub struct Address {
     pub multi_point: Option<Vec<crate::geometry::DirectPosition>>,
     pub xal_address: XALAddress,
 }
+
 impl AbstractFeatureTrait for Address {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -3968,6 +4185,7 @@ impl AbstractFeatureTrait for Address {
         self.description.as_ref()
     }
 }
+
 impl Address {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -4029,6 +4247,7 @@ impl Address {
         })
     }
 }
+
 impl crate::from_gml::FromGml for Address {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -4041,10 +4260,12 @@ impl crate::from_gml::FromGml for Address {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct TransformationMatrix2x2 {
     pub list: f64,
 }
+
 impl TransformationMatrix2x2 {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -4067,6 +4288,7 @@ impl TransformationMatrix2x2 {
         Ok(TransformationMatrix2x2 { list })
     }
 }
+
 impl crate::from_gml::FromGml for TransformationMatrix2x2 {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -4079,10 +4301,12 @@ impl crate::from_gml::FromGml for TransformationMatrix2x2 {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct TransformationMatrix3x4 {
     pub list: f64,
 }
+
 impl TransformationMatrix3x4 {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -4105,6 +4329,7 @@ impl TransformationMatrix3x4 {
         Ok(TransformationMatrix3x4 { list })
     }
 }
+
 impl crate::from_gml::FromGml for TransformationMatrix3x4 {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -4117,10 +4342,12 @@ impl crate::from_gml::FromGml for TransformationMatrix3x4 {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct TransformationMatrix4x4 {
     pub list: f64,
 }
+
 impl TransformationMatrix4x4 {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -4143,6 +4370,7 @@ impl TransformationMatrix4x4 {
         Ok(TransformationMatrix4x4 { list })
     }
 }
+
 impl crate::from_gml::FromGml for TransformationMatrix4x4 {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -4155,11 +4383,13 @@ impl crate::from_gml::FromGml for TransformationMatrix4x4 {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct MeasureOrNilReasonList {
     pub list: DoubleOrNilReason,
     pub uom: String,
 }
+
 impl MeasureOrNilReasonList {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -4189,6 +4419,7 @@ impl MeasureOrNilReasonList {
         })
     }
 }
+
 impl crate::from_gml::FromGml for MeasureOrNilReasonList {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -4201,6 +4432,7 @@ impl crate::from_gml::FromGml for MeasureOrNilReasonList {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct OtherRelationTypeValue {}
 impl OtherRelationTypeValue {
@@ -4217,6 +4449,7 @@ impl OtherRelationTypeValue {
         Ok(OtherRelationTypeValue {})
     }
 }
+
 impl crate::from_gml::FromGml for OtherRelationTypeValue {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -4229,6 +4462,7 @@ impl crate::from_gml::FromGml for OtherRelationTypeValue {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct TemporalRelationTypeValue {}
 impl TemporalRelationTypeValue {
@@ -4245,6 +4479,7 @@ impl TemporalRelationTypeValue {
         Ok(TemporalRelationTypeValue {})
     }
 }
+
 impl crate::from_gml::FromGml for TemporalRelationTypeValue {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -4257,6 +4492,7 @@ impl crate::from_gml::FromGml for TemporalRelationTypeValue {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct TopologicalRelationTypeValue {}
 impl TopologicalRelationTypeValue {
@@ -4273,6 +4509,7 @@ impl TopologicalRelationTypeValue {
         Ok(TopologicalRelationTypeValue {})
     }
 }
+
 impl crate::from_gml::FromGml for TopologicalRelationTypeValue {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -4285,16 +4522,19 @@ impl crate::from_gml::FromGml for TopologicalRelationTypeValue {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 pub trait AbstractAppearanceTrait: AbstractFeatureWithLifespanTrait {}
 #[derive(Debug, Clone)]
 pub enum AbstractAppearance {
     Appearance(Appearance),
 }
+
 impl Default for AbstractAppearance {
     fn default() -> Self {
         Self::Appearance(Default::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractAppearance {
     fn feature_id(&self) -> &ID {
         match self {
@@ -4317,6 +4557,7 @@ impl AbstractFeatureTrait for AbstractAppearance {
         }
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for AbstractAppearance {
     fn creation_date(&self) -> Option<&String> {
         match self {
@@ -4339,15 +4580,18 @@ impl AbstractFeatureWithLifespanTrait for AbstractAppearance {
         }
     }
 }
+
 impl AbstractAppearanceTrait for AbstractAppearance {}
 impl From<Appearance> for AbstractAppearance {
     fn from(v: Appearance) -> Self {
         Self::Appearance(v)
     }
 }
+
 pub trait AbstractAppearanceAccessors {
     fn appearances(&self) -> impl Iterator<Item = &Appearance>;
 }
+
 impl AbstractAppearanceAccessors for [AbstractAppearance] {
     fn appearances(&self) -> impl Iterator<Item = &Appearance> {
         self.iter()
@@ -4356,6 +4600,7 @@ impl AbstractAppearanceAccessors for [AbstractAppearance] {
             })
     }
 }
+
 pub trait AbstractCityObjectTrait: AbstractFeatureWithLifespanTrait {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain>;
     fn relative_to_water(&self) -> Option<RelativeToWater>;
@@ -4365,6 +4610,7 @@ pub trait AbstractCityObjectTrait: AbstractFeatureWithLifespanTrait {
     fn related_to(&self) -> &[AbstractCityObject];
     fn dynamizer(&self) -> &[AbstractDynamizer];
 }
+
 #[derive(Debug, Clone)]
 pub enum AbstractCityObject {
     CeilingSurface(Box<CeilingSurface>),
@@ -4434,11 +4680,13 @@ pub enum AbstractCityObject {
     WaterGroundSurface(Box<WaterGroundSurface>),
     WaterSurface(Box<WaterSurface>),
 }
+
 impl Default for AbstractCityObject {
     fn default() -> Self {
         Self::CeilingSurface(Box::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractCityObject {
     fn feature_id(&self) -> &ID {
         match self {
@@ -4721,6 +4969,7 @@ impl AbstractFeatureTrait for AbstractCityObject {
         }
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for AbstractCityObject {
     fn creation_date(&self) -> Option<&String> {
         match self {
@@ -5003,6 +5252,7 @@ impl AbstractFeatureWithLifespanTrait for AbstractCityObject {
         }
     }
 }
+
 impl AbstractCityObjectTrait for AbstractCityObject {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         match self {
@@ -5495,336 +5745,403 @@ impl AbstractCityObjectTrait for AbstractCityObject {
         }
     }
 }
+
 impl From<CeilingSurface> for AbstractCityObject {
     fn from(v: CeilingSurface) -> Self {
         Self::CeilingSurface(Box::new(v))
     }
 }
+
 impl From<Door> for AbstractCityObject {
     fn from(v: Door) -> Self {
         Self::Door(Box::new(v))
     }
 }
+
 impl From<DoorSurface> for AbstractCityObject {
     fn from(v: DoorSurface) -> Self {
         Self::DoorSurface(Box::new(v))
     }
 }
+
 impl From<FloorSurface> for AbstractCityObject {
     fn from(v: FloorSurface) -> Self {
         Self::FloorSurface(Box::new(v))
     }
 }
+
 impl From<GroundSurface> for AbstractCityObject {
     fn from(v: GroundSurface) -> Self {
         Self::GroundSurface(Box::new(v))
     }
 }
+
 impl From<InteriorWallSurface> for AbstractCityObject {
     fn from(v: InteriorWallSurface) -> Self {
         Self::InteriorWallSurface(Box::new(v))
     }
 }
+
 impl From<OtherConstruction> for AbstractCityObject {
     fn from(v: OtherConstruction) -> Self {
         Self::OtherConstruction(Box::new(v))
     }
 }
+
 impl From<OuterCeilingSurface> for AbstractCityObject {
     fn from(v: OuterCeilingSurface) -> Self {
         Self::OuterCeilingSurface(Box::new(v))
     }
 }
+
 impl From<OuterFloorSurface> for AbstractCityObject {
     fn from(v: OuterFloorSurface) -> Self {
         Self::OuterFloorSurface(Box::new(v))
     }
 }
+
 impl From<RoofSurface> for AbstractCityObject {
     fn from(v: RoofSurface) -> Self {
         Self::RoofSurface(Box::new(v))
     }
 }
+
 impl From<WallSurface> for AbstractCityObject {
     fn from(v: WallSurface) -> Self {
         Self::WallSurface(Box::new(v))
     }
 }
+
 impl From<Window> for AbstractCityObject {
     fn from(v: Window) -> Self {
         Self::Window(Box::new(v))
     }
 }
+
 impl From<WindowSurface> for AbstractCityObject {
     fn from(v: WindowSurface) -> Self {
         Self::WindowSurface(Box::new(v))
     }
 }
+
 impl From<Bridge> for AbstractCityObject {
     fn from(v: Bridge) -> Self {
         Self::Bridge(Box::new(v))
     }
 }
+
 impl From<BridgeConstructiveElement> for AbstractCityObject {
     fn from(v: BridgeConstructiveElement) -> Self {
         Self::BridgeConstructiveElement(Box::new(v))
     }
 }
+
 impl From<BridgeFurniture> for AbstractCityObject {
     fn from(v: BridgeFurniture) -> Self {
         Self::BridgeFurniture(Box::new(v))
     }
 }
+
 impl From<BridgeInstallation> for AbstractCityObject {
     fn from(v: BridgeInstallation) -> Self {
         Self::BridgeInstallation(Box::new(v))
     }
 }
+
 impl From<BridgePart> for AbstractCityObject {
     fn from(v: BridgePart) -> Self {
         Self::BridgePart(Box::new(v))
     }
 }
+
 impl From<BridgeRoom> for AbstractCityObject {
     fn from(v: BridgeRoom) -> Self {
         Self::BridgeRoom(Box::new(v))
     }
 }
+
 impl From<Building> for AbstractCityObject {
     fn from(v: Building) -> Self {
         Self::Building(Box::new(v))
     }
 }
+
 impl From<BuildingConstructiveElement> for AbstractCityObject {
     fn from(v: BuildingConstructiveElement) -> Self {
         Self::BuildingConstructiveElement(Box::new(v))
     }
 }
+
 impl From<BuildingFurniture> for AbstractCityObject {
     fn from(v: BuildingFurniture) -> Self {
         Self::BuildingFurniture(Box::new(v))
     }
 }
+
 impl From<BuildingInstallation> for AbstractCityObject {
     fn from(v: BuildingInstallation) -> Self {
         Self::BuildingInstallation(Box::new(v))
     }
 }
+
 impl From<BuildingPart> for AbstractCityObject {
     fn from(v: BuildingPart) -> Self {
         Self::BuildingPart(Box::new(v))
     }
 }
+
 impl From<BuildingRoom> for AbstractCityObject {
     fn from(v: BuildingRoom) -> Self {
         Self::BuildingRoom(Box::new(v))
     }
 }
+
 impl From<BuildingUnit> for AbstractCityObject {
     fn from(v: BuildingUnit) -> Self {
         Self::BuildingUnit(Box::new(v))
     }
 }
+
 impl From<Storey> for AbstractCityObject {
     fn from(v: Storey) -> Self {
         Self::Storey(Box::new(v))
     }
 }
+
 impl From<CityFurniture> for AbstractCityObject {
     fn from(v: CityFurniture) -> Self {
         Self::CityFurniture(Box::new(v))
     }
 }
+
 impl From<CityObjectGroup> for AbstractCityObject {
     fn from(v: CityObjectGroup) -> Self {
         Self::CityObjectGroup(Box::new(v))
     }
 }
+
 impl From<ClosureSurface> for AbstractCityObject {
     fn from(v: ClosureSurface) -> Self {
         Self::ClosureSurface(Box::new(v))
     }
 }
+
 impl From<GenericLogicalSpace> for AbstractCityObject {
     fn from(v: GenericLogicalSpace) -> Self {
         Self::GenericLogicalSpace(Box::new(v))
     }
 }
+
 impl From<GenericOccupiedSpace> for AbstractCityObject {
     fn from(v: GenericOccupiedSpace) -> Self {
         Self::GenericOccupiedSpace(Box::new(v))
     }
 }
+
 impl From<GenericThematicSurface> for AbstractCityObject {
     fn from(v: GenericThematicSurface) -> Self {
         Self::GenericThematicSurface(Box::new(v))
     }
 }
+
 impl From<GenericUnoccupiedSpace> for AbstractCityObject {
     fn from(v: GenericUnoccupiedSpace) -> Self {
         Self::GenericUnoccupiedSpace(Box::new(v))
     }
 }
+
 impl From<LandUse> for AbstractCityObject {
     fn from(v: LandUse) -> Self {
         Self::LandUse(Box::new(v))
     }
 }
+
 impl From<BreaklineRelief> for AbstractCityObject {
     fn from(v: BreaklineRelief) -> Self {
         Self::BreaklineRelief(Box::new(v))
     }
 }
+
 impl From<MassPointRelief> for AbstractCityObject {
     fn from(v: MassPointRelief) -> Self {
         Self::MassPointRelief(Box::new(v))
     }
 }
+
 impl From<RasterRelief> for AbstractCityObject {
     fn from(v: RasterRelief) -> Self {
         Self::RasterRelief(Box::new(v))
     }
 }
+
 impl From<ReliefFeature> for AbstractCityObject {
     fn from(v: ReliefFeature) -> Self {
         Self::ReliefFeature(Box::new(v))
     }
 }
+
 impl From<TINRelief> for AbstractCityObject {
     fn from(v: TINRelief) -> Self {
         Self::TINRelief(Box::new(v))
     }
 }
+
 impl From<AuxiliaryTrafficArea> for AbstractCityObject {
     fn from(v: AuxiliaryTrafficArea) -> Self {
         Self::AuxiliaryTrafficArea(Box::new(v))
     }
 }
+
 impl From<AuxiliaryTrafficSpace> for AbstractCityObject {
     fn from(v: AuxiliaryTrafficSpace) -> Self {
         Self::AuxiliaryTrafficSpace(Box::new(v))
     }
 }
+
 impl From<ClearanceSpace> for AbstractCityObject {
     fn from(v: ClearanceSpace) -> Self {
         Self::ClearanceSpace(Box::new(v))
     }
 }
+
 impl From<Hole> for AbstractCityObject {
     fn from(v: Hole) -> Self {
         Self::Hole(Box::new(v))
     }
 }
+
 impl From<HoleSurface> for AbstractCityObject {
     fn from(v: HoleSurface) -> Self {
         Self::HoleSurface(Box::new(v))
     }
 }
+
 impl From<Intersection> for AbstractCityObject {
     fn from(v: Intersection) -> Self {
         Self::Intersection(Box::new(v))
     }
 }
+
 impl From<Marking> for AbstractCityObject {
     fn from(v: Marking) -> Self {
         Self::Marking(Box::new(v))
     }
 }
+
 impl From<Railway> for AbstractCityObject {
     fn from(v: Railway) -> Self {
         Self::Railway(Box::new(v))
     }
 }
+
 impl From<Road> for AbstractCityObject {
     fn from(v: Road) -> Self {
         Self::Road(Box::new(v))
     }
 }
+
 impl From<Section> for AbstractCityObject {
     fn from(v: Section) -> Self {
         Self::Section(Box::new(v))
     }
 }
+
 impl From<Square> for AbstractCityObject {
     fn from(v: Square) -> Self {
         Self::Square(Box::new(v))
     }
 }
+
 impl From<Track> for AbstractCityObject {
     fn from(v: Track) -> Self {
         Self::Track(Box::new(v))
     }
 }
+
 impl From<TrafficArea> for AbstractCityObject {
     fn from(v: TrafficArea) -> Self {
         Self::TrafficArea(Box::new(v))
     }
 }
+
 impl From<TrafficSpace> for AbstractCityObject {
     fn from(v: TrafficSpace) -> Self {
         Self::TrafficSpace(Box::new(v))
     }
 }
+
 impl From<Waterway> for AbstractCityObject {
     fn from(v: Waterway) -> Self {
         Self::Waterway(Box::new(v))
     }
 }
+
 impl From<HollowSpace> for AbstractCityObject {
     fn from(v: HollowSpace) -> Self {
         Self::HollowSpace(Box::new(v))
     }
 }
+
 impl From<Tunnel> for AbstractCityObject {
     fn from(v: Tunnel) -> Self {
         Self::Tunnel(Box::new(v))
     }
 }
+
 impl From<TunnelConstructiveElement> for AbstractCityObject {
     fn from(v: TunnelConstructiveElement) -> Self {
         Self::TunnelConstructiveElement(Box::new(v))
     }
 }
+
 impl From<TunnelFurniture> for AbstractCityObject {
     fn from(v: TunnelFurniture) -> Self {
         Self::TunnelFurniture(Box::new(v))
     }
 }
+
 impl From<TunnelInstallation> for AbstractCityObject {
     fn from(v: TunnelInstallation) -> Self {
         Self::TunnelInstallation(Box::new(v))
     }
 }
+
 impl From<TunnelPart> for AbstractCityObject {
     fn from(v: TunnelPart) -> Self {
         Self::TunnelPart(Box::new(v))
     }
 }
+
 impl From<PlantCover> for AbstractCityObject {
     fn from(v: PlantCover) -> Self {
         Self::PlantCover(Box::new(v))
     }
 }
+
 impl From<SolitaryVegetationObject> for AbstractCityObject {
     fn from(v: SolitaryVegetationObject) -> Self {
         Self::SolitaryVegetationObject(Box::new(v))
     }
 }
+
 impl From<WaterBody> for AbstractCityObject {
     fn from(v: WaterBody) -> Self {
         Self::WaterBody(Box::new(v))
     }
 }
+
 impl From<WaterGroundSurface> for AbstractCityObject {
     fn from(v: WaterGroundSurface) -> Self {
         Self::WaterGroundSurface(Box::new(v))
     }
 }
+
 impl From<WaterSurface> for AbstractCityObject {
     fn from(v: WaterSurface) -> Self {
         Self::WaterSurface(Box::new(v))
     }
 }
+
 pub trait AbstractCityObjectAccessors {
     fn ceiling_surfaces(&self) -> impl Iterator<Item = &CeilingSurface>;
     fn doors(&self) -> impl Iterator<Item = &Door>;
@@ -5901,6 +6218,7 @@ pub trait AbstractCityObjectAccessors {
     fn water_ground_surfaces(&self) -> impl Iterator<Item = &WaterGroundSurface>;
     fn water_surfaces(&self) -> impl Iterator<Item = &WaterSurface>;
 }
+
 impl AbstractCityObjectAccessors for [AbstractCityObject] {
     fn ceiling_surfaces(&self) -> impl Iterator<Item = &CeilingSurface> {
         self.iter()
@@ -6377,16 +6695,19 @@ impl AbstractCityObjectAccessors for [AbstractCityObject] {
             })
     }
 }
+
 pub trait AbstractDynamizerTrait: AbstractFeatureWithLifespanTrait {}
 #[derive(Debug, Clone)]
 pub enum AbstractDynamizer {
     Dynamizer(Dynamizer),
 }
+
 impl Default for AbstractDynamizer {
     fn default() -> Self {
         Self::Dynamizer(Default::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractDynamizer {
     fn feature_id(&self) -> &ID {
         match self {
@@ -6409,6 +6730,7 @@ impl AbstractFeatureTrait for AbstractDynamizer {
         }
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for AbstractDynamizer {
     fn creation_date(&self) -> Option<&String> {
         match self {
@@ -6431,15 +6753,18 @@ impl AbstractFeatureWithLifespanTrait for AbstractDynamizer {
         }
     }
 }
+
 impl AbstractDynamizerTrait for AbstractDynamizer {}
 impl From<Dynamizer> for AbstractDynamizer {
     fn from(v: Dynamizer) -> Self {
         Self::Dynamizer(v)
     }
 }
+
 pub trait AbstractDynamizerAccessors {
     fn dynamizers(&self) -> impl Iterator<Item = &Dynamizer>;
 }
+
 impl AbstractDynamizerAccessors for [AbstractDynamizer] {
     fn dynamizers(&self) -> impl Iterator<Item = &Dynamizer> {
         self.iter()
@@ -6448,16 +6773,19 @@ impl AbstractDynamizerAccessors for [AbstractDynamizer] {
             })
     }
 }
+
 pub trait AbstractVersionTrait: AbstractFeatureWithLifespanTrait {}
 #[derive(Debug, Clone)]
 pub enum AbstractVersion {
     Version(Version),
 }
+
 impl Default for AbstractVersion {
     fn default() -> Self {
         Self::Version(Default::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractVersion {
     fn feature_id(&self) -> &ID {
         match self {
@@ -6480,6 +6808,7 @@ impl AbstractFeatureTrait for AbstractVersion {
         }
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for AbstractVersion {
     fn creation_date(&self) -> Option<&String> {
         match self {
@@ -6502,15 +6831,18 @@ impl AbstractFeatureWithLifespanTrait for AbstractVersion {
         }
     }
 }
+
 impl AbstractVersionTrait for AbstractVersion {}
 impl From<Version> for AbstractVersion {
     fn from(v: Version) -> Self {
         Self::Version(v)
     }
 }
+
 pub trait AbstractVersionAccessors {
     fn versions(&self) -> impl Iterator<Item = &Version>;
 }
+
 impl AbstractVersionAccessors for [AbstractVersion] {
     fn versions(&self) -> impl Iterator<Item = &Version> {
         self.iter()
@@ -6519,16 +6851,19 @@ impl AbstractVersionAccessors for [AbstractVersion] {
             })
     }
 }
+
 pub trait AbstractVersionTransitionTrait: AbstractFeatureWithLifespanTrait {}
 #[derive(Debug, Clone)]
 pub enum AbstractVersionTransition {
     VersionTransition(VersionTransition),
 }
+
 impl Default for AbstractVersionTransition {
     fn default() -> Self {
         Self::VersionTransition(Default::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractVersionTransition {
     fn feature_id(&self) -> &ID {
         match self {
@@ -6551,6 +6886,7 @@ impl AbstractFeatureTrait for AbstractVersionTransition {
         }
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for AbstractVersionTransition {
     fn creation_date(&self) -> Option<&String> {
         match self {
@@ -6573,15 +6909,18 @@ impl AbstractFeatureWithLifespanTrait for AbstractVersionTransition {
         }
     }
 }
+
 impl AbstractVersionTransitionTrait for AbstractVersionTransition {}
 impl From<VersionTransition> for AbstractVersionTransition {
     fn from(v: VersionTransition) -> Self {
         Self::VersionTransition(v)
     }
 }
+
 pub trait AbstractVersionTransitionAccessors {
     fn version_transitions(&self) -> impl Iterator<Item = &VersionTransition>;
 }
+
 impl AbstractVersionTransitionAccessors for [AbstractVersionTransition] {
     fn version_transitions(&self) -> impl Iterator<Item = &VersionTransition> {
         self.iter()
@@ -6590,6 +6929,7 @@ impl AbstractVersionTransitionAccessors for [AbstractVersionTransition] {
             })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct CityModel {
     pub feature_id: ID,
@@ -6603,6 +6943,7 @@ pub struct CityModel {
     pub engineering_crs: Option<String>,
     pub city_model_member: Vec<CityModelMember>,
 }
+
 impl AbstractFeatureTrait for CityModel {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -6617,6 +6958,7 @@ impl AbstractFeatureTrait for CityModel {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for CityModel {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -6631,6 +6973,7 @@ impl AbstractFeatureWithLifespanTrait for CityModel {
         self.valid_to.as_ref()
     }
 }
+
 impl CityModel {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -6704,6 +7047,7 @@ impl CityModel {
         })
     }
 }
+
 impl crate::from_gml::FromGml for CityModel {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -6716,6 +7060,7 @@ impl crate::from_gml::FromGml for CityModel {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 pub trait AbstractSpaceTrait: AbstractCityObjectTrait {
     fn space_type(&self) -> Option<SpaceType>;
     fn volume(&self) -> &[QualifiedVolume];
@@ -6732,6 +7077,7 @@ pub trait AbstractSpaceTrait: AbstractCityObjectTrait {
     fn lod3_multi_curve(&self) -> Option<&crate::geometry::MultiCurve>;
     fn lod2_multi_surface(&self) -> Option<&crate::geometry::MultiSurface>;
 }
+
 #[derive(Debug, Clone)]
 pub enum AbstractSpace {
     Door(Box<Door>),
@@ -6777,11 +7123,13 @@ pub enum AbstractSpace {
     SolitaryVegetationObject(Box<SolitaryVegetationObject>),
     WaterBody(Box<WaterBody>),
 }
+
 impl Default for AbstractSpace {
     fn default() -> Self {
         Self::Door(Box::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractSpace {
     fn feature_id(&self) -> &ID {
         match self {
@@ -6968,6 +7316,7 @@ impl AbstractFeatureTrait for AbstractSpace {
         }
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for AbstractSpace {
     fn creation_date(&self) -> Option<&String> {
         match self {
@@ -7154,6 +7503,7 @@ impl AbstractFeatureWithLifespanTrait for AbstractSpace {
         }
     }
 }
+
 impl AbstractCityObjectTrait for AbstractSpace {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         match self {
@@ -7478,6 +7828,7 @@ impl AbstractCityObjectTrait for AbstractSpace {
         }
     }
 }
+
 impl AbstractSpaceTrait for AbstractSpace {
     fn space_type(&self) -> Option<SpaceType> {
         match self {
@@ -8124,216 +8475,259 @@ impl AbstractSpaceTrait for AbstractSpace {
         }
     }
 }
+
 impl From<Door> for AbstractSpace {
     fn from(v: Door) -> Self {
         Self::Door(Box::new(v))
     }
 }
+
 impl From<OtherConstruction> for AbstractSpace {
     fn from(v: OtherConstruction) -> Self {
         Self::OtherConstruction(Box::new(v))
     }
 }
+
 impl From<Window> for AbstractSpace {
     fn from(v: Window) -> Self {
         Self::Window(Box::new(v))
     }
 }
+
 impl From<Bridge> for AbstractSpace {
     fn from(v: Bridge) -> Self {
         Self::Bridge(Box::new(v))
     }
 }
+
 impl From<BridgeConstructiveElement> for AbstractSpace {
     fn from(v: BridgeConstructiveElement) -> Self {
         Self::BridgeConstructiveElement(Box::new(v))
     }
 }
+
 impl From<BridgeFurniture> for AbstractSpace {
     fn from(v: BridgeFurniture) -> Self {
         Self::BridgeFurniture(Box::new(v))
     }
 }
+
 impl From<BridgeInstallation> for AbstractSpace {
     fn from(v: BridgeInstallation) -> Self {
         Self::BridgeInstallation(Box::new(v))
     }
 }
+
 impl From<BridgePart> for AbstractSpace {
     fn from(v: BridgePart) -> Self {
         Self::BridgePart(Box::new(v))
     }
 }
+
 impl From<BridgeRoom> for AbstractSpace {
     fn from(v: BridgeRoom) -> Self {
         Self::BridgeRoom(Box::new(v))
     }
 }
+
 impl From<Building> for AbstractSpace {
     fn from(v: Building) -> Self {
         Self::Building(Box::new(v))
     }
 }
+
 impl From<BuildingConstructiveElement> for AbstractSpace {
     fn from(v: BuildingConstructiveElement) -> Self {
         Self::BuildingConstructiveElement(Box::new(v))
     }
 }
+
 impl From<BuildingFurniture> for AbstractSpace {
     fn from(v: BuildingFurniture) -> Self {
         Self::BuildingFurniture(Box::new(v))
     }
 }
+
 impl From<BuildingInstallation> for AbstractSpace {
     fn from(v: BuildingInstallation) -> Self {
         Self::BuildingInstallation(Box::new(v))
     }
 }
+
 impl From<BuildingPart> for AbstractSpace {
     fn from(v: BuildingPart) -> Self {
         Self::BuildingPart(Box::new(v))
     }
 }
+
 impl From<BuildingRoom> for AbstractSpace {
     fn from(v: BuildingRoom) -> Self {
         Self::BuildingRoom(Box::new(v))
     }
 }
+
 impl From<BuildingUnit> for AbstractSpace {
     fn from(v: BuildingUnit) -> Self {
         Self::BuildingUnit(Box::new(v))
     }
 }
+
 impl From<Storey> for AbstractSpace {
     fn from(v: Storey) -> Self {
         Self::Storey(Box::new(v))
     }
 }
+
 impl From<CityFurniture> for AbstractSpace {
     fn from(v: CityFurniture) -> Self {
         Self::CityFurniture(Box::new(v))
     }
 }
+
 impl From<CityObjectGroup> for AbstractSpace {
     fn from(v: CityObjectGroup) -> Self {
         Self::CityObjectGroup(Box::new(v))
     }
 }
+
 impl From<GenericLogicalSpace> for AbstractSpace {
     fn from(v: GenericLogicalSpace) -> Self {
         Self::GenericLogicalSpace(Box::new(v))
     }
 }
+
 impl From<GenericOccupiedSpace> for AbstractSpace {
     fn from(v: GenericOccupiedSpace) -> Self {
         Self::GenericOccupiedSpace(Box::new(v))
     }
 }
+
 impl From<GenericUnoccupiedSpace> for AbstractSpace {
     fn from(v: GenericUnoccupiedSpace) -> Self {
         Self::GenericUnoccupiedSpace(Box::new(v))
     }
 }
+
 impl From<AuxiliaryTrafficSpace> for AbstractSpace {
     fn from(v: AuxiliaryTrafficSpace) -> Self {
         Self::AuxiliaryTrafficSpace(Box::new(v))
     }
 }
+
 impl From<ClearanceSpace> for AbstractSpace {
     fn from(v: ClearanceSpace) -> Self {
         Self::ClearanceSpace(Box::new(v))
     }
 }
+
 impl From<Hole> for AbstractSpace {
     fn from(v: Hole) -> Self {
         Self::Hole(Box::new(v))
     }
 }
+
 impl From<Intersection> for AbstractSpace {
     fn from(v: Intersection) -> Self {
         Self::Intersection(Box::new(v))
     }
 }
+
 impl From<Railway> for AbstractSpace {
     fn from(v: Railway) -> Self {
         Self::Railway(Box::new(v))
     }
 }
+
 impl From<Road> for AbstractSpace {
     fn from(v: Road) -> Self {
         Self::Road(Box::new(v))
     }
 }
+
 impl From<Section> for AbstractSpace {
     fn from(v: Section) -> Self {
         Self::Section(Box::new(v))
     }
 }
+
 impl From<Square> for AbstractSpace {
     fn from(v: Square) -> Self {
         Self::Square(Box::new(v))
     }
 }
+
 impl From<Track> for AbstractSpace {
     fn from(v: Track) -> Self {
         Self::Track(Box::new(v))
     }
 }
+
 impl From<TrafficSpace> for AbstractSpace {
     fn from(v: TrafficSpace) -> Self {
         Self::TrafficSpace(Box::new(v))
     }
 }
+
 impl From<Waterway> for AbstractSpace {
     fn from(v: Waterway) -> Self {
         Self::Waterway(Box::new(v))
     }
 }
+
 impl From<HollowSpace> for AbstractSpace {
     fn from(v: HollowSpace) -> Self {
         Self::HollowSpace(Box::new(v))
     }
 }
+
 impl From<Tunnel> for AbstractSpace {
     fn from(v: Tunnel) -> Self {
         Self::Tunnel(Box::new(v))
     }
 }
+
 impl From<TunnelConstructiveElement> for AbstractSpace {
     fn from(v: TunnelConstructiveElement) -> Self {
         Self::TunnelConstructiveElement(Box::new(v))
     }
 }
+
 impl From<TunnelFurniture> for AbstractSpace {
     fn from(v: TunnelFurniture) -> Self {
         Self::TunnelFurniture(Box::new(v))
     }
 }
+
 impl From<TunnelInstallation> for AbstractSpace {
     fn from(v: TunnelInstallation) -> Self {
         Self::TunnelInstallation(Box::new(v))
     }
 }
+
 impl From<TunnelPart> for AbstractSpace {
     fn from(v: TunnelPart) -> Self {
         Self::TunnelPart(Box::new(v))
     }
 }
+
 impl From<PlantCover> for AbstractSpace {
     fn from(v: PlantCover) -> Self {
         Self::PlantCover(Box::new(v))
     }
 }
+
 impl From<SolitaryVegetationObject> for AbstractSpace {
     fn from(v: SolitaryVegetationObject) -> Self {
         Self::SolitaryVegetationObject(Box::new(v))
     }
 }
+
 impl From<WaterBody> for AbstractSpace {
     fn from(v: WaterBody) -> Self {
         Self::WaterBody(Box::new(v))
     }
 }
+
 pub trait AbstractSpaceAccessors {
     fn doors(&self) -> impl Iterator<Item = &Door>;
     fn other_constructions(&self) -> impl Iterator<Item = &OtherConstruction>;
@@ -8386,6 +8780,7 @@ pub trait AbstractSpaceAccessors {
     ) -> impl Iterator<Item = &SolitaryVegetationObject>;
     fn water_bodys(&self) -> impl Iterator<Item = &WaterBody>;
 }
+
 impl AbstractSpaceAccessors for [AbstractSpace] {
     fn doors(&self) -> impl Iterator<Item = &Door> {
         self.iter()
@@ -8692,6 +9087,7 @@ impl AbstractSpaceAccessors for [AbstractSpace] {
             })
     }
 }
+
 pub trait AbstractSpaceBoundaryTrait: AbstractCityObjectTrait {}
 #[derive(Debug, Clone)]
 pub enum AbstractSpaceBoundary {
@@ -8720,11 +9116,13 @@ pub enum AbstractSpaceBoundary {
     WaterGroundSurface(Box<WaterGroundSurface>),
     WaterSurface(Box<WaterSurface>),
 }
+
 impl Default for AbstractSpaceBoundary {
     fn default() -> Self {
         Self::CeilingSurface(Box::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractSpaceBoundary {
     fn feature_id(&self) -> &ID {
         match self {
@@ -8839,6 +9237,7 @@ impl AbstractFeatureTrait for AbstractSpaceBoundary {
         }
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for AbstractSpaceBoundary {
     fn creation_date(&self) -> Option<&String> {
         match self {
@@ -8953,6 +9352,7 @@ impl AbstractFeatureWithLifespanTrait for AbstractSpaceBoundary {
         }
     }
 }
+
 impl AbstractCityObjectTrait for AbstractSpaceBoundary {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         match self {
@@ -9151,127 +9551,152 @@ impl AbstractCityObjectTrait for AbstractSpaceBoundary {
         }
     }
 }
+
 impl AbstractSpaceBoundaryTrait for AbstractSpaceBoundary {}
 impl From<CeilingSurface> for AbstractSpaceBoundary {
     fn from(v: CeilingSurface) -> Self {
         Self::CeilingSurface(Box::new(v))
     }
 }
+
 impl From<DoorSurface> for AbstractSpaceBoundary {
     fn from(v: DoorSurface) -> Self {
         Self::DoorSurface(Box::new(v))
     }
 }
+
 impl From<FloorSurface> for AbstractSpaceBoundary {
     fn from(v: FloorSurface) -> Self {
         Self::FloorSurface(Box::new(v))
     }
 }
+
 impl From<GroundSurface> for AbstractSpaceBoundary {
     fn from(v: GroundSurface) -> Self {
         Self::GroundSurface(Box::new(v))
     }
 }
+
 impl From<InteriorWallSurface> for AbstractSpaceBoundary {
     fn from(v: InteriorWallSurface) -> Self {
         Self::InteriorWallSurface(Box::new(v))
     }
 }
+
 impl From<OuterCeilingSurface> for AbstractSpaceBoundary {
     fn from(v: OuterCeilingSurface) -> Self {
         Self::OuterCeilingSurface(Box::new(v))
     }
 }
+
 impl From<OuterFloorSurface> for AbstractSpaceBoundary {
     fn from(v: OuterFloorSurface) -> Self {
         Self::OuterFloorSurface(Box::new(v))
     }
 }
+
 impl From<RoofSurface> for AbstractSpaceBoundary {
     fn from(v: RoofSurface) -> Self {
         Self::RoofSurface(Box::new(v))
     }
 }
+
 impl From<WallSurface> for AbstractSpaceBoundary {
     fn from(v: WallSurface) -> Self {
         Self::WallSurface(Box::new(v))
     }
 }
+
 impl From<WindowSurface> for AbstractSpaceBoundary {
     fn from(v: WindowSurface) -> Self {
         Self::WindowSurface(Box::new(v))
     }
 }
+
 impl From<ClosureSurface> for AbstractSpaceBoundary {
     fn from(v: ClosureSurface) -> Self {
         Self::ClosureSurface(Box::new(v))
     }
 }
+
 impl From<GenericThematicSurface> for AbstractSpaceBoundary {
     fn from(v: GenericThematicSurface) -> Self {
         Self::GenericThematicSurface(Box::new(v))
     }
 }
+
 impl From<LandUse> for AbstractSpaceBoundary {
     fn from(v: LandUse) -> Self {
         Self::LandUse(Box::new(v))
     }
 }
+
 impl From<BreaklineRelief> for AbstractSpaceBoundary {
     fn from(v: BreaklineRelief) -> Self {
         Self::BreaklineRelief(Box::new(v))
     }
 }
+
 impl From<MassPointRelief> for AbstractSpaceBoundary {
     fn from(v: MassPointRelief) -> Self {
         Self::MassPointRelief(Box::new(v))
     }
 }
+
 impl From<RasterRelief> for AbstractSpaceBoundary {
     fn from(v: RasterRelief) -> Self {
         Self::RasterRelief(Box::new(v))
     }
 }
+
 impl From<ReliefFeature> for AbstractSpaceBoundary {
     fn from(v: ReliefFeature) -> Self {
         Self::ReliefFeature(Box::new(v))
     }
 }
+
 impl From<TINRelief> for AbstractSpaceBoundary {
     fn from(v: TINRelief) -> Self {
         Self::TINRelief(Box::new(v))
     }
 }
+
 impl From<AuxiliaryTrafficArea> for AbstractSpaceBoundary {
     fn from(v: AuxiliaryTrafficArea) -> Self {
         Self::AuxiliaryTrafficArea(Box::new(v))
     }
 }
+
 impl From<HoleSurface> for AbstractSpaceBoundary {
     fn from(v: HoleSurface) -> Self {
         Self::HoleSurface(Box::new(v))
     }
 }
+
 impl From<Marking> for AbstractSpaceBoundary {
     fn from(v: Marking) -> Self {
         Self::Marking(Box::new(v))
     }
 }
+
 impl From<TrafficArea> for AbstractSpaceBoundary {
     fn from(v: TrafficArea) -> Self {
         Self::TrafficArea(Box::new(v))
     }
 }
+
 impl From<WaterGroundSurface> for AbstractSpaceBoundary {
     fn from(v: WaterGroundSurface) -> Self {
         Self::WaterGroundSurface(Box::new(v))
     }
 }
+
 impl From<WaterSurface> for AbstractSpaceBoundary {
     fn from(v: WaterSurface) -> Self {
         Self::WaterSurface(Box::new(v))
     }
 }
+
 pub trait AbstractSpaceBoundaryAccessors {
     fn ceiling_surfaces(&self) -> impl Iterator<Item = &CeilingSurface>;
     fn door_surfaces(&self) -> impl Iterator<Item = &DoorSurface>;
@@ -9298,6 +9723,7 @@ pub trait AbstractSpaceBoundaryAccessors {
     fn water_ground_surfaces(&self) -> impl Iterator<Item = &WaterGroundSurface>;
     fn water_surfaces(&self) -> impl Iterator<Item = &WaterSurface>;
 }
+
 impl AbstractSpaceBoundaryAccessors for [AbstractSpaceBoundary] {
     fn ceiling_surfaces(&self) -> impl Iterator<Item = &CeilingSurface> {
         self.iter()
@@ -9470,6 +9896,7 @@ impl AbstractSpaceBoundaryAccessors for [AbstractSpaceBoundary] {
             })
     }
 }
+
 pub trait AbstractLogicalSpaceTrait: AbstractSpaceTrait {}
 #[derive(Debug, Clone)]
 pub enum AbstractLogicalSpace {
@@ -9478,11 +9905,13 @@ pub enum AbstractLogicalSpace {
     CityObjectGroup(CityObjectGroup),
     GenericLogicalSpace(GenericLogicalSpace),
 }
+
 impl Default for AbstractLogicalSpace {
     fn default() -> Self {
         Self::BuildingUnit(Default::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractLogicalSpace {
     fn feature_id(&self) -> &ID {
         match self {
@@ -9517,6 +9946,7 @@ impl AbstractFeatureTrait for AbstractLogicalSpace {
         }
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for AbstractLogicalSpace {
     fn creation_date(&self) -> Option<&String> {
         match self {
@@ -9551,6 +9981,7 @@ impl AbstractFeatureWithLifespanTrait for AbstractLogicalSpace {
         }
     }
 }
+
 impl AbstractCityObjectTrait for AbstractLogicalSpace {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         match self {
@@ -9609,6 +10040,7 @@ impl AbstractCityObjectTrait for AbstractLogicalSpace {
         }
     }
 }
+
 impl AbstractSpaceTrait for AbstractLogicalSpace {
     fn space_type(&self) -> Option<SpaceType> {
         match self {
@@ -9723,33 +10155,39 @@ impl AbstractSpaceTrait for AbstractLogicalSpace {
         }
     }
 }
+
 impl AbstractLogicalSpaceTrait for AbstractLogicalSpace {}
 impl From<BuildingUnit> for AbstractLogicalSpace {
     fn from(v: BuildingUnit) -> Self {
         Self::BuildingUnit(v)
     }
 }
+
 impl From<Storey> for AbstractLogicalSpace {
     fn from(v: Storey) -> Self {
         Self::Storey(v)
     }
 }
+
 impl From<CityObjectGroup> for AbstractLogicalSpace {
     fn from(v: CityObjectGroup) -> Self {
         Self::CityObjectGroup(v)
     }
 }
+
 impl From<GenericLogicalSpace> for AbstractLogicalSpace {
     fn from(v: GenericLogicalSpace) -> Self {
         Self::GenericLogicalSpace(v)
     }
 }
+
 pub trait AbstractLogicalSpaceAccessors {
     fn building_units(&self) -> impl Iterator<Item = &BuildingUnit>;
     fn storeys(&self) -> impl Iterator<Item = &Storey>;
     fn city_object_groups(&self) -> impl Iterator<Item = &CityObjectGroup>;
     fn generic_logical_spaces(&self) -> impl Iterator<Item = &GenericLogicalSpace>;
 }
+
 impl AbstractLogicalSpaceAccessors for [AbstractLogicalSpace] {
     fn building_units(&self) -> impl Iterator<Item = &BuildingUnit> {
         self.iter()
@@ -9780,12 +10218,14 @@ impl AbstractLogicalSpaceAccessors for [AbstractLogicalSpace] {
             })
     }
 }
+
 pub trait AbstractPhysicalSpaceTrait: AbstractSpaceTrait {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve>;
     fn point_cloud(&self) -> Option<&AbstractPointCloud>;
     fn lod1_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve>;
     fn lod2_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve>;
 }
+
 #[derive(Debug, Clone)]
 pub enum AbstractPhysicalSpace {
     Door(Box<Door>),
@@ -9827,11 +10267,13 @@ pub enum AbstractPhysicalSpace {
     SolitaryVegetationObject(Box<SolitaryVegetationObject>),
     WaterBody(Box<WaterBody>),
 }
+
 impl Default for AbstractPhysicalSpace {
     fn default() -> Self {
         Self::Door(Box::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractPhysicalSpace {
     fn feature_id(&self) -> &ID {
         match self {
@@ -10002,6 +10444,7 @@ impl AbstractFeatureTrait for AbstractPhysicalSpace {
         }
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for AbstractPhysicalSpace {
     fn creation_date(&self) -> Option<&String> {
         match self {
@@ -10172,6 +10615,7 @@ impl AbstractFeatureWithLifespanTrait for AbstractPhysicalSpace {
         }
     }
 }
+
 impl AbstractCityObjectTrait for AbstractPhysicalSpace {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         match self {
@@ -10468,6 +10912,7 @@ impl AbstractCityObjectTrait for AbstractPhysicalSpace {
         }
     }
 }
+
 impl AbstractSpaceTrait for AbstractPhysicalSpace {
     fn space_type(&self) -> Option<SpaceType> {
         match self {
@@ -11058,6 +11503,7 @@ impl AbstractSpaceTrait for AbstractPhysicalSpace {
         }
     }
 }
+
 impl AbstractPhysicalSpaceTrait for AbstractPhysicalSpace {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         match self {
@@ -11228,196 +11674,235 @@ impl AbstractPhysicalSpaceTrait for AbstractPhysicalSpace {
         }
     }
 }
+
 impl From<Door> for AbstractPhysicalSpace {
     fn from(v: Door) -> Self {
         Self::Door(Box::new(v))
     }
 }
+
 impl From<OtherConstruction> for AbstractPhysicalSpace {
     fn from(v: OtherConstruction) -> Self {
         Self::OtherConstruction(Box::new(v))
     }
 }
+
 impl From<Window> for AbstractPhysicalSpace {
     fn from(v: Window) -> Self {
         Self::Window(Box::new(v))
     }
 }
+
 impl From<Bridge> for AbstractPhysicalSpace {
     fn from(v: Bridge) -> Self {
         Self::Bridge(Box::new(v))
     }
 }
+
 impl From<BridgeConstructiveElement> for AbstractPhysicalSpace {
     fn from(v: BridgeConstructiveElement) -> Self {
         Self::BridgeConstructiveElement(Box::new(v))
     }
 }
+
 impl From<BridgeFurniture> for AbstractPhysicalSpace {
     fn from(v: BridgeFurniture) -> Self {
         Self::BridgeFurniture(Box::new(v))
     }
 }
+
 impl From<BridgeInstallation> for AbstractPhysicalSpace {
     fn from(v: BridgeInstallation) -> Self {
         Self::BridgeInstallation(Box::new(v))
     }
 }
+
 impl From<BridgePart> for AbstractPhysicalSpace {
     fn from(v: BridgePart) -> Self {
         Self::BridgePart(Box::new(v))
     }
 }
+
 impl From<BridgeRoom> for AbstractPhysicalSpace {
     fn from(v: BridgeRoom) -> Self {
         Self::BridgeRoom(Box::new(v))
     }
 }
+
 impl From<Building> for AbstractPhysicalSpace {
     fn from(v: Building) -> Self {
         Self::Building(Box::new(v))
     }
 }
+
 impl From<BuildingConstructiveElement> for AbstractPhysicalSpace {
     fn from(v: BuildingConstructiveElement) -> Self {
         Self::BuildingConstructiveElement(Box::new(v))
     }
 }
+
 impl From<BuildingFurniture> for AbstractPhysicalSpace {
     fn from(v: BuildingFurniture) -> Self {
         Self::BuildingFurniture(Box::new(v))
     }
 }
+
 impl From<BuildingInstallation> for AbstractPhysicalSpace {
     fn from(v: BuildingInstallation) -> Self {
         Self::BuildingInstallation(Box::new(v))
     }
 }
+
 impl From<BuildingPart> for AbstractPhysicalSpace {
     fn from(v: BuildingPart) -> Self {
         Self::BuildingPart(Box::new(v))
     }
 }
+
 impl From<BuildingRoom> for AbstractPhysicalSpace {
     fn from(v: BuildingRoom) -> Self {
         Self::BuildingRoom(Box::new(v))
     }
 }
+
 impl From<CityFurniture> for AbstractPhysicalSpace {
     fn from(v: CityFurniture) -> Self {
         Self::CityFurniture(Box::new(v))
     }
 }
+
 impl From<GenericOccupiedSpace> for AbstractPhysicalSpace {
     fn from(v: GenericOccupiedSpace) -> Self {
         Self::GenericOccupiedSpace(Box::new(v))
     }
 }
+
 impl From<GenericUnoccupiedSpace> for AbstractPhysicalSpace {
     fn from(v: GenericUnoccupiedSpace) -> Self {
         Self::GenericUnoccupiedSpace(Box::new(v))
     }
 }
+
 impl From<AuxiliaryTrafficSpace> for AbstractPhysicalSpace {
     fn from(v: AuxiliaryTrafficSpace) -> Self {
         Self::AuxiliaryTrafficSpace(Box::new(v))
     }
 }
+
 impl From<ClearanceSpace> for AbstractPhysicalSpace {
     fn from(v: ClearanceSpace) -> Self {
         Self::ClearanceSpace(Box::new(v))
     }
 }
+
 impl From<Hole> for AbstractPhysicalSpace {
     fn from(v: Hole) -> Self {
         Self::Hole(Box::new(v))
     }
 }
+
 impl From<Intersection> for AbstractPhysicalSpace {
     fn from(v: Intersection) -> Self {
         Self::Intersection(Box::new(v))
     }
 }
+
 impl From<Railway> for AbstractPhysicalSpace {
     fn from(v: Railway) -> Self {
         Self::Railway(Box::new(v))
     }
 }
+
 impl From<Road> for AbstractPhysicalSpace {
     fn from(v: Road) -> Self {
         Self::Road(Box::new(v))
     }
 }
+
 impl From<Section> for AbstractPhysicalSpace {
     fn from(v: Section) -> Self {
         Self::Section(Box::new(v))
     }
 }
+
 impl From<Square> for AbstractPhysicalSpace {
     fn from(v: Square) -> Self {
         Self::Square(Box::new(v))
     }
 }
+
 impl From<Track> for AbstractPhysicalSpace {
     fn from(v: Track) -> Self {
         Self::Track(Box::new(v))
     }
 }
+
 impl From<TrafficSpace> for AbstractPhysicalSpace {
     fn from(v: TrafficSpace) -> Self {
         Self::TrafficSpace(Box::new(v))
     }
 }
+
 impl From<Waterway> for AbstractPhysicalSpace {
     fn from(v: Waterway) -> Self {
         Self::Waterway(Box::new(v))
     }
 }
+
 impl From<HollowSpace> for AbstractPhysicalSpace {
     fn from(v: HollowSpace) -> Self {
         Self::HollowSpace(Box::new(v))
     }
 }
+
 impl From<Tunnel> for AbstractPhysicalSpace {
     fn from(v: Tunnel) -> Self {
         Self::Tunnel(Box::new(v))
     }
 }
+
 impl From<TunnelConstructiveElement> for AbstractPhysicalSpace {
     fn from(v: TunnelConstructiveElement) -> Self {
         Self::TunnelConstructiveElement(Box::new(v))
     }
 }
+
 impl From<TunnelFurniture> for AbstractPhysicalSpace {
     fn from(v: TunnelFurniture) -> Self {
         Self::TunnelFurniture(Box::new(v))
     }
 }
+
 impl From<TunnelInstallation> for AbstractPhysicalSpace {
     fn from(v: TunnelInstallation) -> Self {
         Self::TunnelInstallation(Box::new(v))
     }
 }
+
 impl From<TunnelPart> for AbstractPhysicalSpace {
     fn from(v: TunnelPart) -> Self {
         Self::TunnelPart(Box::new(v))
     }
 }
+
 impl From<PlantCover> for AbstractPhysicalSpace {
     fn from(v: PlantCover) -> Self {
         Self::PlantCover(Box::new(v))
     }
 }
+
 impl From<SolitaryVegetationObject> for AbstractPhysicalSpace {
     fn from(v: SolitaryVegetationObject) -> Self {
         Self::SolitaryVegetationObject(Box::new(v))
     }
 }
+
 impl From<WaterBody> for AbstractPhysicalSpace {
     fn from(v: WaterBody) -> Self {
         Self::WaterBody(Box::new(v))
     }
 }
+
 pub trait AbstractPhysicalSpaceAccessors {
     fn doors(&self) -> impl Iterator<Item = &Door>;
     fn other_constructions(&self) -> impl Iterator<Item = &OtherConstruction>;
@@ -11466,6 +11951,7 @@ pub trait AbstractPhysicalSpaceAccessors {
     ) -> impl Iterator<Item = &SolitaryVegetationObject>;
     fn water_bodys(&self) -> impl Iterator<Item = &WaterBody>;
 }
+
 impl AbstractPhysicalSpaceAccessors for [AbstractPhysicalSpace] {
     fn doors(&self) -> impl Iterator<Item = &Door> {
         self.iter()
@@ -11744,6 +12230,7 @@ impl AbstractPhysicalSpaceAccessors for [AbstractPhysicalSpace] {
             })
     }
 }
+
 pub trait AbstractThematicSurfaceTrait: AbstractSpaceBoundaryTrait {
     fn area(&self) -> &[QualifiedArea];
     fn lod3_multi_surface(&self) -> Option<&crate::geometry::MultiSurface>;
@@ -11753,6 +12240,7 @@ pub trait AbstractThematicSurfaceTrait: AbstractSpaceBoundaryTrait {
     fn lod0_multi_surface(&self) -> Option<&crate::geometry::MultiSurface>;
     fn lod1_multi_surface(&self) -> Option<&crate::geometry::MultiSurface>;
 }
+
 #[derive(Debug, Clone)]
 pub enum AbstractThematicSurface {
     CeilingSurface(Box<CeilingSurface>),
@@ -11775,11 +12263,13 @@ pub enum AbstractThematicSurface {
     WaterGroundSurface(Box<WaterGroundSurface>),
     WaterSurface(Box<WaterSurface>),
 }
+
 impl Default for AbstractThematicSurface {
     fn default() -> Self {
         Self::CeilingSurface(Box::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractThematicSurface {
     fn feature_id(&self) -> &ID {
         match self {
@@ -11874,6 +12364,7 @@ impl AbstractFeatureTrait for AbstractThematicSurface {
         }
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for AbstractThematicSurface {
     fn creation_date(&self) -> Option<&String> {
         match self {
@@ -11968,6 +12459,7 @@ impl AbstractFeatureWithLifespanTrait for AbstractThematicSurface {
         }
     }
 }
+
 impl AbstractCityObjectTrait for AbstractThematicSurface {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         match self {
@@ -12131,6 +12623,7 @@ impl AbstractCityObjectTrait for AbstractThematicSurface {
         }
     }
 }
+
 impl AbstractSpaceBoundaryTrait for AbstractThematicSurface {}
 impl AbstractThematicSurfaceTrait for AbstractThematicSurface {
     fn area(&self) -> &[QualifiedArea] {
@@ -12295,101 +12788,121 @@ impl AbstractThematicSurfaceTrait for AbstractThematicSurface {
         }
     }
 }
+
 impl From<CeilingSurface> for AbstractThematicSurface {
     fn from(v: CeilingSurface) -> Self {
         Self::CeilingSurface(Box::new(v))
     }
 }
+
 impl From<DoorSurface> for AbstractThematicSurface {
     fn from(v: DoorSurface) -> Self {
         Self::DoorSurface(Box::new(v))
     }
 }
+
 impl From<FloorSurface> for AbstractThematicSurface {
     fn from(v: FloorSurface) -> Self {
         Self::FloorSurface(Box::new(v))
     }
 }
+
 impl From<GroundSurface> for AbstractThematicSurface {
     fn from(v: GroundSurface) -> Self {
         Self::GroundSurface(Box::new(v))
     }
 }
+
 impl From<InteriorWallSurface> for AbstractThematicSurface {
     fn from(v: InteriorWallSurface) -> Self {
         Self::InteriorWallSurface(Box::new(v))
     }
 }
+
 impl From<OuterCeilingSurface> for AbstractThematicSurface {
     fn from(v: OuterCeilingSurface) -> Self {
         Self::OuterCeilingSurface(Box::new(v))
     }
 }
+
 impl From<OuterFloorSurface> for AbstractThematicSurface {
     fn from(v: OuterFloorSurface) -> Self {
         Self::OuterFloorSurface(Box::new(v))
     }
 }
+
 impl From<RoofSurface> for AbstractThematicSurface {
     fn from(v: RoofSurface) -> Self {
         Self::RoofSurface(Box::new(v))
     }
 }
+
 impl From<WallSurface> for AbstractThematicSurface {
     fn from(v: WallSurface) -> Self {
         Self::WallSurface(Box::new(v))
     }
 }
+
 impl From<WindowSurface> for AbstractThematicSurface {
     fn from(v: WindowSurface) -> Self {
         Self::WindowSurface(Box::new(v))
     }
 }
+
 impl From<ClosureSurface> for AbstractThematicSurface {
     fn from(v: ClosureSurface) -> Self {
         Self::ClosureSurface(Box::new(v))
     }
 }
+
 impl From<GenericThematicSurface> for AbstractThematicSurface {
     fn from(v: GenericThematicSurface) -> Self {
         Self::GenericThematicSurface(Box::new(v))
     }
 }
+
 impl From<LandUse> for AbstractThematicSurface {
     fn from(v: LandUse) -> Self {
         Self::LandUse(Box::new(v))
     }
 }
+
 impl From<AuxiliaryTrafficArea> for AbstractThematicSurface {
     fn from(v: AuxiliaryTrafficArea) -> Self {
         Self::AuxiliaryTrafficArea(Box::new(v))
     }
 }
+
 impl From<HoleSurface> for AbstractThematicSurface {
     fn from(v: HoleSurface) -> Self {
         Self::HoleSurface(Box::new(v))
     }
 }
+
 impl From<Marking> for AbstractThematicSurface {
     fn from(v: Marking) -> Self {
         Self::Marking(Box::new(v))
     }
 }
+
 impl From<TrafficArea> for AbstractThematicSurface {
     fn from(v: TrafficArea) -> Self {
         Self::TrafficArea(Box::new(v))
     }
 }
+
 impl From<WaterGroundSurface> for AbstractThematicSurface {
     fn from(v: WaterGroundSurface) -> Self {
         Self::WaterGroundSurface(Box::new(v))
     }
 }
+
 impl From<WaterSurface> for AbstractThematicSurface {
     fn from(v: WaterSurface) -> Self {
         Self::WaterSurface(Box::new(v))
     }
 }
+
 pub trait AbstractThematicSurfaceAccessors {
     fn ceiling_surfaces(&self) -> impl Iterator<Item = &CeilingSurface>;
     fn door_surfaces(&self) -> impl Iterator<Item = &DoorSurface>;
@@ -12411,6 +12924,7 @@ pub trait AbstractThematicSurfaceAccessors {
     fn water_ground_surfaces(&self) -> impl Iterator<Item = &WaterGroundSurface>;
     fn water_surfaces(&self) -> impl Iterator<Item = &WaterSurface>;
 }
+
 impl AbstractThematicSurfaceAccessors for [AbstractThematicSurface] {
     fn ceiling_surfaces(&self) -> impl Iterator<Item = &CeilingSurface> {
         self.iter()
@@ -12548,11 +13062,13 @@ impl AbstractThematicSurfaceAccessors for [AbstractThematicSurface] {
             })
     }
 }
+
 pub trait AbstractOccupiedSpaceTrait: AbstractPhysicalSpaceTrait {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry>;
     fn lod2_implicit_representation(&self) -> Option<&ImplicitGeometry>;
     fn lod1_implicit_representation(&self) -> Option<&ImplicitGeometry>;
 }
+
 #[derive(Debug, Clone)]
 pub enum AbstractOccupiedSpace {
     Door(Box<Door>),
@@ -12579,11 +13095,13 @@ pub enum AbstractOccupiedSpace {
     SolitaryVegetationObject(Box<SolitaryVegetationObject>),
     WaterBody(Box<WaterBody>),
 }
+
 impl Default for AbstractOccupiedSpace {
     fn default() -> Self {
         Self::Door(Box::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractOccupiedSpace {
     fn feature_id(&self) -> &ID {
         match self {
@@ -12694,6 +13212,7 @@ impl AbstractFeatureTrait for AbstractOccupiedSpace {
         }
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for AbstractOccupiedSpace {
     fn creation_date(&self) -> Option<&String> {
         match self {
@@ -12804,6 +13323,7 @@ impl AbstractFeatureWithLifespanTrait for AbstractOccupiedSpace {
         }
     }
 }
+
 impl AbstractCityObjectTrait for AbstractOccupiedSpace {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         match self {
@@ -12995,6 +13515,7 @@ impl AbstractCityObjectTrait for AbstractOccupiedSpace {
         }
     }
 }
+
 impl AbstractSpaceTrait for AbstractOccupiedSpace {
     fn space_type(&self) -> Option<SpaceType> {
         match self {
@@ -13375,6 +13896,7 @@ impl AbstractSpaceTrait for AbstractOccupiedSpace {
         }
     }
 }
+
 impl AbstractPhysicalSpaceTrait for AbstractOccupiedSpace {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         match self {
@@ -13485,6 +14007,7 @@ impl AbstractPhysicalSpaceTrait for AbstractOccupiedSpace {
         }
     }
 }
+
 impl AbstractOccupiedSpaceTrait for AbstractOccupiedSpace {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         match self {
@@ -13568,121 +14091,145 @@ impl AbstractOccupiedSpaceTrait for AbstractOccupiedSpace {
         }
     }
 }
+
 impl From<Door> for AbstractOccupiedSpace {
     fn from(v: Door) -> Self {
         Self::Door(Box::new(v))
     }
 }
+
 impl From<OtherConstruction> for AbstractOccupiedSpace {
     fn from(v: OtherConstruction) -> Self {
         Self::OtherConstruction(Box::new(v))
     }
 }
+
 impl From<Window> for AbstractOccupiedSpace {
     fn from(v: Window) -> Self {
         Self::Window(Box::new(v))
     }
 }
+
 impl From<Bridge> for AbstractOccupiedSpace {
     fn from(v: Bridge) -> Self {
         Self::Bridge(Box::new(v))
     }
 }
+
 impl From<BridgeConstructiveElement> for AbstractOccupiedSpace {
     fn from(v: BridgeConstructiveElement) -> Self {
         Self::BridgeConstructiveElement(Box::new(v))
     }
 }
+
 impl From<BridgeFurniture> for AbstractOccupiedSpace {
     fn from(v: BridgeFurniture) -> Self {
         Self::BridgeFurniture(Box::new(v))
     }
 }
+
 impl From<BridgeInstallation> for AbstractOccupiedSpace {
     fn from(v: BridgeInstallation) -> Self {
         Self::BridgeInstallation(Box::new(v))
     }
 }
+
 impl From<BridgePart> for AbstractOccupiedSpace {
     fn from(v: BridgePart) -> Self {
         Self::BridgePart(Box::new(v))
     }
 }
+
 impl From<Building> for AbstractOccupiedSpace {
     fn from(v: Building) -> Self {
         Self::Building(Box::new(v))
     }
 }
+
 impl From<BuildingConstructiveElement> for AbstractOccupiedSpace {
     fn from(v: BuildingConstructiveElement) -> Self {
         Self::BuildingConstructiveElement(Box::new(v))
     }
 }
+
 impl From<BuildingFurniture> for AbstractOccupiedSpace {
     fn from(v: BuildingFurniture) -> Self {
         Self::BuildingFurniture(Box::new(v))
     }
 }
+
 impl From<BuildingInstallation> for AbstractOccupiedSpace {
     fn from(v: BuildingInstallation) -> Self {
         Self::BuildingInstallation(Box::new(v))
     }
 }
+
 impl From<BuildingPart> for AbstractOccupiedSpace {
     fn from(v: BuildingPart) -> Self {
         Self::BuildingPart(Box::new(v))
     }
 }
+
 impl From<CityFurniture> for AbstractOccupiedSpace {
     fn from(v: CityFurniture) -> Self {
         Self::CityFurniture(Box::new(v))
     }
 }
+
 impl From<GenericOccupiedSpace> for AbstractOccupiedSpace {
     fn from(v: GenericOccupiedSpace) -> Self {
         Self::GenericOccupiedSpace(Box::new(v))
     }
 }
+
 impl From<Tunnel> for AbstractOccupiedSpace {
     fn from(v: Tunnel) -> Self {
         Self::Tunnel(Box::new(v))
     }
 }
+
 impl From<TunnelConstructiveElement> for AbstractOccupiedSpace {
     fn from(v: TunnelConstructiveElement) -> Self {
         Self::TunnelConstructiveElement(Box::new(v))
     }
 }
+
 impl From<TunnelFurniture> for AbstractOccupiedSpace {
     fn from(v: TunnelFurniture) -> Self {
         Self::TunnelFurniture(Box::new(v))
     }
 }
+
 impl From<TunnelInstallation> for AbstractOccupiedSpace {
     fn from(v: TunnelInstallation) -> Self {
         Self::TunnelInstallation(Box::new(v))
     }
 }
+
 impl From<TunnelPart> for AbstractOccupiedSpace {
     fn from(v: TunnelPart) -> Self {
         Self::TunnelPart(Box::new(v))
     }
 }
+
 impl From<PlantCover> for AbstractOccupiedSpace {
     fn from(v: PlantCover) -> Self {
         Self::PlantCover(Box::new(v))
     }
 }
+
 impl From<SolitaryVegetationObject> for AbstractOccupiedSpace {
     fn from(v: SolitaryVegetationObject) -> Self {
         Self::SolitaryVegetationObject(Box::new(v))
     }
 }
+
 impl From<WaterBody> for AbstractOccupiedSpace {
     fn from(v: WaterBody) -> Self {
         Self::WaterBody(Box::new(v))
     }
 }
+
 pub trait AbstractOccupiedSpaceAccessors {
     fn doors(&self) -> impl Iterator<Item = &Door>;
     fn other_constructions(&self) -> impl Iterator<Item = &OtherConstruction>;
@@ -13716,6 +14263,7 @@ pub trait AbstractOccupiedSpaceAccessors {
     ) -> impl Iterator<Item = &SolitaryVegetationObject>;
     fn water_bodys(&self) -> impl Iterator<Item = &WaterBody>;
 }
+
 impl AbstractOccupiedSpaceAccessors for [AbstractOccupiedSpace] {
     fn doors(&self) -> impl Iterator<Item = &Door> {
         self.iter()
@@ -13887,6 +14435,7 @@ impl AbstractOccupiedSpaceAccessors for [AbstractOccupiedSpace] {
             })
     }
 }
+
 pub trait AbstractUnoccupiedSpaceTrait: AbstractPhysicalSpaceTrait {}
 #[derive(Debug, Clone)]
 pub enum AbstractUnoccupiedSpace {
@@ -13906,11 +14455,13 @@ pub enum AbstractUnoccupiedSpace {
     Waterway(Box<Waterway>),
     HollowSpace(Box<HollowSpace>),
 }
+
 impl Default for AbstractUnoccupiedSpace {
     fn default() -> Self {
         Self::BridgeRoom(Box::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractUnoccupiedSpace {
     fn feature_id(&self) -> &ID {
         match self {
@@ -13989,6 +14540,7 @@ impl AbstractFeatureTrait for AbstractUnoccupiedSpace {
         }
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for AbstractUnoccupiedSpace {
     fn creation_date(&self) -> Option<&String> {
         match self {
@@ -14067,6 +14619,7 @@ impl AbstractFeatureWithLifespanTrait for AbstractUnoccupiedSpace {
         }
     }
 }
+
 impl AbstractCityObjectTrait for AbstractUnoccupiedSpace {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         match self {
@@ -14202,6 +14755,7 @@ impl AbstractCityObjectTrait for AbstractUnoccupiedSpace {
         }
     }
 }
+
 impl AbstractSpaceTrait for AbstractUnoccupiedSpace {
     fn space_type(&self) -> Option<SpaceType> {
         match self {
@@ -14470,6 +15024,7 @@ impl AbstractSpaceTrait for AbstractUnoccupiedSpace {
         }
     }
 }
+
 impl AbstractPhysicalSpaceTrait for AbstractUnoccupiedSpace {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         match self {
@@ -14548,82 +15103,98 @@ impl AbstractPhysicalSpaceTrait for AbstractUnoccupiedSpace {
         }
     }
 }
+
 impl AbstractUnoccupiedSpaceTrait for AbstractUnoccupiedSpace {}
 impl From<BridgeRoom> for AbstractUnoccupiedSpace {
     fn from(v: BridgeRoom) -> Self {
         Self::BridgeRoom(Box::new(v))
     }
 }
+
 impl From<BuildingRoom> for AbstractUnoccupiedSpace {
     fn from(v: BuildingRoom) -> Self {
         Self::BuildingRoom(Box::new(v))
     }
 }
+
 impl From<GenericUnoccupiedSpace> for AbstractUnoccupiedSpace {
     fn from(v: GenericUnoccupiedSpace) -> Self {
         Self::GenericUnoccupiedSpace(Box::new(v))
     }
 }
+
 impl From<AuxiliaryTrafficSpace> for AbstractUnoccupiedSpace {
     fn from(v: AuxiliaryTrafficSpace) -> Self {
         Self::AuxiliaryTrafficSpace(Box::new(v))
     }
 }
+
 impl From<ClearanceSpace> for AbstractUnoccupiedSpace {
     fn from(v: ClearanceSpace) -> Self {
         Self::ClearanceSpace(Box::new(v))
     }
 }
+
 impl From<Hole> for AbstractUnoccupiedSpace {
     fn from(v: Hole) -> Self {
         Self::Hole(Box::new(v))
     }
 }
+
 impl From<Intersection> for AbstractUnoccupiedSpace {
     fn from(v: Intersection) -> Self {
         Self::Intersection(Box::new(v))
     }
 }
+
 impl From<Railway> for AbstractUnoccupiedSpace {
     fn from(v: Railway) -> Self {
         Self::Railway(Box::new(v))
     }
 }
+
 impl From<Road> for AbstractUnoccupiedSpace {
     fn from(v: Road) -> Self {
         Self::Road(Box::new(v))
     }
 }
+
 impl From<Section> for AbstractUnoccupiedSpace {
     fn from(v: Section) -> Self {
         Self::Section(Box::new(v))
     }
 }
+
 impl From<Square> for AbstractUnoccupiedSpace {
     fn from(v: Square) -> Self {
         Self::Square(Box::new(v))
     }
 }
+
 impl From<Track> for AbstractUnoccupiedSpace {
     fn from(v: Track) -> Self {
         Self::Track(Box::new(v))
     }
 }
+
 impl From<TrafficSpace> for AbstractUnoccupiedSpace {
     fn from(v: TrafficSpace) -> Self {
         Self::TrafficSpace(Box::new(v))
     }
 }
+
 impl From<Waterway> for AbstractUnoccupiedSpace {
     fn from(v: Waterway) -> Self {
         Self::Waterway(Box::new(v))
     }
 }
+
 impl From<HollowSpace> for AbstractUnoccupiedSpace {
     fn from(v: HollowSpace) -> Self {
         Self::HollowSpace(Box::new(v))
     }
 }
+
 pub trait AbstractUnoccupiedSpaceAccessors {
     fn bridge_rooms(&self) -> impl Iterator<Item = &BridgeRoom>;
     fn building_rooms(&self) -> impl Iterator<Item = &BuildingRoom>;
@@ -14641,6 +15212,7 @@ pub trait AbstractUnoccupiedSpaceAccessors {
     fn waterways(&self) -> impl Iterator<Item = &Waterway>;
     fn hollow_spaces(&self) -> impl Iterator<Item = &HollowSpace>;
 }
+
 impl AbstractUnoccupiedSpaceAccessors for [AbstractUnoccupiedSpace] {
     fn bridge_rooms(&self) -> impl Iterator<Item = &BridgeRoom> {
         self.iter()
@@ -14750,6 +15322,7 @@ impl AbstractUnoccupiedSpaceAccessors for [AbstractUnoccupiedSpace] {
             })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct ClosureSurface {
     pub feature_id: ID,
@@ -14775,6 +15348,7 @@ pub struct ClosureSurface {
     pub lod0_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod1_multi_surface: Option<crate::geometry::MultiSurface>,
 }
+
 impl AbstractFeatureTrait for ClosureSurface {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -14789,6 +15363,7 @@ impl AbstractFeatureTrait for ClosureSurface {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for ClosureSurface {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -14803,6 +15378,7 @@ impl AbstractFeatureWithLifespanTrait for ClosureSurface {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for ClosureSurface {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -14826,6 +15402,7 @@ impl AbstractCityObjectTrait for ClosureSurface {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceBoundaryTrait for ClosureSurface {}
 impl AbstractThematicSurfaceTrait for ClosureSurface {
     fn area(&self) -> &[QualifiedArea] {
@@ -14850,6 +15427,7 @@ impl AbstractThematicSurfaceTrait for ClosureSurface {
         self.lod1_multi_surface.as_ref()
     }
 }
+
 impl ClosureSurface {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -15089,6 +15667,7 @@ impl ClosureSurface {
         })
     }
 }
+
 impl crate::from_gml::FromGml for ClosureSurface {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,

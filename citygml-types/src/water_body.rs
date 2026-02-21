@@ -10,6 +10,7 @@ impl crate::from_gml::FromGml for WaterBodyClassValue {
         Ok(WaterBodyClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct WaterBodyFunctionValue(pub String);
 impl crate::from_gml::FromGml for WaterBodyFunctionValue {
@@ -19,6 +20,7 @@ impl crate::from_gml::FromGml for WaterBodyFunctionValue {
         Ok(WaterBodyFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct WaterBodyUsageValue(pub String);
 impl crate::from_gml::FromGml for WaterBodyUsageValue {
@@ -28,6 +30,7 @@ impl crate::from_gml::FromGml for WaterBodyUsageValue {
         Ok(WaterBodyUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct WaterLevelValue(pub String);
 impl crate::from_gml::FromGml for WaterLevelValue {
@@ -37,17 +40,20 @@ impl crate::from_gml::FromGml for WaterLevelValue {
         Ok(WaterLevelValue(reader.read_text()?))
     }
 }
+
 pub trait AbstractWaterBoundarySurfaceTrait: AbstractThematicSurfaceTrait {}
 #[derive(Debug, Clone)]
 pub enum AbstractWaterBoundarySurface {
     WaterGroundSurface(WaterGroundSurface),
     WaterSurface(WaterSurface),
 }
+
 impl Default for AbstractWaterBoundarySurface {
     fn default() -> Self {
         Self::WaterGroundSurface(Default::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractWaterBoundarySurface {
     fn feature_id(&self) -> &ID {
         match self {
@@ -74,6 +80,7 @@ impl AbstractFeatureTrait for AbstractWaterBoundarySurface {
         }
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for AbstractWaterBoundarySurface {
     fn creation_date(&self) -> Option<&String> {
         match self {
@@ -100,6 +107,7 @@ impl AbstractFeatureWithLifespanTrait for AbstractWaterBoundarySurface {
         }
     }
 }
+
 impl AbstractCityObjectTrait for AbstractWaterBoundarySurface {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         match self {
@@ -144,6 +152,7 @@ impl AbstractCityObjectTrait for AbstractWaterBoundarySurface {
         }
     }
 }
+
 impl AbstractSpaceBoundaryTrait for AbstractWaterBoundarySurface {}
 impl AbstractThematicSurfaceTrait for AbstractWaterBoundarySurface {
     fn area(&self) -> &[QualifiedArea] {
@@ -189,21 +198,25 @@ impl AbstractThematicSurfaceTrait for AbstractWaterBoundarySurface {
         }
     }
 }
+
 impl AbstractWaterBoundarySurfaceTrait for AbstractWaterBoundarySurface {}
 impl From<WaterGroundSurface> for AbstractWaterBoundarySurface {
     fn from(v: WaterGroundSurface) -> Self {
         Self::WaterGroundSurface(v)
     }
 }
+
 impl From<WaterSurface> for AbstractWaterBoundarySurface {
     fn from(v: WaterSurface) -> Self {
         Self::WaterSurface(v)
     }
 }
+
 pub trait AbstractWaterBoundarySurfaceAccessors {
     fn water_ground_surfaces(&self) -> impl Iterator<Item = &WaterGroundSurface>;
     fn water_surfaces(&self) -> impl Iterator<Item = &WaterSurface>;
 }
+
 impl AbstractWaterBoundarySurfaceAccessors for [AbstractWaterBoundarySurface] {
     fn water_ground_surfaces(&self) -> impl Iterator<Item = &WaterGroundSurface> {
         self.iter()
@@ -220,6 +233,7 @@ impl AbstractWaterBoundarySurfaceAccessors for [AbstractWaterBoundarySurface] {
             })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct WaterBody {
     pub feature_id: ID,
@@ -262,6 +276,7 @@ pub struct WaterBody {
     pub function: Vec<WaterBodyFunctionValue>,
     pub usage: Vec<WaterBodyUsageValue>,
 }
+
 impl AbstractFeatureTrait for WaterBody {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -276,6 +291,7 @@ impl AbstractFeatureTrait for WaterBody {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for WaterBody {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -290,6 +306,7 @@ impl AbstractFeatureWithLifespanTrait for WaterBody {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for WaterBody {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -313,6 +330,7 @@ impl AbstractCityObjectTrait for WaterBody {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for WaterBody {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -357,6 +375,7 @@ impl AbstractSpaceTrait for WaterBody {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for WaterBody {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -371,6 +390,7 @@ impl AbstractPhysicalSpaceTrait for WaterBody {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractOccupiedSpaceTrait for WaterBody {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
@@ -382,6 +402,7 @@ impl AbstractOccupiedSpaceTrait for WaterBody {
         self.lod1_implicit_representation.as_ref()
     }
 }
+
 impl WaterBody {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -847,6 +868,7 @@ impl WaterBody {
         })
     }
 }
+
 impl crate::from_gml::FromGml for WaterBody {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -859,6 +881,7 @@ impl crate::from_gml::FromGml for WaterBody {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct WaterGroundSurface {
     pub feature_id: ID,
@@ -884,6 +907,7 @@ pub struct WaterGroundSurface {
     pub lod0_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod1_multi_surface: Option<crate::geometry::MultiSurface>,
 }
+
 impl AbstractFeatureTrait for WaterGroundSurface {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -898,6 +922,7 @@ impl AbstractFeatureTrait for WaterGroundSurface {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for WaterGroundSurface {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -912,6 +937,7 @@ impl AbstractFeatureWithLifespanTrait for WaterGroundSurface {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for WaterGroundSurface {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -935,6 +961,7 @@ impl AbstractCityObjectTrait for WaterGroundSurface {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceBoundaryTrait for WaterGroundSurface {}
 impl AbstractThematicSurfaceTrait for WaterGroundSurface {
     fn area(&self) -> &[QualifiedArea] {
@@ -959,6 +986,7 @@ impl AbstractThematicSurfaceTrait for WaterGroundSurface {
         self.lod1_multi_surface.as_ref()
     }
 }
+
 impl AbstractWaterBoundarySurfaceTrait for WaterGroundSurface {}
 impl WaterGroundSurface {
     pub fn from_gml_with_info(
@@ -1199,6 +1227,7 @@ impl WaterGroundSurface {
         })
     }
 }
+
 impl crate::from_gml::FromGml for WaterGroundSurface {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1211,6 +1240,7 @@ impl crate::from_gml::FromGml for WaterGroundSurface {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct WaterSurface {
     pub feature_id: ID,
@@ -1237,6 +1267,7 @@ pub struct WaterSurface {
     pub lod1_multi_surface: Option<crate::geometry::MultiSurface>,
     pub water_level: Option<WaterLevelValue>,
 }
+
 impl AbstractFeatureTrait for WaterSurface {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -1251,6 +1282,7 @@ impl AbstractFeatureTrait for WaterSurface {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for WaterSurface {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -1265,6 +1297,7 @@ impl AbstractFeatureWithLifespanTrait for WaterSurface {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for WaterSurface {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -1288,6 +1321,7 @@ impl AbstractCityObjectTrait for WaterSurface {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceBoundaryTrait for WaterSurface {}
 impl AbstractThematicSurfaceTrait for WaterSurface {
     fn area(&self) -> &[QualifiedArea] {
@@ -1312,6 +1346,7 @@ impl AbstractThematicSurfaceTrait for WaterSurface {
         self.lod1_multi_surface.as_ref()
     }
 }
+
 impl AbstractWaterBoundarySurfaceTrait for WaterSurface {}
 impl WaterSurface {
     pub fn from_gml_with_info(
@@ -1557,6 +1592,7 @@ impl WaterSurface {
         })
     }
 }
+
 impl crate::from_gml::FromGml for WaterSurface {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,

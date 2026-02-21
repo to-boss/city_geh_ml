@@ -13,6 +13,7 @@ pub enum TimeseriesTypeValue {
     ImplicitGeometry,
     Appearance,
 }
+
 impl TimeseriesTypeValue {
     pub fn from_gml_text(text: &str) -> Result<Self, crate::error::ReaderError> {
         match text.trim() {
@@ -34,6 +35,7 @@ impl TimeseriesTypeValue {
         }
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct SensorConnection {
     pub connection_type: SensorConnectionTypeValue,
@@ -51,6 +53,7 @@ pub struct SensorConnection {
     pub link_to_sensor_description: Option<String>,
     pub sensor_location: Option<AbstractCityObject>,
 }
+
 impl crate::from_gml::FromGml for SensorConnection {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -150,12 +153,14 @@ impl crate::from_gml::FromGml for SensorConnection {
         })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct TimeseriesComponent {
     pub repetitions: i64,
     pub additional_gap: Option<String>,
     pub timeseries: Option<AbstractTimeseries>,
 }
+
 impl crate::from_gml::FromGml for TimeseriesComponent {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -196,6 +201,7 @@ impl crate::from_gml::FromGml for TimeseriesComponent {
         })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct TimeValuePair {
     pub timestamp: String,
@@ -208,6 +214,7 @@ pub struct TimeValuePair {
     pub implicit_geometry_value: Option<ImplicitGeometry>,
     pub appearance_value: Option<AbstractAppearance>,
 }
+
 impl crate::from_gml::FromGml for TimeValuePair {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -290,6 +297,7 @@ impl crate::from_gml::FromGml for TimeValuePair {
         })
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct AuthenticationTypeValue(pub String);
 impl crate::from_gml::FromGml for AuthenticationTypeValue {
@@ -299,6 +307,7 @@ impl crate::from_gml::FromGml for AuthenticationTypeValue {
         Ok(AuthenticationTypeValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct SensorConnectionTypeValue(pub String);
 impl crate::from_gml::FromGml for SensorConnectionTypeValue {
@@ -308,6 +317,7 @@ impl crate::from_gml::FromGml for SensorConnectionTypeValue {
         Ok(SensorConnectionTypeValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct StandardFileTypeValue(pub String);
 impl crate::from_gml::FromGml for StandardFileTypeValue {
@@ -317,6 +327,7 @@ impl crate::from_gml::FromGml for StandardFileTypeValue {
         Ok(StandardFileTypeValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct TabulatedFileTypeValue(pub String);
 impl crate::from_gml::FromGml for TabulatedFileTypeValue {
@@ -326,10 +337,12 @@ impl crate::from_gml::FromGml for TabulatedFileTypeValue {
         Ok(TabulatedFileTypeValue(reader.read_text()?))
     }
 }
+
 pub trait AbstractTimeseriesTrait: AbstractFeatureTrait {
     fn first_timestamp(&self) -> Option<&String>;
     fn last_timestamp(&self) -> Option<&String>;
 }
+
 #[derive(Debug, Clone)]
 pub enum AbstractTimeseries {
     CompositeTimeseries(CompositeTimeseries),
@@ -337,11 +350,13 @@ pub enum AbstractTimeseries {
     StandardFileTimeseries(StandardFileTimeseries),
     TabulatedFileTimeseries(TabulatedFileTimeseries),
 }
+
 impl Default for AbstractTimeseries {
     fn default() -> Self {
         Self::CompositeTimeseries(Default::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractTimeseries {
     fn feature_id(&self) -> &ID {
         match self {
@@ -376,6 +391,7 @@ impl AbstractFeatureTrait for AbstractTimeseries {
         }
     }
 }
+
 impl AbstractTimeseriesTrait for AbstractTimeseries {
     fn first_timestamp(&self) -> Option<&String> {
         match self {
@@ -394,26 +410,31 @@ impl AbstractTimeseriesTrait for AbstractTimeseries {
         }
     }
 }
+
 impl From<CompositeTimeseries> for AbstractTimeseries {
     fn from(v: CompositeTimeseries) -> Self {
         Self::CompositeTimeseries(v)
     }
 }
+
 impl From<GenericTimeseries> for AbstractTimeseries {
     fn from(v: GenericTimeseries) -> Self {
         Self::GenericTimeseries(v)
     }
 }
+
 impl From<StandardFileTimeseries> for AbstractTimeseries {
     fn from(v: StandardFileTimeseries) -> Self {
         Self::StandardFileTimeseries(v)
     }
 }
+
 impl From<TabulatedFileTimeseries> for AbstractTimeseries {
     fn from(v: TabulatedFileTimeseries) -> Self {
         Self::TabulatedFileTimeseries(v)
     }
 }
+
 pub trait AbstractTimeseriesAccessors {
     fn composite_timeseriess(&self) -> impl Iterator<Item = &CompositeTimeseries>;
     fn generic_timeseriess(&self) -> impl Iterator<Item = &GenericTimeseries>;
@@ -422,6 +443,7 @@ pub trait AbstractTimeseriesAccessors {
         &self,
     ) -> impl Iterator<Item = &TabulatedFileTimeseries>;
 }
+
 impl AbstractTimeseriesAccessors for [AbstractTimeseries] {
     fn composite_timeseriess(&self) -> impl Iterator<Item = &CompositeTimeseries> {
         self.iter()
@@ -456,21 +478,25 @@ impl AbstractTimeseriesAccessors for [AbstractTimeseries] {
             })
     }
 }
+
 pub trait AbstractAtomicTimeseriesTrait: AbstractTimeseriesTrait {
     fn observation_property(&self) -> &String;
     fn uom(&self) -> Option<&String>;
 }
+
 #[derive(Debug, Clone)]
 pub enum AbstractAtomicTimeseries {
     GenericTimeseries(GenericTimeseries),
     StandardFileTimeseries(StandardFileTimeseries),
     TabulatedFileTimeseries(TabulatedFileTimeseries),
 }
+
 impl Default for AbstractAtomicTimeseries {
     fn default() -> Self {
         Self::GenericTimeseries(Default::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractAtomicTimeseries {
     fn feature_id(&self) -> &ID {
         match self {
@@ -501,6 +527,7 @@ impl AbstractFeatureTrait for AbstractAtomicTimeseries {
         }
     }
 }
+
 impl AbstractTimeseriesTrait for AbstractAtomicTimeseries {
     fn first_timestamp(&self) -> Option<&String> {
         match self {
@@ -517,6 +544,7 @@ impl AbstractTimeseriesTrait for AbstractAtomicTimeseries {
         }
     }
 }
+
 impl AbstractAtomicTimeseriesTrait for AbstractAtomicTimeseries {
     fn observation_property(&self) -> &String {
         match self {
@@ -533,21 +561,25 @@ impl AbstractAtomicTimeseriesTrait for AbstractAtomicTimeseries {
         }
     }
 }
+
 impl From<GenericTimeseries> for AbstractAtomicTimeseries {
     fn from(v: GenericTimeseries) -> Self {
         Self::GenericTimeseries(v)
     }
 }
+
 impl From<StandardFileTimeseries> for AbstractAtomicTimeseries {
     fn from(v: StandardFileTimeseries) -> Self {
         Self::StandardFileTimeseries(v)
     }
 }
+
 impl From<TabulatedFileTimeseries> for AbstractAtomicTimeseries {
     fn from(v: TabulatedFileTimeseries) -> Self {
         Self::TabulatedFileTimeseries(v)
     }
 }
+
 pub trait AbstractAtomicTimeseriesAccessors {
     fn generic_timeseriess(&self) -> impl Iterator<Item = &GenericTimeseries>;
     fn standard_file_timeseriess(&self) -> impl Iterator<Item = &StandardFileTimeseries>;
@@ -555,6 +587,7 @@ pub trait AbstractAtomicTimeseriesAccessors {
         &self,
     ) -> impl Iterator<Item = &TabulatedFileTimeseries>;
 }
+
 impl AbstractAtomicTimeseriesAccessors for [AbstractAtomicTimeseries] {
     fn generic_timeseriess(&self) -> impl Iterator<Item = &GenericTimeseries> {
         self.iter()
@@ -582,6 +615,7 @@ impl AbstractAtomicTimeseriesAccessors for [AbstractAtomicTimeseries] {
             })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct CompositeTimeseries {
     pub feature_id: ID,
@@ -592,6 +626,7 @@ pub struct CompositeTimeseries {
     pub last_timestamp: Option<String>,
     pub component: Vec<TimeseriesComponent>,
 }
+
 impl AbstractFeatureTrait for CompositeTimeseries {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -606,6 +641,7 @@ impl AbstractFeatureTrait for CompositeTimeseries {
         self.description.as_ref()
     }
 }
+
 impl AbstractTimeseriesTrait for CompositeTimeseries {
     fn first_timestamp(&self) -> Option<&String> {
         self.first_timestamp.as_ref()
@@ -614,6 +650,7 @@ impl AbstractTimeseriesTrait for CompositeTimeseries {
         self.last_timestamp.as_ref()
     }
 }
+
 impl CompositeTimeseries {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -670,6 +707,7 @@ impl CompositeTimeseries {
         })
     }
 }
+
 impl crate::from_gml::FromGml for CompositeTimeseries {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -682,6 +720,7 @@ impl crate::from_gml::FromGml for CompositeTimeseries {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct GenericTimeseries {
     pub feature_id: ID,
@@ -695,6 +734,7 @@ pub struct GenericTimeseries {
     pub value_type: TimeseriesTypeValue,
     pub time_value_pair: Vec<TimeValuePair>,
 }
+
 impl AbstractFeatureTrait for GenericTimeseries {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -709,6 +749,7 @@ impl AbstractFeatureTrait for GenericTimeseries {
         self.description.as_ref()
     }
 }
+
 impl AbstractTimeseriesTrait for GenericTimeseries {
     fn first_timestamp(&self) -> Option<&String> {
         self.first_timestamp.as_ref()
@@ -717,6 +758,7 @@ impl AbstractTimeseriesTrait for GenericTimeseries {
         self.last_timestamp.as_ref()
     }
 }
+
 impl AbstractAtomicTimeseriesTrait for GenericTimeseries {
     fn observation_property(&self) -> &String {
         &self.observation_property
@@ -725,6 +767,7 @@ impl AbstractAtomicTimeseriesTrait for GenericTimeseries {
         self.uom.as_ref()
     }
 }
+
 impl GenericTimeseries {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -796,6 +839,7 @@ impl GenericTimeseries {
         })
     }
 }
+
 impl crate::from_gml::FromGml for GenericTimeseries {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -808,6 +852,7 @@ impl crate::from_gml::FromGml for GenericTimeseries {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct StandardFileTimeseries {
     pub feature_id: ID,
@@ -822,6 +867,7 @@ pub struct StandardFileTimeseries {
     pub file_type: StandardFileTypeValue,
     pub mime_type: Option<MimeTypeValue>,
 }
+
 impl AbstractFeatureTrait for StandardFileTimeseries {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -836,6 +882,7 @@ impl AbstractFeatureTrait for StandardFileTimeseries {
         self.description.as_ref()
     }
 }
+
 impl AbstractTimeseriesTrait for StandardFileTimeseries {
     fn first_timestamp(&self) -> Option<&String> {
         self.first_timestamp.as_ref()
@@ -844,6 +891,7 @@ impl AbstractTimeseriesTrait for StandardFileTimeseries {
         self.last_timestamp.as_ref()
     }
 }
+
 impl AbstractAtomicTimeseriesTrait for StandardFileTimeseries {
     fn observation_property(&self) -> &String {
         &self.observation_property
@@ -852,6 +900,7 @@ impl AbstractAtomicTimeseriesTrait for StandardFileTimeseries {
         self.uom.as_ref()
     }
 }
+
 impl StandardFileTimeseries {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -928,6 +977,7 @@ impl StandardFileTimeseries {
         })
     }
 }
+
 impl crate::from_gml::FromGml for StandardFileTimeseries {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -940,6 +990,7 @@ impl crate::from_gml::FromGml for StandardFileTimeseries {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct TabulatedFileTimeseries {
     pub feature_id: ID,
@@ -965,6 +1016,7 @@ pub struct TabulatedFileTimeseries {
     pub value_column_no: Option<i64>,
     pub value_column_name: Option<String>,
 }
+
 impl AbstractFeatureTrait for TabulatedFileTimeseries {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -979,6 +1031,7 @@ impl AbstractFeatureTrait for TabulatedFileTimeseries {
         self.description.as_ref()
     }
 }
+
 impl AbstractTimeseriesTrait for TabulatedFileTimeseries {
     fn first_timestamp(&self) -> Option<&String> {
         self.first_timestamp.as_ref()
@@ -987,6 +1040,7 @@ impl AbstractTimeseriesTrait for TabulatedFileTimeseries {
         self.last_timestamp.as_ref()
     }
 }
+
 impl AbstractAtomicTimeseriesTrait for TabulatedFileTimeseries {
     fn observation_property(&self) -> &String {
         &self.observation_property
@@ -995,6 +1049,7 @@ impl AbstractAtomicTimeseriesTrait for TabulatedFileTimeseries {
         self.uom.as_ref()
     }
 }
+
 impl TabulatedFileTimeseries {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1134,6 +1189,7 @@ impl TabulatedFileTimeseries {
         })
     }
 }
+
 impl crate::from_gml::FromGml for TabulatedFileTimeseries {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1146,6 +1202,7 @@ impl crate::from_gml::FromGml for TabulatedFileTimeseries {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct Dynamizer {
     pub feature_id: ID,
@@ -1162,6 +1219,7 @@ pub struct Dynamizer {
     pub dynamic_data: Option<AbstractTimeseries>,
     pub sensor_connection: Option<SensorConnection>,
 }
+
 impl AbstractFeatureTrait for Dynamizer {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -1176,6 +1234,7 @@ impl AbstractFeatureTrait for Dynamizer {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for Dynamizer {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -1190,6 +1249,7 @@ impl AbstractFeatureWithLifespanTrait for Dynamizer {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractDynamizerTrait for Dynamizer {}
 impl Dynamizer {
     pub fn from_gml_with_info(
@@ -1285,6 +1345,7 @@ impl Dynamizer {
         })
     }
 }
+
 impl crate::from_gml::FromGml for Dynamizer {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,

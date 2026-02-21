@@ -7,6 +7,7 @@ pub enum GranularityValue {
     Lane,
     Way,
 }
+
 impl GranularityValue {
     pub fn from_gml_text(text: &str) -> Result<Self, crate::error::ReaderError> {
         match text.trim() {
@@ -22,6 +23,7 @@ impl GranularityValue {
         }
     }
 }
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
 pub enum TrafficDirectionValue {
     #[default]
@@ -29,6 +31,7 @@ pub enum TrafficDirectionValue {
     Backwards,
     Both,
 }
+
 impl TrafficDirectionValue {
     pub fn from_gml_text(text: &str) -> Result<Self, crate::error::ReaderError> {
         match text.trim() {
@@ -46,6 +49,7 @@ impl TrafficDirectionValue {
         }
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct AuxiliaryTrafficAreaClassValue(pub String);
 impl crate::from_gml::FromGml for AuxiliaryTrafficAreaClassValue {
@@ -55,6 +59,7 @@ impl crate::from_gml::FromGml for AuxiliaryTrafficAreaClassValue {
         Ok(AuxiliaryTrafficAreaClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct AuxiliaryTrafficAreaFunctionValue(pub String);
 impl crate::from_gml::FromGml for AuxiliaryTrafficAreaFunctionValue {
@@ -64,6 +69,7 @@ impl crate::from_gml::FromGml for AuxiliaryTrafficAreaFunctionValue {
         Ok(AuxiliaryTrafficAreaFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct AuxiliaryTrafficAreaUsageValue(pub String);
 impl crate::from_gml::FromGml for AuxiliaryTrafficAreaUsageValue {
@@ -73,6 +79,7 @@ impl crate::from_gml::FromGml for AuxiliaryTrafficAreaUsageValue {
         Ok(AuxiliaryTrafficAreaUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct AuxiliaryTrafficSpaceClassValue(pub String);
 impl crate::from_gml::FromGml for AuxiliaryTrafficSpaceClassValue {
@@ -82,6 +89,7 @@ impl crate::from_gml::FromGml for AuxiliaryTrafficSpaceClassValue {
         Ok(AuxiliaryTrafficSpaceClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct AuxiliaryTrafficSpaceFunctionValue(pub String);
 impl crate::from_gml::FromGml for AuxiliaryTrafficSpaceFunctionValue {
@@ -91,6 +99,7 @@ impl crate::from_gml::FromGml for AuxiliaryTrafficSpaceFunctionValue {
         Ok(AuxiliaryTrafficSpaceFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct AuxiliaryTrafficSpaceUsageValue(pub String);
 impl crate::from_gml::FromGml for AuxiliaryTrafficSpaceUsageValue {
@@ -100,6 +109,7 @@ impl crate::from_gml::FromGml for AuxiliaryTrafficSpaceUsageValue {
         Ok(AuxiliaryTrafficSpaceUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct ClearanceSpaceClassValue(pub String);
 impl crate::from_gml::FromGml for ClearanceSpaceClassValue {
@@ -109,6 +119,7 @@ impl crate::from_gml::FromGml for ClearanceSpaceClassValue {
         Ok(ClearanceSpaceClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct HoleClassValue(pub String);
 impl crate::from_gml::FromGml for HoleClassValue {
@@ -118,6 +129,7 @@ impl crate::from_gml::FromGml for HoleClassValue {
         Ok(HoleClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct IntersectionClassValue(pub String);
 impl crate::from_gml::FromGml for IntersectionClassValue {
@@ -127,6 +139,7 @@ impl crate::from_gml::FromGml for IntersectionClassValue {
         Ok(IntersectionClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct MarkingClassValue(pub String);
 impl crate::from_gml::FromGml for MarkingClassValue {
@@ -136,6 +149,7 @@ impl crate::from_gml::FromGml for MarkingClassValue {
         Ok(MarkingClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct RailwayClassValue(pub String);
 impl crate::from_gml::FromGml for RailwayClassValue {
@@ -145,6 +159,7 @@ impl crate::from_gml::FromGml for RailwayClassValue {
         Ok(RailwayClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct RailwayFunctionValue(pub String);
 impl crate::from_gml::FromGml for RailwayFunctionValue {
@@ -154,6 +169,7 @@ impl crate::from_gml::FromGml for RailwayFunctionValue {
         Ok(RailwayFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct RailwayUsageValue(pub String);
 impl crate::from_gml::FromGml for RailwayUsageValue {
@@ -163,6 +179,7 @@ impl crate::from_gml::FromGml for RailwayUsageValue {
         Ok(RailwayUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct RoadClassValue(pub String);
 impl crate::from_gml::FromGml for RoadClassValue {
@@ -172,6 +189,7 @@ impl crate::from_gml::FromGml for RoadClassValue {
         Ok(RoadClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct RoadFunctionValue(pub String);
 impl crate::from_gml::FromGml for RoadFunctionValue {
@@ -181,6 +199,7 @@ impl crate::from_gml::FromGml for RoadFunctionValue {
         Ok(RoadFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct RoadUsageValue(pub String);
 impl crate::from_gml::FromGml for RoadUsageValue {
@@ -190,6 +209,7 @@ impl crate::from_gml::FromGml for RoadUsageValue {
         Ok(RoadUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct SectionClassValue(pub String);
 impl crate::from_gml::FromGml for SectionClassValue {
@@ -199,6 +219,7 @@ impl crate::from_gml::FromGml for SectionClassValue {
         Ok(SectionClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct SquareClassValue(pub String);
 impl crate::from_gml::FromGml for SquareClassValue {
@@ -208,6 +229,7 @@ impl crate::from_gml::FromGml for SquareClassValue {
         Ok(SquareClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct SquareFunctionValue(pub String);
 impl crate::from_gml::FromGml for SquareFunctionValue {
@@ -217,6 +239,7 @@ impl crate::from_gml::FromGml for SquareFunctionValue {
         Ok(SquareFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct SquareUsageValue(pub String);
 impl crate::from_gml::FromGml for SquareUsageValue {
@@ -226,6 +249,7 @@ impl crate::from_gml::FromGml for SquareUsageValue {
         Ok(SquareUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct SurfaceMaterialValue(pub String);
 impl crate::from_gml::FromGml for SurfaceMaterialValue {
@@ -235,6 +259,7 @@ impl crate::from_gml::FromGml for SurfaceMaterialValue {
         Ok(SurfaceMaterialValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct TrackClassValue(pub String);
 impl crate::from_gml::FromGml for TrackClassValue {
@@ -244,6 +269,7 @@ impl crate::from_gml::FromGml for TrackClassValue {
         Ok(TrackClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct TrackFunctionValue(pub String);
 impl crate::from_gml::FromGml for TrackFunctionValue {
@@ -253,6 +279,7 @@ impl crate::from_gml::FromGml for TrackFunctionValue {
         Ok(TrackFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct TrackUsageValue(pub String);
 impl crate::from_gml::FromGml for TrackUsageValue {
@@ -262,6 +289,7 @@ impl crate::from_gml::FromGml for TrackUsageValue {
         Ok(TrackUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct TrafficAreaClassValue(pub String);
 impl crate::from_gml::FromGml for TrafficAreaClassValue {
@@ -271,6 +299,7 @@ impl crate::from_gml::FromGml for TrafficAreaClassValue {
         Ok(TrafficAreaClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct TrafficAreaFunctionValue(pub String);
 impl crate::from_gml::FromGml for TrafficAreaFunctionValue {
@@ -280,6 +309,7 @@ impl crate::from_gml::FromGml for TrafficAreaFunctionValue {
         Ok(TrafficAreaFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct TrafficAreaUsageValue(pub String);
 impl crate::from_gml::FromGml for TrafficAreaUsageValue {
@@ -289,6 +319,7 @@ impl crate::from_gml::FromGml for TrafficAreaUsageValue {
         Ok(TrafficAreaUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct TrafficSpaceClassValue(pub String);
 impl crate::from_gml::FromGml for TrafficSpaceClassValue {
@@ -298,6 +329,7 @@ impl crate::from_gml::FromGml for TrafficSpaceClassValue {
         Ok(TrafficSpaceClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct TrafficSpaceFunctionValue(pub String);
 impl crate::from_gml::FromGml for TrafficSpaceFunctionValue {
@@ -307,6 +339,7 @@ impl crate::from_gml::FromGml for TrafficSpaceFunctionValue {
         Ok(TrafficSpaceFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct TrafficSpaceUsageValue(pub String);
 impl crate::from_gml::FromGml for TrafficSpaceUsageValue {
@@ -316,6 +349,7 @@ impl crate::from_gml::FromGml for TrafficSpaceUsageValue {
         Ok(TrafficSpaceUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct WaterwayClassValue(pub String);
 impl crate::from_gml::FromGml for WaterwayClassValue {
@@ -325,6 +359,7 @@ impl crate::from_gml::FromGml for WaterwayClassValue {
         Ok(WaterwayClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct WaterwayFunctionValue(pub String);
 impl crate::from_gml::FromGml for WaterwayFunctionValue {
@@ -334,6 +369,7 @@ impl crate::from_gml::FromGml for WaterwayFunctionValue {
         Ok(WaterwayFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct WaterwayUsageValue(pub String);
 impl crate::from_gml::FromGml for WaterwayUsageValue {
@@ -343,6 +379,7 @@ impl crate::from_gml::FromGml for WaterwayUsageValue {
         Ok(WaterwayUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct AuxiliaryTrafficArea {
     pub feature_id: ID,
@@ -372,6 +409,7 @@ pub struct AuxiliaryTrafficArea {
     pub usage: Vec<AuxiliaryTrafficAreaUsageValue>,
     pub surface_material: Option<SurfaceMaterialValue>,
 }
+
 impl AbstractFeatureTrait for AuxiliaryTrafficArea {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -386,6 +424,7 @@ impl AbstractFeatureTrait for AuxiliaryTrafficArea {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for AuxiliaryTrafficArea {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -400,6 +439,7 @@ impl AbstractFeatureWithLifespanTrait for AuxiliaryTrafficArea {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for AuxiliaryTrafficArea {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -423,6 +463,7 @@ impl AbstractCityObjectTrait for AuxiliaryTrafficArea {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceBoundaryTrait for AuxiliaryTrafficArea {}
 impl AbstractThematicSurfaceTrait for AuxiliaryTrafficArea {
     fn area(&self) -> &[QualifiedArea] {
@@ -447,6 +488,7 @@ impl AbstractThematicSurfaceTrait for AuxiliaryTrafficArea {
         self.lod1_multi_surface.as_ref()
     }
 }
+
 impl AuxiliaryTrafficArea {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -706,6 +748,7 @@ impl AuxiliaryTrafficArea {
         })
     }
 }
+
 impl crate::from_gml::FromGml for AuxiliaryTrafficArea {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -718,6 +761,7 @@ impl crate::from_gml::FromGml for AuxiliaryTrafficArea {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct HoleSurface {
     pub feature_id: ID,
@@ -743,6 +787,7 @@ pub struct HoleSurface {
     pub lod0_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod1_multi_surface: Option<crate::geometry::MultiSurface>,
 }
+
 impl AbstractFeatureTrait for HoleSurface {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -757,6 +802,7 @@ impl AbstractFeatureTrait for HoleSurface {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for HoleSurface {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -771,6 +817,7 @@ impl AbstractFeatureWithLifespanTrait for HoleSurface {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for HoleSurface {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -794,6 +841,7 @@ impl AbstractCityObjectTrait for HoleSurface {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceBoundaryTrait for HoleSurface {}
 impl AbstractThematicSurfaceTrait for HoleSurface {
     fn area(&self) -> &[QualifiedArea] {
@@ -818,6 +866,7 @@ impl AbstractThematicSurfaceTrait for HoleSurface {
         self.lod1_multi_surface.as_ref()
     }
 }
+
 impl HoleSurface {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1057,6 +1106,7 @@ impl HoleSurface {
         })
     }
 }
+
 impl crate::from_gml::FromGml for HoleSurface {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1069,6 +1119,7 @@ impl crate::from_gml::FromGml for HoleSurface {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct Marking {
     pub feature_id: ID,
@@ -1095,6 +1146,7 @@ pub struct Marking {
     pub lod1_multi_surface: Option<crate::geometry::MultiSurface>,
     pub class_: Option<MarkingClassValue>,
 }
+
 impl AbstractFeatureTrait for Marking {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -1109,6 +1161,7 @@ impl AbstractFeatureTrait for Marking {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for Marking {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -1123,6 +1176,7 @@ impl AbstractFeatureWithLifespanTrait for Marking {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for Marking {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -1146,6 +1200,7 @@ impl AbstractCityObjectTrait for Marking {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceBoundaryTrait for Marking {}
 impl AbstractThematicSurfaceTrait for Marking {
     fn area(&self) -> &[QualifiedArea] {
@@ -1170,6 +1225,7 @@ impl AbstractThematicSurfaceTrait for Marking {
         self.lod1_multi_surface.as_ref()
     }
 }
+
 impl Marking {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1414,6 +1470,7 @@ impl Marking {
         })
     }
 }
+
 impl crate::from_gml::FromGml for Marking {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1426,6 +1483,7 @@ impl crate::from_gml::FromGml for Marking {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct TrafficArea {
     pub feature_id: ID,
@@ -1455,6 +1513,7 @@ pub struct TrafficArea {
     pub usage: Vec<TrafficAreaUsageValue>,
     pub surface_material: Option<SurfaceMaterialValue>,
 }
+
 impl AbstractFeatureTrait for TrafficArea {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -1469,6 +1528,7 @@ impl AbstractFeatureTrait for TrafficArea {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for TrafficArea {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -1483,6 +1543,7 @@ impl AbstractFeatureWithLifespanTrait for TrafficArea {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for TrafficArea {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -1506,6 +1567,7 @@ impl AbstractCityObjectTrait for TrafficArea {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceBoundaryTrait for TrafficArea {}
 impl AbstractThematicSurfaceTrait for TrafficArea {
     fn area(&self) -> &[QualifiedArea] {
@@ -1530,6 +1592,7 @@ impl AbstractThematicSurfaceTrait for TrafficArea {
         self.lod1_multi_surface.as_ref()
     }
 }
+
 impl TrafficArea {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1789,6 +1852,7 @@ impl TrafficArea {
         })
     }
 }
+
 impl crate::from_gml::FromGml for TrafficArea {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1801,6 +1865,7 @@ impl crate::from_gml::FromGml for TrafficArea {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 pub trait AbstractTransportationSpaceTrait: AbstractUnoccupiedSpaceTrait {
     fn traffic_direction(&self) -> Option<TrafficDirectionValue>;
     fn occupancy(&self) -> &[Occupancy];
@@ -1809,6 +1874,7 @@ pub trait AbstractTransportationSpaceTrait: AbstractUnoccupiedSpaceTrait {
     fn traffic_space(&self) -> &[TrafficSpace];
     fn marking(&self) -> &[Marking];
 }
+
 #[derive(Debug, Clone)]
 pub enum AbstractTransportationSpace {
     Intersection(Intersection),
@@ -1819,11 +1885,13 @@ pub enum AbstractTransportationSpace {
     Track(Track),
     Waterway(Waterway),
 }
+
 impl Default for AbstractTransportationSpace {
     fn default() -> Self {
         Self::Intersection(Default::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractTransportationSpace {
     fn feature_id(&self) -> &ID {
         match self {
@@ -1870,6 +1938,7 @@ impl AbstractFeatureTrait for AbstractTransportationSpace {
         }
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for AbstractTransportationSpace {
     fn creation_date(&self) -> Option<&String> {
         match self {
@@ -1916,6 +1985,7 @@ impl AbstractFeatureWithLifespanTrait for AbstractTransportationSpace {
         }
     }
 }
+
 impl AbstractCityObjectTrait for AbstractTransportationSpace {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         match self {
@@ -1995,6 +2065,7 @@ impl AbstractCityObjectTrait for AbstractTransportationSpace {
         }
     }
 }
+
 impl AbstractSpaceTrait for AbstractTransportationSpace {
     fn space_type(&self) -> Option<SpaceType> {
         match self {
@@ -2151,6 +2222,7 @@ impl AbstractSpaceTrait for AbstractTransportationSpace {
         }
     }
 }
+
 impl AbstractPhysicalSpaceTrait for AbstractTransportationSpace {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         match self {
@@ -2197,6 +2269,7 @@ impl AbstractPhysicalSpaceTrait for AbstractTransportationSpace {
         }
     }
 }
+
 impl AbstractUnoccupiedSpaceTrait for AbstractTransportationSpace {}
 impl AbstractTransportationSpaceTrait for AbstractTransportationSpace {
     fn traffic_direction(&self) -> Option<TrafficDirectionValue> {
@@ -2266,41 +2339,49 @@ impl AbstractTransportationSpaceTrait for AbstractTransportationSpace {
         }
     }
 }
+
 impl From<Intersection> for AbstractTransportationSpace {
     fn from(v: Intersection) -> Self {
         Self::Intersection(v)
     }
 }
+
 impl From<Railway> for AbstractTransportationSpace {
     fn from(v: Railway) -> Self {
         Self::Railway(v)
     }
 }
+
 impl From<Road> for AbstractTransportationSpace {
     fn from(v: Road) -> Self {
         Self::Road(v)
     }
 }
+
 impl From<Section> for AbstractTransportationSpace {
     fn from(v: Section) -> Self {
         Self::Section(v)
     }
 }
+
 impl From<Square> for AbstractTransportationSpace {
     fn from(v: Square) -> Self {
         Self::Square(v)
     }
 }
+
 impl From<Track> for AbstractTransportationSpace {
     fn from(v: Track) -> Self {
         Self::Track(v)
     }
 }
+
 impl From<Waterway> for AbstractTransportationSpace {
     fn from(v: Waterway) -> Self {
         Self::Waterway(v)
     }
 }
+
 pub trait AbstractTransportationSpaceAccessors {
     fn intersections(&self) -> impl Iterator<Item = &Intersection>;
     fn railways(&self) -> impl Iterator<Item = &Railway>;
@@ -2310,6 +2391,7 @@ pub trait AbstractTransportationSpaceAccessors {
     fn tracks(&self) -> impl Iterator<Item = &Track>;
     fn waterways(&self) -> impl Iterator<Item = &Waterway>;
 }
+
 impl AbstractTransportationSpaceAccessors for [AbstractTransportationSpace] {
     fn intersections(&self) -> impl Iterator<Item = &Intersection> {
         self.iter()
@@ -2361,6 +2443,7 @@ impl AbstractTransportationSpaceAccessors for [AbstractTransportationSpace] {
             })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct AuxiliaryTrafficSpace {
     pub feature_id: ID,
@@ -2401,6 +2484,7 @@ pub struct AuxiliaryTrafficSpace {
     pub usage: Vec<AuxiliaryTrafficSpaceUsageValue>,
     pub granularity: GranularityValue,
 }
+
 impl AbstractFeatureTrait for AuxiliaryTrafficSpace {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -2415,6 +2499,7 @@ impl AbstractFeatureTrait for AuxiliaryTrafficSpace {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for AuxiliaryTrafficSpace {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -2429,6 +2514,7 @@ impl AbstractFeatureWithLifespanTrait for AuxiliaryTrafficSpace {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for AuxiliaryTrafficSpace {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -2452,6 +2538,7 @@ impl AbstractCityObjectTrait for AuxiliaryTrafficSpace {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for AuxiliaryTrafficSpace {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -2496,6 +2583,7 @@ impl AbstractSpaceTrait for AuxiliaryTrafficSpace {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for AuxiliaryTrafficSpace {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -2510,6 +2598,7 @@ impl AbstractPhysicalSpaceTrait for AuxiliaryTrafficSpace {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractUnoccupiedSpaceTrait for AuxiliaryTrafficSpace {}
 impl AuxiliaryTrafficSpace {
     pub fn from_gml_with_info(
@@ -2930,6 +3019,7 @@ impl AuxiliaryTrafficSpace {
         })
     }
 }
+
 impl crate::from_gml::FromGml for AuxiliaryTrafficSpace {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -2942,6 +3032,7 @@ impl crate::from_gml::FromGml for AuxiliaryTrafficSpace {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct ClearanceSpace {
     pub feature_id: ID,
@@ -2979,6 +3070,7 @@ pub struct ClearanceSpace {
     pub lod2_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
     pub class_: Vec<ClearanceSpaceClassValue>,
 }
+
 impl AbstractFeatureTrait for ClearanceSpace {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -2993,6 +3085,7 @@ impl AbstractFeatureTrait for ClearanceSpace {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for ClearanceSpace {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -3007,6 +3100,7 @@ impl AbstractFeatureWithLifespanTrait for ClearanceSpace {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for ClearanceSpace {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -3030,6 +3124,7 @@ impl AbstractCityObjectTrait for ClearanceSpace {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for ClearanceSpace {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -3074,6 +3169,7 @@ impl AbstractSpaceTrait for ClearanceSpace {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for ClearanceSpace {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -3088,6 +3184,7 @@ impl AbstractPhysicalSpaceTrait for ClearanceSpace {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractUnoccupiedSpaceTrait for ClearanceSpace {}
 impl ClearanceSpace {
     pub fn from_gml_with_info(
@@ -3493,6 +3590,7 @@ impl ClearanceSpace {
         })
     }
 }
+
 impl crate::from_gml::FromGml for ClearanceSpace {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -3505,6 +3603,7 @@ impl crate::from_gml::FromGml for ClearanceSpace {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct Hole {
     pub feature_id: ID,
@@ -3542,6 +3641,7 @@ pub struct Hole {
     pub lod2_terrain_intersection_curve: Option<crate::geometry::MultiCurve>,
     pub class_: Option<HoleClassValue>,
 }
+
 impl AbstractFeatureTrait for Hole {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -3556,6 +3656,7 @@ impl AbstractFeatureTrait for Hole {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for Hole {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -3570,6 +3671,7 @@ impl AbstractFeatureWithLifespanTrait for Hole {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for Hole {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -3593,6 +3695,7 @@ impl AbstractCityObjectTrait for Hole {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for Hole {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -3637,6 +3740,7 @@ impl AbstractSpaceTrait for Hole {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for Hole {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -3651,6 +3755,7 @@ impl AbstractPhysicalSpaceTrait for Hole {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractUnoccupiedSpaceTrait for Hole {}
 impl Hole {
     pub fn from_gml_with_info(
@@ -4056,6 +4161,7 @@ impl Hole {
         })
     }
 }
+
 impl crate::from_gml::FromGml for Hole {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -4068,6 +4174,7 @@ impl crate::from_gml::FromGml for Hole {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct TrafficSpace {
     pub feature_id: ID,
@@ -4113,6 +4220,7 @@ pub struct TrafficSpace {
     pub clearance_space: Vec<ClearanceSpace>,
     pub successor: Vec<TrafficSpace>,
 }
+
 impl AbstractFeatureTrait for TrafficSpace {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -4127,6 +4235,7 @@ impl AbstractFeatureTrait for TrafficSpace {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for TrafficSpace {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -4141,6 +4250,7 @@ impl AbstractFeatureWithLifespanTrait for TrafficSpace {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for TrafficSpace {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -4164,6 +4274,7 @@ impl AbstractCityObjectTrait for TrafficSpace {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for TrafficSpace {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -4208,6 +4319,7 @@ impl AbstractSpaceTrait for TrafficSpace {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for TrafficSpace {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -4222,6 +4334,7 @@ impl AbstractPhysicalSpaceTrait for TrafficSpace {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractUnoccupiedSpaceTrait for TrafficSpace {}
 impl TrafficSpace {
     pub fn from_gml_with_info(
@@ -4690,6 +4803,7 @@ impl TrafficSpace {
         })
     }
 }
+
 impl crate::from_gml::FromGml for TrafficSpace {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -4702,6 +4816,7 @@ impl crate::from_gml::FromGml for TrafficSpace {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct Intersection {
     pub feature_id: ID,
@@ -4745,6 +4860,7 @@ pub struct Intersection {
     pub marking: Vec<Marking>,
     pub class_: Option<IntersectionClassValue>,
 }
+
 impl AbstractFeatureTrait for Intersection {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -4759,6 +4875,7 @@ impl AbstractFeatureTrait for Intersection {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for Intersection {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -4773,6 +4890,7 @@ impl AbstractFeatureWithLifespanTrait for Intersection {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for Intersection {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -4796,6 +4914,7 @@ impl AbstractCityObjectTrait for Intersection {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for Intersection {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -4840,6 +4959,7 @@ impl AbstractSpaceTrait for Intersection {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for Intersection {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -4854,6 +4974,7 @@ impl AbstractPhysicalSpaceTrait for Intersection {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractUnoccupiedSpaceTrait for Intersection {}
 impl AbstractTransportationSpaceTrait for Intersection {
     fn traffic_direction(&self) -> Option<TrafficDirectionValue> {
@@ -4875,6 +4996,7 @@ impl AbstractTransportationSpaceTrait for Intersection {
         &self.marking
     }
 }
+
 impl Intersection {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -5335,6 +5457,7 @@ impl Intersection {
         })
     }
 }
+
 impl crate::from_gml::FromGml for Intersection {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -5347,6 +5470,7 @@ impl crate::from_gml::FromGml for Intersection {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct Railway {
     pub feature_id: ID,
@@ -5394,6 +5518,7 @@ pub struct Railway {
     pub intersection: Vec<Intersection>,
     pub section: Vec<Section>,
 }
+
 impl AbstractFeatureTrait for Railway {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -5408,6 +5533,7 @@ impl AbstractFeatureTrait for Railway {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for Railway {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -5422,6 +5548,7 @@ impl AbstractFeatureWithLifespanTrait for Railway {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for Railway {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -5445,6 +5572,7 @@ impl AbstractCityObjectTrait for Railway {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for Railway {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -5489,6 +5617,7 @@ impl AbstractSpaceTrait for Railway {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for Railway {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -5503,6 +5632,7 @@ impl AbstractPhysicalSpaceTrait for Railway {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractUnoccupiedSpaceTrait for Railway {}
 impl AbstractTransportationSpaceTrait for Railway {
     fn traffic_direction(&self) -> Option<TrafficDirectionValue> {
@@ -5524,6 +5654,7 @@ impl AbstractTransportationSpaceTrait for Railway {
         &self.marking
     }
 }
+
 impl Railway {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -6016,6 +6147,7 @@ impl Railway {
         })
     }
 }
+
 impl crate::from_gml::FromGml for Railway {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -6028,6 +6160,7 @@ impl crate::from_gml::FromGml for Railway {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct Road {
     pub feature_id: ID,
@@ -6075,6 +6208,7 @@ pub struct Road {
     pub intersection: Vec<Intersection>,
     pub section: Vec<Section>,
 }
+
 impl AbstractFeatureTrait for Road {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -6089,6 +6223,7 @@ impl AbstractFeatureTrait for Road {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for Road {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -6103,6 +6238,7 @@ impl AbstractFeatureWithLifespanTrait for Road {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for Road {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -6126,6 +6262,7 @@ impl AbstractCityObjectTrait for Road {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for Road {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -6170,6 +6307,7 @@ impl AbstractSpaceTrait for Road {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for Road {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -6184,6 +6322,7 @@ impl AbstractPhysicalSpaceTrait for Road {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractUnoccupiedSpaceTrait for Road {}
 impl AbstractTransportationSpaceTrait for Road {
     fn traffic_direction(&self) -> Option<TrafficDirectionValue> {
@@ -6205,6 +6344,7 @@ impl AbstractTransportationSpaceTrait for Road {
         &self.marking
     }
 }
+
 impl Road {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -6697,6 +6837,7 @@ impl Road {
         })
     }
 }
+
 impl crate::from_gml::FromGml for Road {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -6709,6 +6850,7 @@ impl crate::from_gml::FromGml for Road {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct Section {
     pub feature_id: ID,
@@ -6752,6 +6894,7 @@ pub struct Section {
     pub marking: Vec<Marking>,
     pub class_: Option<SectionClassValue>,
 }
+
 impl AbstractFeatureTrait for Section {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -6766,6 +6909,7 @@ impl AbstractFeatureTrait for Section {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for Section {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -6780,6 +6924,7 @@ impl AbstractFeatureWithLifespanTrait for Section {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for Section {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -6803,6 +6948,7 @@ impl AbstractCityObjectTrait for Section {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for Section {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -6847,6 +6993,7 @@ impl AbstractSpaceTrait for Section {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for Section {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -6861,6 +7008,7 @@ impl AbstractPhysicalSpaceTrait for Section {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractUnoccupiedSpaceTrait for Section {}
 impl AbstractTransportationSpaceTrait for Section {
     fn traffic_direction(&self) -> Option<TrafficDirectionValue> {
@@ -6882,6 +7030,7 @@ impl AbstractTransportationSpaceTrait for Section {
         &self.marking
     }
 }
+
 impl Section {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -7342,6 +7491,7 @@ impl Section {
         })
     }
 }
+
 impl crate::from_gml::FromGml for Section {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -7354,6 +7504,7 @@ impl crate::from_gml::FromGml for Section {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct Square {
     pub feature_id: ID,
@@ -7399,6 +7550,7 @@ pub struct Square {
     pub function: Vec<SquareFunctionValue>,
     pub usage: Vec<SquareUsageValue>,
 }
+
 impl AbstractFeatureTrait for Square {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -7413,6 +7565,7 @@ impl AbstractFeatureTrait for Square {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for Square {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -7427,6 +7580,7 @@ impl AbstractFeatureWithLifespanTrait for Square {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for Square {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -7450,6 +7604,7 @@ impl AbstractCityObjectTrait for Square {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for Square {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -7494,6 +7649,7 @@ impl AbstractSpaceTrait for Square {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for Square {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -7508,6 +7664,7 @@ impl AbstractPhysicalSpaceTrait for Square {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractUnoccupiedSpaceTrait for Square {}
 impl AbstractTransportationSpaceTrait for Square {
     fn traffic_direction(&self) -> Option<TrafficDirectionValue> {
@@ -7529,6 +7686,7 @@ impl AbstractTransportationSpaceTrait for Square {
         &self.marking
     }
 }
+
 impl Square {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -7999,6 +8157,7 @@ impl Square {
         })
     }
 }
+
 impl crate::from_gml::FromGml for Square {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -8011,6 +8170,7 @@ impl crate::from_gml::FromGml for Square {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct Track {
     pub feature_id: ID,
@@ -8058,6 +8218,7 @@ pub struct Track {
     pub intersection: Vec<Intersection>,
     pub section: Vec<Section>,
 }
+
 impl AbstractFeatureTrait for Track {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -8072,6 +8233,7 @@ impl AbstractFeatureTrait for Track {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for Track {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -8086,6 +8248,7 @@ impl AbstractFeatureWithLifespanTrait for Track {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for Track {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -8109,6 +8272,7 @@ impl AbstractCityObjectTrait for Track {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for Track {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -8153,6 +8317,7 @@ impl AbstractSpaceTrait for Track {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for Track {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -8167,6 +8332,7 @@ impl AbstractPhysicalSpaceTrait for Track {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractUnoccupiedSpaceTrait for Track {}
 impl AbstractTransportationSpaceTrait for Track {
     fn traffic_direction(&self) -> Option<TrafficDirectionValue> {
@@ -8188,6 +8354,7 @@ impl AbstractTransportationSpaceTrait for Track {
         &self.marking
     }
 }
+
 impl Track {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -8680,6 +8847,7 @@ impl Track {
         })
     }
 }
+
 impl crate::from_gml::FromGml for Track {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -8692,6 +8860,7 @@ impl crate::from_gml::FromGml for Track {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct Waterway {
     pub feature_id: ID,
@@ -8739,6 +8908,7 @@ pub struct Waterway {
     pub intersection: Vec<Intersection>,
     pub section: Vec<Section>,
 }
+
 impl AbstractFeatureTrait for Waterway {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -8753,6 +8923,7 @@ impl AbstractFeatureTrait for Waterway {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for Waterway {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -8767,6 +8938,7 @@ impl AbstractFeatureWithLifespanTrait for Waterway {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for Waterway {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -8790,6 +8962,7 @@ impl AbstractCityObjectTrait for Waterway {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for Waterway {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -8834,6 +9007,7 @@ impl AbstractSpaceTrait for Waterway {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for Waterway {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -8848,6 +9022,7 @@ impl AbstractPhysicalSpaceTrait for Waterway {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractUnoccupiedSpaceTrait for Waterway {}
 impl AbstractTransportationSpaceTrait for Waterway {
     fn traffic_direction(&self) -> Option<TrafficDirectionValue> {
@@ -8869,6 +9044,7 @@ impl AbstractTransportationSpaceTrait for Waterway {
         &self.marking
     }
 }
+
 impl Waterway {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -9361,6 +9537,7 @@ impl Waterway {
         })
     }
 }
+
 impl crate::from_gml::FromGml for Waterway {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,

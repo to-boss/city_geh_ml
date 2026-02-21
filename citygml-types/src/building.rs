@@ -8,6 +8,7 @@ pub struct RoomHeight {
     pub status: HeightStatusValue,
     pub value: f64,
 }
+
 impl crate::from_gml::FromGml for RoomHeight {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -45,6 +46,7 @@ impl crate::from_gml::FromGml for RoomHeight {
         })
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct BuildingClassValue(pub String);
 impl crate::from_gml::FromGml for BuildingClassValue {
@@ -54,6 +56,7 @@ impl crate::from_gml::FromGml for BuildingClassValue {
         Ok(BuildingClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct BuildingConstructiveElementClassValue(pub String);
 impl crate::from_gml::FromGml for BuildingConstructiveElementClassValue {
@@ -63,6 +66,7 @@ impl crate::from_gml::FromGml for BuildingConstructiveElementClassValue {
         Ok(BuildingConstructiveElementClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct BuildingConstructiveElementFunctionValue(pub String);
 impl crate::from_gml::FromGml for BuildingConstructiveElementFunctionValue {
@@ -72,6 +76,7 @@ impl crate::from_gml::FromGml for BuildingConstructiveElementFunctionValue {
         Ok(BuildingConstructiveElementFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct BuildingConstructiveElementUsageValue(pub String);
 impl crate::from_gml::FromGml for BuildingConstructiveElementUsageValue {
@@ -81,6 +86,7 @@ impl crate::from_gml::FromGml for BuildingConstructiveElementUsageValue {
         Ok(BuildingConstructiveElementUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct BuildingFunctionValue(pub String);
 impl crate::from_gml::FromGml for BuildingFunctionValue {
@@ -90,6 +96,7 @@ impl crate::from_gml::FromGml for BuildingFunctionValue {
         Ok(BuildingFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct BuildingFurnitureClassValue(pub String);
 impl crate::from_gml::FromGml for BuildingFurnitureClassValue {
@@ -99,6 +106,7 @@ impl crate::from_gml::FromGml for BuildingFurnitureClassValue {
         Ok(BuildingFurnitureClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct BuildingFurnitureFunctionValue(pub String);
 impl crate::from_gml::FromGml for BuildingFurnitureFunctionValue {
@@ -108,6 +116,7 @@ impl crate::from_gml::FromGml for BuildingFurnitureFunctionValue {
         Ok(BuildingFurnitureFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct BuildingFurnitureUsageValue(pub String);
 impl crate::from_gml::FromGml for BuildingFurnitureUsageValue {
@@ -117,6 +126,7 @@ impl crate::from_gml::FromGml for BuildingFurnitureUsageValue {
         Ok(BuildingFurnitureUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct BuildingInstallationClassValue(pub String);
 impl crate::from_gml::FromGml for BuildingInstallationClassValue {
@@ -126,6 +136,7 @@ impl crate::from_gml::FromGml for BuildingInstallationClassValue {
         Ok(BuildingInstallationClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct BuildingInstallationFunctionValue(pub String);
 impl crate::from_gml::FromGml for BuildingInstallationFunctionValue {
@@ -135,6 +146,7 @@ impl crate::from_gml::FromGml for BuildingInstallationFunctionValue {
         Ok(BuildingInstallationFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct BuildingInstallationUsageValue(pub String);
 impl crate::from_gml::FromGml for BuildingInstallationUsageValue {
@@ -144,6 +156,7 @@ impl crate::from_gml::FromGml for BuildingInstallationUsageValue {
         Ok(BuildingInstallationUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct BuildingRoomClassValue(pub String);
 impl crate::from_gml::FromGml for BuildingRoomClassValue {
@@ -153,6 +166,7 @@ impl crate::from_gml::FromGml for BuildingRoomClassValue {
         Ok(BuildingRoomClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct BuildingRoomFunctionValue(pub String);
 impl crate::from_gml::FromGml for BuildingRoomFunctionValue {
@@ -162,6 +176,7 @@ impl crate::from_gml::FromGml for BuildingRoomFunctionValue {
         Ok(BuildingRoomFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct BuildingRoomUsageValue(pub String);
 impl crate::from_gml::FromGml for BuildingRoomUsageValue {
@@ -171,6 +186,7 @@ impl crate::from_gml::FromGml for BuildingRoomUsageValue {
         Ok(BuildingRoomUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct BuildingSubdivisionClassValue(pub String);
 impl crate::from_gml::FromGml for BuildingSubdivisionClassValue {
@@ -180,6 +196,7 @@ impl crate::from_gml::FromGml for BuildingSubdivisionClassValue {
         Ok(BuildingSubdivisionClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct BuildingSubdivisionFunctionValue(pub String);
 impl crate::from_gml::FromGml for BuildingSubdivisionFunctionValue {
@@ -189,6 +206,7 @@ impl crate::from_gml::FromGml for BuildingSubdivisionFunctionValue {
         Ok(BuildingSubdivisionFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct BuildingSubdivisionUsageValue(pub String);
 impl crate::from_gml::FromGml for BuildingSubdivisionUsageValue {
@@ -198,6 +216,7 @@ impl crate::from_gml::FromGml for BuildingSubdivisionUsageValue {
         Ok(BuildingSubdivisionUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct BuildingUsageValue(pub String);
 impl crate::from_gml::FromGml for BuildingUsageValue {
@@ -207,6 +226,7 @@ impl crate::from_gml::FromGml for BuildingUsageValue {
         Ok(BuildingUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct RoofTypeValue(pub String);
 impl crate::from_gml::FromGml for RoofTypeValue {
@@ -216,6 +236,7 @@ impl crate::from_gml::FromGml for RoofTypeValue {
         Ok(RoofTypeValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct RoomElevationReferenceValue(pub String);
 impl crate::from_gml::FromGml for RoomElevationReferenceValue {
@@ -225,6 +246,7 @@ impl crate::from_gml::FromGml for RoomElevationReferenceValue {
         Ok(RoomElevationReferenceValue(reader.read_text()?))
     }
 }
+
 pub trait AbstractBuildingSubdivisionTrait: AbstractLogicalSpaceTrait {
     fn class_(&self) -> Option<&BuildingSubdivisionClassValue>;
     fn function(&self) -> &[BuildingSubdivisionFunctionValue];
@@ -236,16 +258,19 @@ pub trait AbstractBuildingSubdivisionTrait: AbstractLogicalSpaceTrait {
     fn building_installation(&self) -> &[BuildingInstallation];
     fn building_room(&self) -> &[BuildingRoom];
 }
+
 #[derive(Debug, Clone)]
 pub enum AbstractBuildingSubdivision {
     BuildingUnit(BuildingUnit),
     Storey(Storey),
 }
+
 impl Default for AbstractBuildingSubdivision {
     fn default() -> Self {
         Self::BuildingUnit(Default::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractBuildingSubdivision {
     fn feature_id(&self) -> &ID {
         match self {
@@ -272,6 +297,7 @@ impl AbstractFeatureTrait for AbstractBuildingSubdivision {
         }
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for AbstractBuildingSubdivision {
     fn creation_date(&self) -> Option<&String> {
         match self {
@@ -298,6 +324,7 @@ impl AbstractFeatureWithLifespanTrait for AbstractBuildingSubdivision {
         }
     }
 }
+
 impl AbstractCityObjectTrait for AbstractBuildingSubdivision {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         match self {
@@ -342,6 +369,7 @@ impl AbstractCityObjectTrait for AbstractBuildingSubdivision {
         }
     }
 }
+
 impl AbstractSpaceTrait for AbstractBuildingSubdivision {
     fn space_type(&self) -> Option<SpaceType> {
         match self {
@@ -428,6 +456,7 @@ impl AbstractSpaceTrait for AbstractBuildingSubdivision {
         }
     }
 }
+
 impl AbstractLogicalSpaceTrait for AbstractBuildingSubdivision {}
 impl AbstractBuildingSubdivisionTrait for AbstractBuildingSubdivision {
     fn class_(&self) -> Option<&BuildingSubdivisionClassValue> {
@@ -485,20 +514,24 @@ impl AbstractBuildingSubdivisionTrait for AbstractBuildingSubdivision {
         }
     }
 }
+
 impl From<BuildingUnit> for AbstractBuildingSubdivision {
     fn from(v: BuildingUnit) -> Self {
         Self::BuildingUnit(v)
     }
 }
+
 impl From<Storey> for AbstractBuildingSubdivision {
     fn from(v: Storey) -> Self {
         Self::Storey(v)
     }
 }
+
 pub trait AbstractBuildingSubdivisionAccessors {
     fn building_units(&self) -> impl Iterator<Item = &BuildingUnit>;
     fn storeys(&self) -> impl Iterator<Item = &Storey>;
 }
+
 impl AbstractBuildingSubdivisionAccessors for [AbstractBuildingSubdivision] {
     fn building_units(&self) -> impl Iterator<Item = &BuildingUnit> {
         self.iter()
@@ -515,6 +548,7 @@ impl AbstractBuildingSubdivisionAccessors for [AbstractBuildingSubdivision] {
             })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct BuildingUnit {
     pub feature_id: ID,
@@ -558,6 +592,7 @@ pub struct BuildingUnit {
     pub address: Vec<Address>,
     pub storey: Vec<Storey>,
 }
+
 impl AbstractFeatureTrait for BuildingUnit {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -572,6 +607,7 @@ impl AbstractFeatureTrait for BuildingUnit {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for BuildingUnit {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -586,6 +622,7 @@ impl AbstractFeatureWithLifespanTrait for BuildingUnit {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for BuildingUnit {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -609,6 +646,7 @@ impl AbstractCityObjectTrait for BuildingUnit {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for BuildingUnit {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -653,6 +691,7 @@ impl AbstractSpaceTrait for BuildingUnit {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractLogicalSpaceTrait for BuildingUnit {}
 impl AbstractBuildingSubdivisionTrait for BuildingUnit {
     fn class_(&self) -> Option<&BuildingSubdivisionClassValue> {
@@ -683,6 +722,7 @@ impl AbstractBuildingSubdivisionTrait for BuildingUnit {
         &self.building_room
     }
 }
+
 impl BuildingUnit {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1118,6 +1158,7 @@ impl BuildingUnit {
         })
     }
 }
+
 impl crate::from_gml::FromGml for BuildingUnit {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1130,6 +1171,7 @@ impl crate::from_gml::FromGml for BuildingUnit {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct Storey {
     pub feature_id: ID,
@@ -1172,6 +1214,7 @@ pub struct Storey {
     pub building_room: Vec<BuildingRoom>,
     pub building_unit: Vec<BuildingUnit>,
 }
+
 impl AbstractFeatureTrait for Storey {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -1186,6 +1229,7 @@ impl AbstractFeatureTrait for Storey {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for Storey {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -1200,6 +1244,7 @@ impl AbstractFeatureWithLifespanTrait for Storey {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for Storey {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -1223,6 +1268,7 @@ impl AbstractCityObjectTrait for Storey {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for Storey {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -1267,6 +1313,7 @@ impl AbstractSpaceTrait for Storey {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractLogicalSpaceTrait for Storey {}
 impl AbstractBuildingSubdivisionTrait for Storey {
     fn class_(&self) -> Option<&BuildingSubdivisionClassValue> {
@@ -1297,6 +1344,7 @@ impl AbstractBuildingSubdivisionTrait for Storey {
         &self.building_room
     }
 }
+
 impl Storey {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1721,6 +1769,7 @@ impl Storey {
         })
     }
 }
+
 impl crate::from_gml::FromGml for Storey {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -1733,6 +1782,7 @@ impl crate::from_gml::FromGml for Storey {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct BuildingRoom {
     pub feature_id: ID,
@@ -1775,6 +1825,7 @@ pub struct BuildingRoom {
     pub building_furniture: Vec<BuildingFurniture>,
     pub building_installation: Vec<BuildingInstallation>,
 }
+
 impl AbstractFeatureTrait for BuildingRoom {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -1789,6 +1840,7 @@ impl AbstractFeatureTrait for BuildingRoom {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for BuildingRoom {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -1803,6 +1855,7 @@ impl AbstractFeatureWithLifespanTrait for BuildingRoom {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for BuildingRoom {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -1826,6 +1879,7 @@ impl AbstractCityObjectTrait for BuildingRoom {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for BuildingRoom {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -1870,6 +1924,7 @@ impl AbstractSpaceTrait for BuildingRoom {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for BuildingRoom {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -1884,6 +1939,7 @@ impl AbstractPhysicalSpaceTrait for BuildingRoom {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractUnoccupiedSpaceTrait for BuildingRoom {}
 impl BuildingRoom {
     pub fn from_gml_with_info(
@@ -2332,6 +2388,7 @@ impl BuildingRoom {
         })
     }
 }
+
 impl crate::from_gml::FromGml for BuildingRoom {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -2344,6 +2401,7 @@ impl crate::from_gml::FromGml for BuildingRoom {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 pub trait AbstractBuildingTrait: AbstractConstructionTrait {
     fn class_(&self) -> Option<&BuildingClassValue>;
     fn function(&self) -> &[BuildingFunctionValue];
@@ -2360,16 +2418,19 @@ pub trait AbstractBuildingTrait: AbstractConstructionTrait {
     fn building_room(&self) -> &[BuildingRoom];
     fn building_subdivision(&self) -> &[AbstractBuildingSubdivision];
 }
+
 #[derive(Debug, Clone)]
 pub enum AbstractBuilding {
     Building(Building),
     BuildingPart(BuildingPart),
 }
+
 impl Default for AbstractBuilding {
     fn default() -> Self {
         Self::Building(Default::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractBuilding {
     fn feature_id(&self) -> &ID {
         match self {
@@ -2396,6 +2457,7 @@ impl AbstractFeatureTrait for AbstractBuilding {
         }
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for AbstractBuilding {
     fn creation_date(&self) -> Option<&String> {
         match self {
@@ -2422,6 +2484,7 @@ impl AbstractFeatureWithLifespanTrait for AbstractBuilding {
         }
     }
 }
+
 impl AbstractCityObjectTrait for AbstractBuilding {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         match self {
@@ -2466,6 +2529,7 @@ impl AbstractCityObjectTrait for AbstractBuilding {
         }
     }
 }
+
 impl AbstractSpaceTrait for AbstractBuilding {
     fn space_type(&self) -> Option<SpaceType> {
         match self {
@@ -2552,6 +2616,7 @@ impl AbstractSpaceTrait for AbstractBuilding {
         }
     }
 }
+
 impl AbstractPhysicalSpaceTrait for AbstractBuilding {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         match self {
@@ -2578,6 +2643,7 @@ impl AbstractPhysicalSpaceTrait for AbstractBuilding {
         }
     }
 }
+
 impl AbstractOccupiedSpaceTrait for AbstractBuilding {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         match self {
@@ -2598,6 +2664,7 @@ impl AbstractOccupiedSpaceTrait for AbstractBuilding {
         }
     }
 }
+
 impl AbstractConstructionTrait for AbstractBuilding {
     fn condition_of_construction(&self) -> Option<ConditionOfConstructionValue> {
         match self {
@@ -2642,6 +2709,7 @@ impl AbstractConstructionTrait for AbstractBuilding {
         }
     }
 }
+
 impl AbstractBuildingTrait for AbstractBuilding {
     fn class_(&self) -> Option<&BuildingClassValue> {
         match self {
@@ -2728,20 +2796,24 @@ impl AbstractBuildingTrait for AbstractBuilding {
         }
     }
 }
+
 impl From<Building> for AbstractBuilding {
     fn from(v: Building) -> Self {
         Self::Building(v)
     }
 }
+
 impl From<BuildingPart> for AbstractBuilding {
     fn from(v: BuildingPart) -> Self {
         Self::BuildingPart(v)
     }
 }
+
 pub trait AbstractBuildingAccessors {
     fn buildings(&self) -> impl Iterator<Item = &Building>;
     fn building_parts(&self) -> impl Iterator<Item = &BuildingPart>;
 }
+
 impl AbstractBuildingAccessors for [AbstractBuilding] {
     fn buildings(&self) -> impl Iterator<Item = &Building> {
         self.iter()
@@ -2758,6 +2830,7 @@ impl AbstractBuildingAccessors for [AbstractBuilding] {
             })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct BuildingConstructiveElement {
     pub feature_id: ID,
@@ -2802,6 +2875,7 @@ pub struct BuildingConstructiveElement {
     pub function: Vec<BuildingConstructiveElementFunctionValue>,
     pub usage: Vec<BuildingConstructiveElementUsageValue>,
 }
+
 impl AbstractFeatureTrait for BuildingConstructiveElement {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -2816,6 +2890,7 @@ impl AbstractFeatureTrait for BuildingConstructiveElement {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for BuildingConstructiveElement {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -2830,6 +2905,7 @@ impl AbstractFeatureWithLifespanTrait for BuildingConstructiveElement {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for BuildingConstructiveElement {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -2853,6 +2929,7 @@ impl AbstractCityObjectTrait for BuildingConstructiveElement {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for BuildingConstructiveElement {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -2897,6 +2974,7 @@ impl AbstractSpaceTrait for BuildingConstructiveElement {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for BuildingConstructiveElement {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -2911,6 +2989,7 @@ impl AbstractPhysicalSpaceTrait for BuildingConstructiveElement {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractOccupiedSpaceTrait for BuildingConstructiveElement {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
@@ -2922,6 +3001,7 @@ impl AbstractOccupiedSpaceTrait for BuildingConstructiveElement {
         self.lod1_implicit_representation.as_ref()
     }
 }
+
 impl AbstractConstructiveElementTrait for BuildingConstructiveElement {
     fn is_structural_element(&self) -> Option<bool> {
         self.is_structural_element
@@ -2930,6 +3010,7 @@ impl AbstractConstructiveElementTrait for BuildingConstructiveElement {
         &self.filling
     }
 }
+
 impl BuildingConstructiveElement {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -3421,6 +3502,7 @@ impl BuildingConstructiveElement {
         })
     }
 }
+
 impl crate::from_gml::FromGml for BuildingConstructiveElement {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -3433,6 +3515,7 @@ impl crate::from_gml::FromGml for BuildingConstructiveElement {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct BuildingFurniture {
     pub feature_id: ID,
@@ -3475,6 +3558,7 @@ pub struct BuildingFurniture {
     pub function: Vec<BuildingFurnitureFunctionValue>,
     pub usage: Vec<BuildingFurnitureUsageValue>,
 }
+
 impl AbstractFeatureTrait for BuildingFurniture {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -3489,6 +3573,7 @@ impl AbstractFeatureTrait for BuildingFurniture {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for BuildingFurniture {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -3503,6 +3588,7 @@ impl AbstractFeatureWithLifespanTrait for BuildingFurniture {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for BuildingFurniture {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -3526,6 +3612,7 @@ impl AbstractCityObjectTrait for BuildingFurniture {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for BuildingFurniture {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -3570,6 +3657,7 @@ impl AbstractSpaceTrait for BuildingFurniture {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for BuildingFurniture {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -3584,6 +3672,7 @@ impl AbstractPhysicalSpaceTrait for BuildingFurniture {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractOccupiedSpaceTrait for BuildingFurniture {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
@@ -3595,6 +3684,7 @@ impl AbstractOccupiedSpaceTrait for BuildingFurniture {
         self.lod1_implicit_representation.as_ref()
     }
 }
+
 impl AbstractFurnitureTrait for BuildingFurniture {}
 impl BuildingFurniture {
     pub fn from_gml_with_info(
@@ -4061,6 +4151,7 @@ impl BuildingFurniture {
         })
     }
 }
+
 impl crate::from_gml::FromGml for BuildingFurniture {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -4073,6 +4164,7 @@ impl crate::from_gml::FromGml for BuildingFurniture {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct BuildingInstallation {
     pub feature_id: ID,
@@ -4116,6 +4208,7 @@ pub struct BuildingInstallation {
     pub function: Vec<BuildingInstallationFunctionValue>,
     pub usage: Vec<BuildingInstallationUsageValue>,
 }
+
 impl AbstractFeatureTrait for BuildingInstallation {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -4130,6 +4223,7 @@ impl AbstractFeatureTrait for BuildingInstallation {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for BuildingInstallation {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -4144,6 +4238,7 @@ impl AbstractFeatureWithLifespanTrait for BuildingInstallation {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for BuildingInstallation {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -4167,6 +4262,7 @@ impl AbstractCityObjectTrait for BuildingInstallation {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for BuildingInstallation {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -4211,6 +4307,7 @@ impl AbstractSpaceTrait for BuildingInstallation {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for BuildingInstallation {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -4225,6 +4322,7 @@ impl AbstractPhysicalSpaceTrait for BuildingInstallation {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractOccupiedSpaceTrait for BuildingInstallation {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
@@ -4236,11 +4334,13 @@ impl AbstractOccupiedSpaceTrait for BuildingInstallation {
         self.lod1_implicit_representation.as_ref()
     }
 }
+
 impl AbstractInstallationTrait for BuildingInstallation {
     fn relation_to_construction(&self) -> Option<RelationToConstruction> {
         self.relation_to_construction
     }
 }
+
 impl BuildingInstallation {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -4713,6 +4813,7 @@ impl BuildingInstallation {
         })
     }
 }
+
 impl crate::from_gml::FromGml for BuildingInstallation {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -4725,6 +4826,7 @@ impl crate::from_gml::FromGml for BuildingInstallation {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct Building {
     pub feature_id: ID,
@@ -4786,6 +4888,7 @@ pub struct Building {
     pub building_subdivision: Vec<AbstractBuildingSubdivision>,
     pub building_part: Vec<BuildingPart>,
 }
+
 impl AbstractFeatureTrait for Building {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -4800,6 +4903,7 @@ impl AbstractFeatureTrait for Building {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for Building {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -4814,6 +4918,7 @@ impl AbstractFeatureWithLifespanTrait for Building {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for Building {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -4837,6 +4942,7 @@ impl AbstractCityObjectTrait for Building {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for Building {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -4881,6 +4987,7 @@ impl AbstractSpaceTrait for Building {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for Building {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -4895,6 +5002,7 @@ impl AbstractPhysicalSpaceTrait for Building {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractOccupiedSpaceTrait for Building {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
@@ -4906,6 +5014,7 @@ impl AbstractOccupiedSpaceTrait for Building {
         self.lod1_implicit_representation.as_ref()
     }
 }
+
 impl AbstractConstructionTrait for Building {
     fn condition_of_construction(&self) -> Option<ConditionOfConstructionValue> {
         self.condition_of_construction
@@ -4929,6 +5038,7 @@ impl AbstractConstructionTrait for Building {
         &self.occupancy
     }
 }
+
 impl AbstractBuildingTrait for Building {
     fn class_(&self) -> Option<&BuildingClassValue> {
         self.class_.as_ref()
@@ -4973,6 +5083,7 @@ impl AbstractBuildingTrait for Building {
         &self.building_subdivision
     }
 }
+
 impl Building {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -5607,6 +5718,7 @@ impl Building {
         })
     }
 }
+
 impl crate::from_gml::FromGml for Building {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -5619,6 +5731,7 @@ impl crate::from_gml::FromGml for Building {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct BuildingPart {
     pub feature_id: ID,
@@ -5679,6 +5792,7 @@ pub struct BuildingPart {
     pub building_room: Vec<BuildingRoom>,
     pub building_subdivision: Vec<AbstractBuildingSubdivision>,
 }
+
 impl AbstractFeatureTrait for BuildingPart {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -5693,6 +5807,7 @@ impl AbstractFeatureTrait for BuildingPart {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for BuildingPart {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -5707,6 +5822,7 @@ impl AbstractFeatureWithLifespanTrait for BuildingPart {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for BuildingPart {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -5730,6 +5846,7 @@ impl AbstractCityObjectTrait for BuildingPart {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for BuildingPart {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -5774,6 +5891,7 @@ impl AbstractSpaceTrait for BuildingPart {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for BuildingPart {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -5788,6 +5906,7 @@ impl AbstractPhysicalSpaceTrait for BuildingPart {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractOccupiedSpaceTrait for BuildingPart {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
@@ -5799,6 +5918,7 @@ impl AbstractOccupiedSpaceTrait for BuildingPart {
         self.lod1_implicit_representation.as_ref()
     }
 }
+
 impl AbstractConstructionTrait for BuildingPart {
     fn condition_of_construction(&self) -> Option<ConditionOfConstructionValue> {
         self.condition_of_construction
@@ -5822,6 +5942,7 @@ impl AbstractConstructionTrait for BuildingPart {
         &self.occupancy
     }
 }
+
 impl AbstractBuildingTrait for BuildingPart {
     fn class_(&self) -> Option<&BuildingClassValue> {
         self.class_.as_ref()
@@ -5866,6 +5987,7 @@ impl AbstractBuildingTrait for BuildingPart {
         &self.building_subdivision
     }
 }
+
 impl BuildingPart {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -6489,6 +6611,7 @@ impl BuildingPart {
         })
     }
 }
+
 impl crate::from_gml::FromGml for BuildingPart {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,

@@ -8,6 +8,7 @@ pub enum TextureType {
     Typical,
     Unknown,
 }
+
 impl TextureType {
     pub fn from_gml_text(text: &str) -> Result<Self, crate::error::ReaderError> {
         match text.trim() {
@@ -24,6 +25,7 @@ impl TextureType {
         }
     }
 }
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
 pub enum WrapMode {
     #[default]
@@ -33,6 +35,7 @@ pub enum WrapMode {
     Clamp,
     Border,
 }
+
 impl WrapMode {
     pub fn from_gml_text(text: &str) -> Result<Self, crate::error::ReaderError> {
         match text.trim() {
@@ -51,11 +54,13 @@ impl WrapMode {
         }
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct TexCoordGen {
     pub world_to_texture: TransformationMatrix3x4,
     pub crs: Option<String>,
 }
+
 impl crate::from_gml::FromGml for TexCoordGen {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -91,11 +96,13 @@ impl crate::from_gml::FromGml for TexCoordGen {
         })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct TexCoordList {
     pub texture_coordinates: Vec<DoubleList>,
     pub ring: Vec<String>,
 }
+
 impl crate::from_gml::FromGml for TexCoordList {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -129,20 +136,24 @@ impl crate::from_gml::FromGml for TexCoordList {
         })
     }
 }
+
 pub trait AbstractSurfaceDataTrait: AbstractFeatureTrait {
     fn is_front(&self) -> Option<bool>;
 }
+
 #[derive(Debug, Clone)]
 pub enum AbstractSurfaceData {
     GeoreferencedTexture(GeoreferencedTexture),
     ParameterizedTexture(ParameterizedTexture),
     X3DMaterial(X3DMaterial),
 }
+
 impl Default for AbstractSurfaceData {
     fn default() -> Self {
         Self::GeoreferencedTexture(Default::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractSurfaceData {
     fn feature_id(&self) -> &ID {
         match self {
@@ -173,6 +184,7 @@ impl AbstractFeatureTrait for AbstractSurfaceData {
         }
     }
 }
+
 impl AbstractSurfaceDataTrait for AbstractSurfaceData {
     fn is_front(&self) -> Option<bool> {
         match self {
@@ -182,26 +194,31 @@ impl AbstractSurfaceDataTrait for AbstractSurfaceData {
         }
     }
 }
+
 impl From<GeoreferencedTexture> for AbstractSurfaceData {
     fn from(v: GeoreferencedTexture) -> Self {
         Self::GeoreferencedTexture(v)
     }
 }
+
 impl From<ParameterizedTexture> for AbstractSurfaceData {
     fn from(v: ParameterizedTexture) -> Self {
         Self::ParameterizedTexture(v)
     }
 }
+
 impl From<X3DMaterial> for AbstractSurfaceData {
     fn from(v: X3DMaterial) -> Self {
         Self::X3DMaterial(v)
     }
 }
+
 pub trait AbstractSurfaceDataAccessors {
     fn georeferenced_textures(&self) -> impl Iterator<Item = &GeoreferencedTexture>;
     fn parameterized_textures(&self) -> impl Iterator<Item = &ParameterizedTexture>;
     fn x3_d_materials(&self) -> impl Iterator<Item = &X3DMaterial>;
 }
+
 impl AbstractSurfaceDataAccessors for [AbstractSurfaceData] {
     fn georeferenced_textures(&self) -> impl Iterator<Item = &GeoreferencedTexture> {
         self.iter()
@@ -225,10 +242,12 @@ impl AbstractSurfaceDataAccessors for [AbstractSurfaceData] {
             })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct Color {
     pub list: DoubleBetween0and1,
 }
+
 impl Color {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -251,6 +270,7 @@ impl Color {
         Ok(Color { list })
     }
 }
+
 impl crate::from_gml::FromGml for Color {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -263,10 +283,12 @@ impl crate::from_gml::FromGml for Color {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct ColorPlusOpacity {
     pub list: DoubleBetween0and1,
 }
+
 impl ColorPlusOpacity {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -289,6 +311,7 @@ impl ColorPlusOpacity {
         Ok(ColorPlusOpacity { list })
     }
 }
+
 impl crate::from_gml::FromGml for ColorPlusOpacity {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -301,6 +324,7 @@ impl crate::from_gml::FromGml for ColorPlusOpacity {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 pub trait AbstractTextureTrait: AbstractSurfaceDataTrait {
     fn image_uri(&self) -> &String;
     fn mime_type(&self) -> Option<&MimeTypeValue>;
@@ -308,16 +332,19 @@ pub trait AbstractTextureTrait: AbstractSurfaceDataTrait {
     fn wrap_mode(&self) -> Option<WrapMode>;
     fn border_color(&self) -> Option<&ColorPlusOpacity>;
 }
+
 #[derive(Debug, Clone)]
 pub enum AbstractTexture {
     GeoreferencedTexture(GeoreferencedTexture),
     ParameterizedTexture(ParameterizedTexture),
 }
+
 impl Default for AbstractTexture {
     fn default() -> Self {
         Self::GeoreferencedTexture(Default::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractTexture {
     fn feature_id(&self) -> &ID {
         match self {
@@ -344,6 +371,7 @@ impl AbstractFeatureTrait for AbstractTexture {
         }
     }
 }
+
 impl AbstractSurfaceDataTrait for AbstractTexture {
     fn is_front(&self) -> Option<bool> {
         match self {
@@ -352,6 +380,7 @@ impl AbstractSurfaceDataTrait for AbstractTexture {
         }
     }
 }
+
 impl AbstractTextureTrait for AbstractTexture {
     fn image_uri(&self) -> &String {
         match self {
@@ -384,20 +413,24 @@ impl AbstractTextureTrait for AbstractTexture {
         }
     }
 }
+
 impl From<GeoreferencedTexture> for AbstractTexture {
     fn from(v: GeoreferencedTexture) -> Self {
         Self::GeoreferencedTexture(v)
     }
 }
+
 impl From<ParameterizedTexture> for AbstractTexture {
     fn from(v: ParameterizedTexture) -> Self {
         Self::ParameterizedTexture(v)
     }
 }
+
 pub trait AbstractTextureAccessors {
     fn georeferenced_textures(&self) -> impl Iterator<Item = &GeoreferencedTexture>;
     fn parameterized_textures(&self) -> impl Iterator<Item = &ParameterizedTexture>;
 }
+
 impl AbstractTextureAccessors for [AbstractTexture] {
     fn georeferenced_textures(&self) -> impl Iterator<Item = &GeoreferencedTexture> {
         self.iter()
@@ -414,6 +447,7 @@ impl AbstractTextureAccessors for [AbstractTexture] {
             })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct X3DMaterial {
     pub feature_id: ID,
@@ -430,6 +464,7 @@ pub struct X3DMaterial {
     pub is_smooth: Option<bool>,
     pub target: Vec<String>,
 }
+
 impl AbstractFeatureTrait for X3DMaterial {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -444,11 +479,13 @@ impl AbstractFeatureTrait for X3DMaterial {
         self.description.as_ref()
     }
 }
+
 impl AbstractSurfaceDataTrait for X3DMaterial {
     fn is_front(&self) -> Option<bool> {
         self.is_front
     }
 }
+
 impl X3DMaterial {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -554,6 +591,7 @@ impl X3DMaterial {
         })
     }
 }
+
 impl crate::from_gml::FromGml for X3DMaterial {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -566,6 +604,7 @@ impl crate::from_gml::FromGml for X3DMaterial {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct GeoreferencedTexture {
     pub feature_id: ID,
@@ -583,6 +622,7 @@ pub struct GeoreferencedTexture {
     pub target: Vec<String>,
     pub reference_point: Option<crate::geometry::DirectPosition>,
 }
+
 impl AbstractFeatureTrait for GeoreferencedTexture {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -597,11 +637,13 @@ impl AbstractFeatureTrait for GeoreferencedTexture {
         self.description.as_ref()
     }
 }
+
 impl AbstractSurfaceDataTrait for GeoreferencedTexture {
     fn is_front(&self) -> Option<bool> {
         self.is_front
     }
 }
+
 impl AbstractTextureTrait for GeoreferencedTexture {
     fn image_uri(&self) -> &String {
         &self.image_uri
@@ -619,6 +661,7 @@ impl AbstractTextureTrait for GeoreferencedTexture {
         self.border_color.as_ref()
     }
 }
+
 impl GeoreferencedTexture {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -742,6 +785,7 @@ impl GeoreferencedTexture {
         })
     }
 }
+
 impl crate::from_gml::FromGml for GeoreferencedTexture {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -754,6 +798,7 @@ impl crate::from_gml::FromGml for GeoreferencedTexture {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct ParameterizedTexture {
     pub feature_id: ID,
@@ -767,6 +812,7 @@ pub struct ParameterizedTexture {
     pub wrap_mode: Option<WrapMode>,
     pub border_color: Option<ColorPlusOpacity>,
 }
+
 impl AbstractFeatureTrait for ParameterizedTexture {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -781,11 +827,13 @@ impl AbstractFeatureTrait for ParameterizedTexture {
         self.description.as_ref()
     }
 }
+
 impl AbstractSurfaceDataTrait for ParameterizedTexture {
     fn is_front(&self) -> Option<bool> {
         self.is_front
     }
 }
+
 impl AbstractTextureTrait for ParameterizedTexture {
     fn image_uri(&self) -> &String {
         &self.image_uri
@@ -803,6 +851,7 @@ impl AbstractTextureTrait for ParameterizedTexture {
         self.border_color.as_ref()
     }
 }
+
 impl ParameterizedTexture {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -882,6 +931,7 @@ impl ParameterizedTexture {
         })
     }
 }
+
 impl crate::from_gml::FromGml for ParameterizedTexture {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -894,6 +944,7 @@ impl crate::from_gml::FromGml for ParameterizedTexture {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct Appearance {
     pub feature_id: ID,
@@ -907,6 +958,7 @@ pub struct Appearance {
     pub theme: Option<String>,
     pub surface_data: Vec<AbstractSurfaceData>,
 }
+
 impl AbstractFeatureTrait for Appearance {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -921,6 +973,7 @@ impl AbstractFeatureTrait for Appearance {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for Appearance {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -935,6 +988,7 @@ impl AbstractFeatureWithLifespanTrait for Appearance {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractAppearanceTrait for Appearance {}
 impl Appearance {
     pub fn from_gml_with_info(
@@ -1016,6 +1070,7 @@ impl Appearance {
         })
     }
 }
+
 impl crate::from_gml::FromGml for Appearance {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,

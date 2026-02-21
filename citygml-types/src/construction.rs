@@ -11,6 +11,7 @@ pub enum ConditionOfConstructionValue {
     Ruin,
     UnderConstruction,
 }
+
 impl ConditionOfConstructionValue {
     pub fn from_gml_text(text: &str) -> Result<Self, crate::error::ReaderError> {
         match text.trim() {
@@ -31,12 +32,14 @@ impl ConditionOfConstructionValue {
         }
     }
 }
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
 pub enum HeightStatusValue {
     #[default]
     Estimated,
     Measured,
 }
+
 impl HeightStatusValue {
     pub fn from_gml_text(text: &str) -> Result<Self, crate::error::ReaderError> {
         match text.trim() {
@@ -52,6 +55,7 @@ impl HeightStatusValue {
         }
     }
 }
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
 pub enum RelationToConstruction {
     #[default]
@@ -59,6 +63,7 @@ pub enum RelationToConstruction {
     Outside,
     BothInsideAndOutside,
 }
+
 impl RelationToConstruction {
     pub fn from_gml_text(text: &str) -> Result<Self, crate::error::ReaderError> {
         match text.trim() {
@@ -76,12 +81,14 @@ impl RelationToConstruction {
         }
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct ConstructionEvent {
     pub event: EventValue,
     pub date_of_event: String,
     pub description: Option<String>,
 }
+
 impl crate::from_gml::FromGml for ConstructionEvent {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -114,11 +121,13 @@ impl crate::from_gml::FromGml for ConstructionEvent {
         })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct Elevation {
     pub elevation_reference: ElevationReferenceValue,
     pub elevation_value: crate::geometry::DirectPosition,
 }
+
 impl crate::from_gml::FromGml for Elevation {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -158,6 +167,7 @@ impl crate::from_gml::FromGml for Elevation {
         })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct Height {
     pub high_reference: ElevationReferenceValue,
@@ -165,6 +175,7 @@ pub struct Height {
     pub status: HeightStatusValue,
     pub value: f64,
 }
+
 impl crate::from_gml::FromGml for Height {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -202,6 +213,7 @@ impl crate::from_gml::FromGml for Height {
         })
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct DoorClassValue(pub String);
 impl crate::from_gml::FromGml for DoorClassValue {
@@ -211,6 +223,7 @@ impl crate::from_gml::FromGml for DoorClassValue {
         Ok(DoorClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct DoorFunctionValue(pub String);
 impl crate::from_gml::FromGml for DoorFunctionValue {
@@ -220,6 +233,7 @@ impl crate::from_gml::FromGml for DoorFunctionValue {
         Ok(DoorFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct DoorUsageValue(pub String);
 impl crate::from_gml::FromGml for DoorUsageValue {
@@ -229,6 +243,7 @@ impl crate::from_gml::FromGml for DoorUsageValue {
         Ok(DoorUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct ElevationReferenceValue(pub String);
 impl crate::from_gml::FromGml for ElevationReferenceValue {
@@ -238,6 +253,7 @@ impl crate::from_gml::FromGml for ElevationReferenceValue {
         Ok(ElevationReferenceValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct EventValue(pub String);
 impl crate::from_gml::FromGml for EventValue {
@@ -247,6 +263,7 @@ impl crate::from_gml::FromGml for EventValue {
         Ok(EventValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct OtherConstructionClassValue(pub String);
 impl crate::from_gml::FromGml for OtherConstructionClassValue {
@@ -256,6 +273,7 @@ impl crate::from_gml::FromGml for OtherConstructionClassValue {
         Ok(OtherConstructionClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct OtherConstructionFunctionValue(pub String);
 impl crate::from_gml::FromGml for OtherConstructionFunctionValue {
@@ -265,6 +283,7 @@ impl crate::from_gml::FromGml for OtherConstructionFunctionValue {
         Ok(OtherConstructionFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct OtherConstructionUsageValue(pub String);
 impl crate::from_gml::FromGml for OtherConstructionUsageValue {
@@ -274,6 +293,7 @@ impl crate::from_gml::FromGml for OtherConstructionUsageValue {
         Ok(OtherConstructionUsageValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct WindowClassValue(pub String);
 impl crate::from_gml::FromGml for WindowClassValue {
@@ -283,6 +303,7 @@ impl crate::from_gml::FromGml for WindowClassValue {
         Ok(WindowClassValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct WindowFunctionValue(pub String);
 impl crate::from_gml::FromGml for WindowFunctionValue {
@@ -292,6 +313,7 @@ impl crate::from_gml::FromGml for WindowFunctionValue {
         Ok(WindowFunctionValue(reader.read_text()?))
     }
 }
+
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct WindowUsageValue(pub String);
 impl crate::from_gml::FromGml for WindowUsageValue {
@@ -301,9 +323,11 @@ impl crate::from_gml::FromGml for WindowUsageValue {
         Ok(WindowUsageValue(reader.read_text()?))
     }
 }
+
 pub trait AbstractConstructionSurfaceTrait: AbstractThematicSurfaceTrait {
     fn filling_surface(&self) -> &[AbstractFillingSurface];
 }
+
 #[derive(Debug, Clone)]
 pub enum AbstractConstructionSurface {
     CeilingSurface(CeilingSurface),
@@ -315,11 +339,13 @@ pub enum AbstractConstructionSurface {
     RoofSurface(RoofSurface),
     WallSurface(WallSurface),
 }
+
 impl Default for AbstractConstructionSurface {
     fn default() -> Self {
         Self::CeilingSurface(Default::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractConstructionSurface {
     fn feature_id(&self) -> &ID {
         match self {
@@ -370,6 +396,7 @@ impl AbstractFeatureTrait for AbstractConstructionSurface {
         }
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for AbstractConstructionSurface {
     fn creation_date(&self) -> Option<&String> {
         match self {
@@ -420,6 +447,7 @@ impl AbstractFeatureWithLifespanTrait for AbstractConstructionSurface {
         }
     }
 }
+
 impl AbstractCityObjectTrait for AbstractConstructionSurface {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         match self {
@@ -506,6 +534,7 @@ impl AbstractCityObjectTrait for AbstractConstructionSurface {
         }
     }
 }
+
 impl AbstractSpaceBoundaryTrait for AbstractConstructionSurface {}
 impl AbstractThematicSurfaceTrait for AbstractConstructionSurface {
     fn area(&self) -> &[QualifiedArea] {
@@ -593,6 +622,7 @@ impl AbstractThematicSurfaceTrait for AbstractConstructionSurface {
         }
     }
 }
+
 impl AbstractConstructionSurfaceTrait for AbstractConstructionSurface {
     fn filling_surface(&self) -> &[AbstractFillingSurface] {
         match self {
@@ -607,46 +637,55 @@ impl AbstractConstructionSurfaceTrait for AbstractConstructionSurface {
         }
     }
 }
+
 impl From<CeilingSurface> for AbstractConstructionSurface {
     fn from(v: CeilingSurface) -> Self {
         Self::CeilingSurface(v)
     }
 }
+
 impl From<FloorSurface> for AbstractConstructionSurface {
     fn from(v: FloorSurface) -> Self {
         Self::FloorSurface(v)
     }
 }
+
 impl From<GroundSurface> for AbstractConstructionSurface {
     fn from(v: GroundSurface) -> Self {
         Self::GroundSurface(v)
     }
 }
+
 impl From<InteriorWallSurface> for AbstractConstructionSurface {
     fn from(v: InteriorWallSurface) -> Self {
         Self::InteriorWallSurface(v)
     }
 }
+
 impl From<OuterCeilingSurface> for AbstractConstructionSurface {
     fn from(v: OuterCeilingSurface) -> Self {
         Self::OuterCeilingSurface(v)
     }
 }
+
 impl From<OuterFloorSurface> for AbstractConstructionSurface {
     fn from(v: OuterFloorSurface) -> Self {
         Self::OuterFloorSurface(v)
     }
 }
+
 impl From<RoofSurface> for AbstractConstructionSurface {
     fn from(v: RoofSurface) -> Self {
         Self::RoofSurface(v)
     }
 }
+
 impl From<WallSurface> for AbstractConstructionSurface {
     fn from(v: WallSurface) -> Self {
         Self::WallSurface(v)
     }
 }
+
 pub trait AbstractConstructionSurfaceAccessors {
     fn ceiling_surfaces(&self) -> impl Iterator<Item = &CeilingSurface>;
     fn floor_surfaces(&self) -> impl Iterator<Item = &FloorSurface>;
@@ -657,6 +696,7 @@ pub trait AbstractConstructionSurfaceAccessors {
     fn roof_surfaces(&self) -> impl Iterator<Item = &RoofSurface>;
     fn wall_surfaces(&self) -> impl Iterator<Item = &WallSurface>;
 }
+
 impl AbstractConstructionSurfaceAccessors for [AbstractConstructionSurface] {
     fn ceiling_surfaces(&self) -> impl Iterator<Item = &CeilingSurface> {
         self.iter()
@@ -715,17 +755,20 @@ impl AbstractConstructionSurfaceAccessors for [AbstractConstructionSurface] {
             })
     }
 }
+
 pub trait AbstractFillingSurfaceTrait: AbstractThematicSurfaceTrait {}
 #[derive(Debug, Clone)]
 pub enum AbstractFillingSurface {
     DoorSurface(DoorSurface),
     WindowSurface(WindowSurface),
 }
+
 impl Default for AbstractFillingSurface {
     fn default() -> Self {
         Self::DoorSurface(Default::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractFillingSurface {
     fn feature_id(&self) -> &ID {
         match self {
@@ -752,6 +795,7 @@ impl AbstractFeatureTrait for AbstractFillingSurface {
         }
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for AbstractFillingSurface {
     fn creation_date(&self) -> Option<&String> {
         match self {
@@ -778,6 +822,7 @@ impl AbstractFeatureWithLifespanTrait for AbstractFillingSurface {
         }
     }
 }
+
 impl AbstractCityObjectTrait for AbstractFillingSurface {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         match self {
@@ -822,6 +867,7 @@ impl AbstractCityObjectTrait for AbstractFillingSurface {
         }
     }
 }
+
 impl AbstractSpaceBoundaryTrait for AbstractFillingSurface {}
 impl AbstractThematicSurfaceTrait for AbstractFillingSurface {
     fn area(&self) -> &[QualifiedArea] {
@@ -867,21 +913,25 @@ impl AbstractThematicSurfaceTrait for AbstractFillingSurface {
         }
     }
 }
+
 impl AbstractFillingSurfaceTrait for AbstractFillingSurface {}
 impl From<DoorSurface> for AbstractFillingSurface {
     fn from(v: DoorSurface) -> Self {
         Self::DoorSurface(v)
     }
 }
+
 impl From<WindowSurface> for AbstractFillingSurface {
     fn from(v: WindowSurface) -> Self {
         Self::WindowSurface(v)
     }
 }
+
 pub trait AbstractFillingSurfaceAccessors {
     fn door_surfaces(&self) -> impl Iterator<Item = &DoorSurface>;
     fn window_surfaces(&self) -> impl Iterator<Item = &WindowSurface>;
 }
+
 impl AbstractFillingSurfaceAccessors for [AbstractFillingSurface] {
     fn door_surfaces(&self) -> impl Iterator<Item = &DoorSurface> {
         self.iter()
@@ -898,6 +948,7 @@ impl AbstractFillingSurfaceAccessors for [AbstractFillingSurface] {
             })
     }
 }
+
 pub trait AbstractConstructionTrait: AbstractOccupiedSpaceTrait {
     fn condition_of_construction(&self) -> Option<ConditionOfConstructionValue>;
     fn date_of_construction(&self) -> Option<&String>;
@@ -907,6 +958,7 @@ pub trait AbstractConstructionTrait: AbstractOccupiedSpaceTrait {
     fn height(&self) -> &[Height];
     fn occupancy(&self) -> &[Occupancy];
 }
+
 #[derive(Debug, Clone)]
 pub enum AbstractConstruction {
     OtherConstruction(OtherConstruction),
@@ -917,11 +969,13 @@ pub enum AbstractConstruction {
     Tunnel(Tunnel),
     TunnelPart(TunnelPart),
 }
+
 impl Default for AbstractConstruction {
     fn default() -> Self {
         Self::OtherConstruction(Default::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractConstruction {
     fn feature_id(&self) -> &ID {
         match self {
@@ -968,6 +1022,7 @@ impl AbstractFeatureTrait for AbstractConstruction {
         }
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for AbstractConstruction {
     fn creation_date(&self) -> Option<&String> {
         match self {
@@ -1014,6 +1069,7 @@ impl AbstractFeatureWithLifespanTrait for AbstractConstruction {
         }
     }
 }
+
 impl AbstractCityObjectTrait for AbstractConstruction {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         match self {
@@ -1093,6 +1149,7 @@ impl AbstractCityObjectTrait for AbstractConstruction {
         }
     }
 }
+
 impl AbstractSpaceTrait for AbstractConstruction {
     fn space_type(&self) -> Option<SpaceType> {
         match self {
@@ -1249,6 +1306,7 @@ impl AbstractSpaceTrait for AbstractConstruction {
         }
     }
 }
+
 impl AbstractPhysicalSpaceTrait for AbstractConstruction {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         match self {
@@ -1295,6 +1353,7 @@ impl AbstractPhysicalSpaceTrait for AbstractConstruction {
         }
     }
 }
+
 impl AbstractOccupiedSpaceTrait for AbstractConstruction {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         match self {
@@ -1330,6 +1389,7 @@ impl AbstractOccupiedSpaceTrait for AbstractConstruction {
         }
     }
 }
+
 impl AbstractConstructionTrait for AbstractConstruction {
     fn condition_of_construction(&self) -> Option<ConditionOfConstructionValue> {
         match self {
@@ -1409,41 +1469,49 @@ impl AbstractConstructionTrait for AbstractConstruction {
         }
     }
 }
+
 impl From<OtherConstruction> for AbstractConstruction {
     fn from(v: OtherConstruction) -> Self {
         Self::OtherConstruction(v)
     }
 }
+
 impl From<Bridge> for AbstractConstruction {
     fn from(v: Bridge) -> Self {
         Self::Bridge(v)
     }
 }
+
 impl From<BridgePart> for AbstractConstruction {
     fn from(v: BridgePart) -> Self {
         Self::BridgePart(v)
     }
 }
+
 impl From<Building> for AbstractConstruction {
     fn from(v: Building) -> Self {
         Self::Building(v)
     }
 }
+
 impl From<BuildingPart> for AbstractConstruction {
     fn from(v: BuildingPart) -> Self {
         Self::BuildingPart(v)
     }
 }
+
 impl From<Tunnel> for AbstractConstruction {
     fn from(v: Tunnel) -> Self {
         Self::Tunnel(v)
     }
 }
+
 impl From<TunnelPart> for AbstractConstruction {
     fn from(v: TunnelPart) -> Self {
         Self::TunnelPart(v)
     }
 }
+
 pub trait AbstractConstructionAccessors {
     fn other_constructions(&self) -> impl Iterator<Item = &OtherConstruction>;
     fn bridges(&self) -> impl Iterator<Item = &Bridge>;
@@ -1453,6 +1521,7 @@ pub trait AbstractConstructionAccessors {
     fn tunnels(&self) -> impl Iterator<Item = &Tunnel>;
     fn tunnel_parts(&self) -> impl Iterator<Item = &TunnelPart>;
 }
+
 impl AbstractConstructionAccessors for [AbstractConstruction] {
     fn other_constructions(&self) -> impl Iterator<Item = &OtherConstruction> {
         self.iter()
@@ -1504,21 +1573,25 @@ impl AbstractConstructionAccessors for [AbstractConstruction] {
             })
     }
 }
+
 pub trait AbstractConstructiveElementTrait: AbstractOccupiedSpaceTrait {
     fn is_structural_element(&self) -> Option<bool>;
     fn filling(&self) -> &[AbstractFillingElement];
 }
+
 #[derive(Debug, Clone)]
 pub enum AbstractConstructiveElement {
     BridgeConstructiveElement(BridgeConstructiveElement),
     BuildingConstructiveElement(BuildingConstructiveElement),
     TunnelConstructiveElement(TunnelConstructiveElement),
 }
+
 impl Default for AbstractConstructiveElement {
     fn default() -> Self {
         Self::BridgeConstructiveElement(Default::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractConstructiveElement {
     fn feature_id(&self) -> &ID {
         match self {
@@ -1549,6 +1622,7 @@ impl AbstractFeatureTrait for AbstractConstructiveElement {
         }
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for AbstractConstructiveElement {
     fn creation_date(&self) -> Option<&String> {
         match self {
@@ -1579,6 +1653,7 @@ impl AbstractFeatureWithLifespanTrait for AbstractConstructiveElement {
         }
     }
 }
+
 impl AbstractCityObjectTrait for AbstractConstructiveElement {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         match self {
@@ -1630,6 +1705,7 @@ impl AbstractCityObjectTrait for AbstractConstructiveElement {
         }
     }
 }
+
 impl AbstractSpaceTrait for AbstractConstructiveElement {
     fn space_type(&self) -> Option<SpaceType> {
         match self {
@@ -1730,6 +1806,7 @@ impl AbstractSpaceTrait for AbstractConstructiveElement {
         }
     }
 }
+
 impl AbstractPhysicalSpaceTrait for AbstractConstructiveElement {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         match self {
@@ -1760,6 +1837,7 @@ impl AbstractPhysicalSpaceTrait for AbstractConstructiveElement {
         }
     }
 }
+
 impl AbstractOccupiedSpaceTrait for AbstractConstructiveElement {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         match self {
@@ -1783,6 +1861,7 @@ impl AbstractOccupiedSpaceTrait for AbstractConstructiveElement {
         }
     }
 }
+
 impl AbstractConstructiveElementTrait for AbstractConstructiveElement {
     fn is_structural_element(&self) -> Option<bool> {
         match self {
@@ -1799,21 +1878,25 @@ impl AbstractConstructiveElementTrait for AbstractConstructiveElement {
         }
     }
 }
+
 impl From<BridgeConstructiveElement> for AbstractConstructiveElement {
     fn from(v: BridgeConstructiveElement) -> Self {
         Self::BridgeConstructiveElement(v)
     }
 }
+
 impl From<BuildingConstructiveElement> for AbstractConstructiveElement {
     fn from(v: BuildingConstructiveElement) -> Self {
         Self::BuildingConstructiveElement(v)
     }
 }
+
 impl From<TunnelConstructiveElement> for AbstractConstructiveElement {
     fn from(v: TunnelConstructiveElement) -> Self {
         Self::TunnelConstructiveElement(v)
     }
 }
+
 pub trait AbstractConstructiveElementAccessors {
     fn bridge_constructive_elements(
         &self,
@@ -1825,6 +1908,7 @@ pub trait AbstractConstructiveElementAccessors {
         &self,
     ) -> impl Iterator<Item = &TunnelConstructiveElement>;
 }
+
 impl AbstractConstructiveElementAccessors for [AbstractConstructiveElement] {
     fn bridge_constructive_elements(
         &self,
@@ -1854,17 +1938,20 @@ impl AbstractConstructiveElementAccessors for [AbstractConstructiveElement] {
             })
     }
 }
+
 pub trait AbstractFillingElementTrait: AbstractOccupiedSpaceTrait {}
 #[derive(Debug, Clone)]
 pub enum AbstractFillingElement {
     Door(Door),
     Window(Window),
 }
+
 impl Default for AbstractFillingElement {
     fn default() -> Self {
         Self::Door(Default::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractFillingElement {
     fn feature_id(&self) -> &ID {
         match self {
@@ -1891,6 +1978,7 @@ impl AbstractFeatureTrait for AbstractFillingElement {
         }
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for AbstractFillingElement {
     fn creation_date(&self) -> Option<&String> {
         match self {
@@ -1917,6 +2005,7 @@ impl AbstractFeatureWithLifespanTrait for AbstractFillingElement {
         }
     }
 }
+
 impl AbstractCityObjectTrait for AbstractFillingElement {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         match self {
@@ -1961,6 +2050,7 @@ impl AbstractCityObjectTrait for AbstractFillingElement {
         }
     }
 }
+
 impl AbstractSpaceTrait for AbstractFillingElement {
     fn space_type(&self) -> Option<SpaceType> {
         match self {
@@ -2047,6 +2137,7 @@ impl AbstractSpaceTrait for AbstractFillingElement {
         }
     }
 }
+
 impl AbstractPhysicalSpaceTrait for AbstractFillingElement {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         match self {
@@ -2073,6 +2164,7 @@ impl AbstractPhysicalSpaceTrait for AbstractFillingElement {
         }
     }
 }
+
 impl AbstractOccupiedSpaceTrait for AbstractFillingElement {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         match self {
@@ -2093,21 +2185,25 @@ impl AbstractOccupiedSpaceTrait for AbstractFillingElement {
         }
     }
 }
+
 impl AbstractFillingElementTrait for AbstractFillingElement {}
 impl From<Door> for AbstractFillingElement {
     fn from(v: Door) -> Self {
         Self::Door(v)
     }
 }
+
 impl From<Window> for AbstractFillingElement {
     fn from(v: Window) -> Self {
         Self::Window(v)
     }
 }
+
 pub trait AbstractFillingElementAccessors {
     fn doors(&self) -> impl Iterator<Item = &Door>;
     fn windows(&self) -> impl Iterator<Item = &Window>;
 }
+
 impl AbstractFillingElementAccessors for [AbstractFillingElement] {
     fn doors(&self) -> impl Iterator<Item = &Door> {
         self.iter()
@@ -2124,6 +2220,7 @@ impl AbstractFillingElementAccessors for [AbstractFillingElement] {
             })
     }
 }
+
 pub trait AbstractFurnitureTrait: AbstractOccupiedSpaceTrait {}
 #[derive(Debug, Clone)]
 pub enum AbstractFurniture {
@@ -2131,11 +2228,13 @@ pub enum AbstractFurniture {
     BuildingFurniture(BuildingFurniture),
     TunnelFurniture(TunnelFurniture),
 }
+
 impl Default for AbstractFurniture {
     fn default() -> Self {
         Self::BridgeFurniture(Default::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractFurniture {
     fn feature_id(&self) -> &ID {
         match self {
@@ -2166,6 +2265,7 @@ impl AbstractFeatureTrait for AbstractFurniture {
         }
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for AbstractFurniture {
     fn creation_date(&self) -> Option<&String> {
         match self {
@@ -2196,6 +2296,7 @@ impl AbstractFeatureWithLifespanTrait for AbstractFurniture {
         }
     }
 }
+
 impl AbstractCityObjectTrait for AbstractFurniture {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         match self {
@@ -2247,6 +2348,7 @@ impl AbstractCityObjectTrait for AbstractFurniture {
         }
     }
 }
+
 impl AbstractSpaceTrait for AbstractFurniture {
     fn space_type(&self) -> Option<SpaceType> {
         match self {
@@ -2347,6 +2449,7 @@ impl AbstractSpaceTrait for AbstractFurniture {
         }
     }
 }
+
 impl AbstractPhysicalSpaceTrait for AbstractFurniture {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         match self {
@@ -2377,6 +2480,7 @@ impl AbstractPhysicalSpaceTrait for AbstractFurniture {
         }
     }
 }
+
 impl AbstractOccupiedSpaceTrait for AbstractFurniture {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         match self {
@@ -2400,27 +2504,32 @@ impl AbstractOccupiedSpaceTrait for AbstractFurniture {
         }
     }
 }
+
 impl AbstractFurnitureTrait for AbstractFurniture {}
 impl From<BridgeFurniture> for AbstractFurniture {
     fn from(v: BridgeFurniture) -> Self {
         Self::BridgeFurniture(v)
     }
 }
+
 impl From<BuildingFurniture> for AbstractFurniture {
     fn from(v: BuildingFurniture) -> Self {
         Self::BuildingFurniture(v)
     }
 }
+
 impl From<TunnelFurniture> for AbstractFurniture {
     fn from(v: TunnelFurniture) -> Self {
         Self::TunnelFurniture(v)
     }
 }
+
 pub trait AbstractFurnitureAccessors {
     fn bridge_furnitures(&self) -> impl Iterator<Item = &BridgeFurniture>;
     fn building_furnitures(&self) -> impl Iterator<Item = &BuildingFurniture>;
     fn tunnel_furnitures(&self) -> impl Iterator<Item = &TunnelFurniture>;
 }
+
 impl AbstractFurnitureAccessors for [AbstractFurniture] {
     fn bridge_furnitures(&self) -> impl Iterator<Item = &BridgeFurniture> {
         self.iter()
@@ -2444,20 +2553,24 @@ impl AbstractFurnitureAccessors for [AbstractFurniture] {
             })
     }
 }
+
 pub trait AbstractInstallationTrait: AbstractOccupiedSpaceTrait {
     fn relation_to_construction(&self) -> Option<RelationToConstruction>;
 }
+
 #[derive(Debug, Clone)]
 pub enum AbstractInstallation {
     BridgeInstallation(BridgeInstallation),
     BuildingInstallation(BuildingInstallation),
     TunnelInstallation(TunnelInstallation),
 }
+
 impl Default for AbstractInstallation {
     fn default() -> Self {
         Self::BridgeInstallation(Default::default())
     }
 }
+
 impl AbstractFeatureTrait for AbstractInstallation {
     fn feature_id(&self) -> &ID {
         match self {
@@ -2488,6 +2601,7 @@ impl AbstractFeatureTrait for AbstractInstallation {
         }
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for AbstractInstallation {
     fn creation_date(&self) -> Option<&String> {
         match self {
@@ -2518,6 +2632,7 @@ impl AbstractFeatureWithLifespanTrait for AbstractInstallation {
         }
     }
 }
+
 impl AbstractCityObjectTrait for AbstractInstallation {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         match self {
@@ -2569,6 +2684,7 @@ impl AbstractCityObjectTrait for AbstractInstallation {
         }
     }
 }
+
 impl AbstractSpaceTrait for AbstractInstallation {
     fn space_type(&self) -> Option<SpaceType> {
         match self {
@@ -2669,6 +2785,7 @@ impl AbstractSpaceTrait for AbstractInstallation {
         }
     }
 }
+
 impl AbstractPhysicalSpaceTrait for AbstractInstallation {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         match self {
@@ -2699,6 +2816,7 @@ impl AbstractPhysicalSpaceTrait for AbstractInstallation {
         }
     }
 }
+
 impl AbstractOccupiedSpaceTrait for AbstractInstallation {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         match self {
@@ -2722,6 +2840,7 @@ impl AbstractOccupiedSpaceTrait for AbstractInstallation {
         }
     }
 }
+
 impl AbstractInstallationTrait for AbstractInstallation {
     fn relation_to_construction(&self) -> Option<RelationToConstruction> {
         match self {
@@ -2731,26 +2850,31 @@ impl AbstractInstallationTrait for AbstractInstallation {
         }
     }
 }
+
 impl From<BridgeInstallation> for AbstractInstallation {
     fn from(v: BridgeInstallation) -> Self {
         Self::BridgeInstallation(v)
     }
 }
+
 impl From<BuildingInstallation> for AbstractInstallation {
     fn from(v: BuildingInstallation) -> Self {
         Self::BuildingInstallation(v)
     }
 }
+
 impl From<TunnelInstallation> for AbstractInstallation {
     fn from(v: TunnelInstallation) -> Self {
         Self::TunnelInstallation(v)
     }
 }
+
 pub trait AbstractInstallationAccessors {
     fn bridge_installations(&self) -> impl Iterator<Item = &BridgeInstallation>;
     fn building_installations(&self) -> impl Iterator<Item = &BuildingInstallation>;
     fn tunnel_installations(&self) -> impl Iterator<Item = &TunnelInstallation>;
 }
+
 impl AbstractInstallationAccessors for [AbstractInstallation] {
     fn bridge_installations(&self) -> impl Iterator<Item = &BridgeInstallation> {
         self.iter()
@@ -2774,6 +2898,7 @@ impl AbstractInstallationAccessors for [AbstractInstallation] {
             })
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct CeilingSurface {
     pub feature_id: ID,
@@ -2800,6 +2925,7 @@ pub struct CeilingSurface {
     pub lod1_multi_surface: Option<crate::geometry::MultiSurface>,
     pub filling_surface: Vec<AbstractFillingSurface>,
 }
+
 impl AbstractFeatureTrait for CeilingSurface {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -2814,6 +2940,7 @@ impl AbstractFeatureTrait for CeilingSurface {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for CeilingSurface {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -2828,6 +2955,7 @@ impl AbstractFeatureWithLifespanTrait for CeilingSurface {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for CeilingSurface {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -2851,6 +2979,7 @@ impl AbstractCityObjectTrait for CeilingSurface {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceBoundaryTrait for CeilingSurface {}
 impl AbstractThematicSurfaceTrait for CeilingSurface {
     fn area(&self) -> &[QualifiedArea] {
@@ -2875,11 +3004,13 @@ impl AbstractThematicSurfaceTrait for CeilingSurface {
         self.lod1_multi_surface.as_ref()
     }
 }
+
 impl AbstractConstructionSurfaceTrait for CeilingSurface {
     fn filling_surface(&self) -> &[AbstractFillingSurface] {
         &self.filling_surface
     }
 }
+
 impl CeilingSurface {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -3133,6 +3264,7 @@ impl CeilingSurface {
         })
     }
 }
+
 impl crate::from_gml::FromGml for CeilingSurface {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -3145,6 +3277,7 @@ impl crate::from_gml::FromGml for CeilingSurface {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct FloorSurface {
     pub feature_id: ID,
@@ -3171,6 +3304,7 @@ pub struct FloorSurface {
     pub lod1_multi_surface: Option<crate::geometry::MultiSurface>,
     pub filling_surface: Vec<AbstractFillingSurface>,
 }
+
 impl AbstractFeatureTrait for FloorSurface {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -3185,6 +3319,7 @@ impl AbstractFeatureTrait for FloorSurface {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for FloorSurface {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -3199,6 +3334,7 @@ impl AbstractFeatureWithLifespanTrait for FloorSurface {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for FloorSurface {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -3222,6 +3358,7 @@ impl AbstractCityObjectTrait for FloorSurface {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceBoundaryTrait for FloorSurface {}
 impl AbstractThematicSurfaceTrait for FloorSurface {
     fn area(&self) -> &[QualifiedArea] {
@@ -3246,11 +3383,13 @@ impl AbstractThematicSurfaceTrait for FloorSurface {
         self.lod1_multi_surface.as_ref()
     }
 }
+
 impl AbstractConstructionSurfaceTrait for FloorSurface {
     fn filling_surface(&self) -> &[AbstractFillingSurface] {
         &self.filling_surface
     }
 }
+
 impl FloorSurface {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -3504,6 +3643,7 @@ impl FloorSurface {
         })
     }
 }
+
 impl crate::from_gml::FromGml for FloorSurface {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -3516,6 +3656,7 @@ impl crate::from_gml::FromGml for FloorSurface {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct GroundSurface {
     pub feature_id: ID,
@@ -3542,6 +3683,7 @@ pub struct GroundSurface {
     pub lod1_multi_surface: Option<crate::geometry::MultiSurface>,
     pub filling_surface: Vec<AbstractFillingSurface>,
 }
+
 impl AbstractFeatureTrait for GroundSurface {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -3556,6 +3698,7 @@ impl AbstractFeatureTrait for GroundSurface {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for GroundSurface {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -3570,6 +3713,7 @@ impl AbstractFeatureWithLifespanTrait for GroundSurface {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for GroundSurface {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -3593,6 +3737,7 @@ impl AbstractCityObjectTrait for GroundSurface {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceBoundaryTrait for GroundSurface {}
 impl AbstractThematicSurfaceTrait for GroundSurface {
     fn area(&self) -> &[QualifiedArea] {
@@ -3617,11 +3762,13 @@ impl AbstractThematicSurfaceTrait for GroundSurface {
         self.lod1_multi_surface.as_ref()
     }
 }
+
 impl AbstractConstructionSurfaceTrait for GroundSurface {
     fn filling_surface(&self) -> &[AbstractFillingSurface] {
         &self.filling_surface
     }
 }
+
 impl GroundSurface {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -3875,6 +4022,7 @@ impl GroundSurface {
         })
     }
 }
+
 impl crate::from_gml::FromGml for GroundSurface {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -3887,6 +4035,7 @@ impl crate::from_gml::FromGml for GroundSurface {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct InteriorWallSurface {
     pub feature_id: ID,
@@ -3913,6 +4062,7 @@ pub struct InteriorWallSurface {
     pub lod1_multi_surface: Option<crate::geometry::MultiSurface>,
     pub filling_surface: Vec<AbstractFillingSurface>,
 }
+
 impl AbstractFeatureTrait for InteriorWallSurface {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -3927,6 +4077,7 @@ impl AbstractFeatureTrait for InteriorWallSurface {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for InteriorWallSurface {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -3941,6 +4092,7 @@ impl AbstractFeatureWithLifespanTrait for InteriorWallSurface {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for InteriorWallSurface {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -3964,6 +4116,7 @@ impl AbstractCityObjectTrait for InteriorWallSurface {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceBoundaryTrait for InteriorWallSurface {}
 impl AbstractThematicSurfaceTrait for InteriorWallSurface {
     fn area(&self) -> &[QualifiedArea] {
@@ -3988,11 +4141,13 @@ impl AbstractThematicSurfaceTrait for InteriorWallSurface {
         self.lod1_multi_surface.as_ref()
     }
 }
+
 impl AbstractConstructionSurfaceTrait for InteriorWallSurface {
     fn filling_surface(&self) -> &[AbstractFillingSurface] {
         &self.filling_surface
     }
 }
+
 impl InteriorWallSurface {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -4246,6 +4401,7 @@ impl InteriorWallSurface {
         })
     }
 }
+
 impl crate::from_gml::FromGml for InteriorWallSurface {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -4258,6 +4414,7 @@ impl crate::from_gml::FromGml for InteriorWallSurface {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct OuterCeilingSurface {
     pub feature_id: ID,
@@ -4284,6 +4441,7 @@ pub struct OuterCeilingSurface {
     pub lod1_multi_surface: Option<crate::geometry::MultiSurface>,
     pub filling_surface: Vec<AbstractFillingSurface>,
 }
+
 impl AbstractFeatureTrait for OuterCeilingSurface {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -4298,6 +4456,7 @@ impl AbstractFeatureTrait for OuterCeilingSurface {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for OuterCeilingSurface {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -4312,6 +4471,7 @@ impl AbstractFeatureWithLifespanTrait for OuterCeilingSurface {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for OuterCeilingSurface {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -4335,6 +4495,7 @@ impl AbstractCityObjectTrait for OuterCeilingSurface {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceBoundaryTrait for OuterCeilingSurface {}
 impl AbstractThematicSurfaceTrait for OuterCeilingSurface {
     fn area(&self) -> &[QualifiedArea] {
@@ -4359,11 +4520,13 @@ impl AbstractThematicSurfaceTrait for OuterCeilingSurface {
         self.lod1_multi_surface.as_ref()
     }
 }
+
 impl AbstractConstructionSurfaceTrait for OuterCeilingSurface {
     fn filling_surface(&self) -> &[AbstractFillingSurface] {
         &self.filling_surface
     }
 }
+
 impl OuterCeilingSurface {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -4617,6 +4780,7 @@ impl OuterCeilingSurface {
         })
     }
 }
+
 impl crate::from_gml::FromGml for OuterCeilingSurface {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -4629,6 +4793,7 @@ impl crate::from_gml::FromGml for OuterCeilingSurface {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct OuterFloorSurface {
     pub feature_id: ID,
@@ -4655,6 +4820,7 @@ pub struct OuterFloorSurface {
     pub lod1_multi_surface: Option<crate::geometry::MultiSurface>,
     pub filling_surface: Vec<AbstractFillingSurface>,
 }
+
 impl AbstractFeatureTrait for OuterFloorSurface {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -4669,6 +4835,7 @@ impl AbstractFeatureTrait for OuterFloorSurface {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for OuterFloorSurface {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -4683,6 +4850,7 @@ impl AbstractFeatureWithLifespanTrait for OuterFloorSurface {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for OuterFloorSurface {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -4706,6 +4874,7 @@ impl AbstractCityObjectTrait for OuterFloorSurface {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceBoundaryTrait for OuterFloorSurface {}
 impl AbstractThematicSurfaceTrait for OuterFloorSurface {
     fn area(&self) -> &[QualifiedArea] {
@@ -4730,11 +4899,13 @@ impl AbstractThematicSurfaceTrait for OuterFloorSurface {
         self.lod1_multi_surface.as_ref()
     }
 }
+
 impl AbstractConstructionSurfaceTrait for OuterFloorSurface {
     fn filling_surface(&self) -> &[AbstractFillingSurface] {
         &self.filling_surface
     }
 }
+
 impl OuterFloorSurface {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -4988,6 +5159,7 @@ impl OuterFloorSurface {
         })
     }
 }
+
 impl crate::from_gml::FromGml for OuterFloorSurface {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -5000,6 +5172,7 @@ impl crate::from_gml::FromGml for OuterFloorSurface {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct RoofSurface {
     pub feature_id: ID,
@@ -5026,6 +5199,7 @@ pub struct RoofSurface {
     pub lod1_multi_surface: Option<crate::geometry::MultiSurface>,
     pub filling_surface: Vec<AbstractFillingSurface>,
 }
+
 impl AbstractFeatureTrait for RoofSurface {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -5040,6 +5214,7 @@ impl AbstractFeatureTrait for RoofSurface {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for RoofSurface {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -5054,6 +5229,7 @@ impl AbstractFeatureWithLifespanTrait for RoofSurface {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for RoofSurface {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -5077,6 +5253,7 @@ impl AbstractCityObjectTrait for RoofSurface {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceBoundaryTrait for RoofSurface {}
 impl AbstractThematicSurfaceTrait for RoofSurface {
     fn area(&self) -> &[QualifiedArea] {
@@ -5101,11 +5278,13 @@ impl AbstractThematicSurfaceTrait for RoofSurface {
         self.lod1_multi_surface.as_ref()
     }
 }
+
 impl AbstractConstructionSurfaceTrait for RoofSurface {
     fn filling_surface(&self) -> &[AbstractFillingSurface] {
         &self.filling_surface
     }
 }
+
 impl RoofSurface {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -5359,6 +5538,7 @@ impl RoofSurface {
         })
     }
 }
+
 impl crate::from_gml::FromGml for RoofSurface {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -5371,6 +5551,7 @@ impl crate::from_gml::FromGml for RoofSurface {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct WallSurface {
     pub feature_id: ID,
@@ -5397,6 +5578,7 @@ pub struct WallSurface {
     pub lod1_multi_surface: Option<crate::geometry::MultiSurface>,
     pub filling_surface: Vec<AbstractFillingSurface>,
 }
+
 impl AbstractFeatureTrait for WallSurface {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -5411,6 +5593,7 @@ impl AbstractFeatureTrait for WallSurface {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for WallSurface {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -5425,6 +5608,7 @@ impl AbstractFeatureWithLifespanTrait for WallSurface {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for WallSurface {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -5448,6 +5632,7 @@ impl AbstractCityObjectTrait for WallSurface {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceBoundaryTrait for WallSurface {}
 impl AbstractThematicSurfaceTrait for WallSurface {
     fn area(&self) -> &[QualifiedArea] {
@@ -5472,11 +5657,13 @@ impl AbstractThematicSurfaceTrait for WallSurface {
         self.lod1_multi_surface.as_ref()
     }
 }
+
 impl AbstractConstructionSurfaceTrait for WallSurface {
     fn filling_surface(&self) -> &[AbstractFillingSurface] {
         &self.filling_surface
     }
 }
+
 impl WallSurface {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -5730,6 +5917,7 @@ impl WallSurface {
         })
     }
 }
+
 impl crate::from_gml::FromGml for WallSurface {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -5742,6 +5930,7 @@ impl crate::from_gml::FromGml for WallSurface {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct DoorSurface {
     pub feature_id: ID,
@@ -5768,6 +5957,7 @@ pub struct DoorSurface {
     pub lod1_multi_surface: Option<crate::geometry::MultiSurface>,
     pub address: Vec<Address>,
 }
+
 impl AbstractFeatureTrait for DoorSurface {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -5782,6 +5972,7 @@ impl AbstractFeatureTrait for DoorSurface {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for DoorSurface {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -5796,6 +5987,7 @@ impl AbstractFeatureWithLifespanTrait for DoorSurface {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for DoorSurface {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -5819,6 +6011,7 @@ impl AbstractCityObjectTrait for DoorSurface {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceBoundaryTrait for DoorSurface {}
 impl AbstractThematicSurfaceTrait for DoorSurface {
     fn area(&self) -> &[QualifiedArea] {
@@ -5843,6 +6036,7 @@ impl AbstractThematicSurfaceTrait for DoorSurface {
         self.lod1_multi_surface.as_ref()
     }
 }
+
 impl AbstractFillingSurfaceTrait for DoorSurface {}
 impl DoorSurface {
     pub fn from_gml_with_info(
@@ -6094,6 +6288,7 @@ impl DoorSurface {
         })
     }
 }
+
 impl crate::from_gml::FromGml for DoorSurface {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -6106,6 +6301,7 @@ impl crate::from_gml::FromGml for DoorSurface {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct WindowSurface {
     pub feature_id: ID,
@@ -6131,6 +6327,7 @@ pub struct WindowSurface {
     pub lod0_multi_surface: Option<crate::geometry::MultiSurface>,
     pub lod1_multi_surface: Option<crate::geometry::MultiSurface>,
 }
+
 impl AbstractFeatureTrait for WindowSurface {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -6145,6 +6342,7 @@ impl AbstractFeatureTrait for WindowSurface {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for WindowSurface {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -6159,6 +6357,7 @@ impl AbstractFeatureWithLifespanTrait for WindowSurface {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for WindowSurface {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -6182,6 +6381,7 @@ impl AbstractCityObjectTrait for WindowSurface {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceBoundaryTrait for WindowSurface {}
 impl AbstractThematicSurfaceTrait for WindowSurface {
     fn area(&self) -> &[QualifiedArea] {
@@ -6206,6 +6406,7 @@ impl AbstractThematicSurfaceTrait for WindowSurface {
         self.lod1_multi_surface.as_ref()
     }
 }
+
 impl AbstractFillingSurfaceTrait for WindowSurface {}
 impl WindowSurface {
     pub fn from_gml_with_info(
@@ -6446,6 +6647,7 @@ impl WindowSurface {
         })
     }
 }
+
 impl crate::from_gml::FromGml for WindowSurface {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -6458,6 +6660,7 @@ impl crate::from_gml::FromGml for WindowSurface {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct OtherConstruction {
     pub feature_id: ID,
@@ -6507,6 +6710,7 @@ pub struct OtherConstruction {
     pub function: Vec<OtherConstructionFunctionValue>,
     pub usage: Vec<OtherConstructionUsageValue>,
 }
+
 impl AbstractFeatureTrait for OtherConstruction {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -6521,6 +6725,7 @@ impl AbstractFeatureTrait for OtherConstruction {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for OtherConstruction {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -6535,6 +6740,7 @@ impl AbstractFeatureWithLifespanTrait for OtherConstruction {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for OtherConstruction {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -6558,6 +6764,7 @@ impl AbstractCityObjectTrait for OtherConstruction {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for OtherConstruction {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -6602,6 +6809,7 @@ impl AbstractSpaceTrait for OtherConstruction {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for OtherConstruction {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -6616,6 +6824,7 @@ impl AbstractPhysicalSpaceTrait for OtherConstruction {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractOccupiedSpaceTrait for OtherConstruction {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
@@ -6627,6 +6836,7 @@ impl AbstractOccupiedSpaceTrait for OtherConstruction {
         self.lod1_implicit_representation.as_ref()
     }
 }
+
 impl AbstractConstructionTrait for OtherConstruction {
     fn condition_of_construction(&self) -> Option<ConditionOfConstructionValue> {
         self.condition_of_construction
@@ -6650,6 +6860,7 @@ impl AbstractConstructionTrait for OtherConstruction {
         &self.occupancy
     }
 }
+
 impl OtherConstruction {
     pub fn from_gml_with_info(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -7156,6 +7367,7 @@ impl OtherConstruction {
         })
     }
 }
+
 impl crate::from_gml::FromGml for OtherConstruction {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -7168,6 +7380,7 @@ impl crate::from_gml::FromGml for OtherConstruction {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct Door {
     pub feature_id: ID,
@@ -7211,6 +7424,7 @@ pub struct Door {
     pub usage: Vec<DoorUsageValue>,
     pub address: Vec<Address>,
 }
+
 impl AbstractFeatureTrait for Door {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -7225,6 +7439,7 @@ impl AbstractFeatureTrait for Door {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for Door {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -7239,6 +7454,7 @@ impl AbstractFeatureWithLifespanTrait for Door {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for Door {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -7262,6 +7478,7 @@ impl AbstractCityObjectTrait for Door {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for Door {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -7306,6 +7523,7 @@ impl AbstractSpaceTrait for Door {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for Door {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -7320,6 +7538,7 @@ impl AbstractPhysicalSpaceTrait for Door {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractOccupiedSpaceTrait for Door {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
@@ -7331,6 +7550,7 @@ impl AbstractOccupiedSpaceTrait for Door {
         self.lod1_implicit_representation.as_ref()
     }
 }
+
 impl AbstractFillingElementTrait for Door {}
 impl Door {
     pub fn from_gml_with_info(
@@ -7808,6 +8028,7 @@ impl Door {
         })
     }
 }
+
 impl crate::from_gml::FromGml for Door {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
@@ -7820,6 +8041,7 @@ impl crate::from_gml::FromGml for Door {
         Self::from_gml_with_info(reader, &info)
     }
 }
+
 #[derive(Debug, Clone, Default)]
 pub struct Window {
     pub feature_id: ID,
@@ -7862,6 +8084,7 @@ pub struct Window {
     pub function: Vec<WindowFunctionValue>,
     pub usage: Vec<WindowUsageValue>,
 }
+
 impl AbstractFeatureTrait for Window {
     fn feature_id(&self) -> &ID {
         &self.feature_id
@@ -7876,6 +8099,7 @@ impl AbstractFeatureTrait for Window {
         self.description.as_ref()
     }
 }
+
 impl AbstractFeatureWithLifespanTrait for Window {
     fn creation_date(&self) -> Option<&String> {
         self.creation_date.as_ref()
@@ -7890,6 +8114,7 @@ impl AbstractFeatureWithLifespanTrait for Window {
         self.valid_to.as_ref()
     }
 }
+
 impl AbstractCityObjectTrait for Window {
     fn relative_to_terrain(&self) -> Option<RelativeToTerrain> {
         self.relative_to_terrain
@@ -7913,6 +8138,7 @@ impl AbstractCityObjectTrait for Window {
         &self.dynamizer
     }
 }
+
 impl AbstractSpaceTrait for Window {
     fn space_type(&self) -> Option<SpaceType> {
         self.space_type
@@ -7957,6 +8183,7 @@ impl AbstractSpaceTrait for Window {
         self.lod2_multi_surface.as_ref()
     }
 }
+
 impl AbstractPhysicalSpaceTrait for Window {
     fn lod3_terrain_intersection_curve(&self) -> Option<&crate::geometry::MultiCurve> {
         self.lod3_terrain_intersection_curve.as_ref()
@@ -7971,6 +8198,7 @@ impl AbstractPhysicalSpaceTrait for Window {
         self.lod2_terrain_intersection_curve.as_ref()
     }
 }
+
 impl AbstractOccupiedSpaceTrait for Window {
     fn lod3_implicit_representation(&self) -> Option<&ImplicitGeometry> {
         self.lod3_implicit_representation.as_ref()
@@ -7982,6 +8210,7 @@ impl AbstractOccupiedSpaceTrait for Window {
         self.lod1_implicit_representation.as_ref()
     }
 }
+
 impl AbstractFillingElementTrait for Window {}
 impl Window {
     pub fn from_gml_with_info(
@@ -8448,6 +8677,7 @@ impl Window {
         })
     }
 }
+
 impl crate::from_gml::FromGml for Window {
     fn from_gml(
         reader: &mut crate::gml_reader::SubtreeReader<'_>,
