@@ -67,6 +67,13 @@ fn main() -> Result<()> {
         eprintln!("  Concrete classes:     {concrete_count}");
     }
 
+    // Emit IR dump and exit early if requested
+    if let Some(ir_path) = &args.emit_ir {
+        std::fs::write(ir_path, format!("{:#?}", model))?;
+        println!("IR dumped to {}", ir_path.display());
+        return Ok(());
+    }
+
     // Phase 3: Code generation
     if args.verbose {
         eprintln!("\nPhase 3: Generating code{}...", if with_reader { " + reader impls" } else { "" });

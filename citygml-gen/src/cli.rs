@@ -33,4 +33,8 @@ pub struct Args {
     /// Defaults to `<output>/` (same as type output) if flag is present without value.
     #[arg(long)]
     pub with_reader: Option<Option<PathBuf>>,
+
+    /// Dump the resolved IR (UmlModel) to a text file and skip code generation.
+    #[arg(long, default_missing_value = "ir_dump.txt", num_args = 0..=1)]
+    pub emit_ir: Option<PathBuf>,
 }

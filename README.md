@@ -55,6 +55,7 @@ The XMI file is the CityGML 3.0 UML model exported from Enterprise Architect. It
 | `--output <DIR>` | Output directory for generated `.rs` files (default: `src/generated`) |
 | `--with-reader [DIR]` | Also generate `FromGml` deserialization impls (optionally into a separate directory) |
 | `--packages core,building` | Only generate specific packages (comma-separated) |
+| `--emit-ir [FILE]` | Dump the resolved IR (`UmlModel`) to a text file and skip code generation (default: `ir_dump.txt`) |
 | `--verbose` | Print detailed progress |
 | `--dry-run` | Parse and resolve without writing files |
 
